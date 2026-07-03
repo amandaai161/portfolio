@@ -34,7 +34,9 @@
 /* ---------- Shell + 2-column layout ---------- */
 .cs-shell {
   padding-top: clamp(16px, 2vw, 28px);
-  padding-bottom: clamp(80px, 10vw, 160px);
+  /* matches the home "Other projects" (.other) bottom spacing, so the gap
+     before the full-bleed contact section is consistent across the site */
+  padding-bottom: clamp(140px, 15.75vw, 350px);
 }
 .cs-layout {
   display: grid;
