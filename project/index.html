@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Amanda Idris</title>
+  <meta name="description" content="A directory of Amanda Idris's design projects — design systems, landing pages, and brand work." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/css/projects-page.css?v=8" />
+</head>
+<body>
+  <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#ffffff" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="/" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/about" class="nav__link">About</a>
+        <a href="/project" class="nav__link">Works</a>
+        <a href="/#resume" class="nav__link">Resume</a>
+        <a href="/#contact" class="nav__link">Contact</a>
+        <a href="https://linkedin.com" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://behance.net" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="/project" class="mobile-menu__link">Works</a>
+      <a href="/#resume" class="mobile-menu__link">Resume</a>
+      <a href="/#contact" class="mobile-menu__link">Contact</a>
+      <a href="https://linkedin.com" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://behance.net" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="pg-main">
+      <h1 class="pg-title t-display-1 reveal">My projects</h1>
+
+      <div class="pg-grid">
+        <!-- 1 · Aspire: Web Design System -->
+        <a href="/project/aspire-design-system" class="pcard reveal" aria-label="Aspire: Web Design System">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_aspire_ds/ds_thumbnail.webp" alt="Aspire Web Design System preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">Aspire: Web Design System</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                    <li class="pg-tag t-body-sm">Design System</li>
+                    <li class="pg-tag t-body-sm">System Building</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A comprehensive Figma-to-Webflow design system to replace an inefficient, manual web development workflow. The system standardizes components and organizes assets to enable fast, scalable updates across 120+ pages.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2 · Kayn Argan Oil -->
+        <a href="/project/kayn" class="pcard reveal" aria-label="Kayn Argan Oil">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_kayn/kayn_thumbnail.webp" alt="Kayn Argan Oil landing page preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">Kayn Argan Oil</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">Elevates Kayn Argan Oil with a sophisticated, premium aesthetic that reflects its authentic Moroccan origin with elegant touch to build a strong digital presence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 3 · How Aspire Works -->
+        <a href="/project/how-aspire-works" class="pcard reveal" aria-label="How Aspire Works">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_aspire_haw/haw_thumbnail.webp" alt="How Aspire Works preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">How Aspire Works</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                    <li class="pg-tag t-body-sm">Conceptual Design</li>
+                    <li class="pg-tag t-body-sm">Information Architecture</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A dedicated landing page that pulls back the curtain on how Aspire actually works, turning complex fintech infrastructure into a clear, transparent narrative that replaces doubt with credibility.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 4 · NOBI Bakery -->
+        <a href="/project/nobi" class="pcard reveal" aria-label="NOBI Bakery">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_nobi/nobi_thumbnail.webp" alt="NOBI Bakery storefront preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">NOBI Bakery</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A digital storefront and landing page for NOBI Bakery, where time-honored Japanese baking meets modern flavors, wrapped in a seamless ordering experience for busy city dwellers.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 5 · Bacarita Creative Hub -->
+        <a href="/project/bacarita" class="pcard reveal" aria-label="Bacarita Creative Hub">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_bacarita/bacarita_thumbnail.webp" alt="Bacarita Creative Hub preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">Bacarita Creative Hub</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A bold creative-hub identity and site for Bacarita, playful typography and a confident grid that gives the studio&rsquo;s work room to breathe.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 6 · Atlasique Travel -->
+        <a href="/project/atlasique" class="pcard reveal" aria-label="Atlasique Travel">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_atlasique/atlasique_thumbnail.webp" alt="Atlasique Travel preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">Atlasique Travel</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">An immersive travel-agency experience for Atlasique, rich imagery and a calm, editorial layout that makes discovering destinations feel like an invitation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 7 · The Visual Lab -->
+        <a href="/project/visual-lab" class="pcard reveal" aria-label="The Visual Lab">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_visuallabs/visuallabs_thumbnail.webp" alt="The Visual Lab mobile UI concepts preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h2 class="pcard__title t-h5">The Visual Lab</h2>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">UI/UX Design</li>
+                    <li class="pg-tag t-body-sm">Mobile App</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A personal visual lab from my freelance days. A series of high-fidelity mobile UI concepts exploring immersive art, depth, and sophisticated effects, balanced against clean and functional interfaces.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact__info">
+          <h2 class="contact__title t-display-1 reveal">Let&rsquo;s get in touch!</h2>
+
+          <div class="contact__details reveal">
+            <div class="contact__email-wrap">
+              <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" aria-label="Copy email address to clipboard">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="contact__email-text">amandaalfattah@gmail.com</span>
+              </button>
+              <span class="copy-toast" role="status" aria-live="polite">Copied to clipboard</span>
+            </div>
+
+            <div class="contact__links">
+              <div class="contact__col">
+                <a href="https://linkedin.com" class="link-arrow t-h6 fw-medium" target="_blank" rel="noopener">
+                  <span>Chat on Linkedin</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="https://behance.net" class="link-arrow t-h6 fw-medium" target="_blank" rel="noopener">
+                  <span>Visit my Behance</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+              <div class="contact__col">
+                <a href="/#resume" class="link-arrow t-h6 fw-medium">
+                  <span>See my resume</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="/about" class="link-arrow t-h6 fw-medium">
+                  <span>About me</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="footer__info">
+            <p class="footer__name t-body-lg fw-medium">Site by Amanda Alfatah Idris</p>
+            <p class="footer__detail t-body-lg">Adobe user since 2016, Figma user since 2018.</p>
+          </div>
+          <p class="footer__year t-h6 fw-medium">&copy;2026</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/script.js?v=16"></script>
+</body>
+</html>

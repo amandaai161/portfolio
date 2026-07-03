@@ -1,0 +1,1141 @@
+/* ============================================================
+   Amanda Idris — Case Study page
+   Layout: 480px sticky sidebar + fluid scrollable content.
+   Built on styles.css (header/buttons/cards/reveal) + type-system.css.
+   ============================================================ */
+
+.cs-page {
+  /* scoped palette (from the Figma) */
+  --cs-ink: #181818;
+  --cs-muted: rgba(24, 24, 24, 0.58);
+  --cs-dark: #181818;
+  --cs-orange: #f04b26;
+  --cs-blue: #215dcc;
+  --cs-blue-deep: #3b50d8;
+  --cs-pill: #eef1f0;
+  --cs-soft: #f7fafc;
+  --cs-grey: #f6f6f6;
+  --cs-before: #f4f4f2;
+  --cs-track: #e4e4e4;
+  --cs-line: rgba(24, 24, 24, 0.14);
+  --cs-ph: #e9e9e7;
+
+  --cs-radius: 10px;
+  --cs-radius-lg: 14px;
+
+  --header-h: 88px;
+  --sticky-top: 104px;
+
+  color: var(--cs-ink);
+}
+
+.cs-muted { color: var(--cs-muted); }
+
+/* ---------- Shell + 2-column layout ---------- */
+.cs-shell {
+  padding-top: clamp(16px, 2vw, 28px);
+  padding-bottom: clamp(80px, 10vw, 160px);
+}
+.cs-layout {
+  display: grid;
+  grid-template-columns: 420px minmax(0, 1fr);   /* fixed sidebar width — never depends on its content */
+  gap: clamp(40px, 5.2vw, 88px);
+  align-items: start;
+}
+
+/* ---------- Sidebar show/hide toggle (lives inside the sticky sidebar, so it
+   stays visible while scrolling) ---------- */
+.cs-aside-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  align-self: flex-start;
+  padding: 7px 15px 7px 12px;
+  border: 1px solid var(--cs-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cs-ink);
+  font: inherit;
+  font-size: var(--fs-body-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.cs-aside-toggle:hover { background: var(--cs-grey); border-color: var(--cs-ink); }
+.cs-aside-toggle svg { width: 18px; height: 18px; flex: none; }
+.cs-aside-toggle .cs-aside-toggle__show { display: none; }
+
+/* Collapsed ("reading") state: keep only the toggle + table of contents,
+   and cap + centre the main content. */
+.cs-shell.is-aside-hidden .cs-layout { grid-template-columns: 300px minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); }
+.cs-shell.is-aside-hidden .cs-sidebar > :not(.cs-aside-toggle):not(.cs-toc) { display: none; }
+.cs-shell.is-aside-hidden .cs-content { max-width: 1200px; margin-inline: auto; }
+.cs-shell.is-aside-hidden .cs-aside-toggle__hide { display: none; }
+.cs-shell.is-aside-hidden .cs-aside-toggle__show { display: inline; }
+
+/* ---------- Reading-progress bar (sits at the bottom of the sticky nav) ---------- */
+.cs-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 101;
+  pointer-events: none;
+}
+.cs-progress__bar {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--cs-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ============================================================
+   SIDEBAR (sticky — stays put while the content scrolls)
+   ============================================================ */
+.cs-sidebar {
+  position: sticky;
+  top: var(--sticky-top);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.4vw, 22px);
+  /* not scrollable — no internal scrollbar */
+}
+
+.cs-sidebar__title { letter-spacing: -0.035em; }
+.cs-sidebar__desc { color: var(--cs-muted); }
+
+.cs-sidebar__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-body);
+  font-style: italic;
+  font-weight: 400;
+  width: fit-content;
+  color: var(--cs-ink);
+}
+.cs-sidebar__link .ext-arrow { width: 13px; height: 13px; transition: transform 0.35s var(--ease-out); }
+.cs-sidebar__link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cs-sidebar__link:hover .ext-arrow { transform: translate(2px, -2px); }
+
+/* contribution pills */
+.cs-contrib { display: flex; flex-direction: column; gap: 8px; }
+.cs-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs-pill {
+  border-radius: 999px;
+  background: var(--cs-pill);
+  padding: 8px 16px;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* meta grid */
+.cs-meta {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 6px clamp(14px, 1.4vw, 28px);
+  margin: 0;
+}
+.cs-meta__col { display: flex; flex-direction: column; gap: 3px; }
+.cs-meta dt { color: var(--cs-muted); }
+.cs-meta dd { margin: 0; }
+
+.cs-rule { border: 0; height: 1px; background: var(--cs-line); margin: 2px 0; }
+
+/* table of contents (scroll-spy) */
+.cs-toc { display: flex; flex-direction: column; gap: 10px; }
+.cs-toc__heading { color: var(--cs-muted); }
+/* mobile-only "Jump into section" dropdown controls — hidden on desktop */
+.cs-toc__toggle, .cs-toc__close { display: none; }
+.cs-toc__list { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.cs-toc__link {
+  display: inline-block;
+  padding: 2px 0;
+  font-size: var(--fs-body-lg);     /* Body Large */
+  font-weight: 400;
+  color: var(--cs-muted);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  transform-origin: left center;
+  /* Smooth micro-interaction via transform only. The active item enlarges with
+     scale() (not font-size) so it NEVER reflows the sidebar or shifts the
+     content as the active section changes on scroll. */
+  transition: color 0.35s var(--ease), transform 0.4s var(--ease-out);
+}
+.cs-toc__link:hover { color: var(--cs-ink); transform: translateX(5px); }
+.cs-toc__link.is-active {
+  color: var(--cs-ink);
+  font-weight: 600;
+  transform: scale(1.22);           /* ~22px visually, with zero layout shift */
+}
+.cs-toc__link.is-active:hover { transform: scale(1.22) translateX(4px); }
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.cs-content { min-width: 0; }
+.cs-section {
+  padding-top: clamp(56px, 7vw, 116px);
+  scroll-margin-top: var(--sticky-top);
+}
+.cs-section:first-of-type { padding-top: clamp(28px, 3vw, 44px); }
+
+.cs-lead { max-width: none; }   /* fills the content column, matching the full-width images/panels */
+.cs-section > .cs-lead { margin-top: clamp(20px, 2vw, 32px); }
+.cs-section > h2 + .cs-lead { margin-top: clamp(16px, 1.6vw, 24px); }
+
+/* conversational connector lines ("The challenges we face...") */
+.cs-connector {
+  margin-top: clamp(36px, 4vw, 72px);
+  margin-bottom: clamp(18px, 2vw, 28px);
+}
+.cs-section > h2.cs-connector:first-child { margin-top: 0; }
+
+/* generated-copy markers carry no visible style, just a hook for review */
+[data-generated] { /* (FF0101 in Figma — copy written in Amanda's voice) */ }
+
+/* ---------- Image placeholders ---------- */
+.cs-ph {
+  position: relative;
+  aspect-ratio: var(--ar, 16 / 9);
+  width: 100%;
+  border-radius: var(--cs-radius);
+  background:
+    repeating-linear-gradient(135deg, rgba(24,24,24,0.018) 0 12px, rgba(24,24,24,0) 12px 24px),
+    var(--cs-ph);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--cs-line);
+}
+.cs-ph--alt { --cs-ph: #f3f2ef; }
+.cs-ph--hero { margin-bottom: 4px; }
+/* image-bearing frame: drop the hatch, let the real screenshot fill it */
+.cs-ph--img { background: var(--cs-soft); }
+.cs-shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+/* capped images (hero / current workspace / new framework).
+   Width breakpoints are on the FRAME itself (container query), with --cs-h = the
+   image's natural height and --cs-fill = its background colour:
+   - frame ≥ 1000px : image held at 1000px wide + natural height, centred, sides filled with --cs-fill
+   - frame 825–999px: image keeps its full height, left/right edges cropped (cover)
+   - frame < 825px  : image scales down normally with locked aspect ratio          */
+.cs-ph--cap {
+  aspect-ratio: auto;
+  height: auto;
+  background: var(--cs-fill, #fff);
+  align-items: flex-start;
+  container-type: inline-size;
+}
+/* default — narrow columns (<825px, incl. mobile): scale DOWN the cropped 825px
+   framing, i.e. keep the cropped box ratio (825 : natural height) + cover-crop the
+   left/right edges, rather than revealing the full uncropped image. */
+.cs-ph--cap .cs-shot {
+  width: 100%;
+  aspect-ratio: 825 / var(--cs-h);
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
+/* 825–999px: hold the full natural height, crop the left/right edges */
+@container (min-width: 825px) {
+  .cs-ph--cap .cs-shot {
+    aspect-ratio: auto;
+    height: calc(var(--cs-h) * 1px);
+  }
+}
+/* ≥1000px: cap width at 1000px (keeps height); wider area shows --cs-fill */
+@container (min-width: 1000px) {
+  .cs-ph--cap .cs-shot { width: 1000px; }
+}
+/* breathing room before section-level placeholder images */
+.cs-section > .cs-ph { margin-top: clamp(24px, 3vw, 48px); }
+.cs-ph__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--cs-line);
+  color: var(--cs-muted);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  backdrop-filter: blur(2px);
+}
+.cs-ph__tag::before {
+  content: "";
+  width: 15px; height: 15px; flex: none;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3' y='4' width='18' height='16' rx='2.5' stroke='%23888' stroke-width='1.8'/%3E%3Ccircle cx='8.5' cy='9.5' r='1.6' fill='%23888'/%3E%3Cpath d='M5 18l5-5 4 4 2-2 3 3' stroke='%23888' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---------- AI usage card ---------- */
+/* No outer container — only the "AI usage / 15%" metric is boxed (outlined). */
+.cs-ai {
+  margin-top: clamp(12px, 1.4vw, 20px);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(20px, 3vw, 40px);
+}
+.cs-ai__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1.5px solid var(--cs-line);
+  border-radius: var(--cs-radius);
+  padding: clamp(12px, 1.3vw, 18px) clamp(16px, 1.7vw, 24px);
+}
+.cs-ai__pct { letter-spacing: -0.04em; }
+.cs-ai__body { display: flex; flex-direction: column; gap: 8px; }
+.cs-ai__list { display: flex; flex-direction: column; gap: 4px; color: var(--cs-muted); padding-left: 1.1em; list-style: disc; }
+.cs-ai__inv-m { display: none; }   /* shown only on mobile (inside the metric box) */
+/* centre the metric box content on desktop/tablet (mobile switches to a row below) */
+@media (min-width: 761px) {
+  .cs-ai__metric { align-items: center; text-align: center; }
+}
+
+/* ---------- Objective dark cards ---------- */
+.cs-objgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.4vw, 24px);
+}
+.cs-obj {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(22px, 1.9vw, 32px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-dark);
+  color: #fff;
+  min-height: clamp(240px, 18vw, 315px);
+}
+.cs-obj__num {
+  color: #fff;
+  margin-bottom: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(48px, 3.6vw, 58px);
+  height: clamp(48px, 3.6vw, 58px);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+}
+.cs-obj__title { color: #fff; }
+.cs-obj__desc { color: rgba(255, 255, 255, 0.78); }
+
+/* ---------- Challenge list (icon + text) ---------- */
+.cs-challenges { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 20px); }
+.cs-challenges li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cs-challenge__icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cs-grey);
+  border: 1px solid var(--cs-line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cs-ink);
+}
+.cs-challenge__icon svg { width: 21px; height: 21px; }
+
+/* ---------- Generic panels ---------- */
+.cs-panel { border-radius: var(--cs-radius-lg); padding: clamp(28px, 3vw, 48px); }
+.cs-panel--dark { background: var(--cs-dark); color: #fff; }
+.cs-panel--soft { background: var(--cs-soft); }
+
+.cs-workload {
+  margin-top: clamp(32px, 3.5vw, 56px);
+  display: grid;
+  grid-template-columns: auto 1fr;   /* stat hugs its 2 lines, note sits to the right */
+  align-items: center;
+  gap: clamp(24px, 3vw, 48px);
+  padding: clamp(22px, 2.2vw, 32px);  /* reduced container padding */
+}
+.cs-workload__stat {
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1.14;
+  font-weight: var(--fw-medium);
+  /* sized so the forced 2 lines fit while the note sits beside it */
+  font-size: clamp(1.5rem, 0.95rem + 1.8vw, 1.875rem);
+}
+.cs-workload__note { color: rgba(255, 255, 255, 0.72); }
+.cs-hl-warm { color: #ff795b; }
+
+/* ---------- Impact cards (orange) ---------- */
+.cs-impact {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.4vw, 24px);
+}
+.cs-impact__card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(22px, 1.9vw, 32px);
+  border-radius: var(--cs-radius);
+  background: rgba(240, 75, 38, 0.2);   /* orange at 20% */
+  color: var(--cs-ink);
+}
+.cs-impact__card h4 { color: var(--cs-ink); }
+.cs-impact__card p { color: var(--cs-ink); }
+
+/* ---------- Bullet list (used in split "main" columns) ---------- */
+.cs-bullets { list-style: none; display: flex; flex-direction: column; gap: clamp(16px, 1.8vw, 26px); }
+.cs-bullets li { position: relative; padding-left: 26px; }
+.cs-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 4px; top: 0.62em;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+}
+
+/* ---------- Two-column image + text ---------- */
+.cs-twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 2.4vw, 42px);
+}
+.cs-twocol__item { display: flex; flex-direction: column; gap: 18px; }
+
+/* ---------- Figma → Relume → Webflow workflow ---------- */
+.cs-flow {
+  margin-top: clamp(28px, 3vw, 48px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: clamp(8px, 1vw, 16px);
+}
+.cs-flow__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(18px, 1.6vw, 26px);
+  border: 1.5px solid var(--cs-ink);
+  border-radius: var(--cs-radius);
+  background: #fff;
+}
+.cs-flow__desc { color: var(--cs-muted); flex: 1; }
+/* tool name on the left, logo pinned to the right corner */
+.cs-flow__tool { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #000; margin-top: clamp(22px, 2.4vw, 34px); }
+.cs-flow__logo { width: 1.15em; height: 1.15em; object-fit: contain; flex: none; }
+.cs-flow__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cs-ink);
+}
+.cs-flow__arrow svg { width: 26px; height: 14px; }
+
+/* ---------- Numbered build steps (with connecting line) ---------- */
+.cs-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.cs-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(52px, 4vw, 64px) 1fr;
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: start;
+  padding-bottom: clamp(20px, 2vw, 34px);
+}
+.cs-step:last-child { padding-bottom: 0; }
+/* vertical line linking the numbers */
+.cs-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: calc(clamp(52px, 4vw, 64px) / 2);
+  top: 2.4em;
+  bottom: -0.2em;
+  width: 1.5px;
+  background: var(--cs-line);
+  transform: translateX(-50%);
+}
+.cs-step__num {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(52px, 4vw, 64px);
+  height: clamp(52px, 4vw, 64px);
+  border-radius: 50%;
+  border: 1.5px solid var(--cs-ink);
+  background: #fff;
+}
+.cs-step p { padding-top: 0.5em; max-width: 70ch; }
+
+/* ---------- Timeline (2 weeks + 2 weeks) ---------- */
+.cs-timeline { margin-top: clamp(28px, 3vw, 48px); display: flex; flex-direction: column; gap: clamp(18px, 2vw, 28px); }
+.cs-timeline__top { display: flex; align-items: center; gap: clamp(12px, 1.4vw, 24px); }
+.cs-timeline__block { display: flex; flex-direction: column; gap: 4px; }
+.cs-timeline__num { letter-spacing: -0.03em; font-size: clamp(2.25rem, 0.6rem + 3vw, 3.25rem); }   /* larger "2 weeks" */
+.cs-timeline__plus { color: var(--cs-muted); font-size: clamp(1.375rem, 1.6vw, 1.75rem); }          /* much smaller "+" */
+
+/* blue inline highlight (#146AD1) */
+.cs-hl-blue { color: #146ad1; font-weight: 600; }
+
+/* Split sections: intro hugs its own text (left), context stretches (right) */
+.cs-split {
+  margin-top: clamp(36px, 4vw, 72px);
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);   /* intro hugs its widest (2nd) line */
+  gap: clamp(20px, 2vw, 36px);   /* reduced gap between intro and context */
+  align-items: start;
+}
+.cs-split__intro h3 { margin: 0; }
+.cs-split__main { display: flex; flex-direction: column; gap: clamp(24px, 3vw, 40px); }
+.cs-split__main .cs-timeline { margin-top: 0; }
+
+/* ---------- Confidential note (with lock) ---------- */
+.cs-note {
+  margin-top: clamp(20px, 2vw, 28px);
+  padding: clamp(22px, 2.4vw, 36px);
+  display: flex;
+  align-items: flex-start;            /* lock + text align to the top / first line */
+  gap: clamp(14px, 1.6vw, 22px);
+}
+.cs-note p { max-width: 72ch; }
+.cs-note__lock { flex: none; width: 22px; height: auto; color: var(--cs-muted); margin-top: 0.12em; }  /* smaller, left, top-aligned with first line */
+
+/* ---------- Deliverables accordion ---------- */
+.cs-accordion { display: flex; flex-direction: column; gap: 14px; }
+.cs-acc {
+  border: 1px solid var(--cs-line);
+  border-radius: var(--cs-radius);
+  background: #fff;
+  overflow: hidden;
+}
+.cs-acc__head {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.4vw, 20px);
+  padding: clamp(18px, 1.8vw, 28px) clamp(20px, 2vw, 32px);
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.3s var(--ease);
+}
+.cs-acc__head::-webkit-details-marker { display: none; }
+.cs-acc__head:hover { background: var(--cs-grey); }
+.cs-acc__titles { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cs-acc__sub { color: var(--cs-muted); }
+/* delivery icon (left side, #146AD1, aligned with the title line) */
+.cs-acc__icon { flex: none; color: #146ad1; display: inline-flex; align-self: flex-start; margin-top: 3px; }
+.cs-acc__icon svg { width: 30px; height: 30px; }
+/* refined circular chevron toggle */
+.cs-acc__chev {
+  flex: none;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--cs-line);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--cs-ink);
+  transition: transform 0.4s var(--ease-out), background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.cs-acc__chev svg { width: 15px; height: 15px; }
+.cs-acc__head:hover .cs-acc__chev { border-color: var(--cs-ink); }
+.cs-acc[open] .cs-acc__chev { transform: rotate(180deg); background: var(--cs-ink); border-color: var(--cs-ink); color: #fff; }
+/* open state — highlight the WHOLE card (head + body), not just the header */
+.cs-acc[open] { background: var(--cs-grey); border-color: rgba(24, 24, 24, 0.28); }
+.cs-acc[open] .cs-acc__head:hover { background: transparent; }
+/* smooth expand/collapse — height is animated in JS (case-study.js) for reliability.
+   Keep the panel rendered when closed (override the <details> default hide) so the
+   body can animate instead of snapping; padding lives on .cs-acc__media so the body
+   can collapse fully to 0. */
+.cs-acc__panel { display: block; }
+.cs-acc__body {
+  overflow: hidden;
+  height: 0; /* closed default; JS sets an explicit px height while animating */
+  opacity: 0;
+  transition: height 0.42s var(--ease-out), opacity 0.32s var(--ease);
+}
+.cs-acc[open] .cs-acc__body { height: auto; opacity: 1; }
+.cs-acc__media { padding: 0 clamp(20px, 2vw, 32px) clamp(20px, 2vw, 32px); }
+
+/* ---------- Other deliverables chips ---------- */
+.cs-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 1.2vw, 18px);
+}
+.cs-chip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;   /* icon on the left, then label */
+  gap: 12px;
+  padding: clamp(18px, 1.6vw, 26px) clamp(20px, 1.8vw, 28px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-grey);
+  border: 1px solid var(--cs-line);
+}
+.cs-chip__icon { flex: none; color: #146ad1; display: inline-flex; }
+.cs-chip__icon svg { width: 22px; height: 22px; }
+
+/* ---------- Result stat cards (horizontal 3-up) ---------- */
+.cs-results {
+  margin-top: clamp(24px, 3vw, 44px);   /* gap under the section heading */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 1.2vw, 18px);
+}
+.cs-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(10px, 1.2vw, 16px);
+  min-width: 0;
+  padding: clamp(20px, 2vw, 30px);   /* reduced padding */
+}
+/* number = Display 2 (70px); a unit suffix (.t-h4) sits inline at H4 */
+.cs-result__num { color: #fff; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+.cs-result__num .t-h4 { letter-spacing: -0.02em; }
+.cs-result__label { color: rgba(255, 255, 255, 0.74); }
+
+/* ---------- Production-time bars ---------- */
+.cs-bars { margin-top: clamp(36px, 4vw, 64px); display: flex; flex-direction: column; gap: 14px; }
+.cs-bars h3 { margin-bottom: 2px; }
+.cs-bars p { margin-bottom: clamp(12px, 1.4vw, 22px); }
+.cs-bar { display: grid; grid-template-columns: clamp(76px, 7vw, 110px) 1fr; align-items: center; gap: 16px; }
+.cs-bar__track { background: transparent; }
+.cs-bar__fill {
+  position: relative;
+  height: clamp(38px, 3.4vw, 48px);
+  width: var(--w);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-inline: 16px;
+  transform-origin: left;
+  transition: transform 1s var(--ease-out);
+}
+.cs-bar__fill--after { transition-delay: 0.18s; }
+/* grow the bars once the block scrolls into view (.cs-bars carries .reveal).
+   Gated on .js so that, without JS, the bars render full instead of collapsed. */
+.js .cs-bars:not(.in-view) .cs-bar__fill { transform: scaleX(0); }
+.cs-bar__fill--before { background: var(--cs-track); }
+.cs-bar__fill--after { background: var(--cs-blue); }
+.cs-bar__val { white-space: nowrap; letter-spacing: 0.02em; }
+.cs-bar__fill--before .cs-bar__val { color: var(--cs-ink); }
+.cs-bar__fill--after .cs-bar__val { color: #fff; }
+
+/* ---------- New Design Preview: tabs ---------- */
+.cs-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 0;
+}
+.cs-tab {
+  font: inherit;
+  font-size: var(--fs-h6);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--cs-muted);
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  cursor: pointer;
+  position: relative;
+  margin-right: clamp(14px, 1.6vw, 28px);
+  transition: color 0.3s var(--ease);
+}
+.cs-tab::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--cs-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease-out);
+}
+.cs-tab:hover { color: var(--cs-ink); }
+.cs-tab.is-active { color: var(--cs-ink); font-weight: 600; }
+.cs-tab.is-active::after { transform: scaleX(1); }
+
+/* ---------- New Design Preview: sticky tabs + note ---------- */
+/* Tabs + note stay pinned below the header while the (full-height) comparison
+   scrolls past, releasing naturally when the #preview section ends. */
+.cs-preview__bar {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 30;
+  background: #fff;
+  padding: 14px 0 18px;
+  margin-bottom: clamp(16px, 1.8vw, 26px);
+}
+.cs-preview__note { margin-top: 10px; }
+
+/* ---------- Before/After comparison ---------- */
+/* Both panes are stacked in the SAME grid cell, so the container sizes to the
+   TALLER of the two images — neither before nor after is ever cropped. The
+   container has NO radius (only the inner screenshots are rounded). */
+.cs-compare {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+  --pos: 50%;
+  --cmp-pad-x: clamp(28px, 7%, 84px);
+  --cmp-pad-top: clamp(96px, 13%, 152px);
+  --cmp-pad-bottom: clamp(28px, 7%, 84px);
+  user-select: none;
+  touch-action: pan-y;
+}
+.cs-compare__pane {
+  grid-area: 1 / 1; /* stack → row height = tallest image; panes stretch, bg fills behind the top-aligned image */
+  padding: var(--cmp-pad-top) var(--cmp-pad-x) var(--cmp-pad-bottom);
+}
+.cs-compare__pane--after { background: #EFF4F8; }
+/* BEFORE pane sits on top (later in DOM), clipped to the left of the handle */
+.cs-compare__pane--before {
+  background: #E0E0E0;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.cs-compare__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+.cs-compare__tag {
+  position: absolute;
+  top: clamp(20px, 3%, 30px);
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--cs-ink);
+  color: #fff;
+  letter-spacing: 0.04em;
+  z-index: 3;
+  pointer-events: none;
+}
+.cs-compare__tag--before { left: clamp(20px, 3%, 32px); }
+.cs-compare__tag--after { right: clamp(20px, 3%, 32px); background: var(--cs-blue); }
+.cs-compare__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  background: #fff;
+  transform: translateX(-50%);
+  z-index: 4;
+  cursor: ew-resize;
+  box-shadow: 0 0 0 1px rgba(24, 24, 24, 0.15);
+}
+/* the grip follows the viewport as you scroll (--grip-y is set in JS, since the
+   clipped container rules out CSS sticky); the full-height line is draggable anywhere */
+.cs-compare__grip {
+  position: absolute;
+  top: var(--grip-y, 50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.cs-compare__grip svg { width: 22px; height: 22px; }
+.cs-compare__handle:focus-visible { outline: 3px solid var(--cs-blue); outline-offset: 2px; }
+
+/* ---------- Comparison table — clean: no container, hairline row rules ---------- */
+.cs-cmp__head { display: flex; flex-direction: column; gap: 8px; margin-bottom: clamp(20px, 2vw, 32px); }
+.cs-cmp__row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.45fr 1.45fr;
+  gap: clamp(14px, 1.4vw, 26px);
+  padding: clamp(18px, 1.8vw, 26px) 0;
+  border-bottom: 1px solid var(--cs-line);
+  align-items: start;
+}
+.cs-cmp__row:last-child { border-bottom: 0; }
+.cs-cmp__row--head span { color: var(--cs-muted); }
+.cs-cmp__row--head .cs-cmp__after-h { color: var(--cs-blue); }
+.cs-cmp__key { align-self: center; display: flex; align-items: center; gap: 10px; }
+.cs-cmp__icon { flex: none; color: #9a9a9a; display: inline-flex; }   /* grey row icons */
+.cs-cmp__icon svg { width: 24px; height: 24px; }
+.cs-cmp__before { color: var(--cs-muted); }
+.cs-cmp__after { color: var(--cs-ink); }   /* black body text; only the AFTER label stays blue */
+
+/* ============================================================
+   OTHER PROJECTS (full-width, reuses .card / .other__* from styles.css)
+   ============================================================ */
+.cs-other {
+  padding-top: clamp(80px, 9vw, 150px);
+}
+.cs-other .other__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(40px, 5vw, 96px);
+}
+.cs-other .other__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2vw, 20px);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+/* Tablet: sidebar un-sticks and sits on top, content full width */
+@media (max-width: 1080px) {
+  .cs-layout { grid-template-columns: 1fr; gap: clamp(32px, 5vw, 56px); }
+  .cs-aside-toggle { display: none; }   /* sidebar already stacks here */
+  .cs-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    padding-bottom: clamp(24px, 4vw, 40px);
+    border-bottom: 1px solid var(--cs-line);
+  }
+  .cs-sidebar__desc { max-width: 60ch; }
+  /* TOC becomes a horizontal wrap on tablet */
+  .cs-toc__list { flex-direction: row; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+  .cs-toc__link { padding: 6px 14px; border: 1px solid var(--cs-line); border-radius: 999px; font-size: var(--fs-body); }
+  .cs-toc__link.is-active { background: var(--cs-ink); color: #fff; border-color: var(--cs-ink); font-size: var(--fs-body); }
+
+  .cs-workload { grid-template-columns: 1fr; gap: 18px; }
+}
+
+/* Tablet-narrow: collapse 3-col grids to 1 where text is long */
+@media (max-width: 900px) {
+  .cs-twocol { grid-template-columns: 1fr; }
+  .cs-split { grid-template-columns: 1fr; gap: clamp(14px, 3vw, 24px); }
+}
+
+/* Result 3-up needs a wide content column; in the narrow 2-col band the 70px
+   numbers won't fit three-up, so stack them as full-width rows there. */
+@media (min-width: 1081px) and (max-width: 1439px) {
+  .cs-results { grid-template-columns: 1fr; }
+  .cs-result { flex-direction: row; align-items: center; justify-content: space-between; gap: clamp(20px, 4vw, 64px); }
+  .cs-result__label { text-align: right; }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .cs-page { --cs-radius: 8px; --cs-radius-lg: 10px; --header-h: 64px; }   /* mobile navbar height */
+  .cs-shell { padding-top: 20px; }
+  .cs-section { padding-top: clamp(48px, 12vw, 72px); scroll-margin-top: 124px; }   /* clear the navbar + sticky TOC */
+
+  .cs-objgrid,
+  .cs-impact,
+  .cs-results,
+  .cs-chips { grid-template-columns: 1fr; }
+  .cs-meta { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* AI card stacks; the metric box becomes a row with the involvement label on
+     the left and the % on the right ("AI usage" label removed on mobile) */
+  .cs-ai { grid-template-columns: 1fr; gap: 16px; }
+  .cs-ai__metric { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
+  .cs-ai__metric > .t-body-sm { display: none; }   /* hide "AI usage" */
+  .cs-ai__inv-m { display: block; }                /* mobile-only involvement label (left of %) */
+  .cs-ai__pct { flex: none; }
+  .cs-ai__body > p:first-child { display: none; }  /* heading moved into the metric box */
+
+  /* objectives: compact + consistent num→title gap (was uneven due to min-height + auto) */
+  .cs-obj { min-height: 0; }
+  .cs-obj__num { margin-bottom: 0; }
+
+  /* result stat rows: subtext sits BESIDE the number (row), not below */
+  .cs-result { flex-direction: row; align-items: center; gap: clamp(16px, 4.5vw, 28px); }
+  .cs-result__num { flex: none; }
+  .cs-result__label { text-align: left; }
+
+  /* timeline: full-width, centered "2 weeks + 2 weeks" (larger); extra gap
+     before the "It took roughly…" paragraph (which stays left, outside __top) */
+  .cs-timeline { gap: clamp(24px, 6.5vw, 36px); }
+  .cs-timeline__top { flex-direction: column; align-items: center; text-align: center; gap: 8px; width: 100%; }
+  .cs-timeline__block { align-items: center; }
+  .cs-timeline__num { font-size: var(--fs-display-2); }   /* system: 48px on mobile */
+  .cs-timeline__plus { font-size: var(--fs-h2); }         /* system: 32px on mobile */
+
+  /* workload: note drops below the stat on mobile */
+  .cs-workload { grid-template-columns: 1fr; gap: 10px; }
+
+  /* flow becomes vertical, arrows rotate */
+  .cs-flow { grid-template-columns: 1fr; }
+  .cs-flow__arrow { transform: rotate(90deg); padding: 4px 0; }
+
+  /* comparison table → stacked cards */
+  .cs-cmp { border: 0; }
+  .cs-cmp__row { grid-template-columns: 1fr; gap: 8px; border: 1px solid var(--cs-line); border-radius: var(--cs-radius); margin-bottom: 12px; padding: 18px; }
+  .cs-cmp__row--head { display: none; }
+  .cs-cmp__key { align-self: start; font-size: var(--fs-h6); }
+  .cs-cmp__before { padding-top: 4px; }
+  .cs-cmp__before::before { content: "Before · "; font-weight: 600; color: var(--cs-muted); }
+  .cs-cmp__after { padding-left: 0; }
+  .cs-cmp__after::before {
+    content: "After · ";
+    position: static;
+    width: auto; height: auto;
+    background: none;
+    font-weight: 600;
+    color: var(--cs-blue);
+  }
+
+  /* bars: label above; the short "after" value sits to the RIGHT of the bar
+     (outside the narrow fill so it isn't cropped) in blue */
+  .cs-bar { grid-template-columns: 1fr; gap: 6px; }
+  .cs-bar__fill--after .cs-bar__val {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cs-blue);
+  }
+
+  /* compare: tighter frame padding + smaller grip on mobile */
+  .cs-compare {
+    --cmp-pad-x: 14px;
+    --cmp-pad-top: 52px;
+    --cmp-pad-bottom: 14px;
+  }
+  .cs-compare__shot { border-radius: 14px; }
+  .cs-compare__grip { width: 40px; height: 40px; }
+  .cs-compare__grip svg { width: 18px; height: 18px; }
+  .cs-compare__tag { padding: 6px 13px; }
+
+  /* ---- Custom stat sizes → system typography on mobile ---- */
+  .cs-workload__stat { font-size: var(--fs-h4); }   /* 24px, system */
+
+  /* ---- Overview: more breathing room + let the TOC stick across content.
+     display:contents drops the sidebar box so its children (incl. the TOC)
+     become rows of the single-column grid → the sticky TOC's containing block
+     is the full-height layout, so it pins under the navbar through the page. */
+  .cs-sidebar { display: contents; }
+  .cs-layout { row-gap: clamp(24px, 6.5vw, 34px); }
+  .cs-content { margin-top: clamp(6px, 2vw, 14px); }
+
+  /* ---- "Jump into section" ----
+     In-flow it's a NORMAL section (plain label + full list, no glass). It scrolls
+     away with the content. Only once its WHOLE box has cleared the navbar does it
+     pin as a fixed, full-bleed tab and collapse to a dropdown (.is-stuck, set in
+     case-study.js). A JS placeholder holds the vacated space so nothing jumps, and
+     it fades in / out like the navbar (.is-leaving plays the exit). */
+  .cs-toc { gap: 0; }
+  .cs-toc__placeholder { width: 100%; }   /* reserves the in-flow footprint while pinned */
+  .cs-toc.is-stuck {
+    position: fixed;
+    top: var(--header-h);   /* sits flush under the mobile navbar */
+    left: 0;
+    right: 0;
+    z-index: 90;
+    padding-inline: var(--gutter);   /* full-bleed bar, content aligned to the page gutter */
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    box-shadow: 0 10px 22px -14px rgba(24, 24, 24, 0.45);   /* spans edge to edge now */
+    animation: csTocIn 0.32s var(--ease-out) both;
+  }
+  .cs-toc.is-stuck.is-leaving { animation: csTocOut 0.28s var(--ease-out) both; }
+  @keyframes csTocIn  { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes csTocOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); } }
+  .cs-toc__heading { display: none; }   /* hide the desktop "Table of contents" */
+  .cs-toc__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+    padding: 14px 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--cs-line);
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--fs-body-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--cs-ink);
+  }
+  /* chevron appears only once collapsed (stuck); in-flow it reads as a heading */
+  .cs-toc__toggle svg { flex: none; width: 20px; height: 20px; display: none; transition: transform 0.35s var(--ease-out); }
+  .cs-toc.is-stuck .cs-toc__toggle svg { display: block; }
+  .cs-toc.is-stuck.is-open .cs-toc__toggle svg { transform: rotate(180deg); }
+  /* list: visible in-flow (normal section); hidden only when stuck + closed */
+  .cs-toc__list { display: flex; flex-direction: column; gap: 0; align-items: stretch; padding: 4px 0 0; }
+  .cs-toc.is-stuck .cs-toc__list { display: none; }
+  .cs-toc.is-stuck.is-open .cs-toc__list { display: flex; max-height: calc(100vh - var(--header-h) - 24px); overflow-y: auto; }
+  /* plain-text links, ALWAYS Body Large; selected vs not differs ONLY in colour */
+  .cs-toc__link {
+    display: block;
+    width: 100%;
+    padding: 12px 2px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font-size: var(--fs-body-lg);
+    font-weight: 400;
+    transform: none;
+  }
+  .cs-toc__link.is-active { color: var(--cs-ink); font-size: var(--fs-body-lg); font-weight: 400; background: none; border: 0; transform: none; }
+  /* tall chevron-up close button, only when stuck + open (avoids misclicks) */
+  .cs-toc__close {
+    display: none;
+    width: 100%;
+    padding: 18px 0;
+    margin-top: 2px;
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--cs-line);
+    cursor: pointer;
+    color: var(--cs-muted);
+    align-items: center;
+    justify-content: center;
+  }
+  .cs-toc.is-stuck.is-open .cs-toc__close { display: flex; }
+  .cs-toc__close svg { width: 24px; height: 24px; }
+
+  /* the New-Design-Preview tabs bar isn't sticky on mobile (the sticky TOC owns
+     the under-navbar slot — avoids two sticky bars colliding) */
+  .cs-preview__bar { position: static; }
+
+  /* ---- Challenges: icon aligns to the TOP of the text ---- */
+  .cs-challenges li { align-items: flex-start; }
+
+  /* ---- 3 tool boxes: the DESCRIPTION body text → black + Body Normal
+     (tool name + logo keep their original size) ---- */
+  .cs-flow__desc { color: var(--cs-ink); font-size: var(--fs-body); }
+
+  /* ---- Split intros collapse to one line on mobile ---- */
+  .cs-split__intro br { display: none; }
+
+  /* ---- Build steps: smaller number badges; copy top-aligned to its number ---- */
+  .cs-step { grid-template-columns: 44px 1fr; gap: 16px; align-items: start; }
+  .cs-step__num { width: 44px; height: 44px; font-size: var(--fs-body-lg); }
+  .cs-step:not(:last-child)::before { left: 22px; }
+  .cs-step p { padding-top: 0; }   /* align copy to the top of its number */
+
+  /* ---- Core deliverables: smaller titles; icon ≈ title size ---- */
+  .cs-acc__head { gap: 12px; padding: 16px; }
+  .cs-acc__title { font-size: var(--fs-body-lg); }
+  .cs-acc__icon { margin-top: 1px; }
+  .cs-acc__icon svg { width: 18px; height: 18px; }   /* as large as the title (Body Large) */
+  .cs-acc__chev { width: 30px; height: 30px; }
+
+  /* ---- "Drag the handle…" note → smaller on mobile ---- */
+  .cs-preview__note { font-size: var(--fs-body-sm); }
+
+  /* ---- Deliverables: magnify button (images are small on mobile) ---- */
+  .cs-acc__media .cs-ph--img { position: relative; }
+  .cs-zoom-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(24, 24, 24, 0.62);
+    color: #fff;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 6px 18px -6px rgba(24, 24, 24, 0.55);
+    z-index: 3;
+  }
+  .cs-zoom-btn svg { width: 24px; height: 24px; }
+
+  /* other projects single column */
+  .cs-other .other__grid { grid-template-columns: 1fr; gap: 32px; }
+  .cs-other .other__cta { display: none; }
+}
+
+/* ---- Fullscreen image lightbox (magnify + pinch-zoom) ----
+   The trigger button is mobile-only (hidden on desktop), so this overlay only ever
+   opens on small screens. Kept outside the media query so the open state is honoured
+   regardless of any resize while it's showing. */
+@media (min-width: 761px) { .cs-zoom-btn { display: none; } }   /* desktop: images are large enough */
+.cs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(12, 12, 12, 0.96);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  overscroll-behavior: contain;
+}
+.cs-lightbox.is-open { display: flex; animation: csLbIn 0.22s var(--ease-out) both; }
+@keyframes csLbIn { from { opacity: 0; } to { opacity: 1; } }
+.cs-lightbox__stage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;   /* we drive pinch/pan ourselves */
+}
+.cs-lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.cs-lightbox__close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+}
+.cs-lightbox__close svg { width: 24px; height: 24px; }

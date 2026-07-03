@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amanda Idris · About</title>
+  <meta name="description" content="About Amanda Idris, Product Designer, DesignOps Specialist and Systems Architect. Six years building the visual infrastructure behind high-growth brands." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/css/about-page.css?v=34" />
+</head>
+<body>
+  <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#111111" />
+        <stop offset="1" stop-color="#F8F8F8" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="/" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/about" class="nav__link is-active" aria-current="page">About</a>
+        <a href="/project" class="nav__link">Works</a>
+        <a href="/#resume" class="nav__link">Resume</a>
+        <a href="/#contact" class="nav__link">Contact</a>
+        <a href="https://linkedin.com" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://behance.net" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="/project" class="mobile-menu__link">Works</a>
+      <a href="/#resume" class="mobile-menu__link">Resume</a>
+      <a href="/#contact" class="mobile-menu__link">Contact</a>
+      <a href="https://linkedin.com" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://behance.net" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- .m-stage wraps the tab views + the mobile section nav. The contact/footer
+         sits OUTSIDE it, so the sticky nav parks at the stage's end (just before
+         the footer) instead of floating over it. -->
+    <div class="m-stage">
+    <!-- ===================== HERO (bento) ===================== -->
+    <section class="ab-hero" id="profile" data-screen-label="About — Hero">
+      <div class="container">
+        <div class="bento reveal">
+
+          <!-- intro headline -->
+          <div class="bento__intro">
+            <h1 class="bento__headline">Amanda is a product designer and systems architect who turns complex, fast-moving brands into coherent visual systems — <span class="hl">where creative craft meets digital infrastructure.</span></h1>
+          </div>
+
+          <!-- right cluster: stats + portrait + side (the bento) -->
+          <div class="bento__cards">
+
+          <!-- stats -->
+          <div class="bento__stats" aria-label="At a glance">
+            <div class="stat-card stat-card--dark">
+              <span class="stat-card__num">6+</span>
+              <span class="stat-card__label">Years of experience</span>
+            </div>
+            <div class="stat-card stat-card--accent">
+              <span class="stat-card__num">20+</span>
+              <span class="stat-card__label">Different brands<br />I&rsquo;ve worked with</span>
+            </div>
+            <div class="stat-card stat-card--accent">
+              <span class="stat-card__num">2021</span>
+              <span class="stat-card__label">Building AI into my design process since 2021</span>
+            </div>
+          </div>
+
+          <!-- portrait -->
+          <div class="bento__portrait">
+            <img src="/images/profile.webp" alt="Portrait of Amanda Alfatah Idris" loading="eager" />
+            <div class="portrait__top">
+              <p class="portrait__name">Amanda Alfatah Idris</p>
+            </div>
+            <div class="portrait__bottom">
+              <ul class="portrait__titles">
+                <li>DesignOps Specialist</li>
+                <li>Systems Architect</li>
+                <li>Product Designer</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- side: languages + current role -->
+          <div class="bento__side">
+            <div class="lang-card card-accent">
+              <p class="card-eyebrow">The languages I speak</p>
+              <ul class="lang-list">
+                <li class="lang">
+                  <span class="lang__name">Bahasa</span>
+                  <span class="lang__bar" style="--lvl:100%"><span>Native</span></span>
+                </li>
+                <li class="lang">
+                  <span class="lang__name">English</span>
+                  <span class="lang__bar" style="--lvl:82%"><span>Full proficiency</span></span>
+                </li>
+                <li class="lang">
+                  <span class="lang__name">Arabic</span>
+                  <span class="lang__bar" style="--lvl:55%"><span>Intermediate</span></span>
+                </li>
+              </ul>
+            </div>
+            <div class="now-card card-accent-strong">
+              <div class="now-card__head">
+                <p class="card-eyebrow">Current role</p>
+                <p class="now-card__text"><b>Associate Design Manager</b><br />at Aspire.</p>
+              </div>
+              <img class="now-card__logo" src="/images/aspire-logo.svg" alt="Aspire" width="306" height="69" />
+            </div>
+          </div>
+
+          </div><!-- /.bento__cards -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Wrapper for the content sections (mobile shows one at a time via .m-secnav) -->
+    <div class="m-flow">
+
+    <!-- ===================== 01 — EXPERIENCE ===================== -->
+    <section class="ab-sec" id="experience" data-screen-label="About — Experience">
+      <div class="container">
+        <header class="ab-sec-head reveal">
+          <div>
+            <p class="ab-sec-num">01 — Experience</p>
+            <h2 class="ab-sec-title">Career Trajectory</h2>
+          </div>
+          <p class="ab-sec-intro">From a travel agency in Morocco to design operations across Singapore and Jakarta. Six years, four chapters, one throughline. Select a chapter on the timeline to read the full story.</p>
+        </header>
+
+        <div class="tl reveal">
+          <!-- chart (desktop / tablet) -->
+          <div class="tl__chart" aria-hidden="false">
+            <div class="tl__years">
+              <span class="tl__year" style="left:0%">2017</span>
+              <span class="tl__year" style="left:22.2%">2019</span>
+              <span class="tl__year" style="left:44.4%">2021</span>
+              <span class="tl__year" style="left:66.7%">2023</span>
+              <span class="tl__year" style="left:88.9%">2025</span>
+              <span class="tl__year" style="left:100%">Now</span>
+            </div>
+            <div class="tl__grid">
+              <span class="tl__gridline" style="left:0%"></span>
+              <span class="tl__gridline" style="left:22.2%"></span>
+              <span class="tl__gridline" style="left:44.4%"></span>
+              <span class="tl__gridline" style="left:66.7%"></span>
+              <span class="tl__gridline" style="left:88.9%"></span>
+              <span class="tl__gridline" style="left:100%"></span>
+            </div>
+
+            <div class="tl__lanes">
+              <div class="tl__lane">
+                <button type="button" class="tl-bar" data-exp="morina" style="--start:4%;--end:27%">
+                  <span class="tl-bar__label">Graphic Designer · MORINA</span>
+                </button>
+                <button type="button" class="tl-bar" data-exp="freelance" style="--start:45%;--end:52%">
+                  <span class="tl-bar__label">Freelance</span>
+                </button>
+                <button type="button" class="tl-bar tl-bar--aspire" data-exp="aspire" style="--start:54%;--end:100%" aria-label="Aspire Financial Technology, 3 roles">
+                  <span class="tl-aspire-co">Aspire Financial Technology</span>
+                  <span class="tl-seg tl-seg--1" style="flex:16" title="Visual Designer">Visual Designer</span>
+                  <span class="tl-seg tl-seg--2" style="flex:27" title="Senior Visual Designer">Senior Visual Designer</span>
+                  <span class="tl-seg tl-seg--3" style="flex:11" title="Associate Design Manager">Assoc. Mgr</span>
+                </button>
+              </div>
+              <div class="tl__lane">
+                <button type="button" class="tl-bar tl-bar--edu" data-exp="study" style="--start:0%;--end:39%">
+                  <span class="tl-bar__label">Study Period · USMBA, Fès</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- mobile picker (chips). Order: current (Aspire) on the left → oldest on the right. -->
+          <div class="tl__picker" role="tablist" aria-label="Experience chapters">
+            <button type="button" class="tl-bar" data-exp="aspire"><span class="tl-bar__label">Aspire</span><span class="tl-bar__yr">2021 - 2026</span></button>
+            <button type="button" class="tl-bar" data-exp="freelance"><span class="tl-bar__label">Freelance</span><span class="tl-bar__yr">2021</span></button>
+            <button type="button" class="tl-bar" data-exp="morina"><span class="tl-bar__label">MORINA</span><span class="tl-bar__yr">2017 - 2019</span></button>
+            <button type="button" class="tl-bar tl-bar--edu" data-exp="study"><span class="tl-bar__label">Study Period</span><span class="tl-bar__yr">2017 - 2020</span></button>
+          </div>
+          <!-- swipe hint sits just under the chapter switcher -->
+          <div class="tl__hint">
+            <svg class="tl__hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 14a8 8 0 0 1-8 8"/>
+              <path d="M18 11v-1a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/>
+              <path d="M14 10V9a2 2 0 0 0-2-2 2 2 0 0 0-2 2v1"/>
+              <path d="M10 9.5V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v10"/>
+              <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+            </svg>
+            <span>Swipe to move between chapters</span>
+          </div>
+
+          <!-- detail panels -->
+          <div class="tl__detail">
+
+            <!-- ASPIRE (default) -->
+            <article class="exp-panel" data-panel="aspire">
+              <div class="exp-grid">
+                <div class="exp-org">
+                  <h3 class="exp-org__name">Aspire Financial Technology</h3>
+                  <p class="exp-org__meta">Singapore / Jakarta<br />4 yrs 7 mos · 3 roles</p>
+                </div>
+                <div class="exp-roles">
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">Associate Design Manager</h4>
+                      <span class="exp-role__meta">Jul 2025 – Present · Singapore · Remote</span>
+                    </div>
+                    <ul class="exp-list">
+                      <li>Restructured the Figma workspace and mentored team members to drive <b>efficient design-system adoption</b>.</li>
+                      <li>Created detailed documentation and design guidelines that align creative teams with cross-functional partners.</li>
+                      <li>Developed a website design system with Figma&ndash;Relume integration, <b>accelerating web development by up to ~75%</b>.</li>
+                      <li>Led a 100+ page website revamp under one clear, shared set of design guidelines.</li>
+                      <li>Drove a <b>67% increase in website CTR</b> and drastically improved page-load speeds.</li>
+                      <li>Executed a global typography migration from &ldquo;Avenir&rdquo; to &ldquo;Inter&rdquo; by enforcing new font variables across all materials.</li>
+                    </ul>
+                  </div>
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">Senior Visual Designer</h4>
+                      <span class="exp-role__meta">Apr 2023 – Jul 2025 · Indonesia · Hybrid</span>
+                    </div>
+                    <ul class="exp-list">
+                      <li>Delivered <b>500+ design requests annually</b> (JIRA tickets) with minimal delays and consistent quality.</li>
+                      <li>Maintained on-time delivery through periods of major organizational turbulence and market exits.</li>
+                      <li>Engineered a high-impact Pricing Page using AI-driven research to align complex stakeholder requirements.</li>
+                      <li>Boosted email conversions from 5% to 8% by optimizing banners and doubling click rates.</li>
+                      <li><b>Built a universal Blog Banner library</b>, scaling visual consistency across 1,000+ articles.</li>
+                      <li>Secured a <b>10/10 peer eNPS</b> for exceptional reliability from cross-functional stakeholders.</li>
+                    </ul>
+                  </div>
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">Visual Designer</h4>
+                      <span class="exp-role__meta">Nov 2021 – Mar 2023 · Singapore · Remote</span>
+                    </div>
+                    <ul class="exp-list">
+                      <li>Main point of contact for web design, owning the web pages and localized landing pages.</li>
+                      <li>Created social assets for LinkedIn, Instagram and YouTube, tailored across 3 markets (SG, ID, HK).</li>
+                      <li>Worked within the Commercial department, supporting day-to-day creative and design needs.</li>
+                      <li>Collaborated closely with Product to keep features and messaging clear and aligned.</li>
+                      <li>Designed graphic assets for Aspire-hosted and co-branded events.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- FREELANCE -->
+            <article class="exp-panel" data-panel="freelance" hidden>
+              <div class="exp-grid">
+                <div class="exp-org">
+                  <h3 class="exp-org__name">Freelance Designer</h3>
+                  <p class="exp-org__meta">Self-employed · Remote<br />Apr 2021 – Aug 2021 · 5 mos</p>
+                </div>
+                <div class="exp-roles">
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">UI/UX &amp; Identity Design</h4>
+                    </div>
+                    <p class="exp-role__desc">Working through Behance &amp; Instagram to help small businesses sharpen their digital presence.</p>
+                    <ul class="exp-list">
+                      <li><b>Completed 20+ projects</b> in five months across a range of industries.</li>
+                      <li>Ran interactive client interviews using the <b>CORE Discovery framework (the Futur)</b> to shape user stories and flows.</li>
+                      <li>Delivered 3 landing pages, 1 full website, and 2 website redesigns.</li>
+                      <li>Created <b>the visual identity for 6 brands</b>, presented through stylescapes and clear concept visualization.</li>
+                      <li>Took on selected photography and video-editing projects.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- MORINA -->
+            <article class="exp-panel" data-panel="morina" hidden>
+              <div class="exp-grid">
+                <div class="exp-org">
+                  <h3 class="exp-org__name">MORINA Travel Agency</h3>
+                  <p class="exp-org__meta">Rabat-Salé-Kénitra, Morocco<br />Jul 2017 – Aug 2019 · 2 yrs 2 mos</p>
+                </div>
+                <div class="exp-roles">
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">Graphic Designer</h4>
+                    </div>
+                    <p class="exp-role__desc">Joined near the agency&rsquo;s founding and helped grow it into one of Morocco&rsquo;s most recognizable travel brands.</p>
+                    <ul class="exp-list">
+                      <li>Built the <b>brand&rsquo;s visual identity</b>, aligning the visions of 3 different stakeholders.</li>
+                      <li>Defined the logomark, brand colors, typefaces, and a coherent set of guidelines.</li>
+                      <li>Designed posters, banners, business cards, and brand collateral across channels.</li>
+                      <li>Managed social media and content strategy, <b>lifting customer conversion by roughly 150%</b>.</li>
+                      <li>Created 8+ customer-friendly itineraries; occasionally led tours and shot photography.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- STUDY -->
+            <article class="exp-panel" data-panel="study" hidden>
+              <div class="exp-grid">
+                <div class="exp-org">
+                  <h3 class="exp-org__name">Université Sidi Mohammed Ben Abdellah, Fès</h3>
+                  <p class="exp-org__meta">Bachelor&rsquo;s degree, Islamic Studies<br />2017 – 2020</p>
+                </div>
+                <div class="exp-right">
+                  <div class="scholar">
+                    <h4 class="scholar__title">Full scholarship awardee</h4>
+                    <p class="scholar__body">One of just 15 Indonesian students selected to study at Morocco&rsquo;s number-one university on a full scholarship, awarded by AMCI and the Ministry of Religious Affairs of the Republic of Indonesia (KEMENAG).</p>
+                    <div class="scholar__badges">
+                      <span class="cred">
+                        <span class="cred__abbr">AMCI</span>
+                        <span class="cred__full">Agence Marocaine de Coopération Internationale</span>
+                      </span>
+                      <span class="cred">
+                        <span class="cred__abbr">KEMENAG</span>
+                        <span class="cred__full">Ministry of Religious Affairs, Republic of Indonesia</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="exp-role">
+                    <div class="exp-role__head">
+                      <h4 class="exp-role__title">Activities &amp; societies</h4>
+                    </div>
+                    <ul class="exp-list">
+                      <li>English Debate Club &middot; Bab al Ilm</li>
+                      <li>Association of South-East Asian Students in Morocco</li>
+                      <li>Photography Club</li>
+                    </ul>
+                  </div>
+
+                  <div class="exp-nested">
+                    <span class="exp-nested__tag">Organizational experience</span>
+                    <div class="exp-role">
+                      <div class="exp-role__head">
+                        <h4 class="exp-role__title">Head of Information &amp; Media Division</h4>
+                        <span class="exp-role__meta">PPI Maroko · Jun 2018 – Jun 2019 · Morocco</span>
+                      </div>
+                      <ul class="exp-list">
+                        <li>Led a team of young photographers, designers, content creators and writers documenting the Indonesian community in Morocco.</li>
+                        <li>Produced 226 social posts and 52 website articles reaching 4,000+ viewers per week.</li>
+                        <li>Restructured the official PPI Maroko website (ppimaroko.id).</li>
+                        <li>Documented 17 different agendas in photo &amp; video and organized 2 community seminars on photography &amp; design.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 — SKILLSETS ===================== -->
+    <section class="ab-sec" id="skillsets" data-screen-label="About — Skillsets">
+      <div class="container">
+        <header class="ab-sec-head reveal">
+          <div>
+            <p class="ab-sec-num">02 — Skillsets</p>
+            <h2 class="ab-sec-title">A T-shaped designer.</h2>
+          </div>
+          <p class="ab-sec-intro">In practice, that means turning fast-moving products into systems teams can build on: interfaces and design systems that scale cleanly, shipped faster with AI in the loop. And because I work across branding, motion, data and product strategy, I can carry a project from first idea to launch and keep design, engineering and business aligned.</p>
+        </header>
+
+        <div class="tshape reveal">
+          <!-- mobile-only: 2-tab switcher + tiny T illustration + caption -->
+          <div class="m-tshape">
+            <div class="m-tshape__tabs" role="tablist" aria-label="Skill groups">
+              <span class="m-tshape__thumb" aria-hidden="true"></span>
+              <button type="button" class="m-tshape__tab is-active" data-skill="deep">Deep Mastery</button>
+              <button type="button" class="m-tshape__tab" data-skill="broad">Broad skills</button>
+            </div>
+            <div class="m-tshape__ill" aria-hidden="true">
+              <svg viewBox="0 0 204 131" xmlns="http://www.w3.org/2000/svg">
+                <g class="ill-deep">
+                  <rect x="90" y="4"   width="24" height="18" rx="3"/>
+                  <rect x="90" y="25"  width="24" height="18" rx="3"/>
+                  <rect x="90" y="46"  width="24" height="18" rx="3"/>
+                  <rect x="90" y="67"  width="24" height="18" rx="3"/>
+                  <rect x="90" y="88"  width="24" height="18" rx="3"/>
+                  <rect x="90" y="109" width="24" height="18" rx="3"/>
+                </g>
+                <g class="ill-broad">
+                  <rect x="6"   y="88"  width="24" height="18" rx="3"/>
+                  <rect x="34"  y="88"  width="24" height="18" rx="3"/>
+                  <rect x="62"  y="88"  width="24" height="18" rx="3"/>
+                  <rect x="118" y="88"  width="24" height="18" rx="3"/>
+                  <rect x="146" y="88"  width="24" height="18" rx="3"/>
+                  <rect x="174" y="88"  width="24" height="18" rx="3"/>
+                  <rect x="6"   y="109" width="24" height="18" rx="3"/>
+                  <rect x="34"  y="109" width="24" height="18" rx="3"/>
+                  <rect x="62"  y="109" width="24" height="18" rx="3"/>
+                  <rect x="118" y="109" width="24" height="18" rx="3"/>
+                  <rect x="146" y="109" width="24" height="18" rx="3"/>
+                  <rect x="174" y="109" width="24" height="18" rx="3"/>
+                </g>
+              </svg>
+            </div>
+            <div class="m-tshape__cap">
+              <p class="m-tshape__cap-deep"><b>Deep mastery.</b> Where I go deepest: interfaces and design systems that scale cleanly and stay consistent as the product grows.</p>
+              <p class="m-tshape__cap-broad"><b>Broad skills.</b> The range that lets me carry work from concept to launch, bridging design, engineering, product and business so good ideas actually ship, intact.</p>
+            </div>
+          </div>
+
+          <span class="tshape__cap">Deep Mastery<span>Where I go deepest: interfaces and design systems that scale cleanly and stay consistent as the product grows.</span></span>
+          <div class="tshape__grid">
+            <!-- muted-sage grouping panel behind the broad-knowledge fan -->
+            <span class="tshape__box" aria-hidden="true"></span>
+            <!-- deep-mastery vertical (centre column, highlighted) -->
+            <span class="sk sk--deep" style="grid-column:4;grid-row:1">AI Design Engineering</span>
+            <span class="sk sk--deep" style="grid-column:4;grid-row:2">Design Systems</span>
+            <span class="sk sk--deep" style="grid-column:4;grid-row:3">Interaction Design</span>
+            <span class="sk sk--deep" style="grid-column:4;grid-row:4">Product Visuals</span>
+            <span class="sk sk--deep" style="grid-column:4;grid-row:5">Product Design</span>
+            <span class="sk sk--deep" style="grid-column:4;grid-row:6">UI/UX Design</span>
+
+            <!-- broad &amp; collaborative knowledge -->
+            <span class="tshape__broadlabel">Broad &amp; Collaborative Knowledge<span>The range that lets me carry work from concept to launch, bridging design, engineering, product and business so good ideas actually ship, intact.</span></span>
+
+            <span class="sk" style="grid-column:5;grid-row:4">Design Thinking</span>
+
+            <span class="sk" style="grid-column:2;grid-row:5">Product Management</span>
+            <span class="sk" style="grid-column:3;grid-row:5">Identity Design</span>
+            <span class="sk" style="grid-column:5;grid-row:5">Motion Design</span>
+            <span class="sk" style="grid-column:6;grid-row:5">Data Visualization</span>
+
+            <span class="sk" style="grid-column:1;grid-row:6">Frontend Development</span>
+            <span class="sk" style="grid-column:2;grid-row:6">Business Strategy</span>
+            <span class="sk" style="grid-column:3;grid-row:6">Branding</span>
+            <span class="sk" style="grid-column:5;grid-row:6">Visual Design</span>
+            <span class="sk" style="grid-column:6;grid-row:6">Information Architecture</span>
+            <span class="sk" style="grid-column:7;grid-row:6">Photography</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 — TOOLS ===================== -->
+    <section class="ab-sec" id="tools" data-screen-label="About — Tools">
+      <div class="container">
+        <div class="tools-layout reveal">
+        <header class="ab-sec-head">
+          <div>
+            <p class="ab-sec-num">03 — Tools</p>
+            <h2 class="ab-sec-title">The toolkit.</h2>
+          </div>
+          <p class="ab-sec-intro">The software I reach for every day, grouped by how fluently I work in it, from the native, everyday tools to the ones I bring in for specific jobs.</p>
+        </header>
+
+        <div class="tools">
+          <!-- Mastery -->
+          <div class="tools__tier tools__tier--mastery">
+            <div class="tier__label">
+              <span class="tier__name">Mastery</span>
+              <span class="tier__sub">(Native fluency)</span>
+            </div>
+            <div class="tier__grid">
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/figma.svg" alt="Figma" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Fig</span></span><span class="tool__name">Figma</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/claude.svg?v=2" alt="Claude" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">A</span></span><span class="tool__name">Claude</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/photoshop.svg" alt="Photoshop" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Ps</span></span><span class="tool__name">Photoshop</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/illustrator.svg" alt="Illustrator" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Ai</span></span><span class="tool__name">Illustrator</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/after-effects.svg" alt="After Effects" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Ae</span></span><span class="tool__name">After Effects</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/notion.svg?v=2" alt="Notion" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">N</span></span><span class="tool__name">Notion</span></div>
+            </div>
+          </div>
+
+          <!-- Intermediate -->
+          <div class="tools__tier">
+            <div class="tier__label">
+              <span class="tier__name">Intermediate</span>
+              <span class="tier__sub">(High proficiency)</span>
+            </div>
+            <div class="tier__grid">
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/lightroom.svg" alt="Lightroom" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Lr</span></span><span class="tool__name">Lightroom</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/premiere.svg" alt="Premiere Pro" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Pr</span></span><span class="tool__name">Premiere Pro</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/canva.svg" alt="Canva" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Cv</span></span><span class="tool__name">Canva</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/notebooklm.svg" alt="NotebookLM" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">NL</span></span><span class="tool__name">Notebook<span class="tool__name-br">LM</span></span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/midjourney.svg" alt="MidJourney" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Mj</span></span><span class="tool__name">MidJourney</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/relume.webp" alt="Relume" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Re</span></span><span class="tool__name">Relume</span></div>
+            </div>
+          </div>
+
+          <!-- Support -->
+          <div class="tools__tier">
+            <div class="tier__label">
+              <span class="tier__name">Support</span>
+              <span class="tier__sub">(Functional knowledge)</span>
+            </div>
+            <div class="tier__grid">
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/microsoft.svg?v=2" alt="Microsoft" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Ms</span></span><span class="tool__name">Microsoft Apps</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/google.svg" alt="Google" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Go</span></span><span class="tool__name">Google Apps</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/jira.svg" alt="Jira" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Ji</span></span><span class="tool__name">Jira</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/miro.svg?v=2" alt="Miro" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Mi</span></span><span class="tool__name">Miro</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/hubspot.svg?v=2" alt="HubSpot" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Hs</span></span><span class="tool__name">HubSpot</span></div>
+              <div class="tool"><span class="tool__icon"><img src="/images/tools/webflow.svg?v=2" alt="Webflow" loading="lazy" onerror="this.closest('.tool__icon').classList.add('noimg');this.remove();"><span class="mono">Wf</span></span><span class="tool__name">Webflow</span></div>
+            </div>
+          </div>
+        </div>
+        </div><!-- /.tools-layout -->
+      </div>
+    </section>
+    </div><!-- /.m-flow -->
+
+    <!-- Mobile-only section nav: sticky to the viewport bottom while a section
+         scrolls, then parks at the end of the section (just above the footer). -->
+    <nav class="m-secnav" aria-label="Section navigation">
+      <p class="m-secnav__hint">Tap a section to jump there</p>
+      <div class="m-secnav__row">
+        <button type="button" class="m-secnav__tab is-active" data-sec="profile">Profile</button>
+        <button type="button" class="m-secnav__tab" data-sec="experience">Experience</button>
+        <button type="button" class="m-secnav__tab" data-sec="skillsets">Skillsets</button>
+        <button type="button" class="m-secnav__tab" data-sec="tools">Tools</button>
+      </div>
+    </nav>
+    </div><!-- /.m-stage -->
+
+    <!-- ===================== CONTACT + FOOTER ===================== -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact__info">
+          <h2 class="contact__title reveal">Let&rsquo;s get in touch!</h2>
+
+          <div class="contact__details reveal">
+            <div class="contact__email-wrap">
+              <button type="button" class="contact__email" data-copy="amandaalfattah@gmail.com" aria-label="Copy email address to clipboard">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="contact__email-text">amandaalfattah@gmail.com</span>
+              </button>
+              <span class="copy-toast" role="status" aria-live="polite">Copied to clipboard</span>
+            </div>
+
+            <div class="contact__links">
+              <div class="contact__col">
+                <a href="https://linkedin.com" class="link-arrow" target="_blank" rel="noopener">
+                  <span>Chat on Linkedin</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="https://behance.net" class="link-arrow" target="_blank" rel="noopener">
+                  <span>Visit my Behance</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+              <div class="contact__col">
+                <a href="/#resume" class="link-arrow">
+                  <span>See my resume</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="/" class="link-arrow">
+                  <span>Back to home</span>
+                  <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="footer__info">
+            <p class="footer__name">Site by Amanda Alfatah Idris</p>
+            <p class="footer__detail">Adobe user since 2016, Figma user since 2018.</p>
+          </div>
+          <p class="footer__year">&copy;2026</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Standalone-bundle splash / no-JS fallback -->
+  <template id="__bundler_thumbnail" data-bg-color="#ffffff">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#ffffff"/>
+      <text x="600" y="470" font-family="Figtree, system-ui, sans-serif" font-size="360" font-weight="500" letter-spacing="-18" text-anchor="middle" fill="#000000">AI</text>
+      <rect x="430" y="540" width="340" height="6" rx="3" fill="#000000"/>
+      <text x="600" y="610" font-family="Figtree, system-ui, sans-serif" font-size="34" font-weight="400" letter-spacing="2" text-anchor="middle" fill="rgba(0,0,0,0.55)">AMANDA IDRIS — ABOUT</text>
+    </svg>
+  </template>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/script.js?v=16"></script>
+  <script src="/js/about-page.js?v=13"></script>
+</body>
+</html>

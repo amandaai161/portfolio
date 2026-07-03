@@ -1,0 +1,228 @@
+/* ============================================================
+   Amanda Idris — Projects directory page
+   Loaded AFTER styles.css + type-system.css. Only adds the
+   grid + hover-pop card that this page needs; everything else
+   (header, contact, footer, reveal, tokens) is inherited.
+   ============================================================ */
+
+/* Main section container — capped to 1200px of CONTENT
+   (mirrors .container: the max includes the two gutters so the
+   inner column tops out at exactly 1200px). */
+.pg-main {
+  width: 100%;
+  max-width: calc(1200px + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-top: clamp(40px, 6vw, 88px);
+  /* generous tail so a hovered last-row card can pop DOWN into
+     empty space instead of colliding with the contact section */
+  padding-bottom: clamp(140px, 18vw, 300px);
+}
+
+.pg-title {
+  font-weight: 500;
+  margin-bottom: clamp(40px, 5.5vw, 96px);
+}
+
+/* ---------- Grid ---------- */
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 1.2vw, 16px);
+}
+
+/* ---------- Card ----------
+   At rest each tile shows ONLY its square image. On hover the card
+   "pops": a white framed container fades in and grows outward from
+   its centre, and the title / tags / description reveal below,
+   overlaying neighbours (no reflow). The image is not re-scaled. */
+.pcard {
+  position: relative;
+  aspect-ratio: 1 / 1;                 /* square tile in the default state */
+  display: block;
+}
+.pcard__card {
+  position: absolute;
+  /* anchored by the VERTICAL CENTRE (not the top) so the card grows equally
+     up and down on hover — a balanced, middle-aligned expansion. */
+  top: 50%;
+  /* left/right (not width) so hover can push the edges OUTWARD past the cell */
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  padding: 0;                          /* flush at rest; the frame appears on hover */
+  border-radius: 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  /* a touch slower than before for a smoother, less abrupt micro-interaction */
+  transition: background 0.55s var(--ease-out),
+    border-color 0.55s var(--ease-out), box-shadow 0.55s var(--ease-out),
+    padding 0.55s var(--ease-out), left 0.55s var(--ease-out),
+    right 0.55s var(--ease-out);
+  will-change: left, right, padding;
+}
+
+.pcard__media {
+  position: relative;
+  aspect-ratio: 1 / 1;                 /* square image */
+  border-radius: 0;                    /* sharp corners at rest; rounds on hover */
+  overflow: hidden;
+  background: #f1f1f1;
+  transition: border-radius 0.55s var(--ease-out),
+    aspect-ratio 0.55s var(--ease-out);
+}
+.pcard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Collapsible info block — grid-rows 0fr→1fr animates the height
+   cleanly (siblings don't move because the card is absolute). */
+.pcard__reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.55s var(--ease-out),
+    opacity 0.5s var(--ease-out);
+}
+.pcard__reveal-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.pcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 8px 12px;
+}
+.pcard__title {
+  font-weight: 500;
+  color: var(--ink);
+}
+.pcard__desc {
+  color: var(--muted);
+}
+
+/* Tag pills — filled soft chip, no outline (matches the home pills) */
+.pg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pg-tag {
+  background: #eaeeec;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---------- Hover / focus (pointer devices) ---------- */
+@media (hover: hover) {
+  .pcard:hover,
+  .pcard:focus-visible {
+    z-index: 5;
+  }
+  .pcard:hover .pcard__card,
+  .pcard:focus-visible .pcard__card {
+    /* Grow OUTWARD past the cell by EXACTLY the padding amount, so the white
+       frame appears AROUND the image while the image keeps its exact size.
+       (expansion per side == padding  →  content width is unchanged  →  the
+       thumbnail never re-scales, which is what makes the pop feel smooth.) */
+    left: -18px;
+    right: -18px;
+    background: var(--white);
+    border-color: var(--line);
+    box-shadow: 0 26px 56px -14px rgba(0, 0, 0, 0.24);
+    padding: 18px;                     /* inner gutter around the image */
+  }
+  .pcard:hover .pcard__media,
+  .pcard:focus-visible .pcard__media {
+    border-radius: 8px;                /* rounded, but a softer radius */
+    /* Crop 15% off the top + 15% off the bottom on hover. Width is unchanged,
+       so height drops to 70% (1 / 0.7 = 10/7). object-fit:cover keeps the image
+       centred, so it trims equally top & bottom without re-scaling the image. */
+    aspect-ratio: 10 / 7;
+  }
+  .pcard:hover .pcard__reveal,
+  .pcard:focus-visible .pcard__reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  /* desktop hover card uses the smaller body size for its description */
+  .pcard:hover .pcard__desc,
+  .pcard:focus-visible .pcard__desc {
+    font-size: var(--fs-body-sm);
+  }
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 900px) {
+  .pg-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Touch devices wider than the mobile breakpoint (e.g. tablets) can't hover,
+   so the pop interaction never fires. Show the info permanently instead of
+   leaving dead image-only tiles — same treatment as mobile, but keeps the
+   2/3-column grid for the width. */
+@media (hover: none) and (min-width: 761px) {
+  .pcard { position: static; aspect-ratio: auto; }
+  .pcard__card {
+    position: static;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+  .pcard__media { border-radius: var(--radius-media); }
+  .pcard__media img { transform: none; }
+  .pcard__reveal { grid-template-rows: 1fr; opacity: 1; }
+  .pcard__body { padding: 14px 4px 0; }
+}
+
+/* ============================================================
+   MOBILE (≤760px) — simpler: single column, no hover pop.
+   The image + all info are stacked and permanently visible.
+   ============================================================ */
+@media (max-width: 760px) {
+  .pg-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 8vw, 44px);
+  }
+
+  /* card is a normal flow block again (no reserved square / overlay) */
+  .pcard {
+    position: static;
+    aspect-ratio: auto;
+  }
+  .pcard__card {
+    position: static;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+  .pcard__media {
+    aspect-ratio: 560 / 478;   /* mobile keeps the original landscape crop */
+    border-radius: var(--radius-media);
+  }
+  .pcard__media img { transform: none; }
+
+  /* info always shown */
+  .pcard__reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .pcard__body {
+    gap: 12px;
+    padding: 14px 0 0;
+  }
+}

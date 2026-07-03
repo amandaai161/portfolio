@@ -1,0 +1,95 @@
+/* ============================================================
+   Amanda Idris — Case Study: The Visual Lab
+   Extends case-study.css (shared shell / sidebar / TOC / AI box /
+   image placeholders / responsive) with the two components unique
+   to this (simple, 2-section) case study:
+     · design-objective rows   (.cs-vgoals / .cs-vgoal)
+     · labeled UI showcase      (.cs-gallery / .cs-gallery__item)
+   No brand accent — the page keeps the neutral dark palette from
+   case-study.css. Typography uses the shared type system.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   AI box — this project has a single note (no involvement list).
+   The shared mobile rule hides .cs-ai__body > p:first-child (the
+   heading, which moves into the metric box); here the body has ONLY
+   the note, so keep it visible at every breakpoint.
+   ------------------------------------------------------------ */
+.cs-ai__note { color: var(--cs-muted); }
+/* p.cs-ai__note matches the specificity of case-study.css's
+   `.cs-ai__body > p:first-child { display:none }` and wins on source order */
+@media (max-width: 760px) {
+  .cs-ai__body > p.cs-ai__note { display: block; }
+}
+
+/* ============================================================
+   DESIGN OBJECTIVES — full-width dark rows
+   (empty outlined circle + title + description)
+   ============================================================ */
+.cs-vgoals {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+}
+.cs-vgoal {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 1.7vw, 24px);
+  padding: clamp(22px, 2vw, 32px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-dark);
+  color: #fff;
+}
+.cs-vgoal__mark {
+  flex: none;
+  width: clamp(46px, 3.4vw, 54px);
+  height: clamp(46px, 3.4vw, 54px);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.cs-vgoal__mark svg { width: 22px; height: 22px; }
+.cs-vgoal__body { display: flex; flex-direction: column; gap: 8px; }
+.cs-vgoal__title { color: #fff; }
+.cs-vgoal__desc { color: rgba(255, 255, 255, 0.78); }
+
+/* ============================================================
+   UI SHOWCASE — labeled, full-width mockups stacked vertically
+   ============================================================ */
+.cs-gallery {
+  margin-top: clamp(28px, 3vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 3.4vw, 56px);
+}
+.cs-gallery__item {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1vw, 14px);
+}
+.cs-gallery__label { color: var(--cs-muted); }
+.cs-gallery__frame {
+  border-radius: var(--cs-radius);
+  overflow: hidden;
+  border: 1px solid var(--cs-line);
+  background: var(--cs-soft);
+}
+.cs-gallery__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 760px) {
+  .cs-vgoal { gap: 16px; padding: 22px; }
+  /* let the mockups run edge-to-edge like the other case-study galleries */
+  .cs-gallery__frame {
+    margin-inline: calc(var(--gutter) * -1);
+    border-inline: 0;
+    border-radius: 0;
+  }
+}

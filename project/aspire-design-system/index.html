@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aspire: Web Design System — Case Study · Amanda Idris</title>
+  <meta name="description" content="Case study: building a Figma-to-Webflow design system at Aspire that cut landing-page production from ten working days to under four." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/css/projects-page.css?v=8" />
+  <link rel="stylesheet" href="/css/case-study.css?v=29" />
+</head>
+<body class="cs-page">
+  <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#ffffff" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="/" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/about" class="nav__link">About</a>
+        <a href="/project" class="nav__link">Works</a>
+        <a href="/#resume" class="nav__link">Resume</a>
+        <a href="/#contact" class="nav__link">Contact</a>
+        <a href="https://linkedin.com" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://behance.net" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="/project" class="mobile-menu__link">Works</a>
+      <a href="/#resume" class="mobile-menu__link">Resume</a>
+      <a href="/#contact" class="mobile-menu__link">Contact</a>
+      <a href="https://linkedin.com" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://behance.net" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+
+    <!-- reading progress bar -->
+    <div class="cs-progress" aria-hidden="true"><span class="cs-progress__bar" id="readingProgress"></span></div>
+  </header>
+
+  <main class="cs-shell container">
+    <div class="cs-layout">
+
+      <!-- ===================== FIXED SIDEBAR ===================== -->
+      <aside class="cs-sidebar" id="csSidebar" aria-label="Project overview">
+        <button class="cs-aside-toggle" id="asideToggle" type="button" aria-expanded="true" aria-controls="csSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          <span class="cs-aside-toggle__hide">Hide sidebar</span>
+          <span class="cs-aside-toggle__show">Show sidebar</span>
+        </button>
+        <h1 class="cs-sidebar__title t-h2">Aspire: Web Design System</h1>
+        <p class="cs-sidebar__desc t-body-lg">A comprehensive Figma-to-Webflow design system to replace an inefficient, manual web development workflow. The system standardizes components and organizes assets to enable fast, scalable updates across 120+ pages.</p>
+
+        <a href="https://aspireapp.com" class="cs-sidebar__link" target="_blank" rel="noopener">
+          <em>aspireapp.com</em>
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <div class="cs-contrib">
+          <p class="t-eyebrow-1 cs-muted">My contribution</p>
+          <ul class="cs-pills">
+            <li class="cs-pill">Web Design</li>
+            <li class="cs-pill">Design System</li>
+            <li class="cs-pill">System Building</li>
+          </ul>
+        </div>
+
+        <dl class="cs-meta">
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Year</dt><dd class="t-body-lg">2024</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Duration</dt><dd class="t-body-lg">8 weeks</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Company</dt><dd class="t-body-lg">Aspire</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Industry</dt><dd class="t-body-lg">Fintech</dd></div>
+        </dl>
+
+        <hr class="cs-rule" />
+
+        <nav class="cs-toc" aria-label="Table of contents">
+          <p class="t-eyebrow-1 cs-muted cs-toc__heading">Table of contents</p>
+          <button class="cs-toc__toggle t-body-lg" type="button" aria-expanded="false" aria-controls="csTocList">
+            <span>Jump into section</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l7 7 7-7"/></svg>
+          </button>
+          <ul class="cs-toc__list" id="csTocList">
+            <li><a class="cs-toc__link" href="#about">About the Project</a></li>
+            <li><a class="cs-toc__link" href="#discovery">Identifying the bottlenecks</a></li>
+            <li><a class="cs-toc__link" href="#building">Building the system</a></li>
+            <li><a class="cs-toc__link" href="#system">Final: The design system</a></li>
+            <li><a class="cs-toc__link" href="#result">How it transforms our work</a></li>
+          </ul>
+          <button class="cs-toc__close" type="button" aria-label="Collapse sections">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 16l-7-7-7 7"/></svg>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- ===================== SCROLLABLE CONTENT ===================== -->
+      <div class="cs-content">
+
+        <!-- Hero image -->
+        <div class="cs-ph cs-ph--hero cs-ph--img cs-ph--cap reveal" style="--cs-fill:#F7FAFC;--cs-h:300">
+          <img class="cs-shot" src="/images/project_aspire_ds/1_hero.webp" alt="Aspire web design system — colour variables and button styles overview" loading="eager" />
+        </div>
+
+        <!-- ===== About the Project ===== -->
+        <section class="cs-section" id="about">
+          <h2 class="t-h3 reveal">About the Project</h2>
+          <p class="cs-lead t-body-lg reveal">In my 4th year in Aspire, I was promoted to lead a design team of three. My first major initiative was building a comprehensive design system from the ground up. Previously, our web development workflow was entirely manual, leading to constant friction, inefficient back-and-forth, and a lack of organized assets. I collaborated closely with the website and digital marketing teams to establish a scalable foundation that transformed our production process into a faster and more effective engine for growth.</p>
+
+          <aside class="cs-ai reveal" aria-label="AI usage in this project">
+            <div class="cs-ai__metric">
+              <p class="cs-ai__inv-m t-body fw-medium">AI Involvement in this project:</p>
+              <p class="t-body-sm cs-muted">AI usage</p>
+              <p class="cs-ai__pct t-h2">15%</p>
+            </div>
+            <div class="cs-ai__body">
+              <p class="t-body fw-medium">AI Involvement in this project:</p>
+              <ul class="cs-ai__list t-body">
+                <li>To calculate the proper sizing for typography, spacing and padding.</li>
+                <li>To help renaming the Figma components for better organization.</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        <!-- ===== Project Objective ===== -->
+        <section class="cs-section" id="objectives">
+          <h2 class="cs-connector t-h5 reveal">The project objectives are...</h2>
+          <div class="cs-objgrid">
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">01</span>
+              <h3 class="cs-obj__title t-h5">Operational Efficiency</h3>
+              <p class="cs-obj__desc t-body-sm">Streamline the transition from Figma to Webflow using responsive components that eliminate the need for manual mobile redesigns.</p>
+            </article>
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">02</span>
+              <h3 class="cs-obj__title t-h5">Unified Design Language</h3>
+              <p class="cs-obj__desc t-body-sm">Standardize font styles, spacing, and components into a centralized source of truth to resolve friction between designers and developers.</p>
+            </article>
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">03</span>
+              <h3 class="cs-obj__title t-h5">Scalability &amp; Organization</h3>
+              <p class="cs-obj__desc t-body-sm">Establish a robust asset management system that enables bulk updates across 120+ pages while maintaining high performance.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ===== Discovery ===== -->
+        <section class="cs-section" id="discovery">
+          <!-- FF0101 (generated copy) -->
+          <h2 class="t-h3 reveal" data-generated>Identifying the bottlenecks</h2>
+          <p class="cs-lead t-body-lg reveal">I worked with the website team and digital marketing manager to break down the core issues — ensuring the system would also solve scalability and slow load times, not just the symptoms. Below is a preview of our working files.</p>
+
+          <div class="cs-ph cs-ph--img cs-ph--cap reveal" style="--cs-fill:#DEDEDE;--cs-h:300">
+            <img class="cs-shot" src="/images/project_aspire_ds/2_current_workspace.webp" alt="Audit of the existing Webflow pages and Figma working files across products" loading="lazy" />
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal">The challenges we face...</h3>
+          <ul class="cs-challenges reveal">
+            <li class="t-body-lg">
+              <span class="cs-challenge__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+              <span>No centralized system. We manually copied and pasted similar elements from old Figma files.</span>
+            </li>
+            <li class="t-body-lg">
+              <span class="cs-challenge__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M17 7h4v4"/></svg></span>
+              <span>Without a system, the website would only grow more expensive and difficult to scale.</span>
+            </li>
+            <li class="t-body-lg">
+              <span class="cs-challenge__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></span>
+              <span>Looking ahead, the lack of a system would make the website increasingly expensive and difficult to scale.</span>
+            </li>
+            <li class="t-body-lg">
+              <span class="cs-challenge__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+              <span>Onboarding new team members became a major bottleneck.</span>
+            </li>
+          </ul>
+
+          <div class="cs-panel cs-panel--dark cs-workload reveal">
+            <p class="cs-workload__stat">Requires <span class="cs-hl-warm">10 working days</span><br>for every new page.</p>
+            <p class="cs-workload__note t-body-sm">With no centralized system, we manually copied elements from old Figma files — dragging simple projects out to nearly two weeks each, with most of it avoidable rework.</p>
+          </div>
+
+          <div class="cs-impact reveal">
+            <article class="cs-impact__card">
+              <h4 class="t-h5">For Designers</h4>
+              <p class="t-body-sm">Constant confusion over "standard" font styles, spacing, and container sizes forced us to essentially build every new page from scratch.</p>
+            </article>
+            <article class="cs-impact__card">
+              <h4 class="t-h5">For Developers</h4>
+              <p class="t-body-sm">A total lack of sync with the design team resulted in repeating errors caused by unintentional changes and a struggle to understand existing classes or components.</p>
+            </article>
+            <article class="cs-impact__card">
+              <h4 class="t-h5">For Project Mgrs</h4>
+              <p class="t-body-sm">Development velocity slowed significantly, as a disproportionate amount of time was spent on maintenance and fixing avoidable design-to-dev discrepancies.</p>
+            </article>
+          </div>
+
+          <div class="cs-split reveal">
+            <div class="cs-split__intro">
+              <h3 class="t-h5">So,<br>we need to....</h3>
+            </div>
+            <div class="cs-split__main">
+              <ul class="cs-bullets">
+                <li class="t-body-lg">Eliminate the 10-day "copy-paste" cycle by optimizing the Figma-to-Webflow workflow and aligning Figma components with Webflow classes, ensuring developers can easily understand and reuse existing structures to prevent manual errors and slow development speeds.</li>
+                <li class="t-body-lg">Implement a strict technical source of truth using Figma variables and styles to automate spacing, typography, and color tokens, removing designer confusion over standard sizes and eliminating the need to build every new page from scratch.</li>
+                <li class="t-body-lg">Create a scalable design-to-dev bridge where components are built once and synced across all sites, preventing site bloat and establishing a documented, high-performance system for efficient team onboarding.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Building ===== -->
+        <section class="cs-section" id="building">
+          <!-- FF0101 (generated copy) -->
+          <h2 class="t-h3 reveal" data-generated>Building the system</h2>
+          <p class="cs-lead t-body-lg reveal">I began the building phase by mapping out all the foundational information regarding the tools and frameworks we use across the entire web development process.</p>
+
+          <h3 class="cs-connector t-h5 reveal">First, I learn the structure...</h3>
+          <div class="cs-twocol reveal">
+            <article class="cs-twocol__item">
+              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/images/project_aspire_ds/3_structure_1.webp" alt="Brand guideline structure — construction, containers, colours and typography" loading="lazy" /></div>
+              <p class="t-body-lg">Full audit of our existing Figma files to identify recurring patterns within the workflow and elements that needed standardization. Also measuring the baseline production time to build certain pages as a clear benchmark of the old system and workflow.</p>
+            </article>
+            <article class="cs-twocol__item">
+              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/images/project_aspire_ds/3_structure_2.webp" alt="Component structure — buttons, icons and sets of utility classes mapped to Webflow" loading="lazy" /></div>
+              <p class="t-body-lg">Understanding the sync between Figma features like variables and styles and Webflow classes and tokens to ensure a seamless technical translation from design to code.</p>
+            </article>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal">Then I start building the new system...</h3>
+          <p class="cs-lead t-body-lg reveal">I focused on syncable components — build once, update across multiple sites — stress-testing the handoff over several rounds with developers and constantly updating documentation from their feedback to eliminate repeating errors.</p>
+
+          <div class="cs-ph cs-ph--img cs-ph--cap reveal" style="--cs-fill:#F1F0EE;--cs-h:240"><img class="cs-shot" src="/images/project_aspire_ds/4_new_framework.webp" alt="The new Figma-to-Webflow framework — Relume component library powering syncable components" loading="lazy" /></div>
+
+          <!-- Figma → Relume → Webflow workflow -->
+          <div class="cs-flow reveal">
+            <article class="cs-flow__card">
+              <p class="t-eyebrow-2 cs-muted">Source</p>
+              <p class="cs-flow__desc t-body-sm">Variables &amp; styles define the single source of truth.</p>
+              <p class="cs-flow__tool t-h5">Figma<img class="cs-flow__logo" src="/images/tools/figma.svg" alt="" /></p>
+            </article>
+            <span class="cs-flow__arrow" aria-hidden="true">
+              <svg viewBox="0 0 26 14" fill="none"><path d="M1 7h22m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <article class="cs-flow__card">
+              <p class="t-eyebrow-2 cs-muted">Library</p>
+              <p class="cs-flow__desc t-body-sm">Standardized, accessible, pre-defined component structures.</p>
+              <p class="cs-flow__tool t-h5">Relume<img class="cs-flow__logo" src="/images/tools/relume.webp" alt="" /></p>
+            </article>
+            <span class="cs-flow__arrow" aria-hidden="true">
+              <svg viewBox="0 0 26 14" fill="none"><path d="M1 7h22m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <article class="cs-flow__card">
+              <p class="t-eyebrow-2 cs-muted">Output</p>
+              <p class="cs-flow__desc t-body-sm">Classes &amp; tokens aligned 1:1 — build once, reuse everywhere.</p>
+              <p class="cs-flow__tool t-h5">Webflow<img class="cs-flow__logo" src="/images/tools/webflow.svg" alt="" /></p>
+            </article>
+          </div>
+
+          <!-- FF0101 (generated copy) — intro 30% / steps + timeline 70% -->
+          <div class="cs-split reveal">
+            <div class="cs-split__intro">
+              <h3 class="t-h5" data-generated>So, here's <br>how I built it...</h3>
+            </div>
+            <div class="cs-split__main">
+              <ol class="cs-steps">
+                <li class="cs-step"><span class="cs-step__num t-h5">1</span><p class="t-body-lg"><span class="cs-hl-blue">Building the core library</span> using Relume to provide a standardized and well-structured single source of truth.</p></li>
+                <li class="cs-step"><span class="cs-step__num t-h5">2</span><p class="t-body-lg">Running several rounds of <span class="cs-hl-blue">iterations with the development team</span> to stress-test the workflow and ensure a truly seamless handoff.</p></li>
+                <li class="cs-step"><span class="cs-step__num t-h5">3</span><p class="t-body-lg">Creating <span class="cs-hl-blue">syncable components</span> to allow building once and updating across multiple sites with minimal effort.</p></li>
+                <li class="cs-step"><span class="cs-step__num t-h5">4</span><p class="t-body-lg"><span class="cs-hl-blue">Constantly updating the documentation</span> based on team feedback to eliminate repeating errors and ensure the system stays relevant.</p></li>
+              </ol>
+
+              <div class="cs-panel cs-panel--soft cs-timeline">
+                <div class="cs-timeline__top">
+                  <div class="cs-timeline__block">
+                    <p class="cs-timeline__num t-display-2">2 weeks</p>
+                    <p class="t-eyebrow-2 cs-muted">of implementation</p>
+                  </div>
+                  <span class="cs-timeline__plus t-display-2 fw-light" aria-hidden="true">+</span>
+                  <div class="cs-timeline__block">
+                    <p class="cs-timeline__num t-display-2">2 weeks</p>
+                    <p class="t-eyebrow-2 cs-muted">of refining</p>
+                  </div>
+                </div>
+                <p class="t-body-lg">It took roughly 2 weeks to complete the final deliverable. After that, we spent another 2 weeks refining the system through continuous iterations before launching it and applying the standards across all <span class="cs-hl-blue">120+ web pages</span>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== The Design System ===== -->
+        <section class="cs-section" id="system">
+          <!-- FF0101 (generated copy) -->
+          <h2 class="t-h3 reveal" data-generated>Final: The design system</h2>
+          <div class="cs-panel cs-panel--soft cs-note reveal">
+            <svg class="cs-note__lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.3" r="1.4"/></svg>
+            <p class="t-body-lg">Note: Full Figma files are confidential and cannot be shared publicly. Instead, I've provided high-level previews to showcase the system's architecture and core components.</p>
+          </div>
+
+          <!-- FF0101 (generated copy) -->
+          <h3 class="cs-connector t-h5 reveal" data-generated>The core deliverables are...</h3>
+          <div class="cs-accordion reveal">
+            <details class="cs-acc" open>
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 6.8 6.5 11a6.5 6.5 0 0 1-13 0C5.5 9.8 12 3 12 3z"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Color Variables &amp; System</span>
+                  <span class="cs-acc__sub t-body cs-muted">Full token set incl. Dark mode</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_1_color.webp" alt="Colour variables — primitive brand, neutral and accent tokens with dark-mode set" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V4h16v2M9 20h6M12 4v16"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Typography Guideline</span>
+                  <span class="cs-acc__sub t-body cs-muted">Scales, weights &amp; rules</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_2_typography.webp" alt="Typography guideline — type scale, weights and desktop/mobile usage rules" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="4"/><path d="M7.5 12h4"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Buttons &amp; UI Elements</span>
+                  <span class="cs-acc__sub t-body cs-muted">Every interactive state</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/804"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_3_buttons.webp" alt="Buttons and UI elements — every interactive state across light and dark backgrounds" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16M20 4v16M8 12h8M8 12l2.5-2.5M8 12l2.5 2.5M16 12l-2.5-2.5M16 12l-2.5 2.5"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Spacing &amp; Padding</span>
+                  <span class="cs-acc__sub t-body cs-muted">Every interactive state</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/575"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_4_spacing.webp" alt="Spacing and padding scale with container max-widths and how-to-use guidance" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M5 18l5-5 4 4 2-2 3 3"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Imagery Styleguide</span>
+                  <span class="cs-acc__sub t-body cs-muted">To maintain consistent look and feel</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/782"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_5_imagery.webp" alt="Image styleguide — hero, solution and product/feature imagery direction" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Components: Page Sections</span>
+                  <span class="cs-acc__sub t-body cs-muted">Figma component library</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/1256"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_6_imagelibrary.webp" alt="Page-section component library — the full Figma library of reusable sections" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal">Other deliverables</h3>
+          <ul class="cs-chips reveal">
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="13" height="13" rx="2"/><path d="M9 20h9a2 2 0 0 0 2-2V9"/></svg></span><span>Shadows</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M19 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span><span>Effects</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19v-7a7 7 0 0 1 7-7h7"/></svg></span><span>Rounded Corners</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="8" height="8" rx="1.5"/><circle cx="16.5" cy="7" r="3.5"/><path d="M14.5 21l3-5.5 3 5.5z"/></svg></span><span>Iconography</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 4.6v9.8l-8 4.6-8-4.6V7.1z"/></svg></span><span>Logo Library</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg></span><span>Localisation</span></li>
+          </ul>
+        </section>
+
+        <!-- ===== Result ===== -->
+        <section class="cs-section" id="result">
+          <!-- FF0101 (generated copy) -->
+          <h2 class="t-h3 reveal" data-generated>How it transforms our work</h2>
+          <div class="cs-results reveal">
+            <article class="cs-panel cs-panel--dark cs-result">
+              <p class="cs-result__num t-display-2">60-75<span class="t-h4">%</span></p>
+              <p class="cs-result__label t-body-sm">Faster production end-to-end</p>
+            </article>
+            <article class="cs-panel cs-panel--dark cs-result">
+              <p class="cs-result__num t-display-2">&lt;1<span class="t-h4">second</span></p>
+              <p class="cs-result__label t-body-sm">Page loading time</p>
+            </article>
+            <article class="cs-panel cs-panel--dark cs-result">
+              <p class="cs-result__num t-display-2">+67%</p>
+              <p class="cs-result__label t-body-sm">CTR on core product pages</p>
+            </article>
+          </div>
+
+          <div class="cs-bars reveal">
+            <h3 class="t-h5">Web-page production time</h3>
+            <p class="t-body-lg cs-muted">Combined design + development timeline, per page</p>
+            <div class="cs-bar">
+              <span class="cs-bar__label t-body-lg">Before</span>
+              <div class="cs-bar__track"><div class="cs-bar__fill cs-bar__fill--before" style="--w: 100%"><span class="cs-bar__val t-eyebrow-2">~10 working days</span></div></div>
+            </div>
+            <div class="cs-bar">
+              <span class="cs-bar__label t-body-lg">After</span>
+              <div class="cs-bar__track"><div class="cs-bar__fill cs-bar__fill--after" style="--w: 27%"><span class="cs-bar__val t-eyebrow-2">UNDER 4 DAYS</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== New Design Preview ===== -->
+        <section class="cs-section" id="preview">
+          <!-- FF0101 (generated copy) -->
+          <h2 class="cs-connector t-h5 reveal" data-generated>Here is the transformation...</h2>
+
+          <div class="cs-preview__bar reveal">
+            <div class="cs-tabs" role="tablist" aria-label="Page previews">
+              <button class="cs-tab is-active" role="tab" aria-selected="true" data-tab="Homepage" data-before="images/project_aspire_ds/aspire-ds_comparison/1%20Home_OLD.webp" data-after="images/project_aspire_ds/aspire-ds_comparison/1%20Home_NEW.webp">Homepage</button>
+              <button class="cs-tab" role="tab" aria-selected="false" data-tab="Pricing" data-before="images/project_aspire_ds/aspire-ds_comparison/2%20Pricing_OLD.webp" data-after="images/project_aspire_ds/aspire-ds_comparison/2%20Pricing_NEW.webp">Pricing</button>
+              <button class="cs-tab" role="tab" aria-selected="false" data-tab="Blog" data-before="images/project_aspire_ds/aspire-ds_comparison/3%20Blog_OLD.webp" data-after="images/project_aspire_ds/aspire-ds_comparison/3%20Blog_NEW.webp">Blog</button>
+              <button class="cs-tab" role="tab" aria-selected="false" data-tab="Yield" data-before="images/project_aspire_ds/aspire-ds_comparison/4%20Yield_OLD.webp" data-after="images/project_aspire_ds/aspire-ds_comparison/4%20Yield_NEW.webp">Yield</button>
+            </div>
+            <p class="cs-preview__note t-body-lg cs-muted">Drag the handle to compare before and after</p>
+          </div>
+
+          <!-- Before / After comparison (full-page screenshots, inset in colour frames) -->
+          <div class="cs-compare" aria-label="Before and after comparison. Drag the handle to compare.">
+            <div class="cs-compare__pane cs-compare__pane--after">
+              <img class="cs-compare__shot" id="cmpAfter" src="/images/project_aspire_ds/aspire-ds_comparison/1%20Home_NEW.webp" alt="Redesigned page" loading="lazy" />
+            </div>
+            <div class="cs-compare__pane cs-compare__pane--before">
+              <img class="cs-compare__shot" id="cmpBefore" src="/images/project_aspire_ds/aspire-ds_comparison/1%20Home_OLD.webp" alt="Original page" loading="lazy" />
+            </div>
+            <span class="cs-compare__tag cs-compare__tag--before t-body fw-semibold">BEFORE</span>
+            <span class="cs-compare__tag cs-compare__tag--after t-body fw-semibold">AFTER</span>
+            <div class="cs-compare__handle" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Comparison position">
+              <span class="cs-compare__grip" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 7l-4 5 4 5M15 7l4 5-4 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== DC9A00 placeholder → 3-column comparison table ===== -->
+        <section class="cs-section" id="comparison">
+          <header class="cs-cmp__head reveal">
+            <h2 class="t-h5">Before &amp; after, side by side</h2>
+            <p class="t-body-lg cs-muted">What the system actually changed, point by point.</p>
+          </header>
+
+          <div class="cs-cmp reveal" role="table" aria-label="Before and after comparison">
+            <div class="cs-cmp__row cs-cmp__row--head" role="row">
+              <span class="t-eyebrow-2" role="columnheader" aria-hidden="true"></span>
+              <span class="t-eyebrow-2" role="columnheader">Before</span>
+              <span class="t-eyebrow-2 cs-cmp__after-h" role="columnheader">After</span>
+            </div>
+
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg></span>Production time</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">A single landing page averaged 10 working days (~4 design + ~6 dev).</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">Production dropped from 9 days to under 4, a 60–75% speed-up.</span>
+            </div>
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="13" height="10" rx="1.5"/><rect x="16.5" y="8" width="5" height="11" rx="1"/></svg></span>Responsiveness</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">Separate mobile versions added another 1–2 days of manual effort.</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">No separate mobile designs; components were already responsive.</span>
+            </div>
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span>Consistency</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">Colors and typography were inconsistent, with no standardized styles.</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">Global styles and variables kept consistency with minimal friction.</span>
+            </div>
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span>Performance</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">Long load times from redundant, overlapping component layers.</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">Most pages loaded in under 1 second thanks to a clean structure.</span>
+            </div>
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Collaboration</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">Undocumented, manual processes made stakeholder expectations unclear.</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">Synchronized workflows let the team collaborate and revamp faster.</span>
+            </div>
+            <div class="cs-cmp__row" role="row">
+              <span class="cs-cmp__key t-body-lg fw-semibold" role="rowheader"><span class="cs-cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M17 7h4v4"/></svg></span>Scalability</span>
+              <span class="cs-cmp__before t-body-lg" role="cell">Revamping 120+ pages was nearly impossible without a central system.</span>
+              <span class="cs-cmp__after t-body-lg" role="cell">Revamped pages drove a 67% increase in CTR on core product pages.</span>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /.cs-content -->
+    </div><!-- /.cs-layout -->
+
+    <!-- ===================== OTHER PROJECTS ===================== -->
+    <section class="cs-other" aria-label="Other projects">
+      <div class="other__header reveal">
+        <h2 class="other__title t-h1">Other projects</h2>
+        <a href="/project" class="btn btn--dark other__cta">
+          <span>See all projects</span>
+          <svg class="btn__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="pg-grid">
+        <a href="/project/kayn" class="pcard reveal" aria-label="Kayn Argan Oil">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_kayn/kayn_thumbnail.webp" alt="Kayn Argan Oil landing page preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">Kayn Argan Oil</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">Elevates Kayn Argan Oil with a sophisticated, premium aesthetic that reflects its authentic Moroccan origin with elegant touch to build a strong digital presence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/how-aspire-works" class="pcard reveal" aria-label="How Aspire Works">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_aspire_haw/haw_thumbnail.webp" alt="How Aspire Works preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">How Aspire Works</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                    <li class="pg-tag t-body-sm">Conceptual Design</li>
+                    <li class="pg-tag t-body-sm">Information Architecture</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A dedicated landing page that pulls back the curtain on how Aspire actually works, turning complex fintech infrastructure into a clear, transparent narrative that replaces doubt with credibility.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/nobi" class="pcard reveal" aria-label="NOBI Bakery">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_nobi/nobi_thumbnail.webp" alt="NOBI Bakery storefront preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">NOBI Bakery</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A digital storefront and landing page for NOBI Bakery, where time-honored Japanese baking meets modern flavors, wrapped in a seamless ordering experience for busy city dwellers.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/script.js?v=16"></script>
+  <script src="/js/case-study.js?v=12"></script>
+</body>
+</html>

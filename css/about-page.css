@@ -1,0 +1,1172 @@
+/* ============================================================
+   Amanda Idris — About page
+   Extends styles.css (same type, buttons, dividers).
+   Draft-2 palette (scoped to this page only — the home page keeps
+   its pure black/white because it does not load this file):
+     · solid white  → #F8F8F8
+     · solid black  → #111111
+     · accent light → #DDE4E2   accent mid → #D6DEDB
+   Hover feedback is a subtle colour change only — no shadows.
+   Sections: hero · 01 Experience (timeline) · 02 Skillsets (T) · 03 Tools
+   ============================================================ */
+
+:root {
+  /* ---- overrides of the shared black/white tokens (this page only) ---- */
+  --black: #111111;
+  --ink: #111111;
+  --white: #F8F8F8;
+  --muted: rgba(17, 17, 17, 0.55);
+  --line: rgba(17, 17, 17, 0.16);
+
+  /* ---- accent system: light surfaces unified to #EAEEEC ---- */
+  --acc: #EAEEEC;          /* light accent (was #DDE4E2) */
+  --acc-soft: #F1F4F2;     /* lighter shade */
+  --acc-line: #C7D0CC;     /* hairline / border on light accent */
+  --acc2: #EAEEEC;         /* mid accent (was #D6DEDB) */
+  --acc2-deep: #AEB6B3;    /* darker shade — hover darken */
+
+  --ab-section-gap: clamp(120px, 16vw, 280px);
+  --tile: clamp(8px, 0.9vw, 14px);
+}
+
+/* Page chrome tinted to the off-white so the blurred header matches the bg */
+.header { background: rgba(248, 248, 248, 0.72); }
+
+/* Active nav state on the About page */
+.nav__link.is-active::after { transform: scaleX(1); }
+
+/* Shared section header (eyebrow number + title + intro) ----------------- */
+.ab-sec {
+  padding-top: var(--ab-section-gap);
+}
+.ab-sec-head {
+  margin-bottom: clamp(28px, 3.2vw, 58px);
+  max-width: 920px;
+}
+.ab-eyebrow,
+.ab-sec-num {                /* type system: Eyebrow 1 */
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-eyebrow-1);
+  line-height: var(--lh-label);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ab-sec-title {            /* type system: H1 */
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  margin-top: clamp(16px, 1.6vw, 24px);
+  text-wrap: balance;
+}
+.ab-sec-intro {            /* type system: Body Large */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  color: rgba(17, 17, 17, 0.7);
+  max-width: 58ch;
+  margin-top: clamp(18px, 1.8vw, 26px);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.ab-hero {
+  padding-top: clamp(28px, 4vw, 64px);
+}
+
+/* ---- bento: 50:50 text | cards, with a wide gap between them ---- */
+.bento {
+  --pad: clamp(13px, 1.1vw, 19px);       /* ~35% tighter padding */
+  --r: clamp(6px, 0.5vw, 10px);          /* reduced corner radius */
+  display: grid;
+  grid-template-columns: 2fr 3fr;        /* headline 40 : bento 60 */
+  gap: clamp(36px, 5vw, 110px);          /* wider gap between the two */
+  align-items: stretch;
+  min-height: clamp(396px, 29.7vw, 540px);   /* 10% shorter */
+}
+
+/* the right half holds the three card columns */
+.bento__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.04fr) minmax(0, 0.93fr);
+  grid-template-areas: "stats portrait side";
+  gap: clamp(10px, 0.8vw, 16px);
+  align-items: stretch;
+}
+.bento__stats,
+.bento__side { display: flex; flex-direction: column; gap: clamp(10px, 0.8vw, 16px); }
+
+/* base cards */
+.card-dark {
+  background: var(--black);
+  color: var(--white);
+  border-radius: var(--r);
+  padding: var(--pad);
+}
+.card-accent {
+  background: var(--acc);
+  color: var(--black);
+  border-radius: var(--r);
+  padding: var(--pad);
+}
+.card-accent-strong {
+  background: #D6DEDB;          /* "Current role" card — a touch darker than the light cards */
+  color: var(--black);
+  border-radius: var(--r);
+  padding: var(--pad);
+}
+
+/* intro headline (left half) */
+.bento__intro {
+  display: flex;
+  align-items: center;
+}
+.bento__headline {         /* type system: H3 (kept Regular per the 300→400 pass) */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-heading);
+  color: var(--black);
+  text-wrap: pretty;
+}
+.bento__headline .hl { color: var(--black); font-weight: 600; }
+
+/* stats column */
+.bento__stats { grid-area: stats; }
+.stat-card {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: var(--r);
+  padding: var(--pad);
+  min-height: 0;
+}
+.stat-card--dark { background: var(--black); color: var(--white); }
+.stat-card--accent { background: var(--acc); color: var(--black); }
+.stat-card__num {
+  font-weight: 500;
+  font-size: clamp(42px, 4.7vw, 80px);   /* large — the cards now have room for it */
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.stat-card__label {        /* type system: Body Normal */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  max-width: 26ch;
+}
+.stat-card--dark .stat-card__label { color: rgba(248, 248, 248, 0.58); }
+.stat-card--accent .stat-card__label { color: rgba(17, 17, 17, 0.6); }
+
+/* portrait */
+.bento__portrait {
+  grid-area: portrait;
+  position: relative;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: #2b342f;
+  isolation: isolate;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.bento__portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 26%;
+  z-index: 0;
+  transition: transform 0.8s var(--ease-out);
+}
+.bento__portrait:hover img { transform: scale(1.04); }
+.bento__portrait::after {       /* readability scrim top + bottom */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(to bottom, rgba(17, 17, 17, 0.5) 0%, rgba(17, 17, 17, 0) 26%),
+    linear-gradient(to top, rgba(17, 17, 17, 0.62) 0%, rgba(17, 17, 17, 0) 38%);
+}
+.portrait__top,
+.portrait__bottom { position: relative; z-index: 2; }
+/* name spans the photo width and is centred over it */
+.portrait__top { padding: var(--pad); text-align: center; }
+.portrait__name {          /* type system: H5 (mobile keeps its larger bespoke size below) */
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h5);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--white);
+}
+.portrait__bottom { padding: var(--pad); }
+.portrait__titles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(5px, 0.4vw, 7px);             /* reduced gaps between pills */
+}
+.portrait__titles li {     /* type system: Body Large */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-lg);
+  letter-spacing: var(--tracking-body);
+  color: var(--white);
+  background: rgba(17, 17, 17, 0.6);
+  border: 1px solid rgba(248, 248, 248, 0.2);
+  border-radius: 999px;
+  padding: 0.5em 0.95em;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.portrait__spark {
+  position: absolute;
+  right: var(--pad);
+  bottom: var(--pad);
+  z-index: 2;
+  width: clamp(20px, 1.8vw, 28px);
+  height: auto;
+  color: var(--white);
+  opacity: 0.92;
+}
+
+/* side column: languages + current role */
+.bento__side { grid-area: side; }
+.card-eyebrow {
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: 0.04em;
+  color: rgba(17, 17, 17, 0.55);
+  margin-bottom: clamp(14px, 1.3vw, 20px);
+}
+.lang-card { flex: 1.16 1 0; }
+.lang-list { display: flex; flex-direction: column; gap: clamp(13px, 1.2vw, 19px); }
+.lang__name {              /* type system: Body small */
+  display: block;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-sm);
+  letter-spacing: var(--tracking-body);
+  margin-bottom: clamp(7px, 0.7vw, 11px);
+  color: var(--black);
+}
+.lang__bar {
+  position: relative;
+  display: block;
+  height: clamp(24px, 2.2vw, 32px);
+  border-radius: 0;                          /* squared off */
+  background: transparent;                   /* container = outlined rectangle */
+  border: 1.5px solid #C6D1CD;
+  overflow: hidden;
+}
+.lang__bar::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--lvl, 60%);
+  background: #C6D1CD;                        /* filled portion — solid, single colour */
+  border-radius: 0;
+}
+.lang__bar span {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: -0.01em;
+  color: #80948D;                           /* muted sage label */
+  white-space: nowrap;
+}
+
+.now-card {
+  flex: 0.84 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(16px, 1.6vw, 26px);
+}
+.now-card .card-eyebrow { margin-bottom: clamp(8px, 0.7vw, 12px); }
+.now-card__text {          /* type system: Body Large */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  color: rgba(17, 17, 17, 0.78);
+}
+.now-card__text b { font-weight: 600; color: var(--black); }
+/* Aspire wordmark — pinned bottom-right of the card */
+.now-card__logo {
+  align-self: flex-end;
+  margin-top: auto;
+  width: auto;
+  height: clamp(24px, 2.3vw, 33px);
+  display: block;
+}
+
+/* ============================================================
+   01 — EXPERIENCE TIMELINE
+   ============================================================ */
+.tl {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 4.5vw, 80px);
+}
+
+/* ---- chart (years + lanes) ---- */
+/* Sticks below the header while the Experience section scrolls, so the
+   timeline stays visible until the next section. Solid bg + z-index so the
+   detail panels scroll cleanly underneath it. */
+.tl__chart {
+  position: sticky;
+  top: 88px;                /* flush under the 88px-tall sticky navbar (no gap) */
+  z-index: 5;
+  background: var(--white);
+  padding-top: 34px;        /* room for year labels above */
+  padding-bottom: clamp(14px, 1.6vw, 24px);
+}
+.tl__years {
+  position: relative;
+  height: 22px;
+  margin-bottom: 14px;
+}
+.tl__year {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tl__year:first-child { transform: none; }
+.tl__year:last-child { transform: translateX(-100%); }
+
+.tl__grid {
+  position: absolute;
+  inset: 34px 0 0;
+  pointer-events: none;
+}
+.tl__gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+.tl__lanes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2vw, 32px);   /* tightened: smaller gap between the two lanes (still clears the Aspire bracket + company label below lane 1) */
+  z-index: 1;
+}
+.tl__lane {
+  position: relative;
+  height: clamp(54px, 5vw, 72px);
+}
+
+/* ---- bars ---- */
+.tl-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--start);
+  right: calc(100% - var(--end));
+  min-width: 92px;
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* single bars = one filled cell */
+.tl-bar__label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(14px, 1.2vw, 20px);
+  border: 1.5px solid var(--black);
+  border-radius: 5px;
+  background: var(--white);
+  color: var(--black);
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease),
+    border-color 0.4s var(--ease), filter 0.4s var(--ease);
+}
+/* hover = uniform +25% black tint (same shift on white & accent bars, no colour swap) */
+.tl-bar:hover .tl-bar__label { filter: brightness(0.75); }
+.tl-bar.is-active .tl-bar__label { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* study uses the same white styling as MORINA & Freelance (default .tl-bar__label) */
+
+/* Aspire = 3 bordered bars (one clickable object) with a company label below.
+   First two white like the other bars; the current role uses the mid accent. */
+.tl-bar--aspire { gap: 5px; }
+.tl-aspire-co {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 14px);
+  text-align: center;            /* centred under the 3 bars, away from Freelance */
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: -0.01em;
+  color: var(--black);
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* bracket spanning exactly the 3 Aspire bars so the grouping is unambiguous */
+.tl-bar--aspire::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 5px);
+  height: 6px;
+  border: 1.5px solid var(--black);
+  border-top: 0;
+  pointer-events: none;
+}
+.tl-seg {
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(10px, 0.9vw, 16px);
+  border: 1.5px solid var(--black);
+  border-radius: 5px;
+  background: var(--white);
+  color: var(--black);
+  font-weight: 500;
+  font-size: var(--fs-body-sm);   /* type system: Body small */
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease), filter 0.4s var(--ease);
+}
+.tl-seg--3 { background: #BCCCC6; }     /* Associate Design Manager — distinct accent */
+/* hover: uniform +25% black tint so all 3 bars shift by the same amount */
+.tl-bar--aspire:hover .tl-seg { filter: brightness(0.75); }
+/* selected: all three bars turn solid black */
+.tl-bar--aspire.is-active .tl-seg { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* ---- detail panel ---- */
+.tl__detail { position: relative; }
+.exp-panel { display: block; }
+.exp-panel[hidden] { display: none; }
+
+/* org name (left) · roles + descriptions (right) */
+.exp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 2.15fr);
+  gap: clamp(24px, 4vw, 72px);
+  border-top: 2px solid var(--black);
+}
+.exp-org {
+  /* static: the sticky timeline chart above is the pinned element now */
+  align-self: start;
+  padding-top: clamp(22px, 2.2vw, 34px);
+}
+.exp-org__name {           /* type system: H3 */
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.exp-org__meta {           /* type system: Body Normal */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  letter-spacing: var(--tracking-body);
+  color: var(--muted);
+  line-height: var(--lh-normal);
+  margin-top: clamp(12px, 1.2vw, 18px);
+}
+
+.exp-roles,
+.exp-right {
+  display: flex;
+  flex-direction: column;
+  padding-top: clamp(22px, 2.2vw, 34px);
+}
+.exp-role { padding: clamp(24px, 2.6vw, 38px) 0; }
+.exp-roles > .exp-role:first-child,
+.exp-right > .exp-role:first-child { padding-top: 0; }
+.exp-role + .exp-role { border-top: 1px solid var(--line); }
+.exp-role__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 18px;
+  margin-bottom: clamp(16px, 1.6vw, 24px);
+}
+.exp-role__title {         /* type system: H5 */
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h5);
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--lh-snug);
+}
+.exp-role__meta {          /* type system: Body small */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-sm);
+  color: var(--muted);
+  letter-spacing: var(--tracking-body);
+  white-space: nowrap;
+}
+.exp-role__desc {          /* type system: Body Large */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  color: rgba(17, 17, 17, 0.7);
+  margin-bottom: clamp(14px, 1.4vw, 20px);
+  max-width: 62ch;
+}
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1vw, 16px);
+}
+.exp-list li {
+  position: relative;
+  padding-left: 26px;
+  font-weight: var(--fw-regular);     /* type system: Body Large */
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  color: rgba(17, 17, 17, 0.82);
+}
+.exp-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--black);
+}
+.exp-list b { font-weight: 600; }
+
+/* scholarship highlight (study panel) — outlined card (no fill) */
+.scholar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(22px, 2.4vw, 36px);
+  background: transparent;
+  color: var(--black);
+  border: 1.5px solid var(--black);
+  border-radius: 12px;
+  margin-bottom: clamp(28px, 3vw, 44px);
+}
+.scholar__title { font-weight: var(--fw-medium); font-size: var(--fs-h5); letter-spacing: var(--tracking-snug); line-height: var(--lh-snug); }   /* type system: H5 */
+.scholar__body { font-weight: var(--fw-regular); font-size: var(--fs-body-lg); line-height: var(--lh-normal); letter-spacing: var(--tracking-body); color: rgba(17, 17, 17, 0.72); max-width: 60ch; }   /* type system: Body Large */
+.scholar__badges { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+.cred {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 10px 18px;
+  background: #EAEEEC;
+  border: none;
+  border-radius: 9px;
+}
+.cred__abbr { font-weight: var(--fw-semibold); font-size: var(--fs-h6); line-height: var(--lh-snug); letter-spacing: var(--tracking-snug); }   /* type system: H6 */
+.cred__full { font-weight: var(--fw-regular); font-size: var(--fs-body-sm); letter-spacing: var(--tracking-body); color: rgba(17, 17, 17, 0.6); margin-top: 2px; }   /* type system: Body small */
+
+/* nested student activity */
+.exp-nested {
+  margin-top: clamp(28px, 3vw, 48px);
+  padding-top: clamp(24px, 2.6vw, 40px);
+  border-top: 1px solid var(--line);
+}
+.exp-nested__tag {         /* type system: Body Normal · uppercase · greyish */
+  display: inline-block;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  letter-spacing: 0.06em;          /* modest tracking keeps the all-caps legible */
+  text-transform: uppercase;
+  color: var(--muted);             /* greyish, not black */
+  margin-bottom: clamp(18px, 2vw, 28px);
+}
+
+/* ============================================================
+   02 — SKILLSETS (inverted-T diagram)
+   ============================================================ */
+/* whole chart sits in one solid, square, borderless container with generous padding */
+.tshape {
+  display: block;
+  background: #EAEEEC;
+  padding: clamp(32px, 4.5vw, 72px);
+}
+.tshape__cap {             /* type system: Body Large · SemiBold · sentence case */
+  display: block;
+  text-align: center;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-body);
+  color: var(--black);
+  margin-bottom: clamp(20px, 2.4vw, 36px);
+}
+.tshape__cap span {        /* type system: Body Normal */
+  display: block;
+  margin: 8px auto 0;
+  max-width: 58ch;
+  text-transform: none;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  letter-spacing: var(--tracking-body);
+  line-height: var(--lh-normal);
+  color: rgba(17, 17, 17, 0.62);
+}
+.tshape__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: clamp(58px, 5vw, 80px);
+  gap: clamp(6px, 0.7vw, 12px);
+}
+/* grouping panel behind the broad-knowledge fan (rows 4–6) — solid box, no outline/radius */
+.tshape__box {
+  grid-column: 1 / 8;
+  grid-row: 4 / 7;
+  margin: -14px;
+  background: #DDE4E2;
+  border: none;
+  border-radius: 0;
+  z-index: 0;
+}
+.tshape__grid .sk,
+.tshape__broadlabel { position: relative; z-index: 1; }
+.tshape__broadlabel {        /* type system: Body Large · SemiBold */
+  grid-column: 1 / 4;          /* wider — extends to near the Product Visuals box */
+  grid-row: 4;
+  align-self: center;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body-lg);
+  letter-spacing: var(--tracking-body);
+  line-height: var(--lh-snug);
+  color: var(--black);
+}
+.tshape__broadlabel span {   /* type system: Body Normal */
+  display: block;
+  margin-top: 6px;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  color: rgba(17, 17, 17, 0.55);
+}
+
+/* skill box */
+.sk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px clamp(8px, 0.8vw, 14px);
+  border: 1.5px solid var(--black);
+  border-radius: 4px;
+  background: var(--white);
+  font-weight: var(--fw-regular);        /* type system: Body Normal */
+  font-size: var(--fs-body);
+  letter-spacing: var(--tracking-body);
+  line-height: 1.16;                     /* tight: centered multi-line in a fixed box */
+  color: rgba(17, 17, 17, 0.78);
+  text-wrap: balance;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+}
+/* hover = subtle accent wash (border stays black) */
+.sk:hover { background: var(--acc-soft); }
+
+/* deep-mastery column — the stem of the T, in solid black */
+.sk--deep {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.sk--deep:hover { background: #2b2b2b; border-color: #2b2b2b; }
+
+/* ============================================================
+   03 — TOOLS
+   ============================================================ */
+/* Tools layout: the header sits BESIDE the tools panel (unlike other sections). */
+.tools-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+.tools-layout .ab-sec-head { margin-bottom: 0; }
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(26px, 3vw, 46px);
+  background: #EAEEEC;
+  padding: clamp(24px, 3vw, 48px);
+}
+/* breathing room below the toolkit, before the contact section */
+#tools { padding-bottom: clamp(100px, 13vw, 220px); }
+.tools__tier {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.3vw, 20px);          /* tier label sits just above its icons */
+}
+/* tier name + bracketed sub on one line; sub is the same size with lower opacity */
+.tier__label { display: flex; flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.tier__name {              /* type system: H6 */
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h6);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--black);
+}
+.tier__sub {               /* type system: H6 (faded) */
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h6);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: rgba(17, 17, 17, 0.38);
+}
+.tier__grid {
+  display: grid;
+  /* fixed-width columns, left-aligned — icons don't stretch to the far right */
+  grid-template-columns: repeat(auto-fill, clamp(88px, 8.5vw, 108px));
+  justify-content: start;
+  gap: clamp(6px, 0.7vw, 12px);
+}
+.tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(8px, 0.8vw, 12px);
+  padding: clamp(4px, 0.5vw, 8px);
+  text-align: center;
+}
+.tool__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(56px, 5.8vw, 80px);
+  height: clamp(56px, 5.8vw, 80px);
+  border-radius: 12%;
+  background: var(--white);
+  border: 1.5px solid var(--black);
+  overflow: hidden;
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.tool__icon img { width: 58%; height: 58%; object-fit: contain; }
+.tool__icon .mono {
+  display: none;
+  font-weight: 700;
+  font-size: var(--fs-h6);   /* type system: H6 */
+  letter-spacing: -0.04em;
+  color: #4A524A;
+}
+.tool__icon.noimg .mono { display: block; }
+/* hover = subtle accent shift (no shadow / no lift) */
+.tool:hover .tool__icon { background: #DDE4E2; }
+.tool__name {              /* type system: Body Normal */
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  letter-spacing: var(--tracking-body);
+  line-height: 1.15;                  /* tight: names like "Premiere Pro" wrap to 2 lines */
+  color: rgba(17, 17, 17, 0.8);
+}
+
+/* ============================================================
+   CLOSING CTA (before contact)
+   ============================================================ */
+.ab-cta {
+  padding-top: var(--ab-section-gap);
+}
+.ab-cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(28px, 4vw, 60px);
+  padding-bottom: clamp(60px, 8vw, 130px);
+}
+.ab-cta__title {
+  font-weight: 500;
+  font-size: clamp(32px, 4.4vw, 80px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.ab-cta__buttons { display: flex; flex-wrap: wrap; gap: clamp(14px, 1.4vw, 22px); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1080px) {
+  .bento {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 44px);
+    min-height: 0;
+  }
+  .bento__cards {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "portrait portrait"
+      "stats    side";
+  }
+  .bento__portrait { min-height: 440px; }
+  .stat-card { min-height: 120px; }
+}
+
+@media (max-width: 980px) {
+  .ab-sec-head { grid-template-columns: 1fr; align-items: start; }
+}
+
+@media (max-width: 760px) {
+  :root { --ab-section-gap: clamp(96px, 22vw, 160px); }
+  .bento { grid-template-columns: 1fr; }
+  .bento__cards {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "portrait"
+      "stats"
+      "side";
+  }
+  .bento__headline { font-size: clamp(1.65rem, 7.2vw, 2.35rem); }   /* larger heading again */
+  .bento__portrait { min-height: 400px; }
+  .portrait__name { font-size: clamp(30px, 9vw, 42px); }            /* larger, spans wide like desktop */
+
+  /* 6+ spans full width; 20+ and 2021 sit side by side */
+  .bento__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-card { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 10px; min-height: 116px; }
+  .stat-card--dark { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 18px; min-height: 0; }
+  .stat-card__num { font-size: clamp(34px, 9vw, 50px); }
+  .stat-card--dark .stat-card__num { font-size: clamp(44px, 12vw, 60px); }
+  /* stat label stays Body Normal on mobile (system token) */
+
+  /* language: bar sits BESIDE the name, not below */
+  .lang { display: flex; align-items: center; gap: 14px; }
+  .lang__name { flex: 0 0 84px; margin-bottom: 0; white-space: nowrap; font-size: var(--fs-body-sm); }
+  .lang__bar { flex: 1 1 auto; }
+
+  /* timeline → vertical stack of tappable cards on mobile */
+  .tl__chart { display: none; }
+  .tl { gap: 0; }                 /* drop the big flex gap: bar sits close to the name */
+  .tl__detail { gap: 0; }
+
+  /* experience panel stacks: org above roles. No rule above the org name,
+     and only a small gap below the sticky chapter bar. */
+  .exp-grid { grid-template-columns: 1fr; gap: 0; border-top: none; }
+  .exp-org { position: static; padding-top: 4px; padding-bottom: clamp(16px, 4vw, 24px); }
+  .exp-roles, .exp-right { padding-top: clamp(20px, 5vw, 28px); border-top: 1px solid var(--line); }
+
+  /* skillsets → tiny illustration + 2-tab filter (.m-tshape rules below).
+     The boxes have no container, and only one group shows at a time. */
+  .tshape { background: none; padding: 0; }
+  .tshape__cap, .tshape__broadlabel, .tshape__box { display: none; }
+  .tshape__grid {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    grid-template-columns: none; grid-auto-rows: auto;
+  }
+  .tshape__grid .sk {
+    grid-column: auto !important; grid-row: auto !important;
+    flex: 0 0 calc(50% - 5px); min-height: 56px;   /* lone last box stays half-width, left-aligned */
+  }
+  /* Deep selected (default) shows only black boxes; Collaborative shows only white */
+  .tshape:not(.is-broad) .sk:not(.sk--deep) { display: none; }
+  .tshape.is-broad .sk--deep { display: none; }
+
+  .tools-layout { grid-template-columns: 1fr; gap: 24px; }
+  .tools-layout .ab-sec-head { margin-bottom: 0; }
+  .tools__tier { gap: 14px; }
+  /* icons: smaller boxes, more room between rows, grid flush with the tier title */
+  .tier__grid {
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: stretch;
+    gap: 18px 8px;            /* 18px between rows, 8px between columns */
+  }
+  .tool { padding: 0; gap: 8px; align-items: stretch; }
+  .tool__icon { width: 100%; height: auto; aspect-ratio: 1; }
+  /* smaller tool labels so names like "Premiere Pro" fit the cell */
+  .tool__name { font-size: var(--fs-body-sm); line-height: 1.2; letter-spacing: var(--tracking-body); }   /* Body small so 4-col grid fits */
+  .tool__name-br { display: block; }   /* "Notebook" / "LM" on two lines (mobile only) */
+}
+
+/* Mobile timeline picker (chips) — shown only on small screens */
+.tl__picker { display: none; }
+@media (max-width: 760px) {
+  .tl__picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .tl__picker .tl-bar {
+    position: static;
+    inset: auto;
+    min-width: 0;
+    height: auto;
+    padding: 10px 16px;
+    border-radius: 999px;
+  }
+}
+
+/* ============================================================
+   MOBILE COMPONENTS — sticky section nav, experience carousel,
+   skillsets illustration + tabs. Inert on desktop; live at ≤760px.
+   ============================================================ */
+.m-stage { display: contents; }  /* desktop: wrapper transparent to layout */
+.m-flow { display: contents; }   /* desktop: wrapper transparent to layout */
+.m-secnav { display: none; }
+.m-tshape { display: none; }
+.tl-bar__yr { display: none; }
+.tl__hint { display: none; }
+/* (.m-secnav__hint needs no desktop reset — the whole .m-secnav is hidden there) */
+
+/* simple fade-in-from-bottom used for section switches and the skillsets toggle */
+@keyframes mFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 760px) {
+  /* wrappers are plain blocks on mobile; each section becomes a full tab view */
+  .m-stage, .m-flow { display: block; }
+  /* clip the horizontal slide-in animations (overflow:clip doesn't create a
+     scroll container, so the sticky nav inside .m-stage still works) */
+  .m-stage { overflow-x: clip; }
+
+  /* one section visible at a time (the inactive ones get .m-sec-hidden via JS) */
+  .m-sec-hidden { display: none !important; }
+
+  /* entrance micro-interaction (section switch + skillsets toggle) */
+  .m-anim { animation: mFadeUp 0.42s var(--ease-out) both; }
+
+  /* tab views start near the top, not after the big inter-section scroll gap */
+  .ab-sec { padding-top: clamp(28px, 8vw, 52px); }
+  /* breathing room between each section's content and the parked nav below it */
+  .ab-hero, .ab-sec { padding-bottom: clamp(36px, 9vw, 60px); }
+  #tools { padding-bottom: clamp(36px, 9vw, 60px); }   /* override the big desktop value */
+
+  /* footer link buttons: even gaps for all four (the two columns flatten into one) */
+  .contact__col { display: contents; }
+
+  /* ---------- bottom section nav (Profile / Experience / Skillsets / Tools) ----------
+     Sticky to the viewport bottom while the section scrolls, then parks at the end
+     of .m-stage (just above the footer) so it never floats over the contact. */
+  .m-secnav {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    position: sticky;
+    bottom: 0;
+    z-index: 95;
+    background: rgba(248, 248, 248, 0.92);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-top: 1px solid var(--line);
+    padding: 15px 16px calc(16px + env(safe-area-inset-bottom));   /* larger top/bottom + side padding */
+  }
+  .m-secnav__hint {                 /* type system: Body small */
+    text-align: center;
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-body-sm);
+    letter-spacing: 0.01em;
+    color: rgba(17, 17, 17, 0.5);
+  }
+  .m-secnav__row { display: flex; gap: 6px; }
+  .m-secnav__tab {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 1.5px solid var(--black);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--black);
+    font: inherit;
+    font-weight: 500;
+    font-size: var(--fs-body-sm);     /* type system: Body small */
+    letter-spacing: -0.02em;
+    padding: 11px 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .m-secnav__tab.is-active {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  /* ---------- experience: sticky chapter tabs + swipe hint below ---------- */
+  /* hint sits just under the picker (left aligned, finger-swipe icon, no arrows) */
+  .tl__hint {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+    width: 100%;
+    background: #EAEEEC;
+    color: rgba(17, 17, 17, 0.62);
+    font-weight: 500;
+    font-size: var(--fs-body-sm);     /* type system: Body small */
+    letter-spacing: 0.01em;
+    padding: 9px 14px;
+    margin: 0 0 16px;
+  }
+  .tl__hint-icon { width: 19px; height: 19px; flex: none; opacity: 0.8; }
+  .tl__picker {
+    flex-wrap: nowrap;
+    gap: 4px;
+    margin-bottom: 6px;              /* small gap down to the swipe hint */
+    position: sticky;
+    top: 64px;                       /* just below the site header (64px tall on mobile) */
+    z-index: 80;
+    background: var(--white);
+    padding: 10px 0 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tl__picker::-webkit-scrollbar { display: none; }
+  .tl__picker .tl-bar {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 6px 10px 7px 2px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+  }
+  .tl__picker .tl-bar__label,
+  .tl__picker .tl-bar.is-active .tl-bar__label {
+    display: block; flex: none;
+    background: none; border: 0; padding: 0; box-shadow: none;
+    font-size: var(--fs-body-sm); font-weight: 500; letter-spacing: -0.02em;   /* type system: Body small */
+    color: rgba(17, 17, 17, 0.5);
+  }
+  .tl__picker .tl-bar.is-active { border-bottom-color: var(--black); }
+  .tl__picker .tl-bar.is-active .tl-bar__label { color: var(--black); }
+  .tl__picker .tl-bar__yr {         /* type system: Body small */
+    display: block;
+    font-size: var(--fs-body-sm); font-weight: var(--fw-regular); letter-spacing: var(--tracking-body);
+    color: rgba(17, 17, 17, 0.42);
+    white-space: nowrap;
+  }
+
+  /* ---------- experience: swipe carousel ---------- */
+  /* a wide gap between chapters shows clearly during the swipe (the JS strides by
+     clientWidth + this gap when snapping/measuring) */
+  .tl__detail {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 26px;
+  }
+  .tl__detail::-webkit-scrollbar { display: none; }
+  .exp-panel,
+  .exp-panel[hidden] {
+    display: block;
+    flex: 0 0 100%;
+    align-self: flex-start;
+    scroll-snap-align: start;
+  }
+
+  /* ---------- skillsets: switcher (top) + tiny illustration + caption ---------- */
+  .m-tshape { display: block; margin-bottom: 24px; }
+
+  /* segmented switcher: outlined container (no fill), a black thumb slides between
+     the two halves; the inactive side has no fill/outline of its own */
+  .m-tshape__tabs {
+    position: relative;
+    display: flex;
+    background: none;
+    border: 1.5px solid var(--black);
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 18px;
+  }
+  .m-tshape__thumb {
+    position: absolute;
+    top: 4px; bottom: 4px; left: 4px;
+    width: calc(50% - 4px);
+    background: var(--black);
+    border-radius: 999px;
+    transition: transform 0.4s var(--ease);
+    z-index: 0;
+  }
+  .tshape.is-broad .m-tshape__thumb { transform: translateX(100%); }
+  .m-tshape__tab {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 0;
+    border: 0;
+    background: none;
+    color: rgba(17, 17, 17, 0.55);
+    font: inherit;
+    font-weight: 500;
+    font-size: var(--fs-body-sm);     /* type system: Body small */
+    letter-spacing: -0.02em;
+    padding: 11px 8px;
+    cursor: pointer;
+    transition: color 0.3s var(--ease);
+  }
+  .m-tshape__tab.is-active { color: var(--white); }
+
+  /* tiny T illustration — larger boxes, shorter overall height */
+  .m-tshape__ill {
+    background: #EAEEEC;
+    padding: clamp(12px, 3.5vw, 18px) clamp(16px, 5vw, 28px);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .m-tshape__ill svg { width: clamp(185px, 60vw, 250px); height: auto; display: block; }
+  .ill-deep rect, .ill-broad rect { transition: fill 0.3s var(--ease), stroke 0.3s var(--ease); }
+  /* default = Deep Mastery selected */
+  .ill-deep rect { fill: #111111; }
+  .ill-broad rect { fill: #F8F8F8; stroke: #111111; stroke-width: 1.5; }
+  .tshape.is-broad .ill-deep rect { fill: #F8F8F8; stroke: #111111; stroke-width: 1.5; }
+  .tshape.is-broad .ill-broad rect { fill: #111111; stroke: none; }
+
+  /* caption below the illustration — swaps with the active group */
+  .m-tshape__cap {           /* type system: Body Normal */
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    letter-spacing: var(--tracking-body);
+    color: rgba(17, 17, 17, 0.62);
+  }
+  .m-tshape__cap b { font-weight: 600; color: var(--black); }
+  .m-tshape__cap-broad { display: none; }
+  .tshape.is-broad .m-tshape__cap-deep { display: none; }
+  .tshape.is-broad .m-tshape__cap-broad { display: block; }
+}

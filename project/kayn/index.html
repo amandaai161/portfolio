@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kayn Argan Oil — Case Study · Amanda Idris</title>
+  <meta name="description" content="Case study: a premium brand elevation and landing page for Kayn Argan Oil, translating authentic Moroccan sourcing into a sophisticated digital experience." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/css/projects-page.css?v=8" />
+  <link rel="stylesheet" href="/css/case-study.css?v=29" />
+  <link rel="stylesheet" href="/css/case-study-kayn.css?v=8" />
+</head>
+<body class="cs-page">
+  <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#ffffff" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="/" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/about" class="nav__link">About</a>
+        <a href="/project" class="nav__link">Works</a>
+        <a href="/#resume" class="nav__link">Resume</a>
+        <a href="/#contact" class="nav__link">Contact</a>
+        <a href="https://linkedin.com" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://behance.net" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="/project" class="mobile-menu__link">Works</a>
+      <a href="/#resume" class="mobile-menu__link">Resume</a>
+      <a href="/#contact" class="mobile-menu__link">Contact</a>
+      <a href="https://linkedin.com" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://behance.net" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+
+    <!-- reading progress bar -->
+    <div class="cs-progress" aria-hidden="true"><span class="cs-progress__bar" id="readingProgress"></span></div>
+  </header>
+
+  <main class="cs-shell container">
+    <div class="cs-layout">
+
+      <!-- ===================== FIXED SIDEBAR ===================== -->
+      <aside class="cs-sidebar" id="csSidebar" aria-label="Project overview">
+        <button class="cs-aside-toggle" id="asideToggle" type="button" aria-expanded="true" aria-controls="csSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          <span class="cs-aside-toggle__hide">Hide sidebar</span>
+          <span class="cs-aside-toggle__show">Show sidebar</span>
+        </button>
+        <h1 class="cs-sidebar__title t-h2">Kayn Argan Oil</h1>
+        <p class="cs-sidebar__desc t-body-lg">Elevates Kayn Argan Oil with a sophisticated, premium aesthetic that reflects its authentic Moroccan origin with elegant touch to build a strong digital presence.</p>
+
+        <div class="cs-contrib">
+          <p class="t-eyebrow-1 cs-muted">My contribution</p>
+          <ul class="cs-pills">
+            <li class="cs-pill">Brand Design</li>
+            <li class="cs-pill">Web Design</li>
+          </ul>
+        </div>
+
+        <dl class="cs-meta">
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Year</dt><dd class="t-body-lg">2025</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Duration</dt><dd class="t-body-lg">2 weeks</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Company</dt><dd class="t-body-lg">KAYN</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Industry</dt><dd class="t-body-lg">Beauty</dd></div>
+        </dl>
+
+        <hr class="cs-rule" />
+
+        <nav class="cs-toc" aria-label="Table of contents">
+          <p class="t-eyebrow-1 cs-muted cs-toc__heading">Table of contents</p>
+          <button class="cs-toc__toggle t-body-lg" type="button" aria-expanded="false" aria-controls="csTocList">
+            <span>Jump into section</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l7 7 7-7"/></svg>
+          </button>
+          <ul class="cs-toc__list" id="csTocList">
+            <li><a class="cs-toc__link" href="#about">About the Project</a></li>
+            <li><a class="cs-toc__link" href="#process">My Design Process</a></li>
+            <li><a class="cs-toc__link" href="#variables">Understanding the Variables</a></li>
+            <li><a class="cs-toc__link" href="#showcase">The Design Showcase</a></li>
+            <li><a class="cs-toc__link" href="#levelup">The Level-Up Lab</a></li>
+          </ul>
+          <button class="cs-toc__close" type="button" aria-label="Collapse sections">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 16l-7-7-7 7"/></svg>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- ===================== SCROLLABLE CONTENT ===================== -->
+      <div class="cs-content">
+
+        <!-- Hero image -->
+        <div class="cs-ph cs-ph--hero cs-ph--img cs-ph--cap reveal" style="--cs-fill:#0E1E0E;--cs-h:300">
+          <img class="cs-shot" src="/images/project_kayn/kayn_hero.webp" alt="Kayn Argan Oil — brand hero" loading="eager" />
+        </div>
+
+        <!-- ===== About the Project ===== -->
+        <section class="cs-section" id="about">
+          <h2 class="t-h3 reveal">About the Project</h2>
+          <p class="cs-lead t-body-lg reveal">This project is a comprehensive brand elevation for Kayn Argan Oil, transforming a basic identity into a sophisticated, premium aesthetic that reflects their authentic, high-quality Moroccan Argan oil. Facing challenges like generic design and weak visual hierarchy, our core strategy is to deliver an unparalleled design that centered on the Seamless User Experience for their discerning Indonesian market.</p>
+          <p class="cs-lead t-body-lg reveal">To solve core brand deficits, our strategy utilized high-quality visuals and artisanal touches to immediately communicate Argan oil's unique benefits and origin. Our critical objective was to Establish Authenticity &amp; Credibility through elegance and transparency, building a cohesive platform that translates the brand's USPs directly into online sales and online presence.</p>
+
+          <aside class="cs-ai reveal" aria-label="AI usage in this project">
+            <div class="cs-ai__metric">
+              <p class="cs-ai__inv-m t-body fw-medium">AI Involvement in this project:</p>
+              <p class="t-body-sm cs-muted">AI usage</p>
+              <p class="cs-ai__pct t-h2">20%</p>
+            </div>
+            <div class="cs-ai__body">
+              <p class="t-body fw-medium">AI Involvement in this project:</p>
+              <ul class="cs-ai__list t-body">
+                <li>To develop the initial briefs into complex, real-world business challenges.</li>
+                <li>To customize and edit brand photography, packaging visuals, and icons.</li>
+                <li>To calculate technical typography scales and precise layout ratios.</li>
+              </ul>
+            </div>
+          </aside>
+
+          <h3 class="cs-connector t-h5 reveal">The design objectives are...</h3>
+          <div class="cs-goals">
+            <article class="cs-goal reveal">
+              <span class="cs-goal__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-6v14L3 13zM3 11v2"/><path d="M7 12.5V18a2 2 0 0 0 2 2h1"/><path d="M17 8a3 3 0 0 1 0 8"/></svg></span>
+              <p class="t-body-lg"><strong>Boost Brand Awareness &amp; Education: </strong>Clearly communicate Kayn's unique Argan oil benefits and Moroccan origin to build transparency about our sourcing and quality.</p>
+            </article>
+            <article class="cs-goal reveal">
+              <span class="cs-goal__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7.5 9.5l2 2 5-5"/></svg></span>
+              <p class="t-body-lg"><strong>Seamless User Experience: </strong>Create an easy-to-use, informative, and attractive website for learning more about our products and purchasing.</p>
+            </article>
+            <article class="cs-goal reveal">
+              <span class="cs-goal__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l3-4h8l3 4-7 12z"/><path d="M5 8h14M9.5 8L12 20M14.5 8L12 20M8 4l1.5 4M16 4l-1.5 4"/></svg></span>
+              <p class="t-body-lg"><strong>Elevate Premium Perception &amp; Credibility: </strong>Establish Kayn as a distinctly high-end brand by translating the value of its highest-tier Moroccan sourcing through sophisticated visual direction and rigorous content delivery across all digital assets.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ===== My Design Process ===== -->
+        <section class="cs-section" id="process">
+          <h2 class="t-h3 reveal">My 6-Step Design Process</h2>
+          <p class="cs-lead t-body-lg reveal">This 6-step process is a refined take on classic design thinking framework, enhanced with technical insights I got from my professional experience. I applied this framework across these 4 projects to ensure every design is rooted in a clear "why".</p>
+
+          <ol class="cs-process reveal">
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">1</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Brief</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">Gathering Information</h3>
+                  <p class="cs-pstep__sub t-body-lg">Asking the right questions to extract what's in their mind</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-11.7 7.9L3 21l1.6-6.3A8.5 8.5 0 1 1 21 11.5z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.7-.9 1.4v.3"/><path d="M12 16.5h.01"/></svg></span>
+                  <p class="t-body">I've learned that the secret sauce is asking the right questions early on. I try to read the client's mind to make sure I truly get their expectations before I even start connecting the dots, it's all about getting those essential clarity before the clients/stakeholders leave the room.</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">2</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Research &amp; Moodboard</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">Keywords to Concepts</h3>
+                  <p class="cs-pstep__sub t-body-lg">Focus on keywords that are easy to visualize</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+                  <p class="t-body">I take all that raw information and find the most essential and useful keywords. I specifically look for words that can be visualized such as physical objects or particular adjectives like "sporty," "vibrant," or "luxury." These keywords are very helpful for starting my moodboard and make sure the visual direction isn't just a guess, but a directly translated from the clients/stakeholders mind.</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">3</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Ideation</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">Solving the Puzzle</h3>
+                  <p class="cs-pstep__sub t-body-lg">Design is about solving problems, not just decorating a page</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.9 1 .95 1.7l.05.5h5.2l.05-.5c.05-.7.45-1.3.95-1.7A6 6 0 0 0 12 3z"/></svg></span>
+                  <p class="t-body">This is where the real creative heavy lifting happens. I use the client/stakeholder's core problem as the main "anchor" for every single idea I try to generate. It keeps me from being distracted by the "designers dilemma" (a.k.a just making things look pretty). If a design choice doesn't solve a problem, it is not a design just decorating. I'm hired to make things work through high-level creative thinking.</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">4</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Wireframe &amp; Prototype</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">Building the Foundation</h3>
+                  <p class="cs-pstep__sub t-body-lg">Structuring the logic makes the creative phase 10x faster</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+                  <p class="t-body">Before I get into the visual design, I build the skeleton first. This step is fundamental because it forces me to think purely about information hierarchy and user flow. It doesn't only keep me on the right track when I finally open the design tools, but it also speeds up the entire process in the long run. By narrowing down the solution early on, I can make sure the final design is laser-focused on the project's objectives.</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">5</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Visual Design</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">Aesthetics with Intent</h3>
+                  <p class="cs-pstep__sub t-body-lg">Beauty is the hook, but intentionality is what keeps them engaged</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 1.8 1.8 0 0 0 1.7-2.5 1.8 1.8 0 0 1 1.7-2.5H17a4 4 0 0 0 4-4c0-4.4-4-9-9-9z"/><circle cx="7.7" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16.3" cy="11" r="1"/></svg></span>
+                  <p class="t-body">Now, it's time for inserting the visual soul to the solid skeleton. Years of experience in design makes me very fluent in implementing most of the design principals that matter such as hierarchy, contrast, and composition. But it's not just about looking "cool". Every choice is made to build a genuine emotional connection with the target audiences and answer the "why" behind the design.</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="cs-pstep">
+              <span class="cs-pstep__num t-body-lg">6</span>
+              <div class="cs-pstep__body">
+                <span class="cs-pstep__label t-eyebrow-1">Delivery</span>
+                <div class="cs-pstep__heading">
+                  <h3 class="cs-pstep__title t-h6">The Presentation</h3>
+                  <p class="cs-pstep__sub t-body-lg">I don't just sell the design, I sell the logic that built it</p>
+                </div>
+                <div class="cs-pstep__note">
+                  <span class="cs-pstep__dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span>
+                  <p class="t-body">I never just show the final design out of nowhere when delivering the result. I walk the clients/stakeholders through the entire step-by-step process before showing the result. By presenting the research and logic first, I help the clients/stakeholders understand the "why" before they even see the "what.". It transforms the presentation from just a simple hand-over into storytelling the project which validates the end result.</p>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <!-- ===== Understanding the Variables ===== -->
+        <section class="cs-section" id="variables">
+          <h2 class="t-h3 reveal">Understanding the Variables</h2>
+          <!-- generated copy (no em dashes) — original Figma intro was placeholder -->
+          <p class="cs-lead t-body-lg reveal" data-generated>Before designing anything, I mapped out who Kayn is, what makes it different, and who it is really for. Getting these variables right up front is what keeps every later decision grounded in the brand and its audience.</p>
+
+          <h3 class="cs-connector t-h5 reveal">First, I started researching...</h3>
+          <p class="cs-rich cs-lead t-body-lg reveal"><strong>Brand summary: </strong>Kayn Argan Oil is an Indonesian skincare brand specializing in high-quality argan oil sourced directly from a trusted traditional factory in Agadir, Morocco. The brand harnesses the benefits of pure, first cold-pressed argan oil — showcased in its best-selling essential serum and a new shampoo. Built on transparency, authenticity, and small-batch quality, Kayn set out to give Indonesian consumers natural, effective skincare rooted in Moroccan tradition.</p>
+
+          <div class="cs-usp reveal">
+            <div class="cs-usp__head">
+              <span class="cs-usp__badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg></span>
+              <h3 class="cs-usp__title t-h5">Unique Selling Points</h3>
+            </div>
+            <ol class="cs-usp__list">
+              <li class="cs-usp__item"><span class="cs-usp__num t-body-lg">01</span><p class="t-body-lg"><strong>Transparency and Authentic Sourcing: </strong>We build trust by clearly communicating our direct sourcing of pure, first cold-pressed Argan oil from a trusted traditional factory in Morocco. Sharing my personal connection and our traditional methods adds to our authenticity.</p></li>
+              <li class="cs-usp__item"><span class="cs-usp__num t-body-lg">02</span><p class="t-body-lg"><strong>Pure &amp; Potent Argan Oil Focus: </strong>We specialize in harnessing the exceptional benefits of 100% pure, premium Argan oil, rich in vital nutrients, for both skin and hair. Our serum and shampoo are designed to showcase its natural power.</p></li>
+              <li class="cs-usp__item"><span class="cs-usp__num t-body-lg">03</span><p class="t-body-lg"><strong>Quality Through Small-Batch &amp; Focused Production: </strong>We prioritize meticulous quality control through our small-batch production process, allowing us to dedicate our resources and attention to detail on our focused line of high-potential serum and shampoo.</p></li>
+              <li class="cs-usp__item"><span class="cs-usp__num t-body-lg">04</span><p class="t-body-lg"><strong>Strong Ethical and Natural Values: </strong>We are committed to ethical practices (including fair sourcing) and formulating our products with natural and beneficial ingredients, with Argan oil as our star ingredient, prioritizing its efficacy.</p></li>
+              <li class="cs-usp__item"><span class="cs-usp__num t-body-lg">05</span><p class="t-body-lg"><strong>Professional Brand Presentation: </strong>A well-designed website and packaging will convey our professionalism and attention to detail, signaling our trustworthiness and the value of our brand through a cohesive and attractive visual identity.</p></li>
+            </ol>
+          </div>
+
+          <div class="cs-personas">
+            <article class="cs-persona reveal">
+              <p class="t-eyebrow-1 cs-muted">User persona 1</p>
+              <div class="cs-persona__id">
+                <span class="cs-persona__avatar" aria-hidden="true"></span>
+                <span class="cs-persona__name">
+                  <span class="t-h6">Amelia</span>
+                  <span class="cs-persona__role t-body">The Discerning Housewife</span>
+                </span>
+              </div>
+              <div class="cs-persona__pills">
+                <span class="cs-persona__pill t-body-sm">Age 42</span>
+                <span class="cs-persona__pill t-body-sm">Husband income: $300,000+</span>
+              </div>
+              <p class="cs-persona__quote t-body">"I value high-quality, natural ingredients and brands that are transparent about where they come from."</p>
+              <p class="cs-persona__bio t-body-sm">Amelia enjoys a comfortable lifestyle in a prestigious neighborhood in Jakarta. She prioritizes self-care and is always looking for effective yet gentle skincare solutions. Having tried various luxury brands, she's now leaning towards products with natural and potent ingredients. She appreciates brands with a story and a sense of authenticity, as it aligns with her desire for genuine quality over fleeting trends. She often researches ingredients and prefers brands that are transparent about their origins and processes.</p>
+            </article>
+
+            <article class="cs-persona reveal">
+              <p class="t-eyebrow-1 cs-muted">User persona 2</p>
+              <div class="cs-persona__id">
+                <span class="cs-persona__avatar" aria-hidden="true"></span>
+                <span class="cs-persona__name">
+                  <span class="t-h6">Luna Wijaya</span>
+                  <span class="cs-persona__role t-body">Beauty Influencer</span>
+                </span>
+              </div>
+              <div class="cs-persona__pills">
+                <span class="cs-persona__pill t-body-sm">Age 26</span>
+                <span class="cs-persona__pill t-body-sm">$15,000 - $25,000</span>
+                <span class="cs-persona__pill t-body-sm">Single</span>
+              </div>
+              <p class="cs-persona__quote t-body">"I look for authentic, effective products with a compelling story that resonates with my audience."</p>
+              <p class="cs-persona__bio t-body-sm">Luna is a vibrant and active young woman living in a trendy apartment in South Jakarta. Her life revolves around creating engaging content for her social media platforms, where she reviews beauty products, shares skincare routines, and explores new trends. She's always on the lookout for authentic and effective products that resonate with her audience, who value her honest opinions and recommendations. She seeks brands with a strong visual identity and a compelling story, as these elements translate well into engaging content.</p>
+            </article>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal">The problem identification...</h3>
+          <p class="cs-lead t-body-lg reveal">To ensure the final design drives tangible results, I first isolated the key challenges preventing an optimal experience. The following breakdown pairs these core pain points with deliberate, actionable solutions, setting a clear roadmap for how each fix will improve the product's performance.</p>
+
+          <div class="cs-ps reveal">
+            <div class="cs-ps__head">
+              <span class="cs-ps__h-prob t-eyebrow-1">Problems</span>
+              <span class="cs-ps__h-sol t-eyebrow-1">Solutions</span>
+            </div>
+
+            <div class="cs-ps__row">
+              <span class="cs-ps__prob"><span class="cs-ps__bullet cs-ps__bullet--prob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span><span class="t-body-lg">Unclear value proposition</span></span>
+              <span class="cs-ps__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></svg></span>
+              <span class="cs-ps__sol">
+                <span class="cs-ps__sol-title"><span class="cs-ps__bullet cs-ps__bullet--sol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="t-body-lg">Clear value, above the fold</span></span>
+                <span class="cs-ps__sol-desc t-body-sm">Lead with the core benefit and what makes Kayn special, the moment the page loads.</span>
+              </span>
+            </div>
+
+            <div class="cs-ps__row">
+              <span class="cs-ps__prob"><span class="cs-ps__bullet cs-ps__bullet--prob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span><span class="t-body-lg">Poor visual hierarchy</span></span>
+              <span class="cs-ps__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></svg></span>
+              <span class="cs-ps__sol">
+                <span class="cs-ps__sol-title"><span class="cs-ps__bullet cs-ps__bullet--sol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="t-body-lg">Strong hierarchy &amp; clear CTAs</span></span>
+                <span class="cs-ps__sol-desc t-body-sm">Visually distinct buttons and deliberate contrast guide the eye to what matters.</span>
+              </span>
+            </div>
+
+            <div class="cs-ps__row">
+              <span class="cs-ps__prob"><span class="cs-ps__bullet cs-ps__bullet--prob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span><span class="t-body-lg">Insufficient product information</span></span>
+              <span class="cs-ps__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></svg></span>
+              <span class="cs-ps__sol">
+                <span class="cs-ps__sol-title"><span class="cs-ps__bullet cs-ps__bullet--sol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="t-body-lg">Clear, concise product detail</span></span>
+                <span class="cs-ps__sol-desc t-body-sm">Digestible benefits, ingredients, and usage that answer questions before they're asked.</span>
+              </span>
+            </div>
+
+            <div class="cs-ps__row">
+              <span class="cs-ps__prob"><span class="cs-ps__bullet cs-ps__bullet--prob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span><span class="t-body-lg">Generic, uninspired design</span></span>
+              <span class="cs-ps__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></svg></span>
+              <span class="cs-ps__sol">
+                <span class="cs-ps__sol-title"><span class="cs-ps__bullet cs-ps__bullet--sol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="t-body-lg">Prominent trust signals</span></span>
+                <span class="cs-ps__sol-desc t-body-sm">Testimonials, reviews, and certifications integrated to build credibility and confidence.</span>
+              </span>
+            </div>
+
+            <div class="cs-ps__row">
+              <span class="cs-ps__prob"><span class="cs-ps__bullet cs-ps__bullet--prob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span><span class="t-body-lg">Not mobile-friendly</span></span>
+              <span class="cs-ps__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></svg></span>
+              <span class="cs-ps__sol">
+                <span class="cs-ps__sol-title"><span class="cs-ps__bullet cs-ps__bullet--sol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="t-body-lg">Responsive, mobile-first layouts</span></span>
+                <span class="cs-ps__sol-desc t-body-sm">Varied, interesting layouts that hold up beautifully on the screens most buyers use.</span>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== The Design Showcase ===== -->
+        <section class="cs-section" id="showcase">
+          <h2 class="t-h3 reveal">The Design Showcase</h2>
+          <div class="cs-showcase reveal">
+            <img src="/images/project_kayn/kayn_showcase_1.webp" alt="Kayn landing page — hero and brand introduction" loading="lazy" />
+            <img src="/images/project_kayn/kayn_showcase_2.webp" alt="Kayn landing page — product benefits and Argan oil story" loading="lazy" />
+            <img src="/images/project_kayn/kayn_showcase_3.webp" alt="Kayn landing page — product detail and ingredients" loading="lazy" />
+            <img src="/images/project_kayn/kayn_showcase_4.webp" alt="Kayn landing page — trust signals and testimonials" loading="lazy" />
+            <img src="/images/project_kayn/kayn_showcase_5.webp" alt="Kayn landing page — closing call to action" loading="lazy" />
+            <img src="/images/project_kayn/kayn_showcase_6.webp" alt="Kayn landing page — full page layout" loading="lazy" />
+          </div>
+        </section>
+
+        <!-- ===== The Level-Up Lab ===== -->
+        <section class="cs-section" id="levelup">
+          <h2 class="t-h3 reveal">About &ldquo;The Level-Up Lab&rdquo;</h2>
+
+          <div class="cs-lab-banner reveal">
+            <svg class="cs-lab-banner__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.6.8l1 1.2H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <p class="t-h6">This project is a part of &ldquo;The Level-Up Lab&rdquo;.</p>
+          </div>
+
+          <div class="cs-lab reveal">
+            <div class="cs-lab__head">
+              <span class="cs-lab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></span>
+              <h3 class="t-h6">About</h3>
+            </div>
+            <p class="t-body-lg">After three years at Aspire, I needed to see exactly how far my design skillsets had come. I revisited 4 of my early freelance works, layering in the strategic systems and technical skills I've honed in the high-growth startup with real world challenges. This collection is the visual evidence of my evolution, the result of years of professional hustle meeting my core design talent. By tackling familiar business challenges through a more sophisticated lens, I'm solving problems with a level of instinct, empathy, and detail that I simply didn't have when I first started.</p>
+          </div>
+
+          <div class="cs-lab reveal">
+            <div class="cs-lab__head">
+              <span class="cs-lab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg></span>
+              <h3 class="t-h6">Objectives</h3>
+            </div>
+            <ul class="cs-lab__list t-body-lg">
+              <li><strong>Sharper Instincts:</strong> Applying a refined "designer's eye" to transform raw ideas into polished identities.</li>
+              <li><strong>Tool Mastery:</strong> Leveraging advanced design workflows to build faster, cleaner, and smarter.</li>
+              <li><strong>User-First Perspective:</strong> Applying my collaborative insights to ensure that every component in the system is built with a focus on empathy and high usability for the end-user.</li>
+            </ul>
+          </div>
+        </section>
+
+      </div><!-- /.cs-content -->
+    </div><!-- /.cs-layout -->
+
+    <!-- ===================== OTHER PROJECTS ===================== -->
+    <section class="cs-other" aria-label="Other projects">
+      <div class="other__header reveal">
+        <h2 class="other__title t-h1">Other projects</h2>
+        <a href="/project" class="btn btn--dark other__cta">
+          <span>See all projects</span>
+          <svg class="btn__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="pg-grid">
+        <a href="/project/aspire-design-system" class="pcard reveal" aria-label="Aspire: Web Design System">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_aspire_ds/ds_thumbnail.webp" alt="Aspire Web Design System preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">Aspire: Web Design System</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                    <li class="pg-tag t-body-sm">Design System</li>
+                    <li class="pg-tag t-body-sm">System Building</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A comprehensive Figma-to-Webflow design system to replace an inefficient, manual web development workflow. The system standardizes components and organizes assets to enable fast, scalable updates across 120+ pages.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/how-aspire-works" class="pcard reveal" aria-label="How Aspire Works">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_aspire_haw/haw_thumbnail.webp" alt="How Aspire Works preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">How Aspire Works</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                    <li class="pg-tag t-body-sm">Conceptual Design</li>
+                    <li class="pg-tag t-body-sm">Information Architecture</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A dedicated landing page that pulls back the curtain on how Aspire actually works, turning complex fintech infrastructure into a clear, transparent narrative that replaces doubt with credibility.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/nobi" class="pcard reveal" aria-label="NOBI Bakery">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_nobi/nobi_thumbnail.webp" alt="NOBI Bakery storefront preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">NOBI Bakery</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A digital storefront and landing page for NOBI Bakery, where time-honored Japanese baking meets modern flavors, wrapped in a seamless ordering experience for busy city dwellers.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/script.js?v=16"></script>
+  <script src="/js/case-study.js?v=12"></script>
+</body>
+</html>

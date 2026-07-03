@@ -1,0 +1,241 @@
+/* ============================================================
+   Amanda Idris — Case Study: "How Aspire Works" (HAW)
+   Loads AFTER case-study.css. Reuses the shared shell/sidebar/TOC/
+   progress/.cs-ai/.cs-obj/.cs-split/.cs-panel/responsive from
+   case-study.css UNCHANGED, and ONLY adds the HAW-specific pieces:
+     - .cs-qa       interactive Q&A tabs (Discovery)
+     - .cs-quote    indented note/hypothesis blocks
+     - .cs-options  "Exploring the direction" option cards
+     - .cs-iso      isometric visuals row
+     - .cs-struct   page-structure grouped layer panels
+     - .cs-showcase stacked final-design mockups (same as Kayn)
+   Palette (orange/blue/soft/dark) is inherited from case-study.css.
+   ============================================================ */
+
+/* ---------- Sidebar external link (aspireapp.com) ---------- */
+.cs-sidebar__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(14px, 1.4vw, 20px);
+  color: var(--cs-ink);
+  text-decoration: none;
+  font-style: italic;
+  font-weight: 400;
+  border-bottom: 1px solid var(--cs-line);
+  width: max-content;
+  transition: color .2s var(--ease, ease), border-color .2s var(--ease, ease);
+}
+.cs-sidebar__link svg { width: 14px; height: 14px; flex: none; }
+.cs-sidebar__link:hover { color: var(--cs-blue); border-color: var(--cs-blue); }
+
+/* ============================================================
+   DISCOVERY — interactive Q&A ("The trust" issue)
+   Left: question list (tabs). Right: answer panel (orange tint).
+   ============================================================ */
+.cs-qa {
+  margin-top: clamp(22px, 2.4vw, 34px);
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: clamp(16px, 1.6vw, 24px);
+  align-items: stretch;
+}
+.cs-qa__list { display: flex; flex-direction: column; gap: 10px; }
+
+.cs-qa__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--cs-soft);
+  color: var(--cs-ink);
+  font: inherit;
+  cursor: pointer;
+  transition: background .42s var(--ease-out, ease), transform .42s var(--ease-out, ease);
+}
+.cs-qa__q:hover { transform: translateX(3px); }
+.cs-qa__q.is-active { background: rgba(240, 75, 38, 0.15); }
+
+.cs-qa__q-lead { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.cs-qa__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 4px;
+  background: #e1edf5;
+  color: var(--cs-blue);
+  transition: background .42s var(--ease-out, ease), color .42s var(--ease-out, ease);
+}
+.cs-qa__icon svg { width: 22px; height: 22px; }
+.cs-qa__q.is-active .cs-qa__icon { background: rgba(240, 75, 38, 0.15); color: var(--cs-orange); }
+.cs-qa__q-text { min-width: 0; }
+.cs-qa__chev { flex: none; width: 20px; height: 20px; color: var(--cs-ink); transition: transform .42s var(--ease-out, ease); }
+.cs-qa__q.is-active .cs-qa__chev { transform: translateX(2px); }
+
+/* Answer panels — only the active one shows */
+.cs-qa__panels { position: relative; }
+.cs-qa__panel {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(26px, 2.6vw, 36px);
+  height: 100%;
+  padding: clamp(22px, 2.4vw, 30px);
+  border-radius: 8px;
+  background: rgba(240, 75, 38, 0.2);
+}
+.cs-qa__panel.is-active { display: flex; animation: csQaFade .52s var(--ease-out, ease); }
+@keyframes csQaFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-qa__panel.is-active { animation: none; }
+  .cs-qa__q, .cs-qa__icon, .cs-qa__chev { transition: none; }
+}
+.cs-qa__cat { color: var(--cs-orange); }
+.cs-qa__title { color: var(--cs-ink); font-weight: 700; margin-top: 8px; }
+.cs-qa__desc { color: var(--cs-ink); margin-top: 10px; }
+.cs-qa__similar { color: var(--cs-ink); margin-top: clamp(20px, 2.2vw, 28px); }
+.cs-qa__similar ul { margin: 8px 0 0; padding-left: 20px; list-style: disc; display: flex; flex-direction: column; gap: 6px; }
+.cs-qa__aud-label { color: var(--cs-ink); margin-bottom: 10px; }
+.cs-qa__pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.cs-qa__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid var(--cs-ink);
+  border-radius: 999px;
+  color: var(--cs-ink);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Indented quote/note blocks (hypothesis + isometric note)
+   ============================================================ */
+.cs-quote {
+  margin-top: clamp(16px, 1.6vw, 24px);
+  padding-left: clamp(18px, 1.8vw, 28px);
+  border-left: 2px solid var(--cs-line);
+  max-width: 80ch;
+}
+
+/* ============================================================
+   EXPLORING THE DIRECTION — option cards
+   text (left) + exploration image (right), inside a bordered card
+   ============================================================ */
+.cs-options {
+  margin-top: clamp(28px, 3vw, 44px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 28px);
+}
+.cs-option {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+  align-items: center;
+  padding: clamp(22px, 2.2vw, 32px);
+  border: 1px solid var(--cs-line);
+  border-radius: var(--cs-radius-lg);
+  background: #fff;
+}
+.cs-option__label { display: flex; flex-direction: column; gap: 12px; }
+.cs-option__num { color: var(--cs-ink); }
+.cs-option__desc { color: var(--cs-ink); }
+.cs-option__media {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.cs-option__media img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   BUILDING — isometric visuals row
+   ============================================================ */
+.cs-iso {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
+}
+.cs-iso__cell {
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--cs-soft);
+  border: 1px solid rgba(24, 24, 24, 0.08);
+}
+.cs-iso__cell img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   PAGE STRUCTURE — grouped layer panels (right side of .cs-split)
+   ============================================================ */
+.cs-struct { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 20px); }
+.cs-struct__group {
+  padding: clamp(20px, 2vw, 28px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-soft);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.6vw, 22px);
+}
+.cs-struct__eyebrow { color: var(--cs-muted); }
+.cs-struct__layer { display: flex; flex-direction: column; gap: 6px; }
+.cs-struct__layer h4 { color: var(--cs-ink); }
+.cs-struct__layer p { color: var(--cs-ink); }
+
+/* ============================================================
+   FINAL DESIGN — stacked mockups (same treatment as Kayn showcase)
+   ============================================================ */
+.cs-showcase {
+  margin-top: clamp(28px, 3vw, 48px);
+  border: 1px solid rgba(24, 24, 24, 0.1);
+  border-radius: var(--cs-radius-lg);
+  overflow: hidden;
+  background: var(--cs-soft);
+}
+.cs-showcase img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .cs-option { grid-template-columns: 1fr; gap: clamp(16px, 2vw, 24px); }
+
+  /* Q&A becomes an accordion: JS moves each panel to sit directly
+     under its question, and the active one expands beneath it. */
+  .cs-qa { grid-template-columns: 1fr; gap: 10px; }
+  .cs-qa__panels:empty { display: none; }
+  /* spacing is carried by per-item margins (gap:0) so the active question
+     and its panel can sit flush, joined by a hairline separator */
+  .cs-qa__list { gap: 0; }
+  /* no horizontal nudge on tap — it broke the flush accordion layout */
+  .cs-qa__q, .cs-qa__q:hover { transform: none; }
+  .cs-qa__q { margin-bottom: 10px; }
+  .cs-qa__panel { height: auto; margin: 0 0 10px; }
+  .cs-qa__q.is-active { border-radius: 8px 8px 0 0; margin-bottom: 0; }
+  .cs-qa__list > .cs-qa__panel {
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid rgba(24, 24, 24, 0.12);   /* subtle separator */
+  }
+  /* accordion chevron: right-chevron rotates to point DOWN when collapsed,
+     UP when the question is expanded (overrides the desktop translateX) */
+  .cs-qa__chev { transform: rotate(90deg); }
+  .cs-qa__q.is-active .cs-qa__chev { transform: rotate(270deg); }
+}
+
+@media (max-width: 760px) {
+  .cs-iso { grid-template-columns: 1fr; }
+  .cs-showcase { margin-inline: calc(var(--gutter) * -1); border-inline: 0; border-radius: 0; }
+  .cs-qa__q { padding: 14px; }
+  .cs-qa__icon { width: 38px; height: 38px; }
+  .cs-quote { padding-left: 16px; }
+}
