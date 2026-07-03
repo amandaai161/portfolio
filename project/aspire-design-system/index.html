@@ -6,13 +6,29 @@
   <title>Aspire: Web Design System — Case Study · Amanda Idris</title>
   <meta name="description" content="Case study: building a Figma-to-Webflow design system at Aspire that cut landing-page production from ten working days to under four." />
 
+  <link rel="icon" href="/portfolio/favico.svg" type="image/svg+xml" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Amanda Idris" />
+  <meta property="og:title" content="Aspire: Web Design System — Case Study · Amanda Idris" />
+  <meta property="og:description" content="Case study: building a Figma-to-Webflow design system at Aspire that cut landing-page production from ten working days to under four." />
+  <meta property="og:url" content="https://amandaai161.github.io/portfolio/project/aspire-design-system" />
+  <meta property="og:image" content="https://amandaai161.github.io/portfolio/images/meta.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aspire: Web Design System — Case Study · Amanda Idris" />
+  <meta name="twitter:description" content="Case study: building a Figma-to-Webflow design system at Aspire that cut landing-page production from ten working days to under four." />
+  <meta name="twitter:image" content="https://amandaai161.github.io/portfolio/images/meta.webp" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/styles.css?v=16" />
-  <link rel="stylesheet" href="/css/type-system.css?v=5" />
-  <link rel="stylesheet" href="/css/projects-page.css?v=8" />
-  <link rel="stylesheet" href="/css/case-study.css?v=29" />
+  <link rel="stylesheet" href="/portfolio/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/portfolio/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/portfolio/css/projects-page.css?v=8" />
+  <link rel="stylesheet" href="/portfolio/css/case-study.css?v=29" />
 </head>
 <body class="cs-page">
   <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
@@ -28,18 +44,17 @@
   <!-- ===================== HEADER ===================== -->
   <header class="header" id="top">
     <div class="container header__inner">
-      <a href="/" class="header__name">Amanda Idris</a>
+      <a href="/portfolio/" class="header__name">Amanda Idris</a>
 
       <nav class="nav" aria-label="Primary">
-        <a href="/about" class="nav__link">About</a>
-        <a href="/project" class="nav__link">Works</a>
-        <a href="/#resume" class="nav__link">Resume</a>
-        <a href="/#contact" class="nav__link">Contact</a>
-        <a href="https://linkedin.com" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+        <a href="/portfolio/about" class="nav__link">About</a>
+        <a href="/portfolio/project" class="nav__link">Works</a>
+        <a href="/portfolio/#resume" class="nav__link">Resume</a>
+        <a href="https://www.linkedin.com/in/amandaalfattah/" class="nav__link nav__link--ext" target="_blank" rel="noopener">
           Linkedin
           <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="https://behance.net" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+        <a href="https://www.behance.net/amandaalfattah" class="nav__link nav__link--ext" target="_blank" rel="noopener">
           Behance
           <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -51,12 +66,11 @@
     </div>
 
     <div class="mobile-menu" id="mobileMenu" hidden>
-      <a href="/about" class="mobile-menu__link">About</a>
-      <a href="/project" class="mobile-menu__link">Works</a>
-      <a href="/#resume" class="mobile-menu__link">Resume</a>
-      <a href="/#contact" class="mobile-menu__link">Contact</a>
-      <a href="https://linkedin.com" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
-      <a href="https://behance.net" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+      <a href="/portfolio/about" class="mobile-menu__link">About</a>
+      <a href="/portfolio/project" class="mobile-menu__link">Works</a>
+      <a href="/portfolio/#resume" class="mobile-menu__link">Resume</a>
+      <a href="https://www.linkedin.com/in/amandaalfattah/" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://www.behance.net/amandaalfattah" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
     </div>
 
     <!-- reading progress bar -->
@@ -123,7 +137,7 @@
 
         <!-- Hero image -->
         <div class="cs-ph cs-ph--hero cs-ph--img cs-ph--cap reveal" style="--cs-fill:#F7FAFC;--cs-h:300">
-          <img class="cs-shot" src="/images/project_aspire_ds/1_hero.webp" alt="Aspire web design system — colour variables and button styles overview" loading="eager" />
+          <img class="cs-shot" src="/portfolio/images/project_aspire_ds/1_hero.webp" alt="Aspire web design system — colour variables and button styles overview" loading="eager" />
         </div>
 
         <!-- ===== About the Project ===== -->
@@ -176,7 +190,7 @@
           <p class="cs-lead t-body-lg reveal">I worked with the website team and digital marketing manager to break down the core issues — ensuring the system would also solve scalability and slow load times, not just the symptoms. Below is a preview of our working files.</p>
 
           <div class="cs-ph cs-ph--img cs-ph--cap reveal" style="--cs-fill:#DEDEDE;--cs-h:300">
-            <img class="cs-shot" src="/images/project_aspire_ds/2_current_workspace.webp" alt="Audit of the existing Webflow pages and Figma working files across products" loading="lazy" />
+            <img class="cs-shot" src="/portfolio/images/project_aspire_ds/2_current_workspace.webp" alt="Audit of the existing Webflow pages and Figma working files across products" loading="lazy" />
           </div>
 
           <h3 class="cs-connector t-h5 reveal">The challenges we face...</h3>
@@ -242,11 +256,11 @@
           <h3 class="cs-connector t-h5 reveal">First, I learn the structure...</h3>
           <div class="cs-twocol reveal">
             <article class="cs-twocol__item">
-              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/images/project_aspire_ds/3_structure_1.webp" alt="Brand guideline structure — construction, containers, colours and typography" loading="lazy" /></div>
+              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/3_structure_1.webp" alt="Brand guideline structure — construction, containers, colours and typography" loading="lazy" /></div>
               <p class="t-body-lg">Full audit of our existing Figma files to identify recurring patterns within the workflow and elements that needed standardization. Also measuring the baseline production time to build certain pages as a clear benchmark of the old system and workflow.</p>
             </article>
             <article class="cs-twocol__item">
-              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/images/project_aspire_ds/3_structure_2.webp" alt="Component structure — buttons, icons and sets of utility classes mapped to Webflow" loading="lazy" /></div>
+              <div class="cs-ph cs-ph--img" style="--ar: 554/350"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/3_structure_2.webp" alt="Component structure — buttons, icons and sets of utility classes mapped to Webflow" loading="lazy" /></div>
               <p class="t-body-lg">Understanding the sync between Figma features like variables and styles and Webflow classes and tokens to ensure a seamless technical translation from design to code.</p>
             </article>
           </div>
@@ -254,14 +268,14 @@
           <h3 class="cs-connector t-h5 reveal">Then I start building the new system...</h3>
           <p class="cs-lead t-body-lg reveal">I focused on syncable components — build once, update across multiple sites — stress-testing the handoff over several rounds with developers and constantly updating documentation from their feedback to eliminate repeating errors.</p>
 
-          <div class="cs-ph cs-ph--img cs-ph--cap reveal" style="--cs-fill:#F1F0EE;--cs-h:240"><img class="cs-shot" src="/images/project_aspire_ds/4_new_framework.webp" alt="The new Figma-to-Webflow framework — Relume component library powering syncable components" loading="lazy" /></div>
+          <div class="cs-ph cs-ph--img cs-ph--cap reveal" style="--cs-fill:#F1F0EE;--cs-h:240"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/4_new_framework.webp" alt="The new Figma-to-Webflow framework — Relume component library powering syncable components" loading="lazy" /></div>
 
           <!-- Figma → Relume → Webflow workflow -->
           <div class="cs-flow reveal">
             <article class="cs-flow__card">
               <p class="t-eyebrow-2 cs-muted">Source</p>
               <p class="cs-flow__desc t-body-sm">Variables &amp; styles define the single source of truth.</p>
-              <p class="cs-flow__tool t-h5">Figma<img class="cs-flow__logo" src="/images/tools/figma.svg" alt="" /></p>
+              <p class="cs-flow__tool t-h5">Figma<img class="cs-flow__logo" src="/portfolio/images/tools/figma.svg" alt="" /></p>
             </article>
             <span class="cs-flow__arrow" aria-hidden="true">
               <svg viewBox="0 0 26 14" fill="none"><path d="M1 7h22m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -269,7 +283,7 @@
             <article class="cs-flow__card">
               <p class="t-eyebrow-2 cs-muted">Library</p>
               <p class="cs-flow__desc t-body-sm">Standardized, accessible, pre-defined component structures.</p>
-              <p class="cs-flow__tool t-h5">Relume<img class="cs-flow__logo" src="/images/tools/relume.webp" alt="" /></p>
+              <p class="cs-flow__tool t-h5">Relume<img class="cs-flow__logo" src="/portfolio/images/tools/relume.webp" alt="" /></p>
             </article>
             <span class="cs-flow__arrow" aria-hidden="true">
               <svg viewBox="0 0 26 14" fill="none"><path d="M1 7h22m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -277,7 +291,7 @@
             <article class="cs-flow__card">
               <p class="t-eyebrow-2 cs-muted">Output</p>
               <p class="cs-flow__desc t-body-sm">Classes &amp; tokens aligned 1:1 — build once, reuse everywhere.</p>
-              <p class="cs-flow__tool t-h5">Webflow<img class="cs-flow__logo" src="/images/tools/webflow.svg" alt="" /></p>
+              <p class="cs-flow__tool t-h5">Webflow<img class="cs-flow__logo" src="/portfolio/images/tools/webflow.svg" alt="" /></p>
             </article>
           </div>
 
@@ -334,7 +348,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_1_color.webp" alt="Colour variables — primitive brand, neutral and accent tokens with dark-mode set" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_1_color.webp" alt="Colour variables — primitive brand, neutral and accent tokens with dark-mode set" loading="lazy" /></div>
               </div></div></div>
             </details>
             <details class="cs-acc">
@@ -347,7 +361,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_2_typography.webp" alt="Typography guideline — type scale, weights and desktop/mobile usage rules" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/567"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_2_typography.webp" alt="Typography guideline — type scale, weights and desktop/mobile usage rules" loading="lazy" /></div>
               </div></div></div>
             </details>
             <details class="cs-acc">
@@ -360,7 +374,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/804"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_3_buttons.webp" alt="Buttons and UI elements — every interactive state across light and dark backgrounds" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/804"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_3_buttons.webp" alt="Buttons and UI elements — every interactive state across light and dark backgrounds" loading="lazy" /></div>
               </div></div></div>
             </details>
             <details class="cs-acc">
@@ -373,7 +387,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/575"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_4_spacing.webp" alt="Spacing and padding scale with container max-widths and how-to-use guidance" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/575"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_4_spacing.webp" alt="Spacing and padding scale with container max-widths and how-to-use guidance" loading="lazy" /></div>
               </div></div></div>
             </details>
             <details class="cs-acc">
@@ -386,7 +400,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/782"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_5_imagery.webp" alt="Image styleguide — hero, solution and product/feature imagery direction" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/782"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_5_imagery.webp" alt="Image styleguide — hero, solution and product/feature imagery direction" loading="lazy" /></div>
               </div></div></div>
             </details>
             <details class="cs-acc">
@@ -399,7 +413,7 @@
                 <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
               </summary>
               <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
-                <div class="cs-ph cs-ph--img" style="--ar: 1076/1256"><img class="cs-shot" src="/images/project_aspire_ds/aspire-ds_deliverables/deliverables_6_imagelibrary.webp" alt="Page-section component library — the full Figma library of reusable sections" loading="lazy" /></div>
+                <div class="cs-ph cs-ph--img" style="--ar: 1076/1256"><img class="cs-shot" src="/portfolio/images/project_aspire_ds/aspire-ds_deliverables/deliverables_6_imagelibrary.webp" alt="Page-section component library — the full Figma library of reusable sections" loading="lazy" /></div>
               </div></div></div>
             </details>
           </div>
@@ -466,10 +480,10 @@
           <!-- Before / After comparison (full-page screenshots, inset in colour frames) -->
           <div class="cs-compare" aria-label="Before and after comparison. Drag the handle to compare.">
             <div class="cs-compare__pane cs-compare__pane--after">
-              <img class="cs-compare__shot" id="cmpAfter" src="/images/project_aspire_ds/aspire-ds_comparison/1%20Home_NEW.webp" alt="Redesigned page" loading="lazy" />
+              <img class="cs-compare__shot" id="cmpAfter" src="/portfolio/images/project_aspire_ds/aspire-ds_comparison/1%20Home_NEW.webp" alt="Redesigned page" loading="lazy" />
             </div>
             <div class="cs-compare__pane cs-compare__pane--before">
-              <img class="cs-compare__shot" id="cmpBefore" src="/images/project_aspire_ds/aspire-ds_comparison/1%20Home_OLD.webp" alt="Original page" loading="lazy" />
+              <img class="cs-compare__shot" id="cmpBefore" src="/portfolio/images/project_aspire_ds/aspire-ds_comparison/1%20Home_OLD.webp" alt="Original page" loading="lazy" />
             </div>
             <span class="cs-compare__tag cs-compare__tag--before t-body fw-semibold">BEFORE</span>
             <span class="cs-compare__tag cs-compare__tag--after t-body fw-semibold">AFTER</span>
@@ -535,17 +549,17 @@
     <section class="cs-other" aria-label="Other projects">
       <div class="other__header reveal">
         <h2 class="other__title t-h1">Other projects</h2>
-        <a href="/project" class="btn btn--dark other__cta">
+        <a href="/portfolio/project" class="btn btn--dark other__cta">
           <span>See all projects</span>
           <svg class="btn__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
 
       <div class="pg-grid">
-        <a href="/project/kayn" class="pcard reveal" aria-label="Kayn Argan Oil">
+        <a href="/portfolio/project/kayn" class="pcard reveal" aria-label="Kayn Argan Oil">
           <div class="pcard__card">
             <div class="pcard__media">
-              <img src="/images/project_kayn/kayn_thumbnail.webp" alt="Kayn Argan Oil landing page preview" loading="lazy" />
+              <img src="/portfolio/images/project_kayn/kayn_thumbnail.webp" alt="Kayn Argan Oil landing page preview" loading="lazy" />
             </div>
             <div class="pcard__reveal">
               <div class="pcard__reveal-inner">
@@ -562,10 +576,10 @@
           </div>
         </a>
 
-        <a href="/project/how-aspire-works" class="pcard reveal" aria-label="How Aspire Works">
+        <a href="/portfolio/project/how-aspire-works" class="pcard reveal" aria-label="How Aspire Works">
           <div class="pcard__card">
             <div class="pcard__media">
-              <img src="/images/project_aspire_haw/haw_thumbnail.webp" alt="How Aspire Works preview" loading="lazy" />
+              <img src="/portfolio/images/project_aspire_haw/haw_thumbnail.webp" alt="How Aspire Works preview" loading="lazy" />
             </div>
             <div class="pcard__reveal">
               <div class="pcard__reveal-inner">
@@ -583,10 +597,10 @@
           </div>
         </a>
 
-        <a href="/project/nobi" class="pcard reveal" aria-label="NOBI Bakery">
+        <a href="/portfolio/project/nobi" class="pcard reveal" aria-label="NOBI Bakery">
           <div class="pcard__card">
             <div class="pcard__media">
-              <img src="/images/project_nobi/nobi_thumbnail.webp" alt="NOBI Bakery storefront preview" loading="lazy" />
+              <img src="/portfolio/images/project_nobi/nobi_thumbnail.webp" alt="NOBI Bakery storefront preview" loading="lazy" />
             </div>
             <div class="pcard__reveal">
               <div class="pcard__reveal-inner">
@@ -607,7 +621,7 @@
   </main>
 
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="/js/script.js?v=16"></script>
-  <script src="/js/case-study.js?v=12"></script>
+  <script src="/portfolio/js/script.js?v=16"></script>
+  <script src="/portfolio/js/case-study.js?v=12"></script>
 </body>
 </html>
