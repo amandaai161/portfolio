@@ -184,6 +184,17 @@
    CONTENT
    ============================================================ */
 .cs-content { min-width: 0; }
+
+/* Persona avatar: the circle size/shape is defined per-project (.cs-persona__avatar);
+   here we just make an <img> dropped inside it fill and clip to that circle. */
+.cs-persona__avatar { overflow: hidden; }
+.cs-persona__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .cs-section {
   padding-top: clamp(56px, 7vw, 116px);
   scroll-margin-top: var(--sticky-top);
