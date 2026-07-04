@@ -186,6 +186,12 @@
   .pcard__body { padding: 14px 4px 0; }
 }
 
+/* Mobile-only CTAs — hidden on desktop, revealed in the ≤760 block below.
+   .other__more = the "See all projects" button under the Other-projects grid;
+   .pcard__cta  = the per-card "View project" pill on the directory page. */
+.other__more { display: none; }
+.pcard__cta  { display: none; }
+
 /* ============================================================
    MOBILE (≤760px) — simpler: single column, no hover pop.
    The image + all info are stacked and permanently visible.
@@ -224,5 +230,29 @@
   .pcard__body {
     gap: 12px;
     padding: 14px 0 0;
+  }
+
+  /* --- "Other projects" (home .other + case-study .cs-other): show ONLY the
+         thumbnail (no text), tighten the gap, and add one "See all projects"
+         button below the grid. The button is the SAME component as the home
+         featured "View project" CTA (.btn.btn--dark) — full-width on mobile. --- */
+  .other .pg-grid,
+  .cs-other .pg-grid { gap: 14px; }
+  .other .pcard__reveal,
+  .cs-other .pcard__reveal { display: none; }   /* hide title / tags / description */
+  .other__more {
+    display: flex;
+    width: 100%;
+    margin-top: 28px;
+  }
+
+  /* --- Projects directory (.pg-main): bigger gap between cards + a full-width
+         "View project" button under each card (same .btn.btn--dark component;
+         all sizing/padding/colour comes from .btn — no per-card overrides). --- */
+  .pg-main .pg-grid { gap: clamp(72px, 20vw, 110px); }
+  .pg-main .pcard__cta {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
   }
 }
