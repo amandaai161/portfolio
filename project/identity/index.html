@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Identity 2.0 — Case Study · Amanda Idris</title>
+  <meta name="description" content="Case study: Identity 2.0, a full rebrand for Identity, the alumni community of Gontor's Class of 2016. Reviving a fading community with one scalable identity system a small team can actually run." />
+
+  <link rel="icon" href="/favico.svg" type="image/svg+xml" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Amanda Idris" />
+  <meta property="og:title" content="Identity 2.0 — Case Study · Amanda Idris" />
+  <meta property="og:description" content="Case study: Identity 2.0, a full rebrand for Identity, the alumni community of Gontor's Class of 2016. Reviving a fading community with one scalable identity system a small team can actually run." />
+  <meta property="og:url" content="https://amanda-design.com/project/identity" />
+  <meta property="og:image" content="https://amanda-design.com/images/meta.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Identity 2.0 — Case Study · Amanda Idris" />
+  <meta name="twitter:description" content="Case study: Identity 2.0, a full rebrand for Identity, the alumni community of Gontor's Class of 2016. Reviving a fading community with one scalable identity system a small team can actually run." />
+  <meta name="twitter:image" content="https://amanda-design.com/images/meta.webp" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css?v=16" />
+  <link rel="stylesheet" href="/css/type-system.css?v=5" />
+  <link rel="stylesheet" href="/css/projects-page.css?v=10" />
+  <link rel="stylesheet" href="/css/case-study.css?v=31" />
+  <link rel="stylesheet" href="/css/case-study-identity.css?v=8" />
+</head>
+<body class="cs-page cs-page--identity">
+  <!-- Shared SVG gradient for button arrows: black (left) → white (right) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#ffffff" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="/" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/about" class="nav__link">About</a>
+        <a href="/project" class="nav__link">Works</a>
+        <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Resume
+          <svg class="ext-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/amandaalfattah/" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://www.behance.net/amandaalfattah" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="/project" class="mobile-menu__link">Works</a>
+      <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="mobile-menu__link" target="_blank" rel="noopener">Resume</a>
+      <a href="https://www.linkedin.com/in/amandaalfattah/" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://www.behance.net/amandaalfattah" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+
+    <!-- reading progress bar -->
+    <div class="cs-progress" aria-hidden="true"><span class="cs-progress__bar" id="readingProgress"></span></div>
+  </header>
+
+  <main class="cs-shell container">
+    <div class="cs-layout">
+
+      <!-- ===================== FIXED SIDEBAR ===================== -->
+      <aside class="cs-sidebar" id="csSidebar" aria-label="Project overview">
+        <button class="cs-aside-toggle" id="asideToggle" type="button" aria-expanded="true" aria-controls="csSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          <span class="cs-aside-toggle__hide">Hide sidebar</span>
+          <span class="cs-aside-toggle__show">Show sidebar</span>
+        </button>
+        <h1 class="cs-sidebar__title t-h2">Identity 2.0</h1>
+        <p class="cs-sidebar__desc t-body-lg">A full rebrand for Identity, the alumni community of Gontor&rsquo;s Class of 2016. It was never just an aesthetic refresh. The harder part was building a visual system that could scale with the community and still be run by a small team with very limited resources.</p>
+
+        <div class="cs-contrib">
+          <p class="t-eyebrow-1 cs-muted">My contribution</p>
+          <ul class="cs-pills">
+            <li class="cs-pill">Brand Design</li>
+            <li class="cs-pill">Design System</li>
+            <li class="cs-pill">System Building</li>
+            <li class="cs-pill">Canva Brand Kit</li>
+          </ul>
+        </div>
+
+        <dl class="cs-meta">
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Year</dt><dd class="t-body-lg">2026</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Duration</dt><dd class="t-body-lg">7 weeks</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Company</dt><dd class="t-body-lg">Identity</dd></div>
+          <div class="cs-meta__col"><dt class="t-eyebrow-1 cs-muted">Industry</dt><dd class="t-body-lg">Community</dd></div>
+        </dl>
+
+        <hr class="cs-rule" />
+
+        <nav class="cs-toc" aria-label="Table of contents">
+          <p class="t-eyebrow-1 cs-muted cs-toc__heading">Table of contents</p>
+          <button class="cs-toc__toggle t-body-lg" type="button" aria-expanded="false" aria-controls="csTocList">
+            <span>Jump into section</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l7 7 7-7"/></svg>
+          </button>
+          <ul class="cs-toc__list" id="csTocList">
+            <li><a class="cs-toc__link" href="#about">About the Project</a></li>
+            <li><a class="cs-toc__link" href="#problem">Identifying the Identity</a></li>
+            <li><a class="cs-toc__link" href="#strategy">Revival: Strategy and discovery</a></li>
+            <li><a class="cs-toc__link" href="#research">Visual research</a></li>
+            <li><a class="cs-toc__link" href="#final">Final: Identity 2.0</a></li>
+            <li><a class="cs-toc__link" href="#deliverables">System deliverables</a></li>
+          </ul>
+          <button class="cs-toc__close" type="button" aria-label="Collapse sections">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 16l-7-7-7 7"/></svg>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- ===================== SCROLLABLE CONTENT ===================== -->
+      <div class="cs-content">
+
+        <!-- Hero image -->
+        <div class="cs-ph cs-ph--hero cs-ph--img cs-ph--cap reveal" style="--cs-fill:#3C197F;--cs-h:360">
+          <img class="cs-shot" src="/images/project_identity/identity_hero.webp" alt="Identity 2.0 — the new brand: the identity | صبغة wordmark on a deep purple gradient, with connect · collaborate · contribute" loading="eager" />
+        </div>
+
+        <!-- ===== About the Project ===== -->
+        <section class="cs-section" id="about">
+          <h2 class="t-h3 reveal">About The Project</h2>
+          <p class="cs-lead t-body-lg reveal">Identity is the alumni community of Gontor&rsquo;s Class of 2016, the &ldquo;90th Generation,&rdquo; that started with one simple promise: to stay together after leaving the pondok. Ten years on, it had grown to 40+ chapters across two countries, but the spark was fading. What began as a living covenant was slipping back into a once-a-year reunion, and its visual identity had drifted just as far as the community&rsquo;s momentum.</p>
+          <p class="cs-lead t-body-lg reveal">I led Identity 2.0 as creative director, and treated it as far more than a new logo. On the outside, I crafted a new-generation identity that members would be proud to wear. On the inside, I built the system that holds it up: a clear structure, a naming logic, and a documented tone of voice that let a small team stay consistent on their own. The point was to make the community better on both fronts, how it looks and how it actually runs.</p>
+
+          <aside class="cs-ai reveal" aria-label="AI usage in this project">
+            <div class="cs-ai__metric">
+              <p class="cs-ai__inv-m t-body fw-medium">AI Involvement in this project:</p>
+              <p class="t-body-sm cs-muted">AI usage</p>
+              <p class="cs-ai__pct t-h2">35%</p>
+            </div>
+            <div class="cs-ai__body">
+              <p class="t-body fw-medium">AI Involvement in this project:</p>
+              <ul class="cs-ai__list t-body">
+                <li>To systemize and break down the scattered problems into clear themes while brainstorming with the stakeholders.</li>
+                <li>To calculate precise type scales, spacing, and logo construction ratios.</li>
+                <li>To migrate every asset and the full design system from Figma into a Canva Brand Kit, documented with a comprehensive guideline for the team.</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        <!-- ===== Project Objective ===== -->
+        <section class="cs-section" id="objectives">
+          <h2 class="cs-connector t-h5 reveal" data-generated>The project objectives are...</h2>
+          <div class="cs-objgrid">
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">01</span>
+              <h3 class="cs-obj__title t-h5">Revive the Reason to Belong</h3>
+              <p class="cs-obj__desc t-body-sm">Give members a clear, ongoing answer to &ldquo;why stay active?&rdquo;, turning Identity from a yearly reunion into a living, value-driven covenant.</p>
+            </article>
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">02</span>
+              <h3 class="cs-obj__title t-h5">One Coherent System</h3>
+              <p class="cs-obj__desc t-body-sm">Replace two rival logos and a dozen ad-hoc posting styles with one recognizable brand and a single, well-documented tone of voice.</p>
+            </article>
+            <article class="cs-obj reveal">
+              <span class="cs-obj__num t-h6">03</span>
+              <h3 class="cs-obj__title t-h5">A Brand That Scales</h3>
+              <p class="cs-obj__desc t-body-sm">Build a flexible sub-brand and chapter system so every city, program, and event still feels like one family, with no designer needed.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ===== Identifying the "missing" Identity ===== -->
+        <section class="cs-section" id="problem">
+          <h2 class="t-h3 reveal" data-generated>Identifying The &ldquo;missing&rdquo; Identity</h2>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>This isn&rsquo;t a rebrand, it&rsquo;s a revival...</h3>
+          <p class="cs-lead t-body-lg reveal">On paper, this was a rebrand. In practice, the logo was never the real problem. The community itself had quietly started to fade. So before touching a single pixel, I treated Identity 2.0 as a revival: first understand why the energy was draining, then rebuild the brand as the system that brings it back to life.</p>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Why the community was dying (2 realities)...</h3>
+          <div class="id-cards id-cards--2 reveal">
+            <article class="id-card id-card--warn">
+              <div class="id-card__head">
+                <span class="id-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="15" height="8" rx="2"/><path d="M21 11.5v1"/><rect x="5" y="10.5" width="3.5" height="3" rx="0.6" fill="currentColor" stroke="none"/></svg></span>
+                <p class="id-card__eyebrow t-eyebrow-1">Reality 01</p>
+              </div>
+              <h4 class="id-card__title t-h6">The energy fades as life moves on</h4>
+              <p class="id-card__desc t-body-sm">A decade after graduation, members are deep in careers, families, and cities of their own. The momentum that once came for free now competes with real, adult life.</p>
+            </article>
+            <article class="id-card id-card--warn">
+              <div class="id-card__head">
+                <span class="id-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h1.5M14.5 12H16"/></svg></span>
+                <p class="id-card__eyebrow t-eyebrow-1">Reality 02</p>
+              </div>
+              <h4 class="id-card__title t-h6">No strong common thread is left</h4>
+              <p class="id-card__desc t-body-sm">Beyond a shared graduation year, the group had drifted into very different worlds. Without a reason to gather that still feels relevant, &ldquo;being an alumnus&rdquo; slowly stopped meaning much.</p>
+            </article>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>The fundamental issues are...</h3>
+          <div class="id-cards reveal">
+            <article class="id-card id-card--warn">
+              <span class="id-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.7-.9 1.4v.3"/><path d="M12 16.4h.01"/></svg></span>
+              <h4 class="id-card__title t-h6">Perceived value deficit</h4>
+              <p class="id-card__desc t-body-sm">Members couldn&rsquo;t answer a simple question: &ldquo;what do I actually get by staying active?&rdquo; With no visible, ongoing value, showing up became optional.</p>
+            </article>
+            <article class="id-card id-card--warn">
+              <span class="id-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="4" rx="1"/><rect x="3" y="17" width="6" height="4" rx="1"/><rect x="15" y="17" width="6" height="4" rx="1"/><path d="M12 7v4M6 17v-2h12v2"/></svg></span>
+              <h4 class="id-card__title t-h6">Unclear operation</h4>
+              <p class="id-card__desc t-body-sm">Programs ran on the goodwill of a handful of people, with no visible structure, roles, or rhythm. Good intentions kept stalling because nobody quite knew who did what.</p>
+            </article>
+            <article class="id-card id-card--warn">
+              <span class="id-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/><path d="M12 8.5V12l2.5 1.6"/></svg></span>
+              <h4 class="id-card__title t-h6">Nostalgia dilemma</h4>
+              <p class="id-card__desc t-body-sm">The community leaned on nostalgia to pull people back, but nostalgia has a ceiling. Once the old memories were relived, there was little reason to return.</p>
+            </article>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>The technical issues are...</h3>
+          <div class="id-techissue reveal">
+            <div class="id-techissue__shot"><img src="/images/project_identity/identity_technical_issues.webp" alt="A grid of the old social media posts — wildly different layouts, fonts, and colours across every program and admin" loading="lazy" /></div>
+            <div class="id-techissue__list">
+              <div class="id-techissue__item">
+                <h4 class="id-techissue__title t-h6">2 brands, 1 soul</h4>
+                <p class="id-techissue__desc t-body-sm">The same community showed up as both &ldquo;The Identity&rdquo; and &ldquo;Identity Generation&rdquo;, with different logos and vibes. One soul, but two faces, so it never read as a single, recognizable brand.</p>
+              </div>
+              <div class="id-techissue__item">
+                <h4 class="id-techissue__title t-h6">No consistent tone of voice</h4>
+                <p class="id-techissue__desc t-body-sm">Every admin posted in their own style. Captions swung from formal to casual, Arabic to slang, so the feed never sounded like one confident, coherent voice.</p>
+              </div>
+              <div class="id-techissue__item">
+                <h4 class="id-techissue__title t-h6">Great programs, no structure</h4>
+                <p class="id-techissue__desc t-body-sm">The programs were genuinely good: football leagues, charity drives, scholarships. But visually they looked unrelated, so all that impact never added up into one story.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== The revival strategy ===== -->
+        <section class="cs-section" id="strategy">
+          <h2 class="t-h3 reveal" data-generated>Revival: Strategy and discovery</h2>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Let&rsquo;s shift the narration...</h3>
+          <p class="cs-lead t-body-lg reveal">Before we get to tactics, this is the mindset shift everything else is built on. The first job isn&rsquo;t to make 1,500 people care at once. It&rsquo;s to make 30 people feel alive again, then let that warmth spread.</p>
+
+          <div class="id-shift reveal" role="list" aria-label="Shifting the narration, from the old approach to the new one">
+            <div class="id-shift__row" role="listitem">
+              <p class="id-shift__from t-body">&ldquo;Just contribute!&rdquo; as a demand placed <em>on</em> members</p>
+              <span class="id-shift__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-6-6m6 6l-6 6"/></svg></span>
+              <p class="id-shift__to t-body">Contribution <em>between</em> members, through concrete collaboration</p>
+            </div>
+            <div class="id-shift__row" role="listitem">
+              <p class="id-shift__from t-body">One story pushed out to all 1,500 at once</p>
+              <span class="id-shift__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-6-6m6 6l-6 6"/></svg></span>
+              <p class="id-shift__to t-body">Many ways in, each matched to a member&rsquo;s life stage and interests</p>
+            </div>
+            <div class="id-shift__row" role="listitem">
+              <p class="id-shift__from t-body">Chasing every one of the 1,500 at the same time</p>
+              <span class="id-shift__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-6-6m6 6l-6 6"/></svg></span>
+              <p class="id-shift__to t-body">Build a small, active core first (30&ndash;50 people), then let it spread</p>
+            </div>
+            <div class="id-shift__row" role="listitem">
+              <p class="id-shift__from t-body">City-based chapters that quietly died out</p>
+              <span class="id-shift__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0l-6-6m6 6l-6 6"/></svg></span>
+              <p class="id-shift__to t-body">Interest- and profession-based circles, kept warm with light rituals</p>
+            </div>
+          </div>
+
+          <div class="cs-panel cs-panel--dark id-usp reveal">
+            <div class="id-usp__top">
+              <div class="id-usp__lead">
+                <p class="id-usp__label t-eyebrow-1">The USP:</p>
+                <span class="id-usp__chip t-h5">Diversity</span>
+              </div>
+              <p class="id-usp__body t-body">If the fear is that &ldquo;there&rsquo;s nothing to offer,&rdquo; let&rsquo;s look again at what&rsquo;s already here: real expertise, spread across dozens of cities and a handful of countries, all sharing one root. That is the single most valuable network no other community can claim. What&rsquo;s missing was never the asset; it&rsquo;s the switch to turn it on.</p>
+            </div>
+            <hr class="id-usp__rule" />
+            <p class="id-usp__quote t-h4">The very diversity we&rsquo;d treated as a weakness is actually the community&rsquo;s greatest asset, once we switch it on into value that members can genuinely use.</p>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Structuring the variables...</h3>
+          <p class="cs-lead t-body-lg reveal">To make the promise usable, I turned those three words into a working framework. Every activity the community runs now maps to one of three intents, so each chapter knows exactly what a program is <em>for</em>, and members know what they&rsquo;re signing up for.</p>
+
+          <div class="id-pillars reveal">
+            <article class="id-pillar" style="--pill-c:#F2A81E">
+              <p class="id-pillar__label t-eyebrow-1">Awareness</p>
+              <h4 class="id-pillar__title t-h5">Connect</h4>
+              <p class="id-pillar__desc t-body-sm">Low-effort touchpoints that keep everyone in the loop: reunions, chapter meetups, and ID sharing that rebuild everyday familiarity.</p>
+            </article>
+            <article class="id-pillar" style="--pill-c:#5AB84E">
+              <p class="id-pillar__label t-eyebrow-1">Project</p>
+              <h4 class="id-pillar__title t-h5">Collaborate</h4>
+              <p class="id-pillar__desc t-body-sm">Members build together through business collabs, job and skill sharing, and cross-institution projects that turn the network into opportunity.</p>
+            </article>
+            <article class="id-pillar" style="--pill-c:#4A8CF0">
+              <p class="id-pillar__label t-eyebrow-1">Impact</p>
+              <h4 class="id-pillar__title t-h5">Contribute</h4>
+              <p class="id-pillar__desc t-body-sm">Turning the network into real impact: scholarships, relief drives, and digital dakwah that give back to the school and the wider ummah.</p>
+            </article>
+          </div>
+
+          <div class="cs-ph cs-ph--img reveal" style="--ar: 1400/1152"><img class="cs-shot" src="/images/project_identity/identity_table.webp" alt="A matrix mapping the three intents (Connect, Collab, Contribute) against member segments — general, entrepreneurs, creatives, educators, sports, and regional districts" loading="lazy" /></div>
+        </section>
+
+        <!-- ===== The visual research ===== -->
+        <section class="cs-section" id="research">
+          <h2 class="t-h3 reveal" data-generated>Visual research</h2>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Competitor analysis...</h3>
+          <p class="cs-lead t-body-lg reveal">I started close to home, studying how other alumni networks, pesantren communities, and faith-based organisations show up online. I looked at how they introduce themselves, how they run their programs on a feed, and what actually makes people engage rather than quietly scroll past. The pattern was consistent: most lean on formal announcements and group photos, with little visual system holding it together. It confirmed the gap I&rsquo;d suspected. Almost none of them felt like a modern, living brand a 25-year-old would be proud to reshare.</p>
+          <div class="id-imgrid id-imgrid--3 reveal">
+            <img src="/images/project_identity/identity_competitor_1.webp" alt="Competitor analysis — an alumni community social feed" loading="lazy" />
+            <img src="/images/project_identity/identity_competitor_2.webp" alt="Competitor analysis — a faith-based community social feed" loading="lazy" />
+            <img src="/images/project_identity/identity_competitor_3.webp" alt="Competitor analysis — a student organisation social feed" loading="lazy" />
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Other brands analysis...</h3>
+          <p class="cs-lead t-body-lg reveal">Then I deliberately looked outside the category. I studied youth communities, hospitality brands, global non-profits, and creative studios, borrowing the energy, discipline, and confidence that make people actually <em>want</em> to wear a brand. Four in particular shaped the direction, each for a different reason:</p>
+          <div class="id-refs reveal">
+            <figure class="id-ref">
+              <div class="id-ref__img"><img src="/images/project_identity/identity_competitor_4.webp" alt="Reference: YukNgaji, a youth Islamic community with bold, youth-media styling" loading="lazy" /></div>
+              <figcaption class="id-ref__cap">
+                <p class="id-ref__name t-body fw-semibold">YukNgaji</p>
+                <p class="id-ref__note t-body-sm">A youth Islamic movement that posts like a media brand: bold headlines, cinematic photography, and a meme-aware energy. Proof that faith-based content never has to look formal or dusty.</p>
+              </figcaption>
+            </figure>
+            <figure class="id-ref">
+              <div class="id-ref__img"><img src="/images/project_identity/identity_competitor_5.webp" alt="Reference — Common Grounds, a coffee brand with a highly consistent template system" loading="lazy" /></div>
+              <figcaption class="id-ref__cap">
+                <p class="id-ref__name t-body fw-semibold">Common Grounds</p>
+                <p class="id-ref__note t-body-sm">A coffee brand with ironclad template discipline. From cupping sessions to behind-the-bar features, every post is unmistakably one system, exactly the consistency our feed was missing.</p>
+              </figcaption>
+            </figure>
+            <figure class="id-ref">
+              <div class="id-ref__img"><img src="/images/project_identity/identity_competitor_6.webp" alt="Reference — a global water-crisis non-profit with cause-driven storytelling" loading="lazy" /></div>
+              <figcaption class="id-ref__cap">
+                <p class="id-ref__name t-body fw-semibold">charity: water</p>
+                <p class="id-ref__note t-body-sm">A global non-profit that turns contribution into narrative, with bold type over documentary photography that makes impact feel urgent and human, never preachy.</p>
+              </figcaption>
+            </figure>
+            <figure class="id-ref">
+              <div class="id-ref__img"><img src="/images/project_identity/identity_competitor_7.webp" alt="Reference — Antikode, a design studio with a sleek, digital-first system" loading="lazy" /></div>
+              <figcaption class="id-ref__cap">
+                <p class="id-ref__name t-body fw-semibold">Antikode</p>
+                <p class="id-ref__note t-body-sm">A design studio&rsquo;s digital-first polish: sleek, dark, gradient-driven, and thoroughly current. The exact confidence and craft I wanted the new feed to carry.</p>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- ===== The visual direction ===== -->
+        <section class="cs-section" id="direction">
+          <h2 class="t-h3 reveal" data-generated>The visual direction</h2>
+          <p class="cs-lead t-body-lg reveal">From the research, I set three principles to guide every visual decision. The look had to be confident enough to stop a scrolling 25-year-old, yet warm enough to still feel like home. And underneath all three sits the one thing the brand needed most: the whole system had to stay scalable.</p>
+
+          <div class="id-dirs id-dirs--eq reveal">
+            <article class="id-dir id-dir--purple">
+              <p class="id-dir__num t-eyebrow-1">01</p>
+              <h3 class="id-dir__title t-h4">Net&shy;worked</h3>
+              <p class="id-dir__desc t-body-sm">The brand should feel like a living network, not a static crest. A flexible family of sub-brands and chapters that clearly belong together.</p>
+            </article>
+            <span class="id-dir__op t-h3" aria-hidden="true">+</span>
+            <article class="id-dir id-dir--purple">
+              <p class="id-dir__num t-eyebrow-1">02</p>
+              <h3 class="id-dir__title t-h4">Con&shy;tem&shy;po&shy;rary</h3>
+              <p class="id-dir__desc t-body-sm">Digital-first and unmistakably now: a bold wordmark, a deep-purple gradient, and grain-and-glow textures that read native on a phone.</p>
+            </article>
+            <span class="id-dir__op t-h3" aria-hidden="true">+</span>
+            <article class="id-dir id-dir--purple">
+              <p class="id-dir__num t-eyebrow-1">03</p>
+              <h3 class="id-dir__title t-h4">Sup&shy;por&shy;tive</h3>
+              <p class="id-dir__desc t-body-sm">Human before graphic: real member photography, an inviting voice, and layouts that put people and purpose ahead of decoration.</p>
+            </article>
+          </div>
+
+          <div class="id-outcome reveal">
+            <div class="id-outcome__box">
+              <h3 class="id-outcome__title t-h4">Scalable</h3>
+              <p class="id-outcome__desc t-body">This is the foundation the other three rest on. Every new chapter, program, and post should stay recognisably Identity, without a designer ever having to be in the loop.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== The final design ===== -->
+        <section class="cs-section" id="final">
+          <h2 class="t-h3 reveal" data-generated>Final: Identity 2.0</h2>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>Before, it was like this...</h3>
+          <p class="cs-lead t-body-lg reveal">A decade of well-meaning posts, side by side. Every one looks like it came from a different organisation, because in a way it did.</p>
+          <div class="cs-ph cs-ph--img reveal" style="--ar: 1400/1293"><img class="cs-shot" src="/images/project_identity/identity_before.webp" alt="Before — the old feed: a dozen unrelated post styles, logos, and colour treatments" loading="lazy" /></div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>After the revival...</h3>
+          <p class="cs-lead t-body-lg reveal">One wordmark in two scripts, one deep-purple world, and one promise: <em>connect, collaborate, contribute</em>. That promise now carries from the logo all the way through to stationery, merchandise, and member ID cards.</p>
+          <div class="cs-showcase reveal">
+            <img src="/images/project_identity/identity_final/identity_final_showcase_1.webp" alt="Identity 2.0 — the primary wordmark on the brand's deep purple gradient" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_showcase_2.webp" alt="id.story — the brand narrative: not a reunion, but a living covenant" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_showcase_3.webp" alt="Logo variations in Latin and Arabic, plus the refreshed @90thgeneration Instagram profile" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_showcase_4.webp" alt="Brand applied to stationery — letterhead, envelopes, and business cards" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_showcase_5.webp" alt="Merchandise and logo construction — pin badge, kerning and spacing specs for both scripts" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_showcase_6.webp" alt="Member ID lanyard — 'the friends of Identity are still here, after ten years'" loading="lazy" />
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>The social media post...</h3>
+          <p class="cs-lead t-body-lg reveal">The feed is where the community actually lives, so I rebuilt it as a template system: a consistent grid, a fixed type hierarchy, and reusable layouts any admin can fill in minutes. Now every post finally looks like it belongs to the same voice.</p>
+          <div class="id-imgrid id-imgrid--1 reveal">
+            <img src="/images/project_identity/identity_final/identity_final_social_1.webp" alt="New social templates — a consistent, on-brand set of Instagram posts" loading="lazy" />
+            <img src="/images/project_identity/identity_final/identity_final_social_2.webp" alt="New social templates — event, quote, and announcement layouts sharing one system" loading="lazy" />
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>The sub-brands...</h3>
+          <p class="cs-lead t-body-lg reveal">The three intents each became a sub-brand with its own accent colour, a simple, ownable cue that tells members at a glance whether something is about connecting, collaborating, or contributing. The same &ldquo;id.&rdquo; naming then stretches to every city chapter and program.</p>
+          <div class="id-subs reveal">
+            <article class="id-sub">
+              <div class="id-sub__head">
+                <span class="id-sub__dot" style="--sub-c:#AEFF00" aria-hidden="true"></span>
+                <h4 class="id-sub__name t-h5">id.connect</h4>
+              </div>
+              <div class="id-sub__img"><img src="/images/project_identity/identity_final/identity_final_subbrand_1.webp" alt="id.connect sub-brand board — logo lockups and social applications in Nexus Green" loading="lazy" /></div>
+            </article>
+            <article class="id-sub">
+              <div class="id-sub__head">
+                <span class="id-sub__dot" style="--sub-c:#FAB429" aria-hidden="true"></span>
+                <h4 class="id-sub__name t-h5">id.collaborate</h4>
+              </div>
+              <div class="id-sub__img"><img src="/images/project_identity/identity_final/identity_final_subbrand_2.webp" alt="id.collaborate sub-brand board — logo lockups and partnership applications in Synergy Flare" loading="lazy" /></div>
+            </article>
+            <article class="id-sub">
+              <div class="id-sub__head">
+                <span class="id-sub__dot" style="--sub-c:#63ACFF" aria-hidden="true"></span>
+                <h4 class="id-sub__name t-h5">id.contribute</h4>
+              </div>
+              <div class="id-sub__img"><img src="/images/project_identity/identity_final/identity_final_subbrand_3.webp" alt="id.contribute sub-brand board — logo lockups and social-impact applications in Legacy Azure" loading="lazy" /></div>
+            </article>
+            <article class="id-sub">
+              <div class="id-sub__head">
+                <span class="id-sub__dot" style="--sub-c:#B98CFF" aria-hidden="true"></span>
+                <h4 class="id-sub__name t-h5">chapters &amp; programs</h4>
+              </div>
+              <div class="id-sub__img"><img src="/images/project_identity/identity_final/identity_final_subbrand_4.webp" alt="Chapters and programs — the id. naming system applied across regional chapters and activity sub-brands" loading="lazy" /></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ===== The deliverables ===== -->
+        <section class="cs-section" id="deliverables">
+          <h2 class="t-h3 reveal" data-generated>System deliverables</h2>
+          <p class="cs-lead t-body-lg reveal">As I&rsquo;d weighed earlier, the real fix for a scattered brand was never another logo. It was a system the community could run on its own. So the core deliverable became a complete, self-serve brand kit: everything an admin needs to post on-brand, without a designer in the loop.</p>
+          <div class="cs-panel cs-panel--soft cs-note reveal">
+            <svg class="cs-note__lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.3" r="1.4"/></svg>
+            <p class="t-body-lg">Note: These previews are pulled from the full Identity 2.0 brand guidelines. The complete, editable source lives with the community&rsquo;s core team, so here I&rsquo;m sharing the high-level system rather than every internal page.</p>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal" data-generated>The core deliverables are...</h3>
+          <div class="cs-accordion reveal">
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 4.6v9.8l-8 4.6-8-4.6V7.1z"/><path d="M12 7.5v9M8 9.8l8 4.4M16 9.8l-8 4.4"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Brand Logos</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1200/1634"><img class="cs-shot" src="/images/project_identity/identity_deliverables/identity_deliverables_1_logo.webp" alt="Brand logo guideline — primary, Arabic, and sub-brand lockups with clear-space and misuse rules" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 6.8 6.5 11a6.5 6.5 0 0 1-13 0C5.5 9.8 12 3 12 3z"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Brand Colors</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1200/1451"><img class="cs-shot" src="/images/project_identity/identity_deliverables/identity_deliverables_2_color.webp" alt="Colour guideline — the deep purple core palette plus the three sub-brand accents" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V4h16v2M9 20h6M12 4v16"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Typography</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1200/1753"><img class="cs-shot" src="/images/project_identity/identity_deliverables/identity_deliverables_3_typography.webp" alt="Typography guideline — the Latin and Arabic type pairing with the full weight and size scale" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M19 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Visual Effect Guideline</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1200/1563"><img class="cs-shot" src="/images/project_identity/identity_deliverables/identity_deliverables_4_effect.webp" alt="Visual effect guideline — how to build the signature purple gradients, grain, and photo overlays" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+            <details class="cs-acc">
+              <summary class="cs-acc__head">
+                <span class="cs-acc__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M5 18l5-5 4 4 2-2 3 3"/></svg></span>
+                <span class="cs-acc__titles">
+                  <span class="cs-acc__title t-h5">Pre-made Assets</span>
+                </span>
+                <span class="cs-acc__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 7 7-7"/></svg></span>
+              </summary>
+              <div class="cs-acc__panel"><div class="cs-acc__body"><div class="cs-acc__media">
+                <div class="cs-ph cs-ph--img" style="--ar: 1200/1701"><img class="cs-shot" src="/images/project_identity/identity_deliverables/identity_deliverables_5_assets.webp" alt="Pre-made assets — editable, ready-to-post social templates for every program" loading="lazy" /></div>
+              </div></div></div>
+            </details>
+          </div>
+
+          <h3 class="cs-connector t-h5 reveal">Other deliverables</h3>
+          <ul class="cs-chips reveal">
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span><span>Templates</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-11.7 7.9L3 21l1.6-6.3A8.5 8.5 0 1 1 21 11.5z"/></svg></span><span>Tone of Voice</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span>Grids &amp; Layouts</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="8" height="8" rx="1.5"/><circle cx="16.5" cy="7" r="3.5"/><path d="M14.5 21l3-5.5 3 5.5z"/></svg></span><span>Iconography</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/></svg></span><span>Overlays</span></li>
+            <li class="cs-chip t-body-lg fw-medium"><span class="cs-chip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span>Checklists</span></li>
+          </ul>
+        </section>
+
+      </div><!-- /.cs-content -->
+    </div><!-- /.cs-layout -->
+
+    <!-- ===================== OTHER PROJECTS ===================== -->
+    <section class="cs-other" aria-label="Other projects">
+      <div class="other__header reveal">
+        <h2 class="other__title t-h1">Other projects</h2>
+        <a href="/project" class="btn btn--dark other__cta">
+          <span>See all projects</span>
+          <svg class="btn__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="pg-grid">
+        <a href="/project/bacarita" class="pcard reveal" aria-label="Bacarita Creative Hub">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_bacarita/bacarita_thumbnail.webp" alt="Bacarita Creative Hub preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">Bacarita Creative Hub</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">A bold creative-hub identity and site for Bacarita, playful typography and a confident grid that gives the studio&rsquo;s work room to breathe.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/kayn" class="pcard reveal" aria-label="Kayn Argan Oil">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_kayn/kayn_thumbnail.webp" alt="Kayn Argan Oil landing page preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">Kayn Argan Oil</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">Elevates Kayn Argan Oil with a sophisticated, premium aesthetic that reflects its authentic Moroccan origin with elegant touch to build a strong digital presence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/project/atlasique" class="pcard reveal" aria-label="Atlasique Travel">
+          <div class="pcard__card">
+            <div class="pcard__media">
+              <img src="/images/project_atlasique/atlasique_thumbnail.webp" alt="Atlasique Travel preview" loading="lazy" />
+            </div>
+            <div class="pcard__reveal">
+              <div class="pcard__reveal-inner">
+                <div class="pcard__body">
+                  <h3 class="pcard__title t-h5">Atlasique Travel</h3>
+                  <ul class="pg-tags">
+                    <li class="pg-tag t-body-sm">Brand Design</li>
+                    <li class="pg-tag t-body-sm">Web Design</li>
+                  </ul>
+                  <p class="pcard__desc t-body">An immersive travel-agency experience for Atlasique, rich imagery and a calm, editorial layout that makes discovering destinations feel like an invitation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <a href="/project" class="btn btn--dark other__more" aria-label="See all projects">
+        <span>See all projects</span>
+        <svg class="btn__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </section>
+  </main>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact__info">
+        <h2 class="contact__title reveal">Let&rsquo;s get in touch!</h2>
+
+        <div class="contact__details reveal">
+          <div class="contact__email-wrap">
+            <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" aria-label="Copy email address to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="contact__email-text">amandaalfattah@gmail.com</span>
+            </button>
+            <span class="copy-toast" role="status" aria-live="polite">Copied to clipboard</span>
+          </div>
+
+          <div class="contact__links">
+            <div class="contact__col">
+              <a href="https://www.linkedin.com/in/amandaalfattah/" class="link-arrow t-h6 fw-medium" target="_blank" rel="noopener">
+                <span>Chat on Linkedin</span>
+                <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="https://www.behance.net/amandaalfattah" class="link-arrow t-h6 fw-medium" target="_blank" rel="noopener">
+                <span>Visit my Behance</span>
+                <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+            <div class="contact__col">
+              <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="link-arrow t-h6 fw-medium" target="_blank" rel="noopener">
+                <span>See my resume</span>
+                <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="/about" class="link-arrow t-h6 fw-medium">
+                <span>About me</span>
+                <svg class="link-arrow__icon" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="footer__info">
+          <p class="footer__name t-body-lg fw-medium">Site by Amanda Alfatah Idris</p>
+          <p class="footer__detail t-body-lg">Adobe user since 2016, Figma user since 2018.</p>
+        </div>
+        <p class="footer__year t-h6 fw-medium">&copy;2026</p>
+      </footer>
+    </div>
+  </section>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/script.js?v=16"></script>
+  <script src="/js/case-study.js?v=12"></script>
+</body>
+</html>

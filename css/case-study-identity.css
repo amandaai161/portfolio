@@ -1,0 +1,342 @@
+/* ============================================================
+   Amanda Idris — Case Study: Identity 2.0
+   Loads AFTER case-study.css. Reuses the shared shell / sidebar /
+   TOC / progress / .cs-ai / .cs-obj / .cs-panel / .cs-note /
+   .cs-accordion / .cs-chips / responsive from case-study.css
+   UNCHANGED, and ONLY adds the Identity-specific pieces:
+     · .id-cards / .id-card        reality + fundamental issue cards (muted red)
+     · .id-techissue               the "technical issue" — one muted-red container
+     · .id-shift                   the narration shift rows (old approach → new)
+     · .id-usp                     the dark "Diversity" USP panel + H4 quote
+     · .id-pillars / .id-pillar    Awareness · Project · Impact framework
+     · .id-imgrid                  research / social image grids (1 / 2 / 3-up)
+     · .id-refs / .id-ref          captioned reference-brand cards
+     · .id-dirs / .id-dir          visual-direction keyword boxes (purple)
+     · .id-dir__op / .id-outcome   the "+ + = Scalable" equation
+     · .cs-showcase                stacked final-design reveal (clean, borderless)
+     · .id-subs / .id-sub          sub-brand rows (dot + name + board)
+   Spacing mirrors the shared case-study clamp scale; only the brand
+   colours (deep purple + Nexus-green accent + a muted problem red) are new.
+   ============================================================ */
+
+.cs-page--identity {
+  /* Identity 2.0 brand palette (sampled from the new brand) */
+  --id-purple: #4a16a0;        /* core brand purple */
+  --id-purple-deep: #2d0f66;   /* darkest purple — outcome + sub-brand board fill */
+  --id-accent: #aeff00;        /* Nexus Green — highlight on dark surfaces */
+  --id-warn: #d0392b;          /* problem (red) icon + eyebrow */
+  --id-warn-soft: rgba(208, 57, 43, 0.06);   /* muted red container fill */
+  --id-warn-line: rgba(208, 57, 43, 0.18);
+}
+
+/* ============================================================
+   ISSUE CARDS — realities (2-up) + fundamental issues (3-up)
+   both sit in muted-red containers with red icons
+   ============================================================ */
+.id-cards {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.4vw, 24px);
+}
+.id-cards--2 { grid-template-columns: repeat(2, 1fr); }
+.id-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(22px, 1.9vw, 30px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-soft);
+  border: 1px solid var(--cs-line);
+}
+.id-card__head { display: flex; align-items: center; gap: 14px; }
+.id-card__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(74, 22, 160, 0.1);
+  color: var(--id-purple);
+}
+.id-card__icon svg { width: 22px; height: 22px; }
+.id-card__eyebrow { color: var(--cs-muted); }
+.id-card__title { color: var(--cs-ink); }
+.id-card__desc { color: var(--cs-muted); }
+/* muted-red problem cards — realities + fundamental issues */
+.id-card--warn { background: var(--id-warn-soft); border-color: var(--id-warn-line); }
+.id-card--warn .id-card__icon { background: rgba(208, 57, 43, 0.1); color: var(--id-warn); }
+.id-card--warn .id-card__eyebrow { color: var(--id-warn); }
+
+/* ============================================================
+   TECHNICAL ISSUE — one muted-red container (screenshot + points, no icons)
+   ============================================================ */
+.id-techissue {
+  margin-top: clamp(16px, 1.6vw, 24px);
+  padding: clamp(22px, 2.2vw, 34px);
+  border-radius: var(--cs-radius-lg);
+  background: var(--id-warn-soft);
+  border: 1px solid var(--id-warn-line);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(22px, 2.4vw, 34px);
+}
+.id-techissue__shot {
+  border-radius: var(--cs-radius);
+  overflow: hidden;
+  border: 1px solid var(--id-warn-line);
+}
+.id-techissue__shot img { display: block; width: 100%; height: auto; }
+.id-techissue__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.2vw, 34px);
+}
+.id-techissue__item { display: flex; flex-direction: column; gap: 8px; }
+.id-techissue__title { color: var(--cs-ink); }
+.id-techissue__desc { color: var(--cs-muted); }
+
+/* ============================================================
+   NARRATION SHIFT — old approach (soft box) → arrow → new approach
+   ============================================================ */
+.id-shift {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+}
+.id-shift__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(14px, 1.8vw, 28px);
+}
+.id-shift__from { color: var(--cs-muted); }
+.id-shift__arrow { flex: none; display: inline-flex; color: var(--cs-ink); }
+.id-shift__arrow svg { width: 24px; height: 24px; }
+/* the new narration is the one we highlight, so it sits in the soft container */
+.id-shift__to {
+  padding: clamp(16px, 1.5vw, 22px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-soft);
+  border: 1px solid var(--cs-line);
+  color: var(--cs-ink);
+}
+
+/* ============================================================
+   USP PANEL — dark, "Diversity" chip + full-width H4 quote
+   (rides on .cs-panel--dark from case-study.css)
+   ============================================================ */
+.id-usp {
+  margin-top: clamp(24px, 2.6vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.6vw, 38px);
+}
+.id-usp__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.3fr);
+  gap: clamp(24px, 3vw, 52px);
+  align-items: start;
+}
+.id-usp__lead { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.id-usp__label { color: rgba(255, 255, 255, 0.65); }
+.id-usp__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--cs-ink);
+}
+.id-usp__body { color: rgba(255, 255, 255, 0.76); }
+.id-usp__rule { width: 100%; height: 0; border: 0; border-top: 1px solid rgba(255, 255, 255, 0.18); margin: 0; }
+.id-usp__quote { color: #fff; letter-spacing: -0.01em; }
+
+/* ============================================================
+   PILLARS — Awareness · Project · Impact framework
+   soft cards with a coloured top edge (matches the matrix table)
+   ============================================================ */
+.id-pillars {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.4vw, 24px);
+}
+.id-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(22px, 1.9vw, 30px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-soft);
+  border: 1px solid var(--cs-line);
+  border-top: 4px solid var(--pill-c, var(--id-purple));
+}
+.id-pillar__label { color: var(--cs-muted); }
+.id-pillar__title { color: var(--cs-ink); }
+.id-pillar__desc { color: var(--cs-muted); }
+
+/* ============================================================
+   IMAGE GRIDS — competitor research + social templates
+   ============================================================ */
+.id-imgrid {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  gap: clamp(12px, 1.4vw, 20px);
+}
+.id-imgrid--1 { grid-template-columns: 1fr; }
+.id-imgrid--2 { grid-template-columns: repeat(2, 1fr); }
+.id-imgrid--3 { grid-template-columns: repeat(3, 1fr); }
+.id-imgrid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(24, 24, 24, 0.08);
+  background: var(--cs-soft);
+}
+
+/* ============================================================
+   REFERENCE BRANDS — image + name + takeaway note (2-up)
+   ============================================================ */
+.id-refs {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 2.2vw, 36px);
+}
+.id-ref { margin: 0; display: flex; flex-direction: column; gap: clamp(12px, 1.2vw, 18px); }
+.id-ref__img {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(24, 24, 24, 0.08);
+  background: var(--cs-soft);
+}
+.id-ref__img img { display: block; width: 100%; height: auto; }
+.id-ref__cap { display: flex; flex-direction: column; gap: 6px; }
+.id-ref__name { color: var(--cs-ink); }
+.id-ref__note { color: var(--cs-muted); }
+
+/* ============================================================
+   VISUAL DIRECTION — three purple boxes joined by "+", then "= Scalable"
+   ============================================================ */
+.id-dirs {
+  margin-top: clamp(20px, 2vw, 32px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.4vw, 24px);
+}
+/* equation layout: box + box + box */
+.id-dirs--eq {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(10px, 1.2vw, 18px);
+}
+.id-dir {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(24px, 2.2vw, 34px);
+  border-radius: var(--cs-radius);
+  min-height: clamp(210px, 16vw, 270px);
+}
+.id-dir__num { margin-bottom: auto; opacity: 0.6; }
+.id-dir__title { color: inherit; }
+/* long single-word keywords must wrap gracefully (not overflow) in the narrow equation boxes */
+.id-dirs--eq .id-dir__title { hyphens: auto; overflow-wrap: break-word; }
+.id-dir--purple { background: var(--id-purple); color: #fff; }
+.id-dir--purple .id-dir__desc { color: rgba(255, 255, 255, 0.82); }
+/* the "+" operators between the three boxes */
+.id-dir__op { align-self: center; text-align: center; color: var(--id-purple); font-weight: var(--fw-medium); }
+
+/* the "Scalable" foundation the three principles rest on: muted purple + subtle outline */
+.id-outcome { margin-top: clamp(12px, 1.4vw, 20px); }
+.id-outcome__box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(24px, 2.2vw, 34px);
+  border-radius: var(--cs-radius);
+  background: rgba(74, 22, 160, 0.08);
+  border: 1px solid rgba(74, 22, 160, 0.25);
+}
+.id-outcome__title { color: var(--id-purple); }
+.id-outcome__desc { color: var(--cs-muted); }
+
+/* ============================================================
+   FINAL DESIGN — stacked "after" reveal (clean: no border, no radius)
+   ============================================================ */
+.cs-showcase {
+  margin-top: clamp(20px, 2vw, 32px);
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--id-purple-deep);
+}
+.cs-showcase img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   SUB-BRANDS — dot + name row, then a full-width board
+   ============================================================ */
+.id-subs {
+  margin-top: clamp(24px, 2.6vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3vw, 48px);
+}
+.id-sub { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 20px); }
+.id-sub__head { display: flex; align-items: center; gap: 12px; }
+.id-sub__dot {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sub-c, var(--id-purple));
+}
+.id-sub__name { color: var(--cs-ink); }
+.id-sub__img {
+  border-radius: var(--cs-radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(24, 24, 24, 0.1);
+  background: var(--id-purple-deep);
+}
+.id-sub__img img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   DELIVERABLES NOTE — let the disclaimer fill its container.
+   The shared 72ch cap left a lopsided gap at wide widths, while the
+   lead paragraph above it runs full width; matching them reads cleaner.
+   ============================================================ */
+.cs-page--identity .cs-note p { max-width: none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  /* visual-direction principles → stack vertically, "+" operators centred between */
+  .id-dirs--eq { grid-template-columns: 1fr; }
+  .id-dir { min-height: 0; }
+}
+
+@media (max-width: 760px) {
+  .id-cards,
+  .id-cards--2,
+  .id-pillars,
+  .id-imgrid--2,
+  .id-imgrid--3,
+  .id-techissue__list,
+  .id-refs { grid-template-columns: 1fr; }
+
+  /* narration shift → stack (old text, arrow down, new box), with more room between each shift */
+  .id-shift { gap: 30px; }
+  .id-shift__row { grid-template-columns: 1fr; gap: 10px; }
+  .id-shift__arrow { transform: rotate(90deg); justify-self: center; }
+
+  /* USP panel → single column */
+  .id-usp__top { grid-template-columns: 1fr; gap: 18px; }
+
+  /* the stacked reveal + wide research boards bleed to the screen edges */
+  .cs-showcase { margin-inline: calc(var(--gutter) * -1); }
+}
