@@ -202,9 +202,36 @@ body.is-loading .pf-dock {
   font-weight: var(--pf-fw-medium);
   line-height: var(--pf-lh-normal);
   letter-spacing: var(--pf-tr-snug);
-  transition: background-color 0.25s linear;
 }
-.pf-dock__link:hover { background: rgba(0, 0, 0, 0.06); }
+
+/* ---- the hover: an underline, the same one the rest of the site draws ----
+   Amanda: "the link interaction is a bit different, please use underline as the
+   hover animation instead to keep everything consistent." This is v3's own
+   .nav__link::after (css/styles.css) -- a 1.5px rule scaled from 0 to 1 out of
+   the left edge over 0.4s on --ease-out.
+
+   It sits on the LABEL, not on the link. The link is a flex row with 12px of
+   padding and space-between, so an underline across it would run the full width
+   of the menu and pass under the little external-link arrow. Underlining the
+   span keeps the rule the width of the word, which is what it is on v3. */
+.pf-dock__label {
+  position: relative;
+  display: inline-block;
+}
+.pf-dock__label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--pf-ease);
+}
+.pf-dock__link:hover .pf-dock__label::after,
+.pf-dock__link:focus-visible .pf-dock__label::after { transform: scaleX(1); }
 .pf-dock__link:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: -2px; }
 
 .pf-dock__ext { width: 12px; height: 12px; flex: none; opacity: 0.55; }
@@ -213,7 +240,7 @@ body.is-loading .pf-dock {
   .pf-dock__btn,
   .pf-dock__bars i,
   .pf-dock__menu,
-  .pf-dock__link { transition-duration: 0.01ms; }
+  .pf-dock__label::after { transition-duration: 0.01ms; }
 }
 
 @media (max-width: 600px) {

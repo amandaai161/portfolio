@@ -294,7 +294,7 @@
    --pf-tail are all gone, along with the negative margin and the tail band.
 
    IT RUNS ON ITS OWN CLOCK, not on scroll. "WITHOUT SCROLL-DRIVEN. So, just
-   immediate effect, intro and outro." One CSS transition, 0.6s.
+   immediate effect, intro and outro." One CSS transition, 0.9s each way.
 
    The overlay scrolls internally -- the-process plus the footer is about two
    screens -- and overscroll-behavior: contain stops that scroll chaining back to
@@ -344,7 +344,7 @@
   transition: none;
 }
 .pf-outro--live.pf-outro--armed {
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .pf-outro--live.is-shown { transform: translateX(0); }
 
