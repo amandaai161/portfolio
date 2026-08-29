@@ -99,15 +99,19 @@
    the highest value any of the five pages uses (nobi, 200) by a wide margin, so
    this never has to be re-tuned when one of them gains a layer.
 
-   --pf-dock-top is set per page in that page's own <style> block, because the
-   five headers are different heights and this button must sit UNDER the header
-   band rather than on top of its right-most control (kayn's burger, sinan's
-   CTA). Default 88px if a page forgets.
+   It sits in the EXTREME corner, over whatever the page puts there. Amanda:
+   "The floating navigation button on top-right corner should be at the extreme
+   top. Right now the position is under the top-navbar of respective pages. It is
+   totally okay if it is in front of any elements of the page including the
+   header because all those links in the respective pages are dead."
+
+   So there is no --pf-dock-top any more, and no per-page offset to keep in step
+   with five different header heights. One pair of offsets, every page.
    ========================================================================== */
 .pf-dock {
   position: fixed;
-  top: var(--pf-dock-top, 88px);
-  right: var(--pf-dock-right, clamp(16px, 2.4vw, 40px));
+  top: clamp(12px, 1.6vw, 24px);
+  right: clamp(12px, 1.6vw, 24px);
   z-index: 9000;
   display: flex;
   flex-direction: column;
