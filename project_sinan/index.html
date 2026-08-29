@@ -948,444 +948,11 @@ figure{margin:0}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
-<!-- Portfolio chrome, inlined. This page ships as one portable file, so it
-     cannot reference pf-chrome.css the way the other four do. Keep this block
-     byte-identical to final_pages/_shared/pf-chrome.css. -->
-<style>
-/* ============================================================================
-   PORTFOLIO CHROME — the floating site nav and the main footer
-   ----------------------------------------------------------------------------
-   Dropped into five hand-built landing pages that share nothing: five resets,
-   five token vocabularies, five scroll engines. So:
-
-     · every selector is `pf-` prefixed
-     · every custom property is declared on the component roots below, NEVER on
-       :root — `--nav-h`, `--white`, `--bg` and `--line` all already mean
-       something different on at least one of these pages
-     · every property this file depends on is set explicitly. The host resets
-       zero out margins, list markers, button chrome and heading weights, so a
-       UA default is never a safe assumption here.
-
-   Load this BEFORE pf-outro.css: the type tokens below are what that file sizes
-   itself from.
-   ========================================================================== */
-
-/* ---- box model ----
-   These three components drop into five unrelated codebases, so they cannot
-   assume a host reset. Every one of the five pages happens to set
-   `box-sizing: border-box` globally today, and without it `width: 100%` plus
-   `padding-inline` on the wraps below overflows by twice the gutter. Scoped to
-   the component roots and their descendants so nothing leaks back out into a
-   host page. */
-.pf-dock, .pf-dock *, .pf-dock *::before, .pf-dock *::after,
-.pf-outro, .pf-outro *, .pf-outro *::before, .pf-outro *::after,
-.pf-foot, .pf-foot *, .pf-foot *::before, .pf-foot *::after,
-.pf-dock::before, .pf-dock::after, .pf-outro::before, .pf-outro::after, .pf-foot::before, .pf-foot::after {
-  box-sizing: border-box;
-}
-
-/* ---- shared tokens ----------------------------------------------------------
-   The steps are lifted from portfolio_v3/css/type-system.css so the-process
-   section and the footer are typographically the same site as amanda-design.com.
-   Only the steps actually used are carried; the fluid clamps are the originals,
-   unchanged. */
-.pf-dock,
-.pf-outro,
-.pf-foot {
-  --pf-font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-
-  --pf-fs-h1: clamp(2.5rem, 1.73rem + 2.4vw, 4rem);        /* 40 → 64 */
-  --pf-fs-h4: clamp(1.625rem, 1.3rem + 1.0vw, 2.5rem);     /* 26 → 40 */
-  --pf-fs-h5: clamp(1.5rem, 1.31rem + 0.6vw, 2rem);        /* 24 → 32 */
-  --pf-fs-h6: clamp(1.375rem, 1.25rem + 0.39vw, 1.75rem);  /* 22 → 28 */
-  --pf-fs-body-lg: 1.125rem;   /* 18 */
-  --pf-fs-body: 1rem;          /* 16 */
-  --pf-fs-body-sm: 0.875rem;   /* 14 */
-  --pf-fs-eyebrow: 0.6875rem;  /* 11 */
-
-  --pf-lh-tight: 1.04;
-  --pf-lh-snug: 1.18;
-  --pf-lh-normal: 1.45;
-  --pf-lh-label: 1.25;
-
-  --pf-tr-display: -0.04em;
-  --pf-tr-heading: -0.03em;
-  --pf-tr-snug: -0.02em;
-  --pf-tr-body: -0.01em;
-  --pf-tr-wide: 0.06em;
-
-  --pf-fw-regular: 400;
-  --pf-fw-medium: 500;
-  --pf-fw-semibold: 600;
-
-  --pf-ink: #000000;
-  --pf-paper: #ffffff;
-  --pf-muted: rgba(0, 0, 0, 0.55);
-  --pf-line: rgba(0, 0, 0, 0.18);
-  --pf-shot: #e8e8e8;
-
-  --pf-ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Phone scale, from the same source file. Token-level, so every rule below
-     inherits it without a second selector. */
-}
-
-@media (max-width: 760px) {
-  .pf-dock,
-  .pf-outro,
-  .pf-foot {
-    --pf-fs-h1: 2.5rem;
-    --pf-fs-h4: 1.5rem;
-    --pf-fs-h5: 1.375rem;
-    --pf-fs-h6: 1.25rem;
-    --pf-fs-eyebrow: 0.75rem;
-    --pf-lh-tight: 1.14;
-    --pf-lh-snug: 1.24;
-    --pf-lh-normal: 1.55;
-    --pf-lh-label: 1.3;
-    --pf-tr-display: -0.025em;
-    --pf-tr-heading: -0.02em;
-    --pf-tr-snug: -0.015em;
-  }
-}
-
-/* ============================================================================
-   THE FLOATING NAV DOCK
-   ----------------------------------------------------------------------------
-   Fixed to the top right of every page, above everything. z-index 9000 clears
-   the highest value any of the five pages uses (nobi, 200) by a wide margin, so
-   this never has to be re-tuned when one of them gains a layer.
-
-   --pf-dock-top is set per page in that page's own <style> block, because the
-   five headers are different heights and this button must sit UNDER the header
-   band rather than on top of its right-most control (kayn's burger, sinan's
-   CTA). Default 88px if a page forgets.
-   ========================================================================== */
-.pf-dock {
-  position: fixed;
-  top: var(--pf-dock-top, 88px);
-  right: var(--pf-dock-right, clamp(16px, 2.4vw, 40px));
-  z-index: 9000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  font-family: var(--pf-font);
-  letter-spacing: var(--pf-tr-body);
-}
-
-/* The page is still loading. Both of these are the host pages' own signals:
-   kayn holds <html data-motion="pending"> until the loader hands over, nobi
-   holds <body class="is-loading">. The dock must not float over either. */
-html[data-motion="pending"] .pf-dock,
-body.is-loading .pf-dock {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.pf-dock__btn {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  margin: 0;
-  padding: 0;
-  border: 1.5px solid var(--pf-ink);
-  border-radius: 50%;
-  background: var(--pf-paper);
-  color: var(--pf-ink);
-  cursor: pointer;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
-  transition: transform 0.35s var(--pf-ease), box-shadow 0.35s var(--pf-ease);
-}
-.pf-dock__btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2); }
-.pf-dock__btn:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: 3px; }
-
-/* Three bars that fold into an X. The middle bar fades rather than rotating,
-   which is what keeps the two diagonals meeting at the centre. */
-.pf-dock__bars { position: relative; display: block; width: 20px; height: 12.4px; }
-.pf-dock__bars i {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1.6px;
-  border-radius: 2px;
-  background: currentColor;
-  transition: transform 0.4s var(--pf-ease), opacity 0.2s linear;
-}
-.pf-dock__bars i:nth-child(1) { top: 0; }
-.pf-dock__bars i:nth-child(2) { top: 5.4px; }
-.pf-dock__bars i:nth-child(3) { top: 10.8px; }
-.pf-dock.is-open .pf-dock__bars i:nth-child(1) { transform: translateY(5.4px) rotate(45deg); }
-.pf-dock.is-open .pf-dock__bars i:nth-child(2) { opacity: 0; }
-.pf-dock.is-open .pf-dock__bars i:nth-child(3) { transform: translateY(-5.4px) rotate(-45deg); }
-
-.pf-dock__menu {
-  min-width: 212px;
-  margin: 0;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  border: 1.5px solid var(--pf-ink);
-  border-radius: 14px;
-  background: var(--pf-paper);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
-  opacity: 0;
-  transform: translateY(-8px) scale(0.97);
-  transform-origin: 100% 0;
-  transition: opacity 0.26s linear, transform 0.34s var(--pf-ease);
-}
-.pf-dock__menu[hidden] { display: none; }
-.pf-dock.is-open .pf-dock__menu { opacity: 1; transform: none; }
-
-.pf-dock__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 0;
-  padding: 9px 12px;
-  border-radius: 8px;
-  color: var(--pf-ink);
-  background: transparent;
-  text-decoration: none;
-  font-size: var(--pf-fs-body);
-  font-weight: var(--pf-fw-medium);
-  line-height: var(--pf-lh-normal);
-  letter-spacing: var(--pf-tr-snug);
-  transition: background-color 0.25s linear;
-}
-.pf-dock__link:hover { background: rgba(0, 0, 0, 0.06); }
-.pf-dock__link:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: -2px; }
-
-.pf-dock__ext { width: 12px; height: 12px; flex: none; opacity: 0.55; }
-
-@media (prefers-reduced-motion: reduce) {
-  .pf-dock__btn,
-  .pf-dock__bars i,
-  .pf-dock__menu,
-  .pf-dock__link { transition-duration: 0.01ms; }
-}
-
-@media (max-width: 600px) {
-  .pf-dock__btn { width: 46px; height: 46px; }
-  .pf-dock__menu { min-width: 190px; }
-}
-
-/* ============================================================================
-   THE MAIN FOOTER
-   ----------------------------------------------------------------------------
-   Amanda's site footer, rebuilt standalone so it can be dropped onto pages that
-   share no stylesheet with portfolio_v3. Same composition, same measured
-   numbers — the headline's 13.87cqw fill figure is hers, arrived at by
-   measuring "Let's get in touch!" in Figtree 500 at -0.045em (7.1718em wide, so
-   filling a measure means font-size = measure / 7.1718 = 13.94%, with ~0.5%
-   held back for sub-pixel rounding).
-
-   cqw and not vw, and that is the whole point of the container-type line: vw
-   counts the classic scrollbar's width and the container does not, so a vw
-   figure overshoots by the scrollbar every time. The vw value outside @supports
-   is the fallback for a browser without container queries, deliberately the
-   conservative one.
-   ========================================================================== */
-.pf-foot {
-  display: block;
-  margin: 0;
-  padding-block: clamp(64px, 8vw, 150px) clamp(40px, 4vw, 60px);
-  background: var(--pf-ink);
-  color: var(--pf-paper);
-  font-family: var(--pf-font);
-  letter-spacing: var(--pf-tr-body);
-}
-
-.pf-foot__wrap {
-  width: 100%;
-  max-width: calc(1720px + clamp(20px, 5.2vw, 100px) * 2);
-  margin-inline: auto;
-  padding-inline: clamp(20px, 5.2vw, 100px);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(40px, 6vw, 100px);
-  container-type: inline-size;
-}
-
-.pf-foot__title {
-  margin: 0;
-  font-weight: var(--pf-fw-medium);
-  font-size: max(56px, 11.9vw);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  white-space: nowrap;
-  color: inherit;
-}
-@supports (container-type: inline-size) {
-  .pf-foot__title { font-size: max(56px, 13.87cqw); }
-}
-
-.pf-foot__details {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: clamp(28px, 4vw, 64px);
-}
-.pf-foot__reach { display: flex; align-items: center; gap: clamp(18px, 2.6vw, 44px); }
-
-.pf-foot__email-wrap { position: relative; display: inline-flex; align-items: center; gap: clamp(10px, 1vw, 18px); }
-.pf-foot__email {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32em;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  font-weight: var(--pf-fw-medium);
-  font-size: clamp(22px, 2.6vw, 48px);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  cursor: pointer;
-}
-.pf-foot__email:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-.pf-foot__copy { width: 0.62em; height: 0.62em; flex: none; opacity: 0.85; transition: opacity 0.3s linear; }
-.pf-foot__email:hover .pf-foot__copy { opacity: 1; }
-
-/* A real mailto: route beside the click-to-copy button, for when copying
-   fails (or can't be trusted to have worked) and for anyone who would rather
-   open their mail client outright. Deliberately quiet: small, muted at rest,
-   so the button carrying the actual address stays the loud element here. */
-.pf-foot__mailto {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(26px, 1.6vw, 32px);
-  height: clamp(26px, 1.6vw, 32px);
-  flex: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  color: inherit;
-  text-decoration: none;
-  opacity: 0.5;
-  transition: opacity 0.3s linear;
-}
-.pf-foot__mailto:hover, .pf-foot__mailto:focus-visible { opacity: 1; }
-.pf-foot__mailto:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-.pf-foot__mailto-icon { width: 62%; height: 62%; display: block; }
-
-/* Underlined at rest, not on hover — the copy toast is the hover feedback. */
-.pf-foot__email-text { position: relative; }
-.pf-foot__email-text::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -0.12em;
-  height: 2px;
-  background: currentColor;
-}
-
-.pf-foot__toast {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--pf-paper);
-  font-size: clamp(12px, 1vw, 15px);
-  font-weight: var(--pf-fw-medium);
-  letter-spacing: var(--pf-tr-body);
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-4px);
-  pointer-events: none;
-  transition: opacity 0.3s linear, transform 0.3s var(--pf-ease);
-}
-.pf-foot__toast::before {
-  content: "";
-  width: 13px;
-  height: 13px;
-  flex: none;
-  background: no-repeat center / contain
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 13l4 4L19 7' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-.pf-foot__toast.is-shown { opacity: 1; transform: translateY(0); }
-
-.pf-foot__socials { display: flex; align-items: center; gap: 10px; }
-.pf-foot__social {
-  --pf-chip: clamp(28px, 2.4vw, 38px);
-  display: inline-flex;
-  width: var(--pf-chip);
-  height: var(--pf-chip);
-  /* currentColor paints the chip; the glyph is knocked out of it in #181818,
-     so one declaration covers both. Square, no radius. */
-  color: var(--pf-paper);
-  transition: transform 0.3s var(--pf-ease);
-}
-.pf-foot__social:hover { transform: translateY(-3px); }
-.pf-foot__social svg { width: 100%; height: 100%; display: block; }
-
-.pf-foot__nav {
-  margin-left: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  gap: clamp(4px, 0.5vw, 9px);
-}
-.pf-foot__nav a {
-  color: inherit;
-  text-decoration: none;
-  font-weight: var(--pf-fw-medium);
-  font-size: clamp(16px, 1.25vw, 20px);
-  line-height: var(--pf-lh-normal);
-  letter-spacing: var(--pf-tr-snug);
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1.5px;
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  transition: background-size 0.4s var(--pf-ease);
-}
-.pf-foot__nav a:hover { background-size: 100% 1.5px; }
-
-.pf-foot__base {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  margin-top: clamp(60px, 8vw, 150px);
-}
-.pf-foot__base p {
-  margin: 0;
-  font-size: var(--pf-fs-body);
-  font-weight: var(--pf-fw-regular);
-  line-height: var(--pf-lh-normal);
-  letter-spacing: var(--pf-tr-body);
-  opacity: 0.85;
-}
-
-@media (max-width: 760px) {
-  .pf-foot__title { white-space: normal; }
-  .pf-foot__details { flex-direction: column; gap: 30px; }
-  .pf-foot__reach { flex-wrap: wrap; gap: 18px; }
-  .pf-foot__nav { margin-left: 0; align-items: flex-start; text-align: left; gap: 8px; }
-  .pf-foot__nav a { background-position: 0 100%; }
-  .pf-foot__base { flex-direction: column; align-items: flex-start; gap: 8px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pf-foot__social, .pf-foot__nav a, .pf-foot__toast { transition-duration: 0.01ms; }
-}
-
-/* Sinan's sticky header is var(--head) = 56px tall. */
-.pf-dock { --pf-dock-top: calc(var(--head) + 16px); }
-</style>
+<!-- Portfolio chrome. This page used to inline it, because it shipped as one
+     portable file. Inside v4 it is served from the same root as everything
+     else, so it links the shared copies like the other four pages do. -->
+<link rel="stylesheet" href="/css/pf-chrome.css">
+<link rel="stylesheet" href="/css/pf-footer.css">
 </head>
 <body>
 
@@ -2468,58 +2035,73 @@ body.is-loading .pf-dock {
      rather than on the project. Sinan gets it straight — no cover transition
      and no the-process section, because unlike the other four this page IS the
      process breakdown; there is no separate page to send anyone to. -->
-<footer class="pf-foot">
-  <div class="pf-foot__wrap">
-    <h2 class="pf-foot__title">Let&rsquo;s get in touch!</h2>
+<!-- THE SITE FOOTER — v3's own .contact block, not a re-creation.
+     Amanda: "Why not just use the existing one to keep the consistency."
+     The rules arrive via /css/pf-footer.css, scoped under .pf-footer-host so
+     they cannot touch this page's own design. Two deliberate departures from
+     the homepage's copy of this markup: Home points at "/" rather than "#top"
+     (on a project page "#top" would scroll this page, not go home), and the
+     toast ships empty — aria-live announces on content CHANGE, so the handler
+     writes the text. The .outro__rise classes are dropped: they are homepage
+     scroll-scene hooks and nothing here drives them.
 
-    <div class="pf-foot__details">
-      <div class="pf-foot__reach">
-        <div class="pf-foot__email-wrap">
-          <button type="button" class="pf-foot__email" data-pf-copy="amandaalfattah@gmail.com" aria-label="Copy amandaalfattah@gmail.com to clipboard">
-            <svg class="pf-foot__copy" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="pf-foot__email-text">amandaalfattah@gmail.com</span>
-          </button>
-          <a class="pf-foot__mailto" href="mailto:amandaalfattah@gmail.com" aria-label="Email amandaalfattah@gmail.com directly">
-            <svg class="pf-foot__mailto-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <span class="pf-foot__toast" role="status" aria-live="polite"></span>
-        </div>
+     The scope class sits on a WRAPPER rather than on .contact itself: every
+     rule in pf-footer.css is scoped as a DESCENDANT of .pf-footer-host, and a
+     descendant selector does not match the element carrying the class. Putting
+     it on .contact would silently drop .contact's own background and padding. -->
+<div class="pf-footer-host">
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact__info">
+        <h2 class="contact__title">Let&rsquo;s get in touch!</h2>
 
-        <div class="pf-foot__socials">
-          <a class="pf-foot__social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" aria-label="Visit my Behance">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <rect width="48" height="48" fill="currentColor"/>
-              <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818"/>
-            </svg>
-          </a>
-          <a class="pf-foot__social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" aria-label="Chat on Linkedin">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <rect width="48" height="48" fill="currentColor"/>
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818"/>
-            </svg>
-          </a>
+        <div class="contact__details">
+          <div class="contact__reach">
+            <div class="contact__email-wrap">
+              <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" data-cursor="Copy to clipboard" aria-label="Copy amandaalfattah@gmail.com to clipboard">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="contact__email-text">amandaalfattah@gmail.com</span>
+              </button>
+              <span class="copy-toast" role="status" aria-live="polite"></span>
+            </div>
+
+            <!-- Both marks are Amanda's own files, used as supplied: her 48x48
+                 box, her paths, her #181818. The background rect is painted
+                 currentColor so one declaration owns the chip colour. -->
+            <div class="contact__socials">
+              <a class="social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" data-cursor="Visit my Behance" aria-label="Visit my Behance">
+                <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                  <rect width="48" height="48" fill="currentColor" />
+                  <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818" />
+                </svg>
+              </a>
+              <a class="social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" data-cursor="Chat on Linkedin" aria-label="Chat on Linkedin">
+                <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                  <rect width="48" height="48" fill="currentColor" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <nav class="contact__nav" aria-label="Footer">
+            <a href="/" class="contact__nav-link">Home</a>
+            <a href="/about" class="contact__nav-link">About</a>
+            <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="contact__nav-link" target="_blank" rel="noopener">Resume</a>
+          </nav>
         </div>
       </div>
 
-      <nav class="pf-foot__nav" aria-label="Footer">
-        <a href="https://amanda-design.com/">Home</a>
-        <a href="https://amanda-design.com/about">About</a>
-        <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">Resume</a>
-      </nav>
+      <footer class="footer">
+        <p class="footer__name">Site by Amanda Alfatah Idris. Built with Claude Code</p>
+        <p class="footer__legal">&copy;2026 Amanda Idris. All rights reserved.</p>
+      </footer>
     </div>
-
-    <div class="pf-foot__base">
-      <p>Site by Amanda Alfatah Idris. Built with Claude Code</p>
-      <p>&copy;2026 Amanda Idris. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+  </section>
+</div>
 
 
 <script>window.LOG=[{"id":"0809 identity-key-visual-gradient 01","t":"2026-08-09T19:46:49","model":"z-image","usd":0.004,"credits":0.8,"chars":246,"task":"bac7870515","prompt":"Abstract dark violet-purple gradient background, deep near-black corner fading into rich violet and soft lavender glow, one gentle diagonal light bloom, fine analog film grain, moody minimal premium tech atmosphere, no text, no objects, no people","img":null},{"id":"0809 identity-key-visual-constellation 01","t":"2026-08-09T19:47:29","model":"z-image","usd":0.004,"credits":0.8,"chars":272,"task":"5c0169f25e","prompt":"Abstract dark violet gradient field, sparse glowing nodes connected by thin luminous threads forming a constellation, accent points in electric green, warm amber, and sky blue scattered across deep purple, fine film grain, moody premium tech atmosphere, no text, no people","img":"sx2"},{"id":"0809 identity-plate1-hero 01","t":"2026-08-09T22:07:20","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":943,"task":"feb4943289","prompt":"Abstract photograph of a vast three-dimensional field of tiny luminous points suspended in dark space, camera inside the field so the points continue past every edge of frame. 85mm lens at f/1.4: points nearest the lens render as large soft out-of-focus discs, a single mid-plane of points sits crisply sharp and pin-small, the most distant fade to nothing in haze. A few fine curved threads of light link scattered points, thin, tapering, brighter at one end. Strict monotone violet-purple: near-black ground, deep violet mid-tones, a pale lavender bloom in the upper right. No second hue anywhere. Uneven distribution, two or three dense knots with wide empty gaps, never a regular grid or evenly scattered dots. Deep unlit empty space fills the lower left third. Clean render: no film grain, no noise, no text, no interface elements, no circuit traces, no hexagonal grids, no lens flare, no chrome or liquid metal, no globe or sphere shape.","img":"s01"},{"id":"0809 identity-plate1-hero 02","t":"2026-08-09T22:08:36","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":981,"task":"ff944a52cc","prompt":"Abstract photograph looking into a vast three-dimensional cloud of tiny glowing points that completely surrounds the camera and fills the frame corner to corner. 85mm lens at f/1.4: a few points very close to the lens render as large soft out-of-focus discs scattered across the frame, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deeply saturated electric violet-purple throughout, rich and vivid like hex 5B21E0, glowing against a near-black violet ground, with a soft pale lavender bloom in the upper right corner. Strictly one hue, no grey, no blue, no white cast. Points gather in three or four irregular clusters separated by wide empty darkness, scattered across the whole frame. Empty unlit darkness fills the lower left third. Clean render: no connecting lines, no curved threads or scribbles, no diagonal wave or curtain or stream formation, no film grain, no text, no lens flare, no chrome, no globe or sphere.","img":"s02"},{"id":"0809 identity-plate1-hero 03","t":"2026-08-09T22:09:47","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":973,"task":"0b33474626","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. 85mm lens at f/1.4: a scattering of points very close to the lens render as large soft out-of-focus discs, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deep blue-leaning violet, indigo-violet like hex 5B21E0, glowing against near-black, with a soft pale lavender bloom in the upper right corner. Strictly one hue, not magenta, not pink, not orchid, not grey. Density varies continuously and organically across the frame, some regions crowded and others nearly empty. Empty unlit darkness fills the lower left third. Clean render: no spherical clusters, no dandelion or firework shapes, no discrete balls of particles, no connecting lines or threads, no diagonal wave or stream, no film grain, no text, no lens flare, no chrome, no globe.","img":"s03"},{"id":"0809 identity-plate1-hero 04","t":"2026-08-09T22:10:52","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":808,"task":"eb31421935","prompt":"Abstract photograph from deep inside a swarm of tiny glowing points filling an entire volume of dark space in every direction, extending past all four edges of frame. 35mm lens at f/1.4. Points occupy the full depth of the volume rather than lying on any surface: several very close to the lens as large soft out-of-focus discs, a sharp pin-small mid-plane, the rest receding into blackness. Deep blue-leaning indigo-violet like hex 5B21E0 glowing against near-black, soft pale lavender bloom in the upper right corner. One hue only, not magenta, not pink, not grey. Empty unlit darkness fills the lower left third. Clean render: no undulating surface, no terrain or landscape, no mesh or cloth, no wave, no spherical clusters, no connecting lines, no film grain, no text, no lens flare, no chrome, no globe.","img":"s04"},{"id":"0809 identity-plate2-mark 01","t":"2026-08-09T22:14:06","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1047,"task":"d425b49629","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. Sparse and quiet, far fewer points than a dense field, most of the frame deep empty darkness. 85mm lens at f/1.4: a few points very close to the lens render as large soft out-of-focus discs, a small group of points at mid-distance sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deep blue-leaning violet, indigo-violet like hex 5B21E0, glowing against near-black, with a soft pale lavender bloom in the upper left corner. Strictly one hue, not magenta, not pink, not orchid, not grey. The points gather toward the left of the frame. Empty unlit darkness fills the entire right half. Clean render: no spherical clusters, no dandelion or firework shapes, no discrete balls of particles, no connecting lines or threads, no diagonal wave or stream, no undulating surface or terrain, no film grain, no text, no lens flare, no chrome, no globe.","img":"ssparse"},{"id":"0809 identity-plate4-constellation 01","t":"2026-08-09T22:14:41","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1060,"task":"c027fd8234","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. Dense and luminous, the richest and brightest field, points crowding the upper two thirds. 85mm lens at f/1.4: a scattering of points very close to the lens render as large soft out-of-focus discs, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deep blue-leaning violet, indigo-violet like hex 5B21E0, glowing against near-black, with a broad pale lavender bloom across the upper portion at full strength. Strictly one hue, not magenta, not pink, not orchid, not grey. Density varies continuously and organically. Empty unlit darkness fills the lower third of the frame. Clean render: no spherical clusters, no dandelion or firework shapes, no discrete balls of particles, no connecting lines or threads, no diagonal wave or stream, no undulating surface or terrain, no film grain, no text, no lens flare, no chrome, no globe.","img":null},{"id":"0809 identity-plate4-constellation 02","t":"2026-08-09T22:16:11","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1108,"task":"17815e8376","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. Dense and luminous throughout, the richest field of the set, points filling the frame at every depth. 85mm lens at f/1.4: a scattering of points very close to the lens render as large soft out-of-focus discs, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deep blue-leaning violet, indigo-violet like hex 5B21E0, glowing against near-black, with a soft pale lavender bloom in the upper right corner. Strictly one hue, not periwinkle, not blue, not magenta, not pink, not grey. Density varies continuously and organically with no horizon line and no ground plane. Empty unlit darkness fills the lower third of the frame. Clean render: no undulating surface, no dunes, no terrain or landscape, no horizon, no glitter or sand texture, no spherical clusters, no connecting lines or threads, no diagonal wave or stream, no film grain, no text, no lens flare, no chrome, no globe.","img":"sdense"},{"id":"0809 identity-hero-loop 01","t":"2026-08-09T22:19:30","model":"kling/v3-turbo-image-to-video","usd":0.5625,"credits":112.5,"chars":335,"task":"373d093271","prompt":"Camera drifts forward through the field at an extremely slow, steady, barely perceptible speed; the nearest out-of-focus points pass the lens and leave frame. Everything else holds still - field density, the lavender bloom position, the palette, and the empty lower-left darkness. No flicker, no new elements entering, no colour shift.","img":null},{"id":"0811 meja-control-undirected 01","t":"2026-08-11T17:57:01","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":169,"task":"06d7601272","prompt":"luxury family restaurant interior, warm and premium, high end but family friendly, 8k, ultra detailed, hyperrealistic, masterpiece, award winning, trending on artstation","img":"mctrl"},{"id":"0811 meja-terr-chaos 01","t":"2026-08-11T17:57:57","model":"z-image","usd":0.004,"credits":0.8,"chars":142,"task":"8dff3cd076","prompt":"Bright busy family restaurant mid-service, primary colours, kids' cups and scattered crayons, loud cheerful energy, casual snapshot, no people","img":"tchaos"},{"id":"0811 meja-terr-sanctuary 01","t":"2026-08-11T17:58:44","model":"z-image","usd":0.004,"credits":0.8,"chars":124,"task":"25ad0ed1a3","prompt":"Quiet warm restaurant corner at dusk, one low amber lamp, calm hushed intimate mood, empty set table, deep shadow, no people","img":null},{"id":"0811 meja-terr-tradition 01","t":"2026-08-11T17:59:35","model":"z-image","usd":0.004,"credits":0.8,"chars":125,"task":"45af581299","prompt":"Heritage kitchen, worn copper pots, aged wood, hand-written recipe card, nostalgic warm patina, generations of use, no people","img":"ttrad"},{"id":"0811 meja-terr-occasion 01","t":"2026-08-11T18:00:00","model":"z-image","usd":0.004,"credits":0.8,"chars":113,"task":"bffa3e9237","prompt":"Celebratory restaurant table, theatrical warm spotlight, festive dessert, glamorous special-night mood, no people","img":"tocc"},{"id":"0811 meja-hero-directed 01","t":"2026-08-11T18:00:34","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1111,"task":"1f1162b7e1","prompt":"Interior photograph of a premium restaurant at early evening, 35mm lens at f/2.0, standing eye level, looking down the length of a long communal oak table toward a dark window wall. A row of low pendant lamps hangs close above the table and throws a single warm pool of light along the wood, falling off deeply into the room behind so the far walls read as soft unlit shadow. Materials: honey-toned oak with open visible grain, unlacquered brass with a dull patina, heavy cream linen, hand-thrown stoneware in warm grey. Strictly warm palette of amber, clay, bone and deep brown, no cool tones anywhere in frame. The table is set for eight and includes two smaller child-height chairs; a few plates are already used and a water glass is half empty, so the table reads lived in rather than styled. Shallow depth of field, the far end of the room dissolving into soft warm bokeh. Generous quiet space across the upper third of the frame. Clean render: no people, no faces, no text, no signage, no flower arrangements, no lit candles, no white tablecloth, no chrome, no cool blue light, no lens flare, no vignette.","img":null},{"id":"0811 meja-detail-hands 01","t":"2026-08-11T18:01:15","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":795,"task":"16645cc01a","prompt":"Close photograph of two hands passing a wide shallow stoneware serving bowl across a honey oak table, 50mm lens at f/1.8, shot from seated eye level slightly above the table plane. Single warm pendant light from directly above, deep falloff to shadow at the frame edges. Hands are adult and relaxed, sleeves of a soft oatmeal knit, no jewellery, no faces in frame. The bowl is matte warm grey stoneware holding a simple braised dish, steam just visible against the dark background. Materials read honestly: open oak grain, matte glaze, soft linen. Strictly warm palette, amber and clay and bone against deep brown shadow. Shallow depth of field, background dissolved to warm bokeh. Clean render: no text, no logos, no cool light, no chrome, no garnish styling, no scattered herbs, no lens flare.","img":null},{"id":"0811 meja-signage 01","t":"2026-08-11T18:02:07","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":854,"task":"39b85bbb48","prompt":"Photograph of a restaurant menu cover lying flat on a honey oak table, shot from directly overhead, 50mm lens at f/4. The cover is heavy uncoated bone-coloured card. Printed on it in clean flat warm-black letterforms: the single word MEJA in a large heavy grotesque, uppercase, tight letter-spacing, positioned in the upper third and occupying about sixty percent of the card width. Below it on one line in much smaller widely letter-spaced capitals, the words A TABLE FOR EVERYONE. Nothing else is printed on the card. Generous even margins. Single warm key light from the upper left, soft shadow falling to the lower right, the card's edge catching a thin highlight. Strictly warm palette, bone and amber and deep brown. Clean render: no glow, no embossing, no foil, no additional text, no logos, no decorative flourishes, no cool light, no lens flare.","img":null},{"id":"0811 meja2-hero-warm 01","t":"2026-08-11T20:44:32","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1193,"task":"e24fb3993e","prompt":"Interior photograph of a premium restaurant in the early evening, 35mm lens at f/2.2, standing eye level, looking along a long honey-oak table laid for a large group. Warm light from a row of low pendant lamps together with soft ambient bounce off cream plaster walls, so the whole room stays legible and glowing rather than dark, with gentle shadow and no heavy black areas anywhere. Materials read as quietly expensive and handmade: honey oak with open visible grain, unlacquered brass, hand-thrown stoneware in warm cream, heavy oatmeal linen, a woven wool rug, one shelf of simple ceramics. The table is mid-meal and generous, several shared dishes still full, a torn loaf on a board, water glasses at different levels, two chairs pushed back at an angle as if people just stood up. Palette of amber, honey, cream, terracotta and soft olive against warm white walls. Shallow depth of field, the far end of the room softly out of focus but still brightly lit. Generous calm space across the upper third of the frame. Clean render: no people, no faces, no text, no signage, no lit candles, no white tablecloth, no chrome, no cool blue light, no lens flare, no vignette, no dark moody shadow.","img":null},{"id":"0811 meja2-terr-generosity 01","t":"2026-08-11T20:45:22","model":"z-image","usd":0.004,"credits":0.8,"chars":182,"task":"23ba4fad1d","prompt":"Warm generous restaurant table mid-meal, shared dishes still full, honey wood and cream linen, soft golden light, abundant welcoming and relaxed, refined handmade ceramics, no people","img":null},{"id":"0811 meja2-detail-warm 01","t":"2026-08-11T20:46:07","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":880,"task":"33442a39b7","prompt":"Close photograph of a wide shallow cream stoneware bowl of food being set down onto a honey oak table by two relaxed adult hands, 50mm lens at f/2.2, seated eye level slightly above the table plane. Warm overhead light plus soft bounce from a cream wall, bright and open rather than moody, gentle shadow under the bowl, no deep blacks. Around it the table is busy and generous: a second shared dish, a torn loaf on a wooden board, mismatched water glasses, a crumpled oatmeal linen napkin, a small child-sized cup near the edge. Materials honest and tactile, open oak grain, matte glaze, woven linen. Palette of amber, honey, cream, terracotta and soft olive. Shallow depth of field, background softly out of focus but still light. Clean render: no faces, no text, no logos, no chrome, no cool light, no lit candles, no scattered herb garnish, no lens flare, no dark moody shadow.","img":null},{"id":"0813 meja2-table-overhead 01","t":"2026-08-13T23:24:40","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1193,"task":"d9f95cf3c1","prompt":"Overhead photograph looking straight down at a long honey-oak table mid-meal, 35mm lens at f/4 from about two metres above, the table plane parallel to the frame. Warm light from low pendants together with soft ambient bounce off cream plaster walls, so every dish stays legible and glowing, with gentle shadow and no heavy black areas anywhere. The table is generous and shared: a wide platter of roasted vegetables, a torn loaf on an olive-wood board, a shallow bowl of dressed leaves, small hand-thrown stoneware plates in warm cream at each place, unmatched water glasses at different levels, brass cutlery resting on heavy oatmeal linen. Several adult hands and forearms reach in from the edges of the frame, sleeves in oatmeal linen and soft olive, relaxed and mid-reach, no faces and no heads in frame. Palette of amber, honey, cream, terracotta and soft olive against warm honey oak. Materials read as quietly expensive and handmade: open oak grain, matte glaze, unlacquered brass, heavy linen. Clean render: no faces, no heads, no text, no logos, no printed napkins, no lit candles, no white tablecloth, no chrome, no cool blue light, no lens flare, no vignette, no dark moody shadow.","img":null},{"id":"0813 meja2-plate-carried 01","t":"2026-08-14T11:34:19","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1201,"task":"359c4f147d","prompt":"Photograph taken just behind and to the side of a guest carrying a plate away from a shared table, 50mm lens at f/2.0 at standing eye level, the plate held at waist height and filling the lower third of the frame. Warm light from low pendants plus soft bounce off cream plaster walls, so the food and the room both stay legible and glowing, gentle shadow and no heavy black areas anywhere. The guest is seen from behind at the shoulder and forearm only, wearing a soft cream knit, no face and no head in frame. The plate is warm cream hand-thrown stoneware holding a generous helping of a braised dish with roasted vegetables and a piece of torn bread, plated honestly rather than styled. Behind, softly out of focus but still brightly lit, a long honey-oak table laid for a large group, warm cream walls, heavy oatmeal linen and unlacquered brass. Palette of amber, honey, cream, terracotta and soft olive. Shallow depth of field, the plate crisply sharp, the room dissolved to warm bokeh. Clean render: no faces, no heads, no text, no logos, no lit candles, no white tablecloth, no chrome, no cool blue light, no garnish styling, no scattered herbs, no lens flare, no vignette, no dark moody shadow.","img":null},{"id":"0814 identity-plate5-mirrored 01","t":"2026-08-14T11:35:16","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1006,"task":"896ee78ef4","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. 85mm lens at f/1.4: a scattering of points very close to the lens render as large soft out-of-focus discs, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Deep blue-leaning violet, indigo-violet like hex 5B21E0, glowing against near-black, with a soft pale lavender bloom in the upper left corner. Strictly one hue, not magenta, not pink, not orchid, not grey. Density varies continuously and organically across the frame, some regions crowded and others nearly empty, gathering toward the upper left. Empty unlit darkness fills the lower right third. Clean render: no spherical clusters, no dandelion or firework shapes, no discrete balls of particles, no connecting lines or threads, no diagonal wave or stream, no film grain, no text, no lens flare, no chrome, no globe.","img":null},{"id":"0814 identity-plate5-mirrored 02","t":"2026-08-14T11:36:35","model":"flux-2/flex-text-to-image","usd":0.12,"credits":24.0,"chars":1308,"task":"4099fb432f","prompt":"Abstract photograph taken from inside a vast three-dimensional cloud of tiny glowing points that extends past all four edges of the frame with no visible boundary or backdrop. The points fill the entire depth of the frame as a volume, scattered evenly through space, never gathered onto a single surface or into a band. 85mm lens at f/1.4: a scattering of points very close to the lens render as large soft out-of-focus discs, one mid-plane of points sits crisply sharp and pin-small, and the deepest points dissolve into darkness. Saturated deep blue-leaning violet, indigo-violet exactly like hex 5B21E0, intensely purple and clearly saturated, glowing against near-black, with a soft pale lavender bloom in the upper left corner. Strictly one hue, never washed out to lavender-grey, never silver, never white, not magenta, not pink, not orchid, not blue. Density varies continuously and organically, gathering toward the upper left. Empty unlit darkness fills the lower right third. Clean render: no arc, no ridge, no crest, no wave, no curved band or stream of particles crossing the frame, no undulating surface or terrain, no spherical clusters, no dandelion or firework shapes, no discrete balls of particles, no connecting lines or threads, no film grain, no text, no lens flare, no chrome, no globe.","img":"s05"},{"id":"meja-booth","kind":"direction","chars":1085,"prompt":"Interior photograph of a premium restaurant in the evening, 85mm lens at f/2.0, seated eye level, shooting past a carved timber screen held in the near foreground so the frame is partly obstructed and the table reads as somebody else’s evening you happened to walk past. A curved timber table sits against a fluted olive-green banquette, laid with shared bowls mid-meal: a noodle dish, steamed rice, a braised dish with chilli, a small dressed salad, a glass of red wine and two water glasses. A striped linen napkin lies dropped across the table. A server crosses the far background in white shirtsleeves, cropped and out of focus. Warm light from two amber glass pendants directly above, pooling on the table and falling away to shadow at the frame edges. Materials read as warm and tactile: oiled timber, ribbed velvet, matte stoneware, woven linen. Palette of amber, olive, cream and deep brown. Shallow depth of field, the foreground screen thrown fully soft. Clean render: no text, no logos, no chrome, no cool blue light, no lens flare, no empty room, no overhead flat lighting.","usd":null},{"id":"meja-carried","kind":"direction","chars":1102,"prompt":"Interior photograph of a premium restaurant in the early evening, 50mm lens at f/1.8, standing eye level and slightly behind a server carrying a single plate away from the pass. The plate is held at chest height, fills the lower centre of the frame and stays crisply sharp against a room dissolved into large rounded bokeh from a ceiling of low pendant lamps. The server is seen from the shoulder and forearm only, in a dark jacket with a white cuff showing at the wrist. The plate is dark hand-thrown stoneware holding a braised dish with roasted carrots, small potatoes and a thick torn piece of sourdough, plated honestly rather than styled. Behind it a long timber table waits laid for a large group, napkins folded, plates stacked. Materials read as warm and handmade: dark oak, matte glaze, unlacquered brass, heavy linen. Palette of amber, honey, cream and deep brown. Shallow depth of field, everything beyond the plate soft. Clean render: no text, no logos, no chrome, no cool blue light, no lens flare, no tweezered garnish, no scattered herbs, no white tablecloth, no overhead flat lighting.","usd":null},{"id":"meja-generosity","kind":"direction","chars":982,"prompt":"Interior photograph of a premium restaurant before service, 35mm lens at f/2.8, standing eye level, looking straight down the length of a long timber table laid end to end for a large group. Every place is set and the centre of the table is crowded with shared dishes: platters of grilled vegetables, bowls of pasta, boards of bread, small plates of cured fish, carafes of wine, tall candles lit down the centre line. Chairs in tan leather along both sides, all of them empty, the room waiting. Warm light from low pendants and the candles, with the far end of the room falling away into soft shadow. Materials read as quietly expensive and handmade: dark oak with open grain, hand-thrown stoneware, unlacquered brass, heavy oatmeal linen. Palette of amber, honey, cream and deep brown. Shallow depth of field, the far end softly out of focus. Clean render: no text, no signage, no logos, no chrome, no cool blue light, no lens flare, no white tablecloth, no overhead flat lighting.","usd":null},{"id":"meja-hero","kind":"direction","chars":1190,"prompt":"Interior photograph of a premium restaurant in the early evening, 35mm lens at f/2.2, standing eye level, three-quarters onto a family seated mid-meal at a solid oak table. Warm light from a row of low pendant lamps plus a single candle on the table, falling away into a deep, softly lit room behind, so the space reads full rather than flat. A father leans in to feed a small child a spoonful, the mother is laughing, an older child turns toward the lens mid-laugh. Nobody is posed. Shared plates across the table, several still full, wine and water glasses at different levels, linen napkins loose. A server passes in the near foreground, cropped and thrown out of focus, so the room reads staffed and busy. Materials read as quietly expensive and handmade: dark oak with open grain, unlacquered brass, hand-thrown stoneware, heavy oatmeal linen. Palette of amber, honey, cream and deep brown against warm timber. Shallow depth of field, the diners behind dissolved to warm bokeh but still legible as a full room. Clean render: no text, no signage, no logos, no chrome, no cool blue light, no lens flare, no vignette, no empty tables, no posed smiles to camera, no overhead flat lighting.","usd":null},{"id":"meja-shared","kind":"direction","chars":1059,"prompt":"Interior photograph of a premium restaurant late in the evening, 50mm lens at f/2.2, high three-quarter angle looking down onto a table as a plate of churros is passed between two people. Four hands are in frame: one lowering the plate from the left, one reaching in to dip a churro into a small dish of thick chocolate, two more resting beside a second plate. Sleeves are cream knit and black, cropped at the wrist and elbow so the gesture carries the frame rather than a face. On the table: a lemon-garnished cocktail, an amber tea in a glass cup, a plate of grilled vegetables and a scallop shell of ceviche. Warm low light from above with deep falloff to a dark background, so the hands and the food hold all of the attention. Materials read as warm and handmade: pale ceramic, marble, brass, cotton. Palette of amber, honey, cream and deep brown. Shallow depth of field, the background dissolved to soft dark. Clean render: no text, no logos, no chrome, no cool blue light, no lens flare, no scattered garnish, no overhead flat lighting, no empty plates.","usd":null}];</script>
@@ -2802,139 +2384,6 @@ window.SINAN={
 };
 })();
 </script>
-<script>
-/* ============================================================================
-   PORTFOLIO CHROME — behavior
-   ----------------------------------------------------------------------------
-   ES5 on purpose. These five pages are served as plain files with no build
-   step, and two of them already ship ES5-only scripts; a single arrow function
-   here would be the only thing on the page that needs a transpiler.
-   ========================================================================== */
-(function (window, document) {
-  "use strict";
-
-  var PF = (window.PFChrome = window.PFChrome || {});
-
-  /* ---- the floating nav dock ---------------------------------------------- */
-  var dock = document.querySelector("[data-pf-dock]");
-  if (dock) {
-    var btn = dock.querySelector(".pf-dock__btn");
-    var menu = dock.querySelector(".pf-dock__menu");
-    var open = false;
-    var hideTimer = null;
-
-    function setOpen(next) {
-      if (next === open) return;
-      open = next;
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-      btn.setAttribute("aria-label", open ? "Close site menu" : "Open site menu");
-
-      if (open) {
-        clearTimeout(hideTimer);
-        menu.hidden = false;
-        /* Force a reflow so the opacity/transform transition has a start frame
-           to run from — without this the menu appears fully open. */
-        void menu.offsetHeight;
-        dock.classList.add("is-open");
-      } else {
-        dock.classList.remove("is-open");
-        hideTimer = setTimeout(function () {
-          if (!open) menu.hidden = true;
-        }, 400);
-      }
-    }
-
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      setOpen(!open);
-    });
-
-    /* Following a link closes the dock, so returning via the back button does
-       not land on a page with the menu still hanging open. */
-    menu.addEventListener("click", function (e) {
-      if (e.target.closest && e.target.closest(".pf-dock__link")) setOpen(false);
-    });
-
-    document.addEventListener("click", function (e) {
-      if (!open) return;
-      if (e.target.closest && e.target.closest("[data-pf-dock]")) return;
-      setOpen(false);
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (!open) return;
-      if (e.key === "Escape" || e.key === "Esc") {
-        setOpen(false);
-        btn.focus();
-      }
-    });
-
-    PF.dock = {
-      open: function () { setOpen(true); },
-      close: function () { setOpen(false); },
-      get isOpen() { return open; }
-    };
-  }
-
-  /* ---- footer: click-to-copy email + toast --------------------------------
-     Two paths because navigator.clipboard needs a secure context, and these
-     pages are also opened straight off the filesystem while being worked on.
-     Both paths resolve to a real boolean all the way through -- the click
-     handler below tells the truth about whether the copy actually worked,
-     rather than announcing success unconditionally. A mailto: link sits
-     beside the button in the markup as a fallback route to the same address,
-     for the case where neither path succeeds. */
-  function copyText(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      return navigator.clipboard.writeText(text).then(
-        function () { return true; },
-        function () { return legacyCopy(text); }
-      );
-    }
-    return Promise.resolve(legacyCopy(text));
-  }
-
-  function legacyCopy(text) {
-    var ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    var ok = false;
-    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
-    ta.parentNode.removeChild(ta);
-    return ok;
-  }
-
-  PF.copy = copyText;
-
-  var emailBtn = document.querySelector(".pf-foot__email");
-  var toast = document.querySelector(".pf-foot__toast");
-  if (emailBtn && toast) {
-    var toastTimer = null;
-    /* The toast ships empty in the markup; role="status" aria-live="polite"
-       only announces on a content change, so writing the text here (rather
-       than just toggling a class on text that was already sitting in the
-       DOM) is what makes it actually speak. Cleared again once the fade-out
-       finishes, so nothing lingers in the accessibility tree between uses. */
-    toast.addEventListener("transitionend", function (e) {
-      if (e.propertyName === "opacity" && !toast.classList.contains("is-shown")) {
-        toast.textContent = "";
-      }
-    });
-    emailBtn.addEventListener("click", function () {
-      var text = emailBtn.getAttribute("data-pf-copy") || emailBtn.textContent.trim();
-      copyText(text).then(function (ok) {
-        toast.textContent = ok ? "Copied to clipboard" : "Couldn’t copy — copy it manually";
-        toast.classList.add("is-shown");
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(function () { toast.classList.remove("is-shown"); }, 1900);
-      });
-    });
-  }
-})(window, document);
-</script>
+<script src="/js/pf-chrome.js" defer></script>
 </body>
 </html>

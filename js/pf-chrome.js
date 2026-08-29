@@ -72,13 +72,19 @@
   }
 
   /* ---- footer: click-to-copy email + toast --------------------------------
-     Two paths because navigator.clipboard needs a secure context, and these
-     pages are also opened straight off the filesystem while being worked on.
-     Both paths resolve to a real boolean all the way through -- the click
-     handler below tells the truth about whether the copy actually worked,
-     rather than announcing success unconditionally. A mailto: link sits
-     beside the button in the markup as a fallback route to the same address,
-     for the case where neither path succeeds. */
+     This is v3's own handler (js/ui.js) with two corrections carried over from
+     the previous round: the promise is awaited, so the toast tells the truth
+     about whether the copy actually worked rather than announcing success
+     unconditionally; and the toast text is WRITTEN rather than revealed.
+
+     Two copy paths because navigator.clipboard needs a secure context, and
+     these pages are also opened straight off the filesystem while being worked
+     on. Both resolve to a real boolean all the way through.
+
+     The markup is v3's .contact block now, so the selectors are v3's:
+     .contact__email / .copy-toast / data-copy. The mailto link the previous
+     build put beside the button is gone with the rest of the re-creation --
+     Amanda: the footer must be the one from v3, and v3 has no such link. */
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text).then(
@@ -105,8 +111,8 @@
 
   PF.copy = copyText;
 
-  var emailBtn = document.querySelector(".pf-foot__email");
-  var toast = document.querySelector(".pf-foot__toast");
+  var emailBtn = document.querySelector(".contact__email");
+  var toast = document.querySelector(".copy-toast");
   if (emailBtn && toast) {
     var toastTimer = null;
     /* The toast ships empty in the markup; role="status" aria-live="polite"
@@ -120,9 +126,9 @@
       }
     });
     emailBtn.addEventListener("click", function () {
-      var text = emailBtn.getAttribute("data-pf-copy") || emailBtn.textContent.trim();
+      var text = emailBtn.getAttribute("data-copy") || emailBtn.textContent.trim();
       copyText(text).then(function (ok) {
-        toast.textContent = ok ? "Copied to clipboard" : "Couldn’t copy — copy it manually";
+        toast.textContent = ok ? "Copied to clipboard" : "Couldn’t copy — please copy it manually";
         toast.classList.add("is-shown");
         clearTimeout(toastTimer);
         toastTimer = setTimeout(function () { toast.classList.remove("is-shown"); }, 1900);
