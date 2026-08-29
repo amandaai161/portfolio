@@ -1,0 +1,960 @@
+/* ============================================================
+   Amanda Idris — Portfolio
+   Responsive build from Figma (desktop 1920 / mobile 402)
+   ============================================================ */
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --ink: #000000;
+  --muted: rgba(0, 0, 0, 0.55);
+  --line: rgba(0, 0, 0, 0.18);
+  --line-light: rgba(255, 255, 255, 0.35);
+
+  --container-max: 1720px;
+  --gutter: clamp(20px, 5.2vw, 100px);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --radius-media: clamp(6px, 0.55vw, 8px);
+
+  font-synthesis: none;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Lenis smooth-scroll (disables native smooth so Lenis controls the motion) */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+ul { list-style: none; }
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container-max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+}
+/* 2px gradient divider line under the nav (transparent → black → transparent) */
+.header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.header.is-scrolled::after { opacity: 1; }
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88px;
+  gap: 24px;
+}
+
+.header__name {
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 2.6vw, 54px);
+}
+
+.nav__link {
+  position: relative;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.3s var(--ease);
+}
+/* animated underline */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.nav__link:hover::after { transform: scaleX(1); }
+
+.ext-arrow {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.35s var(--ease-out);
+}
+.nav__link--ext:hover .ext-arrow { transform: translate(2px, -2px); }
+
+/* Hamburger (mobile only) */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.nav-toggle svg { width: 26px; height: 26px; }
+
+.mobile-menu {
+  /* Overlays the page (does not push content down) — sits just below the header */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(252, 252, 252, 0.97);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: 8px var(--gutter) 22px;
+  gap: 4px;
+}
+.mobile-menu__link {
+  font-size: 22px;
+  font-weight: 500;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left 0.3s var(--ease);
+}
+.mobile-menu__link:last-child { border-bottom: none; }   /* no line below the last item */
+.mobile-menu__link:active { padding-left: 8px; }
+
+/* Mobile menu open/close animation */
+.mobile-menu[hidden] { display: none; }
+.mobile-menu {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s var(--ease), opacity 0.4s var(--ease);
+}
+.mobile-menu.is-open {
+  max-height: 460px;
+  opacity: 1;
+}
+
+/* ============================================================
+   BUTTONS / LINKS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;                                  /* text↔arrow gap: 4px desktop */
+  border-radius: 999px;
+  padding: 0.3em 0.6em;                      /* em-based → scales with the font */
+  font-weight: 500;
+  /* Cohesive with the headline (≈44% of it). Stays at its initial 40px while
+     there is a gap, then scales down in lock-step with the headline once the
+     gap closes — the whole button (padding + arrow) scales proportionally. */
+  font-size: clamp(0.875rem, 2.51vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease);
+}
+/* Soft Invert: on hover the button swaps to white with black text + a thin
+   black outline (flat, no shadow). The arrow flips to solid black so it stays
+   visible on the white fill. */
+.btn--dark {
+  background: var(--black);
+  color: var(--white);
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease),
+    outline-color 0.4s var(--ease), margin-right 0.4s var(--ease-out);
+}
+.btn--dark:hover {
+  background: var(--white);
+  color: var(--black);
+  outline-color: var(--black);
+  /* cancels the width growth in layout → button keeps a fixed LEFT edge and
+     extends to the RIGHT (overlapping the margin), never reflowing neighbours. */
+  margin-right: -0.4em;
+}
+/* On hover the gap between text and arrow opens up, widening the button. */
+.btn--dark:hover .btn__arrow { margin-left: 0.4em; }
+.btn__arrow {
+  width: 1em;                                /* scales with the button font */
+  height: auto;
+  flex: none;
+  margin-left: 0;
+  transition: margin-left 0.4s var(--ease-out);
+}
+.btn__arrow path {
+  stroke: url(#arrowGrad);                   /* gradient black(left) → white(right) */
+  stroke-width: 3;
+  transition: stroke 0.4s var(--ease);
+}
+.btn--dark:hover .btn__arrow path { stroke: var(--black); }
+
+/* arrow text-link (contact) */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: clamp(18px, 1.5vw, 28px);
+  letter-spacing: -0.02em;
+  width: fit-content;
+}
+.link-arrow__icon {
+  width: clamp(24px, 1.6vw, 34px);
+  height: auto;
+  transition: transform 0.4s var(--ease-out);
+}
+.link-arrow:hover .link-arrow__icon { transform: translateX(6px); }
+.link-arrow > span {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.4s var(--ease-out);
+}
+.link-arrow:hover > span { background-size: 100% 1.5px; }
+
+/* ============================================================
+   DIVIDERS
+   ============================================================ */
+.divider--v {
+  flex: none;
+  width: 2px;                /* +1px thicker */
+  align-self: stretch;
+  /* gradient swapped: white (top, transparent) → black (bottom) */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ============================================================
+   INTRO — fixed, full-screen, vertically + horizontally centered hero.
+   `.intro` is an in-flow 100vh spacer; `.intro__stage` is the fixed layer
+   that fades + parallaxes out as the page scrolls.
+   ============================================================ */
+.intro {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.intro__stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100svh;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;          /* vertical centering */
+  /* clear the sticky header above and the scroll cue below */
+  padding-top: clamp(84px, 10vh, 132px);
+  padding-bottom: clamp(72px, 9vh, 112px);
+  will-change: opacity, transform;
+}
+
+.intro__top {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.2vw, 17px);
+}
+.intro__avatar {
+  width: clamp(56px, 5vw, 72px);
+  height: clamp(56px, 5vw, 72px);
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+}
+.intro__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.intro__greeting {
+  font-weight: 300;
+  font-size: clamp(22px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+}
+.intro__titles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(8px, 1vw, 18px);
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+.intro__sep {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+/* Headline (left) + buttons (right), separated by a flexible spacer.
+   - the spacer grows to fill the free space but never exceeds 220px (max gap);
+     once it caps at 220px the remaining slack falls to the RIGHT of the buttons
+     (right margin appears only when the row is wide enough — see spec ~1650px).
+   - because the spacer measures the *actual* (font-scaled) headline & button
+     widths, the gap shrinks gracefully toward 0 as the row narrows, then the
+     headline and buttons simply scale down together — never overlapping. */
+.intro__statement-row {
+  display: flex;
+  align-items: flex-start;            /* buttons top-aligned with the headline */
+  justify-content: flex-start;        /* group hugs the left; slack → right margin */
+  margin-top: clamp(48px, 6vw, 85px);
+}
+
+.intro__spacer {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 220px;                   /* maximum gap between headline and buttons */
+  align-self: stretch;
+}
+
+.display-statement {
+  font-weight: 500;
+  /* 90px max; scales with the viewport so headline + cohesive buttons fit the
+     row. Caps at 90px (≈vw 1594) — the point where the gap opens up. */
+  font-size: clamp(2rem, 5.65vw, 5.625rem);
+  line-height: 0.99;
+  letter-spacing: -0.035em;
+  max-width: 1088px;
+  flex: 0 0 auto;                     /* keep the 3 forced lines; scale via font only */
+}
+
+.intro__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;            /* the 3 buttons are left-aligned */
+  gap: clamp(14px, 1.6vw, 24px);
+  flex: 0 0 auto;
+}
+
+/* Description: LEFT-aligned to the page; the scroll cue below it is centered. */
+.intro__about {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;                /* tight gap below the headline/buttons row */
+}
+/* The divider + text keep their left indent (220px → 100px). */
+.intro__about-inner {
+  display: flex;
+  gap: clamp(20px, 2vw, 32px);
+  margin-left: clamp(100px, calc(100px + (100vw - 760px) * 0.18), 220px);
+}
+
+/* ---------- Scroll-down cue: dark mouse, fixed, fades out on scroll ---------- */
+.scroll-cue {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(18px, 4vh, 40px);
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 24px;
+  height: 40px;
+  border: 2px solid var(--black);
+  border-radius: 14px;
+  display: flex;
+  /* 65% transparency at rest (JS reduces it further as the page scrolls) */
+  opacity: var(--cue-opacity, 0.35);
+  will-change: opacity;
+}
+.scroll-cue .mouse-scroll {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: auto;
+  border-radius: 50%;
+  background: linear-gradient(170deg, #1a1a1a, #000000);
+  animation: mouse-scroll 1.1s linear infinite;
+}
+@keyframes mouse-scroll {
+  0%   { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(8px); }
+}
+/* Divider: 230px max, scales in proportion with the headline (≈2.55×). */
+.intro__about .divider--v {
+  height: clamp(82px, 14.44vw, 230px);
+  align-self: flex-start;
+}
+.intro__about-text {
+  font-weight: 300;
+  /* subcopy scales with the headline too (20px at the 90px headline) */
+  font-size: clamp(14px, 1.255vw, 20px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  max-width: 415px;                /* text container max width */
+  align-self: flex-end;            /* bottom-aligned to the line */
+}
+
+/* ============================================================
+   FEATURED PROJECTS
+   ============================================================ */
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(156px, 19.5vw, 312px);            /* Aspire ↔ Kayn (+30%) */
+  padding-block: clamp(40px, 6vw, 100px) clamp(52px, 7.8vw, 130px); /* bottom +30% */
+}
+
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 808fr) minmax(0, 850fr);
+  gap: clamp(32px, 3.6vw, 62px);
+  align-items: stretch;             /* image fills the info column's height */
+}
+
+.project__info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 9vw, 160px);
+}
+.project__head {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.5vw, 20px);
+}
+.project__title {
+  font-weight: 500;
+  font-size: clamp(30px, 3.6vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.project__desc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;                          /* labels ↔ description gap (was 28px) */
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+/* mobile-only labels shown above the card title (hidden on desktop) */
+.card__labels { display: none; }
+.label {
+  border: 1px solid var(--black);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 24px);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.project__desc {
+  display: flex;
+  gap: clamp(20px, 2vw, 32px);
+}
+/* Divider: 210px max, scales in proportion with the project title (≈3.28×). */
+.project__desc .divider--v {
+  height: clamp(98px, 11.8vw, 210px);
+  align-self: flex-start;
+}
+.project__desc p {
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 24px);
+  line-height: 1.2;                /* eased from 1.0 */
+  letter-spacing: -0.01em;
+  align-self: flex-end;            /* bottom-aligned to the line */
+  max-width: 540px;
+}
+
+.project__cta { align-self: flex-start; }
+
+/* Image fills the info column's height (no fixed aspect ratio) on desktop/tablet. */
+.project__media {
+  display: block;
+  border-radius: var(--radius-media);
+  overflow: hidden;
+  height: 100%;
+  min-height: clamp(360px, 42vw, 590px);
+}
+.project__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s var(--ease-out);
+}
+.project__media:hover img { transform: scale(1.03); }
+
+/* Featured-image layer. The two home thumbnails are pre-cropped to the exact
+   17:12 frame ratio, so they sit flush with NO zoom and NO drift — the whole
+   image is always visible (no cropping on any edge). */
+.media-parallax {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  transform-origin: center;
+}
+
+/* ============================================================
+   OTHER PROJECTS
+   ============================================================ */
+.other {
+  /* top: Kayn ↔ Other (+30%); bottom: +75% space before the contact section */
+  padding-block: clamp(52px, 7.8vw, 182px) clamp(140px, 15.75vw, 350px);
+}
+.other__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(40px, 6vw, 152px);
+}
+.other__title {
+  font-weight: 500;
+  font-size: clamp(30px, 3.6vw, 64px);
+  letter-spacing: -0.035em;
+}
+
+.other__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2vw, 20px);
+}
+
+/* ---------- Project Card (with Figma hover spec) ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.4vw, 20px);
+}
+.card__media {
+  position: relative;
+  border-radius: var(--radius-media);
+  overflow: hidden;
+  aspect-ratio: 560 / 478;
+  isolation: isolate;
+}
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center;
+  /* 5% enlarge of the image on hover (per Figma guide) */
+  transition: transform 0.6s var(--ease-out);
+  will-change: transform;
+}
+.card:hover .card__media img,
+.card:focus-visible .card__media img { transform: scale(1.05); }
+
+/* dark gradient overlay — matches Figma: rgba(0,0,0,.2) -> rgba(0,0,0,.95) */
+.card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: clamp(16px, 1.6vw, 22px);
+  color: var(--white);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.95));
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.card:hover .card__overlay,
+.card:focus-visible .card__overlay { opacity: 1; }
+
+/* tags + description rise in subtly */
+.card__overlay .labels,
+.card__excerpt {
+  transform: translateY(14px);
+  opacity: 0;
+  transition: transform 0.55s var(--ease-out), opacity 0.55s var(--ease);
+}
+.card__excerpt { transition-delay: 0.06s; }
+.card:hover .card__overlay .labels,
+.card:hover .card__excerpt,
+.card:focus-visible .card__overlay .labels,
+.card:focus-visible .card__excerpt {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.labels--light .label {
+  border-color: var(--line-light);
+  font-weight: 400;
+  font-size: clamp(13px, 1vw, 18px);
+  padding: 6px 14px;
+}
+.card__excerpt {
+  font-weight: 400;
+  font-size: clamp(14px, 1.2vw, 20px);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.card__title {
+  font-weight: 500;
+  font-size: clamp(22px, 2.2vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* ============================================================
+   CONTACT + FOOTER
+   ============================================================ */
+.contact {
+  background: var(--black);
+  color: var(--white);
+  padding-block: clamp(64px, 8vw, 150px) clamp(40px, 4vw, 60px);
+}
+.contact__info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 100px);
+}
+.contact__title {
+  font-weight: 500;
+  /* one line on desktop/tablet (sized to fit the container); wraps on mobile */
+  font-size: clamp(56px, 10.6vw, 206px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+/* 3 columns (email + 2 link columns) with equal 80px gaps that scale with the
+   text. justify-content:flex-start keeps the gaps consistent (not spread). */
+.contact__details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: clamp(40px, 5.5vw, 80px);
+}
+/* Email = a click-to-copy button with a copy icon + a toast below it. */
+.contact__email-wrap { position: relative; }
+.contact__email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+  font: inherit;
+  font-weight: 500;
+  font-size: clamp(22px, 2.6vw, 48px);
+  letter-spacing: -0.03em;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.copy-icon {
+  width: 0.62em;
+  height: 0.62em;
+  flex: none;
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease);
+}
+.contact__email:hover .copy-icon { opacity: 1; }
+/* underline under the text only (animated on hover) */
+.contact__email-text {
+  position: relative;
+}
+.contact__email-text::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -0.12em;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.contact__email:hover .contact__email-text::after { transform: scaleX(1); }
+
+/* Mini "copied" toast, just below the email address */
+.copy-toast {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--white);
+  font-size: clamp(12px, 1vw, 15px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease-out);
+}
+.copy-toast::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  flex: none;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 13l4 4L19 7' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.copy-toast.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact__links {
+  display: flex;
+  gap: clamp(40px, 5.5vw, 80px);   /* matches the email↔links gap */
+}
+.contact__col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.6vw, 40px);
+}
+
+.footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: clamp(60px, 8vw, 150px);
+}
+.footer__info { display: flex; flex-direction: column; gap: 4px; }
+.footer__name { font-weight: 500; font-size: clamp(14px, 1vw, 20px); letter-spacing: -0.02em; }
+.footer__detail { font-weight: 400; font-size: clamp(14px, 1vw, 20px); letter-spacing: -0.02em; opacity: 0.85; }
+.footer__year { font-weight: 500; font-size: clamp(20px, 1.5vw, 28px); letter-spacing: -0.02em; }
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal {
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+/* Hidden state only applies when JS is active — without JS the content shows. */
+.js .reveal:not(.in-view) {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   RESPONSIVE — mobile (matches Figma 402 layout)
+   ============================================================ */
+@media (max-width: 760px) {
+  :root { --radius-media: 4px; }   /* smaller image corners on mobile */
+  .nav { display: none; }
+  .nav-toggle { display: inline-flex; }
+  .header__inner { min-height: 64px; }
+  .header__name { font-size: 20px; }
+
+  /* Intro: normal in-flow scrolling hero on mobile (not a fixed full screen) */
+  .intro { min-height: 0; }
+  .intro__stage {
+    position: static;
+    height: auto;
+    padding-top: clamp(24px, 8vw, 48px);
+    padding-bottom: clamp(48px, 12vw, 80px);
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* headline flows freely (no forced line breaks) on mobile */
+  .hl-break { display: none; }
+  .intro__statement-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(28px, 7vw, 44px);
+  }
+  .intro__spacer { display: none; }   /* no horizontal gap when stacked */
+  .display-statement { max-width: none; }
+
+  /* Titles stack vertically, no "|" separators, tighter rows, more space below greeting */
+  .intro__titles {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    margin-top: 12px;
+  }
+  .intro__sep { display: none; }
+
+  /* Description: no left margin on mobile; line spans the text height */
+  .intro__about { margin-top: clamp(40px, 9vw, 60px); }
+  .intro__about-inner { margin-left: 0; }
+  .intro__about .divider--v { height: auto; align-self: stretch; }
+  .intro__about-text {
+    font-size: 16px;
+    max-width: none;
+    align-self: auto;
+  }
+
+  /* Buttons: full-width primary, then two side-by-side */
+  .intro__buttons {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  /* readable tap targets on mobile + 2px text↔arrow gap */
+  .btn {
+    justify-content: center;
+    gap: 2px;
+    font-size: clamp(15px, 4.3vw, 18px);
+    padding: 11px 20px;
+  }
+  .intro__buttons .btn:first-child { width: 100%; }
+  .intro__buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .intro__buttons .btn:first-child { grid-column: 1 / -1; }
+
+  /* Projects: stack with image on top; image returns to a fixed aspect ratio */
+  .project {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .project__media { order: -1; height: auto; min-height: 0; aspect-ratio: 17 / 12; }
+  .project__info { gap: 28px; }
+  .project__desc .divider--v { display: none; }   /* remove the line on mobile */
+  .project__desc { gap: 0; }
+  .project__desc p { align-self: flex-start; }
+
+  /* Project labels: small (match the cards') and kept on one line */
+  .project .labels {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .project .label {
+    font-size: 11px;
+    font-weight: 400;
+    padding: 4px 9px;
+    white-space: nowrap;
+  }
+
+  /* "View project" button spans full width */
+  .project__cta { width: 100%; align-self: stretch; }
+
+  /* Scroll cue: hide on mobile */
+  .scroll-cue { display: none; }
+
+  /* Other projects: single column */
+  .other__grid { grid-template-columns: 1fr; gap: 32px; }
+  .other__header { margin-bottom: 32px; }
+  .other__cta { display: none; }   /* mobile design omits the top CTA */
+
+  /* No hover overlay/excerpt on mobile; labels sit in one line BELOW the title */
+  .card__overlay { display: none; }
+  .card { gap: 10px; }
+  .card__labels {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow: hidden;
+    order: 1;            /* place after the title (media → title → labels) */
+  }
+  .card__labels .label {
+    font-size: 11px;
+    font-weight: 400;
+    padding: 4px 9px;
+    white-space: nowrap;
+  }
+
+  /* Contact: headline may wrap on mobile */
+  .contact__title { white-space: normal; }
+  .contact__details { flex-direction: column; gap: 32px; }
+  .contact__links { flex-direction: column; gap: 24px; }
+  /* email is statically underlined on mobile (no hover) */
+  .contact__email-text::after { transform: scaleX(1); }
+  .footer { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer__year { font-size: 14px; }   /* smaller ©2026 */
+}
+
+@media (max-width: 760px) and (hover: hover) {
+  /* keep the reveal-on-hover behaviour for mobile-width devices that DO hover */
+  .card__overlay { opacity: 0; }
+  .card:hover .card__overlay { opacity: 1; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

@@ -1,0 +1,155 @@
+/* ============================================================
+   SITE CHROME — the header and the footer, on every page
+   ------------------------------------------------------------
+   Built to Amanda's sketch for the homepage, then made shared:
+   "It is the footer we're gonna use in the entire pages of the
+   site." It lives in its own file rather than in v3.css because
+   v3.css is the HOMEPAGE's stylesheet — it is full of scroll
+   scenes, pinned sections and html.motion states that the about
+   page neither loads nor wants. The chrome is the part both
+   pages have in common, so it is the part that gets its own file.
+
+   Load it AFTER styles.css (v1's shared sheet, which is never
+   edited at source) and after the page's own stylesheet. That
+   ordering is what lets these rules win without any specificity
+   games — it is the same position the block held when it was the
+   last thing in v3.css.
+   ============================================================ */
+
+/* ---- the current page, in the nav ----
+   Was in about-page.css, where only the about page could see it, so the
+   homepage had no way to mark itself. Moved here, since "which page am I
+   on" is a header question on every page rather than a fact about one of
+   them. .nav__link::after (styles.css) is the underline the hover already
+   draws; this holds it open. */
+.nav__link.is-active::after { transform: scaleX(1); }
+
+/* ---- the headline fills the measure ----
+   "It can be as big as the design I provided." In the sketch the headline
+   runs gutter to gutter; the v1 size (clamp(56px, 10.6vw, 206px)) left it at
+   86% of the container, which is what made it look like a heading sitting in
+   a section rather than the section's own edge.
+
+   The number is measured, not guessed: "Let's get in touch!" in Figtree 500
+   at -0.045em is 7.1718em wide, so filling a measure means font-size =
+   measure / 7.1718, i.e. 13.94% of it.
+
+   It is expressed in cqw, NOT vw, and that is the whole point of the
+   container-type line below. vw counts the classic scrollbar's width and the
+   container does not, so a vw figure overshoots by the scrollbar every time —
+   measured at 1440px: 100.58% of the measure, i.e. over the gutter. That
+   error is a fixed ~15px, so it is worst exactly where there is least room.
+   1cqw is 1% of .contact__info's own content box, which IS the measure, so
+   the scrollbar never enters the arithmetic and one constant covers every
+   width. 13.87cqw is the fill figure with ~0.5% held back for sub-pixel
+   rounding.
+
+   No maximum is needed: .container already caps at 1720px, so the size caps
+   with it at 238px. The 56px floor is v1's own, kept so phones — which wrap
+   this headline rather than scaling it — render exactly as they did before.
+
+   The vw value outside @supports is the fallback for a browser without
+   container queries, and is deliberately the conservative one: it gives back
+   ~4% of the fill to buy room for a scrollbar it cannot measure. 11.9vw
+   leaves 0.0426 x vw of slack, which covers any scrollbar up to 32px at the
+   760px breakpoint and more above it — and below that breakpoint the headline
+   wraps rather than scaling, so the arithmetic stops mattering. Modern
+   browsers never see this line at all. */
+.contact__info { container-type: inline-size; }
+.contact__title { font-size: max(56px, 11.9vw); }
+@supports (container-type: inline-size) {
+  .contact__title { font-size: max(56px, 13.87cqw); }
+}
+
+/* ---- the details row ----
+   Two groups, not three columns: everything you can reach Amanda by on the
+   left, the page's own links on the right. margin-left:auto does the split,
+   so the row still collapses sensibly when it runs out of width. */
+.contact__details {
+  align-items: flex-start;
+  gap: clamp(28px, 4vw, 64px);
+}
+.contact__reach {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.6vw, 44px);
+}
+.contact__socials { display: flex; align-items: center; gap: 10px; }
+.contact__nav {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: clamp(4px, 0.5vw, 9px);
+}
+.contact__nav-link {
+  font-weight: var(--fw-medium);
+  font-size: clamp(16px, 1.25vw, 20px);
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  /* Same gradient underline the .link-arrow spans it replaces used, so the
+     hover reads identically to the rest of the page. */
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-size 0.4s var(--ease-out);
+}
+.contact__nav-link:hover { background-size: 100% 1.5px; }
+
+/* ---- the two brand chips ----
+   No border-radius: the container is square, and Amanda's own files are what
+   is inside it. The dot cursor carries the label on hover (data-cursor in
+   index.html), so there is nothing here for a tooltip. */
+.social {
+  --chip: clamp(28px, 2.4vw, 38px);
+  display: inline-flex;
+  width: var(--chip);
+  height: var(--chip);
+  /* currentColor paints the chip and the shapes knocked out of the glyph
+     (see index.html) — one declaration for both. */
+  color: var(--white);
+  transition: transform 0.3s var(--ease-out);
+}
+.social__glyph { width: 100%; height: 100%; display: block; }
+.social:hover { transform: translateY(-3px); }
+
+/* The email address is underlined at rest in the sketch, not on hover only.
+   styles.css still draws it, as a ::after scaled from 0 to 1 on hover; this
+   moves the RESTING end to 1, which makes both ends 1 and the hover a no-op.
+   The tooltip is the hover feedback now. */
+.contact__email-text::after { transform: scaleX(1); }
+
+/* ---- the bottom rule ----
+   One line each side, and they are one thing typographically: same size, same
+   weight, same opacity. They were 18px and 14.4px, which is what Amanda saw —
+   .footer__name carried .t-body-lg and .footer__legal did not, and between two
+   equally specific single-class selectors the winner is decided by which
+   stylesheet loads last. Sizing both here, off the type scale's body step,
+   takes that race out of it: one rule, one size, and no .t-* class in the
+   markup to disagree with. */
+.footer { align-items: baseline; }
+.footer__name,
+.footer__legal {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  opacity: 0.85;
+}
+
+@media (max-width: 760px) {
+  /* The row has nowhere near the width for two groups side by side, so the
+     nav drops under the email and loses its right alignment with it. */
+  .contact__details { flex-direction: column; gap: 30px; }
+  .contact__reach { flex-wrap: wrap; gap: 18px; }
+  .contact__nav {
+    margin-left: 0;
+    align-items: flex-start;
+    text-align: left;
+    gap: 8px;
+  }
+  .contact__nav-link { background-position: 0 100%; }
+  .footer { align-items: flex-start; }
+}

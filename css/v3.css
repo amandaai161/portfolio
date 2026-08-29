@@ -1,0 +1,1445 @@
+/* ============================================================
+   PORTFOLIO v3 — homepage layout.
+   Loaded AFTER styles.css + type-system.css, which own the
+   design system (Figtree, ink/white, gutter, container, easing)
+   and the shared chrome (header, buttons, contact, footer).
+   Nothing in this file redefines a v1 token.
+   ============================================================ */
+
+:root {
+  --watermark: rgba(0, 0, 0, 0.045);     /* resting colour of the giant headline */
+  --mhead-fs: clamp(56px, 10.2vw, 200px);
+  /* Clears the header — but via a HARDCODED 88px, not the live --header-h
+     token below (which js/ui.js measures off the real header and keeps
+     current on load/resize). The two can disagree: css/styles.css's
+     .header__inner is 88px min-height by default but drops to a 64px
+     min-height at <=760px, so on mobile this fixed 88px overshoots the
+     header's actual bottom edge by up to 24px of extra, unaccounted-for
+     gap above the headline. Not fixed here (out of this pass's scope —
+     the prior version of this comment just asserted "clears the 88px
+     header" as if that were always true, which is the part being
+     corrected), but worth knowing before reading this as viewport-aware
+     the way --header-h actually is. */
+  --mhead-top: calc(88px + clamp(6px, 1.6vh, 22px));
+
+  /* Requirement 10's "landed" size — bigger than --mhead-fs (the shrunk
+     watermark size), used only while the headline sits middle-left being
+     read. Published to JS through #mheadSlot below, which is measured
+     rather than duplicated. A DELIBERATE design choice, not a
+     measured one — no reference frame in claude-handover/new-interaction/
+     shows this state — so it is its own clamp() rather than a multiplier
+     of --mhead-fs, and it SHARES --mhead-fs's 56px floor on purpose: below
+     the ~431px viewport width where 13vw first exceeds that floor, "landed"
+     and "final" are numerically identical, so mobile gets zero extra
+     overflow risk beyond what --mhead-fs already carries at that width.
+     Above that width it grows faster (13vw vs 10.2vw) and caps higher
+     (260px vs 200px), which is intentional: middle-left is the prominent,
+     readable position, top-left is the quiet watermark. */
+  --mhead-fs-landed: clamp(56px, 13vw, 260px);
+  --rule: 1px solid var(--black);
+  /* ---- Intro stage geometry ----
+     "Intro v2" frames 3/4: the demo animation sits DEAD CENTRE of the stage
+     and the two headlines are placed relative to it — headline 1 above,
+     headline 2 below. Both offsets below are derived from --demo-h rather
+     than typed independently, so the three boxes cannot drift apart.
+     --demo-h is a division, not an aspect-ratio: the offsets need the
+     height as a real number inside calc(), which an aspect-ratio-derived
+     height is not available as. 1200x400 is js/demo-anim.js's own stage
+     size, hence the /3. */
+  --demo-w: min(700px, 74vw);
+  --demo-h: calc(var(--demo-w) / 3);
+  /* Cut to a quarter of what it was (was clamp(18px, 3.2vh, 44px)) — the
+     headlines now sit close to the demo animation rather than floating a
+     screen-third away from it. */
+  --demo-gap: clamp(5px, 0.8vh, 11px);
+
+  --header-h: 88px;                      /* pre-JS fallback only — styles.css's
+                                             .header__inner is min-height: 88px, not a
+                                             fixed height, so js/ui.js measures the real
+                                             header and overwrites this inline on <html>
+                                             on load and on resize. */
+}
+
+/* ---------- Stacking order ----------
+   #morphHead sits behind the content so the giant type reads as a
+   watermark showing through the gaps between cards (sketch 3.2 / 3.4).
+   Sections are therefore transparent; only .contact is opaque.        */
+body { background: var(--white); }
+.intro__stage { z-index: 2; }
+#work, #other, #cta { position: relative; z-index: 3; background: transparent; }
+
+/* No sideways scrolling. Sketch 3.1 deliberately starts the four cards
+   oversized and bleeding past the gutter (scale 1.38 on an 815px card), and
+   that start state applies from FIRST PAINT — so without this the page has a
+   horizontal scrollbar before the reader has touched anything, and can be
+   dragged sideways into empty space. Found by sweeping the document:
+   .wcard__media and its <img> both extend past documentElement.clientWidth.
+
+   Clipped HERE, on the full-width section that contains the overflow, and
+   deliberately NOT on html or body. Overflow set on the root element
+   propagates to the viewport, and a viewport that is a scroll container is
+   what stops position:sticky from sticking — it would silently kill the
+   intro's pinned stage, the spine of the entire scroll sequence. That is not
+   a theoretical objection to `hidden` only: `overflow-x: clip` on <html> was
+   tried first and breaks sticky exactly the same way. Measured, with the rule
+   toggled live on the running page: the stage's own top at scroll 1500/2500
+   read -1412/-2412 with the root rule (i.e. scrolling away with the page) and
+   88/88 without it (pinned). This element is full-width, so clipping on it
+   lands on the same pixels the viewport edge would, with none of that.
+
+   .wpair keeps its own `overflow: visible` under motion — the cards still
+   spill past the grid and the gutter (that is the entry), they just cannot
+   push the document wider than the screen. */
+#work { overflow-x: clip; }
+.contact { position: relative; z-index: 4; }
+
+/* ---------- Shared section rhythm ---------- */
+.v3-wrap {
+  width: 100%;
+  max-width: calc(var(--container-max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ============================================================
+   SMOOTH SCROLL (Lenis)
+   styles.css already carries the base .lenis rules; this only
+   disables the native smooth-scroll that would fight it.
+   ============================================================ */
+html.lenis { scroll-behavior: auto; }
+/* ============================================================
+   INTRO — three centred states over one scroll-driven demo
+   animation. A long runway against a sticky stage (see the height
+   rule below for the current number and what buys it):
+     state 1  the bio — photo, name, titles, scroll cue
+     state 2  headline 1, arriving centred and rising to its slot
+     state 3  headline 2, below the demo animation
+   js/scenes-intro.js drives every beat off one scrubbed timeline,
+   so scrolling up rewinds all of it.
+   ============================================================ */
+/* css/styles.css (untouchable, pre-v3) still carries an OLD rule for this
+   exact class name — `.intro { min-height: 100vh; min-height: 100svh; }` —
+   left over from the v1/v2 fixed-hero intro. Same specificity, so source
+   order alone decided it and v3.css's own height rule used to win outright
+   in every mode. Now that height only applies under html.motion (below),
+   min-height needs an explicit reset here too, or the old rule reappears
+   under no-motion and forces the section to a full viewport height it no
+   longer needs (confirmed by measurement — without this line .intro
+   measured min-height:100vh's ~viewport px here, not its own content
+   height). */
+.intro { position: relative; min-height: 0; }
+/* The scroll runway (and the sticky pin below) only makes sense once
+   js/scenes-intro.js is actually driving a scrubbed timeline through it —
+   gated on html.motion so a no-motion visitor gets a normally-flowing,
+   normal-height section instead of screens of empty scroll before reaching
+   content that a fixed-height sticky box would otherwise have clipped. See
+   the mobile override below and the no-motion notes further down this file
+   for why both the height and the sticky pin need the same gate. */
+/* 1275vh. Everything in this section is scroll-driven, so scroll distance is
+   the only currency there is, and Amanda's asks are bought purely with it:
+   the demo animation running at HALF its previous rate (which was already
+   half the rate before that), and a held frame on either side of it. At an
+   820px viewport this is ~9,723px of scrubbing between the pin's start and
+   end, which the beat map in js/scenes-intro.js divides up — see it for the
+   px each beat gets.
+
+   The last 25vh of that is new, and it bought exactly one thing: a real pause
+   on the FINISHED frame (demo complete, headline 2 under it), which Amanda
+   reported as missing — "this frame's pause is too fast, I think you don't
+   apply any pause here". The rest of that pause came from halving frame 1's
+   hold, which she asked to shorten in the same message, and from laying the
+   section's tail out as consecutive spans rather than overlapping ones (see
+   js/scenes-intro.js's tail block). Note that the demo's own two beats hold
+   their PIXEL length across this change — their fractions were reduced to
+   compensate — so growing the section did not quietly slow the animation
+   down again. */
+html.motion .intro { height: 1275vh; }
+
+/* Mobile scroll distance, held at the same ratio to desktop's it has always
+   had (0.867, originally derived from the old two-state intro's 260vh against
+   a 300vh desktop): 1275 x 0.867 ≈ 1106vh. Measured against the actual beat
+   timeline at a 375px viewport (see task-3-guard-fix-report.md), this keeps
+   every one of the four scrubbed beats comfortably scrollable (none
+   compressed to a twitchy sliver) without inflating the intro to nearly a
+   full extra screen-height of blank scrolling the way reusing the desktop
+   number verbatim would. */
+@media (max-width: 760px) {
+  html.motion .intro { height: 1106vh; }
+}
+
+/* Under motion the stage is ONE centred cell that everything shares, not a
+   row stack. That single cell is what puts the demo animation at the exact
+   centre of the stage (Amanda's item 3) — and, because .intro__state--1
+   stretches across the same cell and centres its own content, what puts the
+   bio/avatar frame at the exact centre too (item 1).
+
+   Item 1 was a real, structural bug, not a nudge: the old grid was
+   `grid-template-rows: 1fr auto auto 1fr` with the demo box in row 2 and the
+   states in row 3, so the demo's box — ~233px tall plus up to 56px of margin,
+   and occupying its row from the first frame whether or not anything was
+   painted in it — pushed the whole states row BELOW the stage's true centre.
+   The bio was never centred; it was centred-minus-half-the-demo-box. Sharing
+   one cell removes the row that was displacing it rather than compensating
+   for it with an offset that would need re-tuning at every viewport. */
+html.motion .intro__stage {
+  position: sticky; top: var(--header-h, 88px);
+  height: calc(100vh - var(--header-h, 88px));
+  height: calc(100svh - var(--header-h, 88px));
+  display: grid; grid-template-areas: "stack"; place-items: center;
+}
+
+.intro__stage {
+  /* css/styles.css's OLD .intro__stage rule (same class name, v1/v2 fixed
+     hero — see the .intro note above) sets position:fixed, a viewport
+     height, and vertical padding. v3.css's own position/height used to be
+     unconditional and fully overrode all three regardless of motion state;
+     now that position/height only apply under html.motion (below), this
+     block explicitly resets them too so nothing from the old rule leaks
+     through under no-motion. Confirmed by measurement: before these three
+     lines were explicit, no-motion computed .intro__stage as
+     position:fixed, height:~viewport, top:0 — the old hero, reconstituted
+     by accident. justify-content:center is also reset: it's meaningless
+     for the flex layout the old rule intended, but on THIS element (now a
+     grid in every mode) it would recenter the single implicit column
+     track instead of letting it fill the container, which the old rule
+     never had to account for. */
+  position: static;
+  height: auto;
+  justify-content: normal;
+  /* No-motion layout: demo box, then the three states, stacked in ordinary
+     flow. A plain flex column — nothing overlaps, nothing is positioned, and
+     the section is only as tall as its content. The overlaid single-cell
+     arrangement above is html.motion only.
+
+     (Historical note kept because it cost a round to find: the ORIGINAL
+     brief's "1fr auto 1fr" put the demo box and the headline in the SAME
+     row without a grid-column, and auto-placement quietly put them in two
+     separate implicit COLUMNS side by side — .intro__stage's computed
+     grid-template-columns came out "700px 488px". Forcing one cell fixed
+     that but made each item centre independently by its own margin-box
+     height, so the demo's taller box contained the shorter headline's box
+     outright: the demo's rect (y 279-512) fully contained the avatar's
+     (y 337-401), confirmed by hiding the demo and watching the avatar
+     reappear. Neither failure mode can recur here — flow layout in
+     no-motion, and one explicitly-named grid area in motion.)
+  ---------------------------------------------------------------------- */
+  display: flex; flex-direction: column; align-items: center;
+  padding-inline: clamp(24px, 3vw, 48px);
+  padding-block: 0;   /* resets the old rule's padding-top/padding-bottom */
+}
+
+/* Explicit height, not aspect-ratio: --demo-h is the number the headline
+   offsets below are built from, so the box's real height and the offsets'
+   idea of it must be the same expression, not two that merely agree today.
+   js/demo-anim.js's DemoAnim.fitTo() scales its own 1200x400 stage into
+   whatever this box measures. */
+/* Collapsed until js/demo-anim.js has actually built something into it.
+   The demo animation is entirely JS-constructed, so with scripting off this
+   box is empty — and because its height is explicit, an empty one is ~233px
+   of blank space at 1280px sitting between the header and the bio, with
+   nothing in it and no way for a reader to know why. Sizing it only once it
+   has contents means a no-JS visitor gets the three text states with no gap,
+   and everyone else gets the animation.
+
+   This is separate from the html.motion gate: with JS but reduced motion the
+   box IS mounted (js/scenes-intro.js renders the finished frame statically),
+   so it must still be sized. The condition is "was it built", not "is motion
+   allowed". */
+.intro__demo { display: none; }
+.intro__demo.is-mounted {
+  display: block;
+  width: var(--demo-w); height: var(--demo-h);
+  margin-bottom: clamp(24px, 4vh, 56px);   /* no-motion flow gap only */
+}
+html.motion .intro__demo.is-mounted { grid-area: stack; margin-bottom: 0; }
+
+/* Outside html.motion, the three states stack in NORMAL FLOW, each its own
+   row, spaced with a gap — nothing overlaid, nothing hidden (see the
+   no-motion note further down). */
+.intro__states {
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+/* Under motion .intro__states stops being a stack and becomes a full-size
+   positioning context filling the stage's one shared cell, so each state can
+   be anchored to the stage's own centre line independently. place-self:
+   stretch is what overrides the parent's place-items: center for THIS child
+   only — without it the box would shrink to its tallest state's content and
+   the 50% offsets below would be percentages of the wrong height.  */
+html.motion .intro__states {
+  grid-area: stack;
+  place-self: stretch;
+  display: block;
+  position: relative;
+  gap: 0;
+}
+
+.intro__state { text-align: center; }
+
+/* The three anchored positions ("Intro v2" frames 1-4). Every one of them
+   is expressed against the stage's own 50% centre line, which is also where
+   .intro__demo's centre sits, so the two never need to know each other's
+   pixel positions:
+
+     state 1 (bio)        — fills the stage and centres its own content, so
+                            it lands exactly where the demo will later be.
+     state 2 (headline 1) — its BOTTOM edge sits one demo-half-height plus a
+                            gap ABOVE the centre line.
+     state 3 (headline 2) — its TOP edge sits the same distance BELOW it.
+
+   Deliberately no transform anywhere in here: js/scenes-intro.js animates
+   these elements' `y`, and GSAP resolves a `y` tween by parsing the element's
+   CURRENT computed transform matrix as the start value. A CSS
+   translateY(-50%) would therefore be silently absorbed into GSAP's baseline
+   (a 120px-tall box would report y = -60px) and every drift distance would
+   come out wrong by half the element's own height. top/bottom offsets are
+   layout, not transform, so GSAP's transform channel starts clean at 0. */
+html.motion .intro__state { position: absolute; left: 0; right: 0; }
+
+/* WHY THE BIO'S NAME WAS NOT CLICKABLE. Amanda: "The 'Hi, I'm Amanda.' can be
+   clickable too. Right now, it is only the photo that is clickable." It was
+   inside the same <a> the photo is in, and a click dispatched straight at it
+   did reach /about — so on paper it was fine. It was not: a REAL pointer never
+   got there.
+
+   The three states are absolutely positioned siblings stacked in the same
+   cell, and opacity: 0 does not remove an element from hit-testing. Headline 1
+   is the sibling AFTER the bio, so it paints on top of it, and at the start of
+   the sequence js/scenes-intro.js has it translated DOWN by its whole rise
+   distance (measured: y = +217px at a 900px viewport) so that it can climb
+   into place later. That put its invisible box straight over the greeting and
+   the titles line. Only the top of the photo stuck out above it — which is
+   exactly, and only, what was clickable. Confirmed by reading the live hover
+   chain: the topmost element under the pointer over the name was H1
+   .intro__state, not the link.
+
+   So: none of these three layers takes pointer input, ever, and the one thing
+   that is genuinely interactive opts back in. Written here rather than as a
+   per-state timeline flag because it has to be true at EVERY scroll position,
+   including the ones where the state that happens to be covering the bio is a
+   different one (headline 2 sits over the scroll cue at rest for the same
+   reason). js/scenes-intro.js still switches the link itself off once the bio
+   has faded, which is the only part that depends on where the scroll is. */
+html.motion .intro__state { pointer-events: none; }
+html.motion .intro__state--1 .intro__me { pointer-events: auto; }
+html.motion .intro__state--1 { top: 0; bottom: 0; justify-content: center; }
+html.motion .intro__state--2 { bottom: calc(50% + var(--demo-h) / 2 + var(--demo-gap)); }
+html.motion .intro__state--3 { top: calc(50% + var(--demo-h) / 2 + var(--demo-gap)); }
+
+/* State 1 stacks the avatar/greeting link above the titles line, at the
+   same rhythm the old .intro__top used for this same pairing — and now the
+   scroll cue below that (Amanda: "the scroll indicator should be put below my
+   titles' line, not in the bottom of the page"). */
+.intro__state--1 {
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(10px, 1vw, 14px);
+}
+
+/* The scroll cue, un-fixed. css/styles.css's .scroll-cue is v1's chrome —
+   position: fixed, pinned to the bottom of the VIEWPORT — and everything
+   about how it LOOKS (the 24x40 rounded outline, the 8px dot, its animation,
+   its 0.35 resting opacity) is inherited from there untouched, so this stays
+   v1's design system. The only thing overridden is where it lives.
+
+   Making it a real child of .intro__state--1 is also what answers the second
+   half of Amanda's note — "then adjust the whole elements of the page
+   accordingly so all is centered properly". .intro__state--1 fills the stage
+   and centres its own contents, so adding ~40px of cue re-centres the avatar,
+   the greeting and the titles around it automatically. Nothing here nudges
+   anything by a hand-tuned offset, which is what would have had to be
+   re-tuned at every viewport.
+
+   margin-top on top of the parent's gap: the cue is a different kind of thing
+   from the two text lines above it and wants more air than the rhythm they
+   share. Amanda asked for more of it ("Add a bit more vertical spacing
+   between them and the scroll indicator"), and this is where that lives —
+   the parent centres the whole group afterwards, so adding space here pushes
+   the cue down and the bio up by half as much each, keeping the block's
+   centre exactly on the stage's. */
+.scroll-cue--inline {
+  position: static;
+  transform: none;
+  margin-top: clamp(26px, 4vh, 56px);
+}
+
+.intro__me {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1vw, 14px);
+  color: inherit;
+}
+.intro__avatar {
+  /* The photo KEEPS the larger size — Amanda: "Reduce the size of the hero
+     section's elements back to be like the previous one, except my photo."
+     The greeting and the titles below went back to what they were; this one
+     stays up about a third, so the portrait now leads the block instead of
+     competing with the type. Square aspect, so width and height move
+     together. */
+  width: clamp(72px, 6.4vw, 96px);
+  height: clamp(72px, 6.4vw, 96px);
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+}
+.intro__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.intro__greeting {
+  position: relative;
+  font-weight: var(--fw-light);
+  font-size: clamp(22px, 2.2vw, 32px);   /* back to the pre-enlargement size */
+  letter-spacing: -0.02em;
+}
+.intro__greeting::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.intro__me:hover .intro__greeting::after,
+.intro__me:focus-visible .intro__greeting::after { transform: scaleX(1); }
+
+/* THE WHOLE BLOCK IS THE LINK, and it now looks like it.
+
+   Amanda: "The 'Hi, I'm Amanda.' can be clickable too. Right now, it is only
+   the photo that is clickable." The name was already inside the same <a> and
+   a click on it already reached /about — verified by dispatching one — so
+   what was missing was not the target but the SIGNAL: only the photo moved on
+   hover, so only the photo looked live. The name's underline swept in at the
+   same time, but under a light 32px line at the bottom of a large block it is
+   easy to miss, and nothing else acknowledged the pointer.
+
+   Now the entire block lifts as one, the photo lifts a little further and
+   grows, and the underline sweeps in — three things saying the same thing.
+   Together with the cursor's own "More about me" pill (index.html's
+   data-cursor) there is nothing left to guess at. */
+.intro__me {
+  transition: transform 0.4s var(--ease-out);
+}
+.intro__me .intro__avatar,
+.intro__me .intro__greeting { transition: transform 0.4s var(--ease-out); }
+.intro__me:hover,
+.intro__me:focus-visible { transform: translateY(-3px); }
+.intro__me:hover .intro__avatar,
+.intro__me:focus-visible .intro__avatar { transform: translateY(-3px) scale(1.04); }
+.intro__name { font-weight: var(--fw-bold); }
+
+.intro__titles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 1vw, 18px);            /* both back to the pre-enlargement */
+  font-weight: var(--fw-light);
+  font-size: clamp(15px, 1.4vw, 20px);   /* size — see .intro__avatar's note */
+  letter-spacing: -0.02em;
+}
+.intro__sep { display: inline-block; width: 1px; height: 1em; background: rgba(0, 0, 0, 0.28); }
+
+.intro__h {
+  /* Explicit weight so state 2 (an <h1>, UA-bold by default) and state 3
+     (a <p>, UA-normal by default) read at the SAME weight — the brief's
+     literal size/leading/tracking values are kept verbatim below, but a
+     weight has to be set here or the two states would visibly mismatch. */
+  font-weight: var(--fw-medium);
+  font-size: clamp(32px, 4.6vw, 76px);
+  line-height: 1.08; letter-spacing: -0.02em;
+  max-width: 18ch; margin: 0 auto;
+}
+
+/* PHONE-ONLY LINE BREAKS. index.html carries two in each intro headline; at
+   this width and up they do not exist, so the desktop lines wrap on their own
+   exactly as they always have. The spaces around them are kept in the markup,
+   so hiding them leaves ordinary word spacing behind.
+
+   Stated as "off above 761px" rather than "on below it" on purpose: a <br>
+   switched off with display:none and back on with an explicit display value
+   is relying on the browser treating an inline <br> as a break, which is not
+   something to bet a layout on. Below the breakpoint these are simply <br>
+   elements doing what <br> does. */
+@media (min-width: 761px) {
+  .intro__brk { display: none; }
+}
+
+/* Resting state (no html.motion) = ALL THREE states shown, stacked and
+   readable via the flex-column on .intro__states above. Previously this
+   section set state 1 and state 2 to display:none, leaving state 3 (which
+   also carried aria-hidden, removed in index.html) as the ONLY content in
+   the intro for any visitor without motion — no heading, nothing in the
+   accessibility tree. Nothing here overrides state 1's or state 2's
+   display any more: state 1 keeps its own unconditional flex-column rule
+   above (needed in BOTH modes for its internal avatar/greeting/titles
+   layout), and state 2/3 use their plain UA block display, which is
+   exactly what stacks them in flow once .intro__states stops being a
+   same-cell grid. Under html.motion, .intro__states switches to the
+   overlaid grid above and js/scenes-intro.js crossfades between the three
+   via opacity — grid-area only takes effect once the parent is actually a
+   grid, which only html.motion makes it, so this needs no rule here. */
+
+/* ============================================================
+   MORPHING DISPLAY HEADLINE
+   #morphHead is fixed and sits BEHIND the sections (z-index 1),
+   so once it settles it reads as the watermark in sketches
+   3 / 3.2 / 3.4 / 4 — visible through the gaps between cards.
+
+   #mheadSlot is an invisible measuring twin, but NOT at the final
+   size and place. It is overridden below (the `#mheadSlot { ... }`
+   rule) to sit at the LANDED middle-left, large-type position,
+   because that is where the headline arrives: readable full size,
+   middle-left, before it shrinks.
+
+   So the headline's TWO states both live here, in CSS, and
+   js/headline.js reads them at runtime rather than carrying
+   numbers of its own — #mheadSlot's rect for the landed state, and
+   a plain unoverridden `.mhead` rect for the watermark. Neither
+   position is ever hard-coded in JS, and both stay correct at every
+   viewport width. Everything that module writes is an interpolation
+   between the two.
+   ============================================================ */
+.mhead {
+  position: fixed;
+  left: var(--gutter);
+  top: var(--mhead-top);
+  z-index: 1;
+
+  /* Hugs its own two lines. There is deliberately NO width cap here any more.
+     It used to be `min(100vw - gutters, 6em)`, chosen because "SELECTED" is
+     ~4.6em wide and "SELECTED WORK." ~8.1em, so a 6em box forced the break
+     between the two words at every viewport. That worked only for as long as
+     the text was the text: while the first word scrambles through random
+     characters on its way to "OTHER", a wide frame no longer fits the cap the
+     same way, and the headline reflowed and collapsed onto one line
+     mid-change (measured: 786px -> 918 -> 1002 -> 786, one line at the
+     widest). The break is structural now — see .mhead__word — so no string
+     can move it, and the cap has nothing left to do. */
+  width: max-content;
+  max-width: calc(100vw - var(--gutter) * 2);
+
+  font-size: var(--mhead-fs);
+  font-weight: var(--fw-bold);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-display);
+  color: var(--watermark);
+
+  transform-origin: 0 0;
+  pointer-events: none;
+  contain: layout style;      /* keeps per-frame font-size writes off the page's layout */
+}
+
+/* ONE WORD PER LINE, by structure. Two lines is now a fact of the markup
+   rather than a consequence of the current string's width, which is what
+   makes it survive the scramble. white-space: nowrap is the other half: the
+   glyphs inside a word are inline-blocks, and without it the browser is free
+   to break BETWEEN any two of them. */
+.mhead__word { display: block; white-space: nowrap; }
+
+.mhead--slot { visibility: hidden; }
+
+/* will-change scoped to #morphHead specifically, not the shared .mhead
+   class both it and #mheadSlot carry — #mheadSlot is visibility:hidden and
+   never animated (it exists purely to be measured), so a class-level rule
+   here would promote it to its own compositor layer for the page's entire
+   life for no reason. Also gated on html.motion: under no-motion nothing
+   in this codebase ever writes to #morphHead per-frame, so there is
+   nothing to hint. font-size is deliberately dropped from the hint — it
+   is not a compositable property (will-change only pays off for
+   properties the compositor can update without a layout/paint pass, e.g.
+   transform/opacity), so including it just holds a promoted layer's
+   memory for a property that forces layout regardless. */
+html.motion #morphHead { will-change: transform; }
+
+/* Requirement 10's landed target — middle-left, large type. An ID
+   selector (0,1,0,0), not a class, so it beats .mhead's own top/font-size
+   (0,0,1,0) regardless of source order and applies ONLY to this one
+   element — #morphHead keeps .mhead's plain base rule (the small, top-left
+   watermark) as ITS default, and js/headline.js interpolates toward these
+   numbers. top:50% + translateY(-50%) is genuine CSS vertical centring —
+   correct regardless of the element's own (font-size- and
+   line-count-dependent) height, and its output already reflects in
+   getBoundingClientRect() for both this element's own rect and its
+   per-glyph child rects, so nothing downstream needs its own centring
+   math. */
+#mheadSlot {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--mhead-fs-landed);
+}
+
+/* Before JS takes over, the live head must not sit on top of the intro. */
+html.motion #morphHead { opacity: 0; }
+
+/* ============================================================
+   THE HEADLINE'S GLYPHS — js/headline.js splits each word of
+   #morphHead into one span per character so each can arrive from
+   its own point outside the frame, and so each can hold a pinned
+   width while random characters pass through it.
+
+   display: inline-block, not the spans' default inline — this is
+   load-bearing, not cosmetic. CSS transform has NO EFFECT on a
+   non-replaced inline box, confirmed directly in this project's own
+   target engine (a plain inline <span>'s transform: translate() was
+   a measured, verified 0,0 — completely inert — while the identical
+   transform on an inline-block sibling moved it exactly as written).
+   An inline box also cannot take a width, and the pinned width is
+   what stops the headline relaying out on every frame of the
+   scramble. Without this rule neither half of the feature works.
+
+   No width or transform is declared here: js/headline.js writes
+   both on every frame, and a resting value in CSS would be a second
+   writer for a property that has exactly one.
+
+   A no-motion page never runs js/headline.js (it bails at
+   V3.ready), so the split never happens and #morphHead stays two
+   plain words. These rules are therefore only ever exercised under
+   html.motion, but are left unscoped since they are harmless — and
+   correct — either way.
+   ============================================================ */
+.mhead__ch { display: inline-block; }
+
+/* ============================================================
+   HEAD HOLD — the empty scroll runway the landed "SELECTED WORK."
+   headline holds over before it shrinks to the watermark. See
+   index.html's own note on #headHold for why it has to be empty, and
+   js/headline.js's measureAnchors() for how this height is split
+   into the hold and the shrink.
+
+   40vh, and the range js/headline.js derives from it is this height
+   PLUS one viewport: the hold starts where #intro's own bottom
+   reaches the viewport bottom and ends where #work's stage pins,
+   which is this box's document bottom. That alignment is the point —
+   the shrink finishes and the first slide begins on the same pixel,
+   with no blank screen between them.
+
+   The resulting range splits two-thirds to the hold and one-third to
+   the shrink: roughly 840px of holding and 420px of shrinking at a
+   900px viewport, several unhurried wheel notches to read it in.
+
+   Zero height without html.motion: nothing flies, nothing lands and
+   nothing shrinks there, so this would be a screen and a third of
+   dead scrolling between the intro and the work for exactly the
+   visitors least able to afford it.
+   ============================================================ */
+.headhold { height: 0; }
+html.motion .headhold { height: 40vh; }
+
+/* ============================================================
+   WORK — four slides through one pinned stage
+   claude-handover/new-interaction-work/. See index.html for the
+   slide list; js/scenes-work.js owns the choreography.
+   ============================================================ */
+.work { position: relative; }
+
+/* The runway. Five slides, each with an entry, a hold of several scroll
+   points and an exit, need roughly a screen and a half apiece — same
+   reasoning as the intro's 800vh: a scroll-driven sequence can only buy
+   pacing with distance. Gated on html.motion so a no-motion visitor gets a
+   normally-flowing section of exactly its content's height instead of six
+   screens of empty scrolling. */
+/* The pinned slideshow is desktop-only, and everything about it — the
+   runway, the sticky stage, the stacked layers and the start states that
+   hide each slide's contents — is gated on the SAME breakpoint, in one
+   place, so none of them can be live without the others.
+
+   The reason is a fit problem, not a taste one: a slide is pinned to the
+   viewport, so its content has to fit in one screen. At 375px the three
+   other-work cards stack into a single column 1,190px tall inside a 748px
+   stage — measured — and there is no version of "pin it" that makes that
+   readable. Below the breakpoint the four slides simply stack and scroll,
+   which is also what the no-motion page does.
+
+   js/scenes-work.js gates itself on the identical query via gsap.matchMedia,
+   so crossing the breakpoint on a resize builds or reverts the whole scene
+   rather than leaving a half-applied one behind. */
+@media (min-width: 761px) {
+  html.motion .work { height: 520vh; }
+}
+
+/* No-motion: an ordinary column. Every slide is in flow, in order, at full
+   opacity — the resting state IS the readable page. */
+.work__stage {
+  display: flex; flex-direction: column;
+  gap: clamp(56px, 9vw, 140px);
+  padding-block: clamp(56px, 9vw, 170px);
+}
+
+@media (min-width: 761px) {
+  html.motion .work__stage {
+    position: sticky; top: var(--header-h, 88px);
+    height: calc(100vh - var(--header-h, 88px));
+    height: calc(100svh - var(--header-h, 88px));
+    display: grid; grid-template-areas: "stack"; place-items: center;
+    gap: 0; padding-block: 0;
+  }
+}
+
+/* Under motion every slide occupies the same cell, so switching between them
+   cannot reflow anything — the page is still and only the content changes,
+   the same property the intro's three states rely on. */
+@media (min-width: 761px) {
+  html.motion .wslide {
+    grid-area: stack;
+    place-self: stretch;
+    display: flex; flex-direction: column; justify-content: center;
+    width: 100%;
+    /* pointer-events are re-enabled per slide by js/scenes-work.js as each
+       one becomes the live slide — otherwise all five stacked layers would
+       be hit-testable at once and the topmost invisible one would swallow
+       every click meant for the visible one. */
+    pointer-events: none;
+  }
+  html.motion .wslide.is-live { pointer-events: auto; }
+  html.motion .wslide--head { height: auto; }
+}
+
+/* The headline-only slide has no content of its own — #morphHead is what is
+   on screen for it. Zero height in flow so it adds nothing to the stacked
+   reading order. */
+.wslide--head { height: 0; }
+
+/* ============================================================
+   SELECTED WORK — sketch "Homepage 3 (selected)" / 3.1–3.4
+   ============================================================ */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+
+/* The two full-bleed rules that bracket the SINAN row. */
+.srule {
+  height: 1px;
+  background: var(--black);
+  transform-origin: left center;
+}
+.srule--bottom { transform-origin: right center; }
+
+/* ---------- Shared pill ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--black);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ---------- SINAN row ---------- */
+.sinan {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(0, 2.4fr) minmax(200px, 1fr);
+  gap: clamp(24px, 3vw, 60px);
+  align-items: start;
+  padding-block: clamp(40px, 5vw, 96px);
+}
+.sinan__lead { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 24px); align-items: flex-start; }
+.sinan__title { font-weight: var(--fw-regular); }
+.sinan__pill { margin: 0; }
+
+.sinan__media {
+  aspect-ratio: 16 / 9;
+  background: #bfbfbf;
+  overflow: hidden;
+  transform-origin: center center;
+}
+.sinan__media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Sits low in its column, as in the sketch. */
+.sinan__desc { align-self: end; max-width: 34ch; }
+
+/* ---------- The paired projects (slides 2 and 3) ----------
+   Two cards, deliberately not aligned: the left one carries its text ABOVE
+   its image, the right one below, and the right one rides --swork-split lower
+   so their images stagger. That offset is the same quantity, and the same
+   token, the old two-column grid used — see its note below for why it is
+   built from the meta block's own tokens rather than a flat clamp. */
+.wpair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 4.6vw, 89px);
+  align-items: start;
+}
+.wcard {
+  display: flex; flex-direction: column;
+  gap: var(--swork-card-gap);
+  color: inherit;
+}
+.wcard--r {
+  margin-top: calc(
+      var(--swork-title-line)   /* the left card's title line box */
+    + var(--swork-meta-gap)     /* its title -> tags gap          */
+    + var(--swork-pill-h)       /* its row of tag pills           */
+    + var(--swork-card-gap)     /* its meta block -> image gap    */
+    + var(--swork-split)        /* and THEN the sketch's offset   */
+  );
+}
+
+.wcard__media {
+  aspect-ratio: 5 / 3;
+  background: #bfbfbf;
+  overflow: hidden;
+  transform-origin: center center;
+}
+.wcard__media img { width: 100%; height: 100%; object-fit: cover; }
+
+.wcard__meta { display: flex; flex-direction: column; gap: var(--swork-meta-gap); align-items: flex-start; }
+.wcard__title { font-weight: var(--fw-regular); }
+.wcard__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* THE OFFSET IS BETWEEN THE TWO IMAGES, not between the two cards.
+   The sketch (selected-slide2/3.png) puts the right card's IMAGE ~66px BELOW
+   the left card's image. But the left card carries its title and tags ABOVE
+   its image, so its image already starts one meta-block lower than the card
+   does — while the right card's image starts at the very top of its own card.
+   A flat `margin-top: 66px` on the right card therefore lands its image ABOVE
+   the left one, which is the opposite of the sketch: measured, the right image
+   sat 40px HIGHER than the left instead of 66px lower, a 106px error.
+
+   So the margin has to pay back the left card's meta block first, and only
+   then apply the offset. Every term below is the exact expression of the box
+   it names — the same tokens the meta block is actually built from — so the
+   sum is right at every width by construction rather than at the widths
+   someone happened to check.
+
+   (This arithmetic existed and was correct for the earlier two-column layout;
+   it was dropped during the rebuild on the false reasoning that a side-by-side
+   row made it unnecessary. It does not: the asymmetry is inside the card, not
+   between the columns.)
+
+   Precondition, same as before: one line of title, one row of tags. Below
+   1000px the pair stacks and the offset goes to zero, so it does not apply. */
+:root {
+  --swork-split: 66px;
+  --swork-meta-gap: clamp(10px, 1vw, 16px);
+  --swork-card-gap: clamp(12px, 1.4vw, 24px);
+  --swork-title-line: calc(var(--fs-h3) * var(--lh-tight));
+  /* One pill: its own line box, plus 6px padding and a 1px border, twice. */
+  --swork-pill-h: calc(var(--fs-body-sm) * 1.2 + 14px);
+}
+
+@media (max-width: 1000px) {
+  .wpair { grid-template-columns: 1fr; gap: clamp(32px, 6vw, 56px); }
+  /* One column, so the stagger has nothing to stagger against. column-reverse
+     (not column) puts the right card's title above its image like the left
+     card's, so every card in the stack reads title-first and the rhythm stays
+     regular — the two-column layout is the only place the inverted order
+     means anything. */
+  .wcard--r { margin-top: 0; flex-direction: column-reverse; }
+}
+
+@media (max-width: 760px) {
+  .sinan { grid-template-columns: 1fr; }
+  .sinan__desc { align-self: start; max-width: none; }
+}
+
+/* ---------- Motion-only start states for #selected ----------
+   Resting (no-JS / reduced-motion) these elements are fully drawn.
+   These rules apply only once motion-core has added html.motion, so
+   a failed script load can never leave the section blank.            */
+@media (min-width: 761px) {
+  html.motion .srule { transform: scaleX(0); }
+  html.motion .sinan__title,
+  html.motion .sinan__pill,
+  html.motion .sinan__desc { opacity: 0; }
+  html.motion .sinan__media { opacity: 0; transform: scale(0.2); }
+}
+
+/* ---------- Motion-only start states for the paired cards ----------
+   Oversized, blurred, and — new this round — well OUT OF FRAME. Amanda:
+   "they should come a bit further and 65% of their thumbnails are outframe".
+   The travel itself is written by js/scenes-work.js as a fraction of each
+   card's own measured size (left cards from the top-left, right cards from
+   the bottom-right), because a fixed px offset would put a 1920px card and a
+   375px card in completely different places relative to the frame. Only the
+   scale/blur/opacity floor lives here, so the resting CSS is still the final
+   state. */
+@media (min-width: 761px) {
+  html.motion .wcard__media { opacity: 0; transform: scale(1.38); filter: blur(18px); }
+  html.motion .wcard__meta { opacity: 0; }
+  /* The cards must be allowed to spill past the grid while oversized. */
+  html.motion .wpair { overflow: visible; }
+}
+
+/* ============================================================
+   OTHER WORK — sketch "Homepage 4 (others)"
+
+   A SLIDE of its own. Amanda: "The 3 items appear like a slide
+   show instead. Just like the selected section." So this section
+   is a scroll runway with a sticky stage in it, and the three
+   cards rise in, hold alone on screen, and leave upward
+   (js/scenes-outro.js). The hold is what "separated from the
+   bottom CTA and footer section" means in practice — there is a
+   stretch where these three are the only thing there.
+
+   Gated at 901px, which is where the grid still has all three
+   side by side. At two columns and then one the grid is taller
+   than a stage, so below that this stays ordinary flow with the
+   padding below and a plain reveal.
+   ============================================================ */
+.other { padding-block: clamp(90px, 14vw, 240px) clamp(40px, 6vw, 90px); }
+
+@media (min-width: 901px) {
+  /* The runway. All of it is scroll for the one slide to move through:
+     ~1,170px of it at a 900px viewport, split roughly 210 / 750 / 210
+     between the entrance, the hold and the exit. */
+  html.motion .other { height: 240vh; padding-block: 0; }
+  html.motion .other__stage {
+    position: sticky;
+    top: var(--header-h, 88px);
+    height: calc(100vh - var(--header-h, 88px));
+    height: calc(100svh - var(--header-h, 88px));
+    display: grid;
+    place-items: center;
+  }
+  html.motion .other__stage > .owork { width: 100%; }
+}
+
+
+.owork {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 1.3vw, 25px);
+}
+.owork__card { display: flex; flex-direction: column; gap: clamp(10px, 1.2vw, 20px); color: inherit; }
+.owork__media { aspect-ratio: 8 / 7; background: #bfbfbf; overflow: hidden; }
+.owork__media img { width: 100%; height: 100%; object-fit: cover; }
+.owork__title { font-weight: var(--fw-medium); margin-top: clamp(4px, 0.5vw, 10px); }
+.owork__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Start state for both paths — the slide above and the plain reveal below
+   901px. Declared in CSS rather than written by JS at build time so there is
+   no frame where the cards are visible before the scene takes them, and
+   gated on html.motion so a no-motion page never hides them at all. */
+html.motion .owork__card { opacity: 0; transform: translateY(60px); }
+
+@media (max-width: 900px) { .owork { grid-template-columns: repeat(2, 1fr); row-gap: clamp(32px, 6vw, 56px); } }
+@media (max-width: 640px) { .owork { grid-template-columns: 1fr; row-gap: clamp(32px, 8vw, 48px); } }
+
+/* ============================================================
+   INTRO — "AI" / "the polish" scan into their decorative forms
+
+   ONE full-height vertical seam travels left to right across the
+   word. Left of the seam is the AFTER (decorative) form; right of
+   it is the BEFORE (plain headline) form. Both are clipped at the
+   SAME x, so there is exactly one edge on screen and the two
+   letterforms never overlap — Amanda's reference image of "the
+   polish" caught mid-scan, script on the left, sans on the right,
+   joined by a single vertical line.
+
+   This replaces a one-sided clip that only revealed AFTER and left
+   BEFORE sitting underneath at full opacity. Because both AFTER
+   SVGs are STROKED OUTLINES rather than filled glyphs, BEFORE's
+   solid letterforms read straight through AFTER's transparent
+   interiors — two superimposed words, not one. That needed a
+   separate "hide BEFORE once its own wipe finishes" step to paper
+   over; clipping BEFORE away as the seam passes removes the
+   overlap by construction, so that step is gone.
+
+   ---- Sizing (Amanda: "keep the before form text size similar to
+   the whole headline2 text ... right now both have their own sizes
+   which makes it looks more like glitch") ----
+
+   All four SVGs are cropped tight to their own ink — confirmed by
+   getBBox() on every path: the combined bbox equals the viewBox in
+   all four files. So `height: 1em`, which the BEFORE images used to
+   carry, was wrong by a different factor for each word: 1em is the
+   FONT SIZE, but each image's own height is its INK height, and the
+   two words have very different ink-to-em ratios. "AI" is 56 units
+   of pure cap-height (no ascender above it, no descender below), so
+   forcing it to 1em rendered it ~1.36x larger than the "I use" and
+   "to scale it" around it; "the polish" is 74 units of ascender-to-
+   descender, ~1.03x. Two unrelated magnifications on two words in
+   one sentence is exactly the "glitch" reading.
+
+   The fix is to stop guessing the ratio and measure it. js/scenes-
+   intro.js measures each phrase's real rendered INK height with
+   canvas measureText().actualBoundingBoxAscent/Descent in the
+   headline's own computed font, and writes it to --ink-ai /
+   --ink-polish below. Ink height (not advance width) is the right
+   quantity because it is exactly what the SVG's viewBox height is,
+   and because it is immune to letter-spacing, which .intro__h
+   applies (-0.02em) and the traced SVGs do not.
+
+   Every other number here is then a pure ratio off that one measured
+   value, so the whole word scales as one piece:
+     AI      before 69x56   -> after 123x62
+     polish  before 340x74  -> after 286x114
+   Note "the polish" gets NARROWER after (0.84x) even though it reads
+   much bigger: its extra height is tall script ascenders and
+   descenders, not extra horizontal run. That is what Amanda's own
+   frames show — Frame 5's second line measures narrower than Frame
+   3's and recentres. "AI" does get wider (1.78x), and its following
+   word ("to") moves right accordingly.
+
+   The em values below are only a pre-JS / no-canvas fallback (they
+   are the ratios the two SVGs imply for a ~78px trace, i.e. what the
+   measurement should land near); the measured value always wins.
+   ============================================================ */
+#introHeadline3 {
+  --ink-ai: 0.72em;      --ink-polish: 0.95em;
+  --desc-ai: 0em;        --desc-polish: 0.20em;
+}
+
+.intro__word { position: relative; display: inline-block; vertical-align: baseline; }
+/* max-width: none overrides css/styles.css's global `img { max-width: 100% }`
+   reset. That reset resolves its percentage against the nearest positioned
+   ancestor — .intro__word — which js/scenes-intro.js gives an explicit px
+   width for the scan below; without this override the AFTER image's real
+   (wider) intrinsic width was being clamped straight back down to BEFORE's
+   width, silently discarding the whole point of the scan (found by
+   measurement: getBoundingClientRect on the AFTER image reported exactly the
+   container's width, not its own 123x62 / 286x114 intrinsic ratio, until
+   this line was added). */
+.intro__word-img { display: block; width: auto; max-width: none; }
+
+.intro__word--ai     .intro__word-img--before { height: var(--ink-ai); }
+.intro__word--polish .intro__word-img--before { height: var(--ink-polish); }
+
+/* BASELINE. Every one of these images is anchored by its BOTTOM EDGE to
+   .intro__word's own bottom — which, because .intro__word-img is
+   display:block and so gives the span no in-flow line boxes, is exactly
+   what the surrounding text's vertical-align: baseline aligns to. But an
+   image's bottom edge is the bottom of its INK, and for any word with a
+   descender that is BELOW the baseline, not on it. Anchoring the descender
+   tip to the baseline lifts the whole word by the descender's depth.
+
+   "AI" has no descender at all (measured: actualBoundingBoxDescent is
+   exactly 0), which is why it has always looked right and why this went
+   unnoticed. "the polish" has the "p", and it rendered ~12px high at a
+   1280px viewport — clearly visible against "without losing" on the same
+   line, and caught in a screenshot rather than by reading the CSS.
+
+   The shift is each phrase's own measured descent, written by
+   js/scenes-intro.js from the same measureText() call as --ink-*. Keeping
+   --desc-ai in the rule set even though it is 0 means both words are
+   described by one mechanism rather than one being a special case.
+   transform, not bottom:, for the same reason as the AFTER rule below —
+   bottom only moves a positioned box, and the no-motion state makes these
+   static. */
+.intro__word--ai     .intro__word-img--before { transform: translateY(var(--desc-ai)); }
+.intro__word--polish .intro__word-img--before { transform: translateY(var(--desc-polish)); }
+.intro__word--ai     .intro__word-img--after  { height: calc(var(--ink-ai) * 62 / 56); }
+.intro__word--polish .intro__word-img--after  { height: calc(var(--ink-polish) * 114 / 74); }
+
+.intro__word-img--after {
+  position: absolute;
+  left: 0; bottom: 0;
+  /* Hidden at rest; js/scenes-intro.js drives both this inset and BEFORE's
+     from the one shared seam position. */
+  clip-path: inset(0 100% 0 0);
+}
+
+/* text_polish_after.svg's own non-descending letters ("t/h/e/o/l/i/s/h") sit
+   at y≈84.4 of its 0-114 viewBox — measured via getBBox() on each <path>,
+   clustering tightly (84.1-85.0) except the "p" loop, which runs to y=114.
+   The base rule above anchors this image's BOTTOM edge (bottom: 0, i.e. the
+   "p" descender tip) to .intro__word's own bottom edge, which — since
+   .intro__word-img is display:block, giving the span no in-flow line boxes —
+   is what the surrounding text's vertical-align: baseline actually aligns
+   to. Anchoring the descender tip there instead of the artwork's true
+   baseline sits the whole word (114-84.4 = 29.6 units) too high — confirmed
+   in-browser: with only the base rule, "the polish"'s own non-descending
+   letters rendered ~23px above "losing"'s baseline at a 1280px viewport, a
+   clearly visible mismatch against Frame 5, where the two sit flush. This
+   shifts it back down by that same fraction of the shared per-unit scale
+   (hence the /74 denominator: --ink-polish IS 74 units).
+   translateY (not bottom:) on purpose — bottom: only moves a positioned box,
+   and the no-motion rule below switches this same element to position:
+   static, where a bottom offset would be silently ignored. transform is
+   layout-inert and shifts the painted image the same way in both position
+   modes, so one rule fixes both the motion end-state and the no-motion
+   resting state. */
+.intro__word--polish .intro__word-img--after { transform: translateY(calc(var(--ink-polish) * 29.58 / 74)); }
+/* transform is layout-inert (that's why it was used above, to reach both
+   position modes with one rule) — the paragraph's own box never grew to
+   account for the shift, so the image's now-lower bottom edge overflowed
+   past #introHeadline3's own bottom by ~12px at 1280px in no-motion. Measured
+   first: adding that same amount as margin-bottom directly on
+   .intro__word--polish seemed like the obvious fix, but it re-broke the
+   baseline alignment above — that span is itself a baseline-aligned
+   participant on this line, so growing ITS OWN margin box pulls the whole
+   line's shared baseline down with it, including "losing"'s. Padding on the
+   PARAGRAPH instead sits outside the line box entirely, so it cannot feed
+   back into that alignment. */
+#introHeadline3 { padding-bottom: calc(var(--ink-polish) * 29.58 / 74); }
+
+/* Resting state (no-motion) = the final visible state: the AFTER form,
+   shown fully revealed and in normal flow instead of clipped/absolute. */
+html:not(.motion) .intro__word-img--before { display: none; }
+html:not(.motion) .intro__word-img--after {
+  /* Height is NOT reset here — the --ink-* rules above must keep applying so
+     the no-motion resting state renders at the same size as the motion
+     path's fully-scanned end state. */
+  position: static;
+  clip-path: none;
+}
+
+/* ============================================================
+   READING PROGRESS — a hairline across the bottom of the header,
+   filling left to right.
+
+   Lifted verbatim from css/case-study.css's .cs-progress, class
+   names included, because Amanda asked for it to be "just like the
+   case study pages" — reusing the component rather than building a
+   homepage-only lookalike is what actually makes that true. The one
+   substitution is var(--black) for that file's --cs-ink token,
+   which v3 does not load; the two are the same value.
+
+   .header is already position:sticky with a z-index, so this rides
+   along with it and stays visible for the whole page. It sits one
+   above the header's own ::after divider so the fill reads as a
+   line drawn over that rule rather than beside it.
+   ============================================================ */
+.cs-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 101;
+  pointer-events: none;
+}
+.cs-progress__bar {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--black);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ============================================================
+   BOTTOM CTA — sketch "Homepage 5 (bottom)"
+   Square-cornered buttons with an arrow, one solid and one
+   outlined, centred under a single display line.
+   ============================================================ */
+/* ============================================================
+   THE CLOSING BLOCK — #outro wraps the CTA and the contact/footer
+   so they arrive as ONE thing (Amanda: "The bottom CTA section and
+   footer appear as one slide, not separated").
+
+   js/scenes-outro.js pins #outro while its entrance plays: the
+   headline assembles from off-frame, then everything else fades up,
+   then the pin releases and the block scrolls normally. The pin is
+   also the answer to "It can't be directly scrolled to the bottom
+   when the bottom CTA headline still animating" — while it holds,
+   scrolling drives the entrance rather than the page.
+
+   The CTA's top padding is dropped while it is the head of that
+   block: it existed to separate two sections that no longer are two.
+   ============================================================ */
+.outro { position: relative; z-index: 3; background: var(--white); }
+
+/* TWO LINES, BY STRUCTURE. Each line is its own block, so the break cannot
+   move: not at a different viewport, not after a webfont swap, and not while
+   random characters are passing through the line on their way in. Amanda asked
+   for two and the old single-string version gave three. */
+.cta__line { display: block; }
+
+/* The headline's per-glyph cells. Same two properties, and the same two
+   reasons, as .mhead__ch: transform has no effect on a non-replaced inline
+   box, and an inline box cannot take a width — and the pinned width is what
+   stops the line relaying out as random characters pass through it.
+
+   The WORD is inline-block and nowrap, not block: unlike the display
+   headline, this is a real sentence that has to wrap naturally at whatever
+   width it is given. nowrap keeps the browser from breaking a line between
+   two glyphs of the same word, which is what it would otherwise be free to
+   do now that every glyph is its own box. */
+.cta__word { display: inline-block; white-space: nowrap; }
+.cta__ch { display: inline-block; }
+
+/* Pre-JS states, gated on html.motion so a no-motion page shows the finished
+   block and nothing here applies. js/scenes-outro.js owns all three from its
+   first frame; these exist only so there is no flash before it runs.
+   .outro__fade arrives during the pinned entrance (the CTA's buttons, the only
+   thing on screen then); .outro__rise arrives on its own as the contact block
+   scrolls up afterwards. */
+html.motion .outro__fade { opacity: 0; transform: translateY(34px); }
+html.motion .outro__rise { opacity: 0; transform: translateY(44px); }
+html.motion #outro .cta__title { visibility: hidden; }
+
+/* THE FIRST SCREEN OF THE BLOCK IS ALL WHITE. Amanda: "The bottom CTA section
+   should appears first, then once we scroll, the footer appears. So, basically
+   the first screen of this section is full white. Adding that black footer
+   container ruins the UX flow."
+
+   Two rules do that. The CTA fills exactly one stage, so the black contact
+   block begins one screen further down and is not on screen at all while the
+   headline arrives. And #outro carries the header's height as padding, because
+   while it is pinned it is fixed at the VIEWPORT's top — underneath the fixed
+   header — so without this the headline sits jammed against the navigation
+   with no air above it, which is what her screenshot shows.
+
+   place-items: center is what balances the block: the headline and the buttons
+   are centred in the screen they own, rather than hanging off a top padding
+   and a bottom padding that have to be guessed at separately. */
+/* Ungated on width, unlike the work and other-work slides. Those need a
+   breakpoint because their content cannot fit a small screen side by side;
+   a centred headline and two buttons fit any screen, and a phone has exactly
+   the same problem with a black block appearing under a half-empty CTA. */
+html.motion #outro { padding-top: var(--header-h, 88px); }
+html.motion #outro .cta {
+  min-height: calc(100vh - var(--header-h, 88px));
+  min-height: calc(100svh - var(--header-h, 88px));
+  display: grid;
+  place-items: center;
+  padding-block: clamp(32px, 5vh, 72px);
+}
+
+.cta { padding-block: clamp(100px, 15vw, 260px) clamp(80px, 12vw, 200px); }
+.cta__inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: clamp(32px, 4vw, 64px);
+}
+
+.cta__title {
+  font-weight: var(--fw-medium);
+  font-size: clamp(1.75rem, 4.6vw, 4.25rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  /* No max-width and no text-wrap: balance — .cta__line decides where the
+     lines break, and both of those exist to influence a wrap that no longer
+     happens. The floor drops to 1.75rem so the longer of the two lines still
+     fits one line on a 375px phone. */
+}
+
+.cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.2vw, 22px); }
+
+/* Square corners, as drawn — deliberately not the pill radius the rest of
+   the page uses for tags. */
+.cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.85em 1.5em;
+  border: 1.5px solid var(--black);
+  font-size: clamp(15px, 1.1vw, 20px);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+.cta__btn svg { width: 1.6em; height: auto; flex: none; transition: transform 0.35s var(--ease-out); }
+.cta__btn:hover svg { transform: translateX(5px); }
+
+.cta__btn--solid { background: var(--black); color: var(--white); }
+.cta__btn--solid:hover { background: var(--white); color: var(--black); }
+/* The outlined button tints rather than inverting: 15% black on hover, 30%
+   while held. Keeping the label and outline black throughout means the button
+   never restates itself as a second solid button beside the primary one —
+   the two stay visibly primary and secondary at every state. */
+.cta__btn--ghost { background: var(--white); color: var(--black); }
+.cta__btn--ghost:hover { background: rgba(0, 0, 0, 0.15); color: var(--black); }
+.cta__btn--ghost:active { background: rgba(0, 0, 0, 0.30); color: var(--black); }
+
+@media (max-width: 480px) {
+  /* Two full-width buttons stacked read better than two cramped ones that
+     wrap unevenly — nowrap on the labels means they cannot shrink. */
+  .cta__actions { flex-direction: column; align-self: stretch; }
+  .cta__btn { justify-content: center; }
+}
+
+/* ============================================================
+   MOBILE — everything in this file below this line applies at
+   760px and under, and NOTHING here may reach the desktop layout.
+   Amanda: "please make sure to keep the current Desktop version
+   as much as possible, don't touch it as it is 100% perfect
+   already." So this is one block, one query, at the end of the
+   file, rather than mobile overrides scattered through the rules
+   they modify — a single place to read, and a single place where
+   a desktop regression could come from.
+   ============================================================ */
+@media (max-width: 760px) {
+
+  /* ---- 1. the hero ----
+     "Make 'Hi Im Amanda' larger, and the title texts are a bit smaller."
+     The photo is untouched — it is the one thing she has asked twice to keep
+     at its size. */
+  .intro__greeting { font-size: 30px; }
+
+  /* The three titles do not fit one line at any readable size on a phone, so
+     they wrap — and the hairline separators, being flex items of the same
+     row, wrapped with them and ended up stranded alone on lines of their own.
+     Dropped here rather than kept as decoration with nothing to separate:
+     three centred lines already read as a list. */
+  .intro__titles { font-size: 13px; gap: 6px; }
+  .intro__titles .intro__sep { display: none; }
+
+  /* "The scroll indicator is missing too in mobile version." It was: v1's
+     css/styles.css hides .scroll-cue below this width, from back when it was
+     fixed chrome at the bottom of the page. It is part of the bio block now,
+     so that rule is wrong for it here. Overridden rather than edited at
+     source, because styles.css is v1's and its own pages still want it. */
+  .intro__state--1 .scroll-cue--inline { display: flex; }
+
+  /* ---- the intro, given its room back ----
+     "I need you to reduce the site left & right margin to give more room to
+     the content." 24px each side -> 12px, which is what the headlines and the
+     demo animation below are all sized against. */
+  .intro__stage { padding-inline: 12px; }
+
+  /* "The intro 1 & 2 headline both should be a lot more bigger": 32px -> 42px,
+     held from the round before. The measure cap is dropped because the line
+     breaks are in the markup now (see .intro__brk) — a max-width would only
+     add breaks the copy did not ask for. Measured at 42px against the 351px
+     the new margins leave: the widest line of either headline is "behind the
+     brand." at 317px, so all seven lines fit with room to spare. */
+  .intro__h { font-size: 42px; max-width: none; }
+
+  /* "Make the demo animation larger. Maximize its width til the max width of
+     the screen." Edge to edge minus the same 12px the headlines get, so the
+     three things in this stage share one measure. --demo-h is derived from
+     this, so the box stays 3:1 and js/demo-anim.js's fitTo() scales its
+     1200x400 stage into whatever it measures. */
+  :root { --demo-w: calc(100vw - 24px); }
+
+  /* "Add a bit more gaps between the intro 1 headline, demo animation and
+     intro 2 headline." This is the gap on EACH side of the demo box — both
+     headlines are positioned off the stage's centre line by half the demo's
+     height plus this. */
+  :root { --demo-gap: 26px; }
+
+  /* ---- 3 + 4. the headline as a fixed title bar ----
+     "After appearing, please move it to the top of the screen and make it
+     fixed at the top of the screen when we scroll thru the 5 projects. Also
+     add white background + 40px white(on top)-to-transparent(at the bottom)
+     gradient, so the the items those are covered by this Headline's
+     background disappears seamlessly."
+
+     Three things make that work, and only the first is new behaviour:
+
+     ITS RESTING COLOUR IS SOLID BLACK, not the watermark. js/headline.js
+     reads the resting colour off this rule rather than assuming one, so this
+     single declaration is the whole change — the headline still travels
+     between exactly two states, they are just different states here.
+
+     IT PAINTS ABOVE THE SECTIONS. On desktop it is deliberately behind them
+     (z-index 1) so it reads as a watermark through the gaps. A title bar the
+     content passes UNDER has to be in front: above the sections (3) and the
+     contact block (4), below the header (100). */
+  html.motion #morphHead { color: var(--black); z-index: 5; }
+
+  /* "The Selected work headline is a bit of centered vertically, please fix
+     it." It was centred — in the VIEWPORT, which is not the same thing once a
+     fixed 88px header sits on top of it. #mheadSlot's top: 50% put the
+     headline's middle on the middle of the window, i.e. 44px above the middle
+     of the area the reader can actually see. Half the header's height puts it
+     back. Scoped here because the desktop version is not to be touched. */
+  #mheadSlot { top: calc(50% + var(--header-h, 88px) / 2); }
+
+  /*   AND IT CARRIES ITS OWN BACKDROP. Full-bleed white from the top of the
+     screen to the headline's own bottom, then 40px of white-to-transparent so
+     a card scrolling up under it dissolves instead of being cut off.
+
+     Positioned against the headline rather than the viewport because .mhead
+     has `contain: layout`, which makes it the containing block for fixed
+     descendants — a position:fixed pseudo-element here would be measured from
+     the headline, not the screen, which is not what it looks like it does.
+     top: -(--mhead-top) reaches y = 0 because --mhead-top IS the resting top
+     this element is measured at, and --mhead-veil is 1 only when it is
+     actually resting there (js/headline.js writes it from the same number
+     that puts the headline at the top). */
+  html.motion #morphHead::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--gutter));
+    width: 100vw;
+    top: calc(-1 * var(--mhead-top));
+    bottom: -40px;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--white) calc(100% - 40px),
+      rgba(255, 255, 255, 0) 100%);
+    opacity: var(--mhead-veil, 0);
+  }
+
+  /* ---- 5. air between the projects ----
+     "Add more vertical gaps between the 5 projects." Both gaps, because on a
+     phone the five are three stacked slides and the two inside each pair. */
+  .work__stage { gap: 104px; padding-block: 72px 96px; }
+  .wpair { gap: 64px; }
+
+  /* "Right after it takes place, the selected work headline move up to the top
+     of the screen, then the sinan section starts to appear (not moving
+     together with the headline)."
+
+     They were moving together, and the reason is arithmetic rather than
+     choreography: the headline finishes its move at #headHold's bottom, which
+     IS #work's top — and a section's content enters the screen a full viewport
+     BEFORE its top reaches the scroll position. So the first project was
+     already halfway up the screen while the headline was still climbing.
+
+     One screen of padding is exactly the offset that removes: with it, the
+     first project's top edge reaches the bottom of the screen at the same
+     moment the headline reaches the top, and rises from there. Nothing about
+     the headline's own timing changed.
+
+     html.motion-gated because there is no headline move to wait for on a
+     resting page — there it would be a screen of blank scrolling for nothing. */
+  html.motion .work__stage { padding-top: 100svh; }
+
+  /* ---- 6. the pills ---- */
+  .pill { padding: 3px 10px; font-size: 13px; }
+
+  /* ---- 7. the other-work section reads like the selected one ----
+     "Do the same headline animation + project interaction of the selected
+     work section to the other work section."
+
+     The headline treatment is already shared — it is one element, still fixed
+     at the top with the same backdrop through both sections. The rest is
+     making the two behave the same: the same spacing between projects, and
+     the same arrival for each of them. These are the start states for that
+     arrival; js/scenes-work.js and js/scenes-outro.js bring them home, each
+     project on its own trigger so it animates as IT reaches the screen rather
+     than when its section does. Motion-gated, so a resting page draws them.
+
+     The five selected projects had no arrival at all on a phone (their
+     desktop start states are gated to 761px and up, and their choreography
+     with them), so this is where they get one. */
+  html.motion .wslide--sinan .sinan,
+  html.motion .wslide--pair .wcard { opacity: 0; transform: translateY(60px); }
+
+  .other { padding-block: 96px 96px; }
+  .owork { row-gap: 104px; }
+
+  /* ---- 8. project titles ----
+     "Reduce all projects' title size." 28px (selected) and 24px (other) both
+     to 22px, which also puts the two sections on one size — they are the same
+     kind of thing and were only different because they came from different
+     type-scale steps. */
+  .sinan__title, .wcard__title, .owork__title { font-size: 22px; }
+
+  /* ---- 9. matching thumbnails ----
+     "The 3 other projects' thumbnail, please make it to have the similar size
+     to the ones in selected work section." The other-work thumbnails are 8:7
+     and stood 293px tall against the selected pairs' 201px, so on a phone —
+     where every card is full width — they read as a different, heavier kind of
+     card. Same 5:3 as the pairs makes them the same object. */
+  .owork__media { aspect-ratio: 5 / 3; }
+
+  /* ---- 8. the closing headline ----
+     "The bottom CTA section should be significantly bigger. For mobile it
+     doesn't necessarily need to be 2 lines, can be more." 28px -> 44px; the
+     second line wraps at that size, which she has explicitly allowed here. */
+  #outro .cta__title { font-size: 44px; }
+}

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Portfolio — Amanda Alfatah Idris</title>
+  <meta name="description" content="Amanda Idris — Product Designer and Systems Architect. I build the visual infrastructure behind high-growth digital brands." />
+
+  <link rel="icon" href="/favico.svg" type="image/svg+xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Amanda Idris" />
+  <meta property="og:title" content="Amanda Idris — Product Designer &amp; Systems Architect" />
+  <meta property="og:description" content="Amanda Idris — Product Designer and Systems Architect. I build the visual infrastructure behind high-growth digital brands." />
+  <meta property="og:url" content="https://amanda-design.com/" />
+  <meta property="og:image" content="https://amanda-design.com/images/meta.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Amanda Idris — Product Designer &amp; Systems Architect" />
+  <meta name="twitter:description" content="Amanda Idris — Product Designer and Systems Architect. I build the visual infrastructure behind high-growth digital brands." />
+  <meta name="twitter:image" content="https://amanda-design.com/images/meta.webp" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Figtree requested as a VARIABLE font (300..900 ranges, not a list of
+       discrete instances): one file covering every weight the type system
+       names, instead of a request per instance. Same character coverage,
+       fewer round trips. -->
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/type-system.css" />
+  <link rel="stylesheet" href="/css/v3.css" />
+  <!-- After v3.css, which is where these rules used to live as its last
+       block — same position in the cascade, now on both pages. -->
+  <link rel="stylesheet" href="/css/chrome.css" />
+  <link rel="stylesheet" href="/css/cursor.css" />
+</head>
+<body class="home">
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#ffffff" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===================== HEADER (v1, unchanged) ===================== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="#top" class="header__name">Amanda Idris</a>
+
+      <nav class="nav" aria-label="Primary">
+        <!-- HOME first, as drawn in Amanda's header sketch. Same target as
+             .header__name above it (#top, not "/") so it scrolls this page
+             back up instead of reloading it — on the one page it appears on,
+             a reload would drop the reader out of a scroll-driven sequence
+             and back at a cold start. -->
+        <a href="#top" class="nav__link is-active" aria-current="page">Home</a>
+        <a href="/about" class="nav__link">About</a>
+        <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Resume
+          <svg class="ext-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/amandaalfattah/" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Linkedin
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://www.behance.net/amandaalfattah" class="nav__link nav__link--ext" target="_blank" rel="noopener">
+          Behance
+          <svg class="ext-arrow" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="#top" class="mobile-menu__link">Home</a>
+      <a href="/about" class="mobile-menu__link">About</a>
+      <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="mobile-menu__link" target="_blank" rel="noopener">Resume</a>
+      <a href="https://www.linkedin.com/in/amandaalfattah/" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
+      <a href="https://www.behance.net/amandaalfattah" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
+    </div>
+
+    <!-- Reading progress. Same element, same class names and same place in the
+         header as every case study page (portfolio_v1/project/*/index.html),
+         so the homepage and the case studies read as one site rather than two
+         that each invented their own indicator. -->
+    <div class="cs-progress" aria-hidden="true"><span class="cs-progress__bar" id="readingProgress"></span></div>
+  </header>
+
+  <main>
+    <!-- The giant display type. ONE fixed element, alive from the tail of
+         the intro all the way to the CTA, and owned end to end by
+         js/headline.js — nothing else on the page writes to it.
+
+         TWO WORDS, TWO BLOCKS. css/v3.css gives .mhead__word display:block,
+         so "SELECTED WORK." is on two lines because the markup says so, not
+         because a width cap happens to fit it. That matters while the first
+         word is scrambling through random characters on its way to "OTHER":
+         the old single-string version relied on a 6em cap to force the break,
+         so a wide scramble frame broke differently and the headline collapsed
+         onto one line mid-change (measured: 786px wide -> 918 -> 1002 -> 786,
+         one line at the widest point). No string can do that to two blocks.
+
+         data-morph-to is what the first word becomes. Only that word changes —
+         "WORK." is the same in both — so it is the only one that scrambles.
+
+         The resting markup already reads the final string, which is what a
+         no-motion visitor sees: html.motion never gets added, so neither the
+         `html.motion #morphHead{opacity:0}` rule in css/v3.css nor any of
+         js/headline.js applies, and the plain two-word markup below IS the
+         page. js/headline.js bails before splitting anything in that case, so
+         it stays plain prose.
+
+         #mheadSlot is an invisible twin that defines the LANDED position and
+         size. It is never painted and never split — it exists purely to be
+         measured, so both of the headline's two states come from CSS rather
+         than from numbers written into JS. -->
+    <div class="mhead" id="morphHead" aria-hidden="true"><span class="mhead__word" data-morph-to="OTHER">SELECTED</span> <span class="mhead__word">WORK.</span></div>
+    <div class="mhead mhead--slot" id="mheadSlot" aria-hidden="true"><span class="mhead__word">SELECTED</span> <span class="mhead__word">WORK.</span></div>
+
+    <!-- ===================== INTRO — three centred states over a scroll-driven field ===================== -->
+    <section class="intro" id="intro">
+      <div class="intro__stage">
+
+        <!-- The DEMO animation (js/demo-anim.js). Named "demo", not "intro",
+             so it is never confused with the intro SECTION's own state-to-state
+             transitions. It sits dead-centre of the stage; headline 1 is
+             positioned above it and headline 2 below it (see css/v3.css). -->
+        <div class="intro__demo" id="demoAnim" aria-hidden="true"></div>
+
+        <div class="intro__states">
+
+          <div class="intro__state intro__state--1">
+            <a href="/about" class="intro__me" data-cursor="More about me" aria-label="More about me">
+              <span class="intro__avatar"><img src="/images/profile.webp" alt="Portrait of Amanda Idris" width="72" height="72" /></span>
+              <span class="intro__greeting">Hi, I&rsquo;m <b class="intro__name">Amanda.</b></span>
+            </a>
+            <p class="intro__titles">
+              <span>Design Systems Architect</span>
+              <span class="intro__sep" aria-hidden="true"></span>
+              <span>Visual Designer</span>
+              <span class="intro__sep" aria-hidden="true"></span>
+              <span>6+ years of experience</span>
+            </p>
+
+            <!-- Scroll cue: v1's mouse glyph, icon ONLY — the "See my works"
+                 label that used to sit beside it in v1 is deliberately gone
+                 (Amanda, twice: first "remove the see my works text", then
+                 "please only show the icon without text"). It reuses
+                 .scroll-cue/.mouse-scroll straight from css/styles.css, so it
+                 carries v1's design system with no new look of its own; the
+                 only addition is .scroll-cue--inline, which un-fixes it.
+
+                 It sits HERE, as the last line of the bio frame, rather than
+                 fixed to the bottom of the viewport — Amanda: "The hero
+                 section, the scroll indicator should be put below my titles'
+                 line, not in the bottom of the page. Then adjust the whole
+                 elements of the page accordingly so all is centered
+                 properly." Being a real child of the frame is what does the
+                 centring: .intro__state--1 fills the stage and centres its
+                 own contents, so the group re-centres around the cue's added
+                 height by itself, at every viewport, with no offset to tune.
+                 It also means the cue now leaves WITH the bio rather than on
+                 a fade of its own (js/ui.js used to drive one) — the bio
+                 frame is the one thing it was ever an invitation to scroll
+                 past.
+
+                 Not a link: v1's was an <a href="#works">, but v3's intro is a
+                 long scrubbed sequence and jumping past it would skip the
+                 whole thing. aria-hidden + no tab stop because it is pure
+                 decoration with no label to announce. -->
+            <div class="scroll-cue scroll-cue--inline" id="scrollCue" aria-hidden="true"><span class="mouse-scroll"></span></div>
+          </div>
+
+          <!-- The two <br class="intro__brk"> are PHONE-ONLY line breaks:
+               css/v3.css hides them at 761px and up, so the desktop line
+               remains one string wrapping on its own, exactly as it does now.
+               The spaces around them are kept, so with the breaks hidden the
+               sentence still reads "I build visual infrastructure behind the
+               brand." with normal word spacing.
+
+               Amanda asked for this headline to hold at three lines on a
+               phone. A max-width in ch happens to give three today and gives
+               two or four the moment the size, the measure or the webfont
+               moves; a break in the markup is the count itself. -->
+          <h1 class="intro__state intro__state--2 intro__h">I build visual <br class="intro__brk" />infrastructure <br class="intro__brk" />behind the brand.</h1>
+
+          <!-- The <br> before "without" pins Frame 3/4/5's two-line split
+               ("I use AI to scale it" / "without losing the polish") as a fixed
+               break, not natural wrapping. Natural wrapping is viewport-
+               dependent AND width-dependent: measured at 1280px, the paragraph
+               naturally wraps as "...it without" / "losing the polish" (matching
+               neither this text's original plain form nor the AI-image swap) up
+               until AI's wipe-driven width crosses ~82px, at which point
+               "without" jumps from line 1 to line 2 mid-wipe (an actual rewrap,
+               not the intended smooth outward slide) — see task-4-report.md's
+               fix-round-1 section. At 1440px "without" never separates from
+               line 1 at all, before or after the wipe. The <br> makes that break
+               point a fixed fact of the markup instead of a fragile function of
+               font metrics, and re-verified clean (constant 0.50 displacement
+               ratio, stable line count through the whole wipe) at 1280/1440/375
+               — see task-4-report.md's fix-round-1 section for that table too.
+               It does NOT stop the rest of the sentence from wrapping further at
+               narrow widths, and that's fine at the required 375px check: "I use
+               AI to scale it" still fits on its one pinned line there, "without
+               losing the polish" just reflows onto 2 lines below it (3 lines
+               total, stable through the whole wipe) — ordinary responsive
+               behaviour, not a defect. At 320px (checked as an extra margin,
+               not a required width) the pinned line itself starts to wrap too,
+               which can strand "it" alone on its own line — a real but minor
+               cosmetic edge case at very old/narrow phone widths, disclosed
+               rather than fixed this round; natural (br-less) wrapping doesn't
+               have this specific problem at 320px but reintroduces the original
+               mid-wipe rewrap risk this <br> exists to prevent. -->
+          <p class="intro__state intro__state--3 intro__h" id="introHeadline3">I use <span class="intro__word intro__word--ai"><img class="intro__word-img intro__word-img--before" src="/images/text_AI_before.svg" alt="" aria-hidden="true" /><img class="intro__word-img intro__word-img--after" src="/images/text_AI_after.svg" alt="AI" /></span><br class="intro__brk" /> to scale it<br>without losing <br class="intro__brk" /><span class="intro__word intro__word--polish"><img class="intro__word-img intro__word-img--before" src="/images/text_polish_before.svg" alt="" aria-hidden="true" /><img class="intro__word-img intro__word-img--after" src="/images/text_polish_after.svg" alt="the polish" /></span></p>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- The scroll runway the landed "SELECTED WORK." headline holds over.
+         Deliberately EMPTY: Amanda asked for the headline to sit readable at
+         middle-left "for the first few scroll" before it shrinks to the
+         top-left watermark, and it can only do that if nothing else is
+         arriving on screen at the same time. Before this element existed the
+         hold ran on top of the work section scrolling in, so the headline was
+         never alone and the hold never read as one.
+
+         js/headline.js measures this box to place both beats: it holds over
+         the first two thirds and shrinks across the last one, and the shrink
+         ends exactly where #work's stage pins — so the hold finishes and the
+         first slide begins on the same pixel, with no blank screen between.
+
+         Collapsed to zero height without html.motion (css/v3.css): with no
+         arrival and no shrink there is nothing to hold, and an empty box would
+         just be dead scrolling. -->
+    <div class="headhold" id="headHold" aria-hidden="true"></div>
+
+    <!-- ===================== WORK — a four-slide sequence =====================
+         claude-handover/new-interaction-work/. #selected used to be a
+         normally-scrolling section; it is now ONE pinned stage that four
+         slides pass through, each fading in with its own entry, holding for a
+         few scroll points, then leaving upward:
+
+           1  Claude design skills: SINAN
+           2  pair 1 — Identity 2.0 + Aspire Web Design System
+           3  pair 2 — Kayn Argan Oil + NOBI Bakery
+           4  the OTHER WORK. headline (the fixed #morphHead carries it, so
+              this slide is a timing placeholder with nothing of its own)
+
+         The three other projects used to be a fifth slide here. They are a
+         slide again, but their own — #other, further down, with its own stage
+         and its own scene (js/scenes-outro.js) — so this pin can release
+         cleanly at the end of slide 4 and the headline can be back to its
+         watermark before they arrive under it.
+
+         Without html.motion the stage is a plain flex column and all four
+         slides simply stack and read in order, which is why the markup is
+         ordinary sectioned content rather than four absolutely-positioned
+         layers in the HTML itself. -->
+    <section class="work" id="work" aria-labelledby="workHeading">
+      <h2 class="visually-hidden" id="workHeading">Selected and other work</h2>
+
+      <div class="work__stage">
+
+        <!-- SLIDE 1 -->
+        <div class="wslide wslide--sinan">
+          <div class="srule srule--top" aria-hidden="true"></div>
+
+          <a class="sinan v3-wrap" href="/project_sinan/" data-cursor="See project">
+            <div class="sinan__lead">
+              <h3 class="sinan__title t-h3">Claude design skills: SINAN</h3>
+              <p class="sinan__pill"><span class="pill">Claude Skills</span></p>
+            </div>
+            <div class="sinan__media">
+              <img src="/images/placeholder_sinan.svg" alt="" width="1600" height="900" />
+            </div>
+            <p class="sinan__desc t-body-sm">A set of Claude skills that carry my art direction into generative work — brief in, directed image and video prompts out, with the craft decisions already made.</p>
+          </a>
+
+          <div class="srule srule--bottom" aria-hidden="true"></div>
+        </div>
+
+        <!-- SLIDE 2 — pair 1. The left card carries its text ABOVE its image and
+             the right card below it, and the right card rides one --swork-split
+             lower; that is the "not aligned" arrangement the frames draw. -->
+        <div class="wslide wslide--pair">
+          <div class="wpair v3-wrap">
+            <a class="wcard wcard--l" href="/project_identity/" data-cursor="See project">
+              <div class="wcard__meta">
+                <h3 class="wcard__title t-h3">Identity 2.0</h3>
+                <ul class="wcard__tags">
+                  <li class="pill">Brand Design</li>
+                  <li class="pill">Web Design</li>
+                  <li class="pill">Canva Brand Kit</li>
+                </ul>
+              </div>
+              <div class="wcard__media"><img src="/images/home_thumbnail_identity.webp" alt="Identity 2.0 preview" loading="lazy" /></div>
+            </a>
+
+            <a class="wcard wcard--r" href="/project_aspire/" data-cursor="See project">
+              <div class="wcard__media"><img src="/images/home_thumbnail_ds.webp" alt="Aspire Web Design System preview" loading="lazy" /></div>
+              <div class="wcard__meta">
+                <h3 class="wcard__title t-h3">Aspire Web Design System</h3>
+                <ul class="wcard__tags">
+                  <li class="pill">Web Design</li>
+                  <li class="pill">Web Design System</li>
+                </ul>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — pair 2 -->
+        <div class="wslide wslide--pair">
+          <div class="wpair v3-wrap">
+            <a class="wcard wcard--l" href="/project_kayn/" data-cursor="See project">
+              <div class="wcard__meta">
+                <h3 class="wcard__title t-h3">Kayn Argan Oil</h3>
+                <ul class="wcard__tags">
+                  <li class="pill">Brand Design</li>
+                  <li class="pill">Web Design</li>
+                </ul>
+              </div>
+              <div class="wcard__media"><img src="/images/kayn_thumbnail.webp" alt="Kayn Argan Oil preview" loading="lazy" /></div>
+            </a>
+
+            <a class="wcard wcard--r" href="/project_nobi/" data-cursor="See project">
+              <div class="wcard__media"><img src="/images/nobi_thumbnail.webp" alt="NOBI Bakery preview" loading="lazy" /></div>
+              <div class="wcard__meta">
+                <h3 class="wcard__title t-h3">NOBI Bakery</h3>
+                <ul class="wcard__tags">
+                  <li class="pill">Brand Design</li>
+                  <li class="pill">Web Design</li>
+                </ul>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 — the OTHER WORK. headline, and the last pinned slide.
+             #morphHead (fixed, above) is what is actually on screen here; this
+             slide exists so the sequence has a beat to hold it on. Empty on
+             purpose, and zero-height without motion so it adds nothing to the
+             stacked reading order. The pin releases at the end of this slide;
+             everything below scrolls normally. -->
+        <div class="wslide wslide--head" aria-hidden="true"></div>
+
+      </div>
+    </section>
+
+    <!-- ===================== OTHER WORK =====================
+         A SLIDE again, not ordinary content. Amanda: "The other work
+         section: Please make it separated from the bottom CTA and footer
+         section. The 3 items appear like a slide show instead. Just like the
+         selected section. The intro and outro animation can just be a simple
+         fading in + out with movement from bottom to top."
+
+         So this section is now a scroll runway with a sticky stage inside it
+         (css/v3.css), and js/scenes-outro.js runs one slide through it: the
+         three cards rise in together, hold, and leave upward. Separating it
+         from the closing block is what the hold does — nothing else is on
+         screen while these three are.
+
+         Only where all three fit one screen side by side. Below 901px the
+         grid drops to two columns and then one, which is taller than a stage,
+         so there the section falls back to ordinary flow with a plain reveal.
+         Both paths live in js/scenes-outro.js. -->
+    <section class="other" id="other" aria-labelledby="otherHeading">
+      <h2 class="visually-hidden" id="otherHeading">Other work</h2>
+      <div class="other__stage">
+        <div class="owork v3-wrap">
+          <a class="owork__card" href="/project_bacarita/" data-cursor="See project">
+            <div class="owork__media"><img src="/images/bacarita_thumbnail.webp" alt="Bacarita Creative Hub preview" loading="lazy" /></div>
+            <h3 class="owork__title t-h4">Bacarita Creative Hub</h3>
+            <ul class="owork__tags">
+              <li class="pill">Brand Design</li>
+              <li class="pill">Web Design</li>
+            </ul>
+          </a>
+
+          <a class="owork__card" href="/project_atlasique/" data-cursor="See project">
+            <div class="owork__media"><img src="/images/atlasique_thumbnail.webp" alt="Atlasique Travel preview" loading="lazy" /></div>
+            <h3 class="owork__title t-h4">Atlasique Travel</h3>
+            <ul class="owork__tags">
+              <li class="pill">Brand Design</li>
+              <li class="pill">Web Design</li>
+            </ul>
+          </a>
+
+          <a class="owork__card" href="/project_visuallab/" data-cursor="See project">
+            <div class="owork__media"><img src="/images/visuallabs_thumbnail.webp" alt="The Visual Lab preview" loading="lazy" /></div>
+            <h3 class="owork__title t-h4">The Visual Lab</h3>
+            <ul class="owork__tags">
+              <li class="pill">Brand Design</li>
+              <li class="pill">UI Design</li>
+            </ul>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== THE CLOSING BLOCK =====================
+         The CTA and the contact/footer are ONE thing now. Amanda: "The bottom
+         CTA section and footer appear as one slide, not separated. The intro
+         animation of the bottom CTA headline should be like the 13
+         characters' … While the rest of the elements appearing by fading in as
+         usual. Wait until the headline took place, after that the other
+         appears and this section is scrollable as usual. It can't be directly
+         scrolled to the bottom when the bottom CTA headline still animating,
+         otherwise, it might ruin the UX."
+
+         #outro is what makes them one: js/scenes-outro.js PINS it while its
+         entrance plays, so the two arrive together and neither can be scrolled
+         past mid-animation — the scroll drives the entrance instead of the
+         page. When the entrance finishes the pin releases and the whole block
+         scrolls normally, which is what lets it be taller than one screen.
+
+         THE FIRST SCREEN OF THIS BLOCK IS ALL WHITE. Amanda: "The bottom CTA
+         section should appears first, then once we scroll, the footer appears.
+         So, basically the first screen of this section is full white. Adding
+         that black footer container ruins the UX flow." So .cta is sized to
+         fill exactly one stage (css/v3.css) and the black contact block starts
+         one screen further down — it is not on screen at all while the
+         headline is arriving.
+
+         Only .cta__actions carries .outro__fade, because only it is on screen
+         during the entrance; the contact block and the footer carry
+         .outro__rise instead and arrive on their own as they scroll up.
+
+         The headline is split into per-glyph cells by js/arrival.js and runs
+         on the SAME settings as "SELECTED WORK." at the end of the intro —
+         Amanda asked for this one in that one's terms and got something else
+         the first time. -->
+    <section class="outro" id="outro">
+
+    <!-- Sketch "Homepage 5 (bottom)". The button labels are the sketch's own;
+         the headline is NOT — the sketch carries Lorem ipsum there.
+
+         TWO LINES, AND THEY ARE TWO ELEMENTS. Amanda: "Make sure the new
+         headline only has 2 lines! Right now, you made it 3 lines which is not
+         a good approach." The copy is hers — she took the first line from the
+         options put to her and wrote the second herself. It does what this
+         section has to do: the work is finished being the subject, and the two
+         buttons under it (About me, See my resume) both lead to the person who
+         made it.
+
+         The break is a fact of the markup, not of the current string's width:
+         .cta__line is display:block (css/v3.css), so nothing about a viewport,
+         a webfont or a scramble frame can turn two lines into three. -->
+    <section class="cta" id="cta" aria-labelledby="ctaHeading">
+      <div class="v3-wrap cta__inner">
+        <h2 class="cta__title" id="ctaHeading"><span class="cta__line">That&rsquo;s the work.</span><span class="cta__line">Learn more about the designer.</span></h2>
+        <div class="cta__actions outro__fade">
+          <a class="cta__btn cta__btn--solid" href="/about">
+            About me
+            <svg viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </a>
+          <a class="cta__btn cta__btn--ghost" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
+            See my resume
+            <svg viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT + FOOTER =====================
+         Rebuilt to Amanda's sketch. What changed from the v1 block that was
+         here: the headline now fills the measure instead of sitting at ~86%
+         of it; the two columns of arrow links became two brand chips beside
+         the email plus a right-aligned Home / About / Resume list; and the
+         bottom rule is one line each side instead of a two-line block and a
+         big standalone year.
+
+         The three .outro__rise elements are unchanged in number and order
+         (title, details, footer), so js/scenes-outro.js keeps staggering
+         exactly the same three things on the way up. -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact__info">
+          <h2 class="contact__title outro__rise">Let&rsquo;s get in touch!</h2>
+
+          <div class="contact__details outro__rise">
+            <div class="contact__reach">
+              <!-- data-cursor is the same attribute the project cards use:
+                   js/cursor.js swells the black dot into a labelled pill over
+                   anything carrying it. Amanda: "they should be coming from
+                   the blackdot, not separated elements. Just like the 'See
+                   project' ones." So there is no tooltip element and no
+                   tooltip CSS — one hover affordance on the page, not two.
+                   The label is presentational; the accessible name stays on
+                   aria-label, and .copy-toast still announces the result. -->
+              <div class="contact__email-wrap">
+                <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" data-cursor="Copy to clipboard" aria-label="Copy email address to clipboard">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="contact__email-text">amandaalfattah@gmail.com</span>
+                </button>
+                <span class="copy-toast" role="status" aria-live="polite">Copied to clipboard</span>
+              </div>
+
+              <!-- Both marks are Amanda's own files (behance_icon.svg and
+                   LinkedIn_icon.svg), used as supplied: her 48x48 box, her
+                   paths, her #181818. The one edit is the background rect,
+                   which is hers too but painted currentColor instead of white
+                   so css/chrome.css owns the chip colour in one place. Square, no
+                   radius — "with no rounded corners container". -->
+              <div class="contact__socials">
+                <a class="social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" data-cursor="Visit my Behance" aria-label="Visit my Behance">
+                  <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor" />
+                    <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818" />
+                  </svg>
+                </a>
+                <a class="social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" data-cursor="Chat on Linkedin" aria-label="Chat on Linkedin">
+                  <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <nav class="contact__nav" aria-label="Footer">
+              <a href="#top" class="contact__nav-link">Home</a>
+              <a href="/about" class="contact__nav-link">About</a>
+              <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="contact__nav-link" target="_blank" rel="noopener">Resume</a>
+            </nav>
+          </div>
+        </div>
+
+        <footer class="footer outro__rise">
+          <!-- No type-scale class on either. .footer__name is already sized by
+               styles.css, so a .t-* class beside it is a coin toss between two
+               single-class selectors that only load order decides — which is
+               exactly how these two ended up at 18px and 14.4px. css/v3.css
+               sizes both, in one rule. -->
+          <p class="footer__name">Site by Amanda Alfatah Idris. Built with Claude Code</p>
+          <p class="footer__legal">&copy;2026 Amanda Idris. All rights reserved.</p>
+        </footer>
+      </div>
+    </section>
+
+    </section><!-- /#outro -->
+  </main>
+
+  <div class="cursor" aria-hidden="true"><span class="cursor__label">See project</span></div>
+
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="/js/arrival.js"></script>
+  <script src="/js/motion-core.js"></script>
+  <script src="/js/cursor.js"></script>
+  <script src="/js/demo-anim.js"></script>
+  <script src="/js/scenes-intro.js"></script>
+  <script src="/js/scenes-work.js"></script>
+  <script src="/js/scenes-outro.js"></script>
+  <!-- LAST of the scene files, and it has to be: js/headline.js measures where
+       its own beats fall from what the others have already built — #work's
+       timeline mapping (V3.work.at) and #outro's pinned position — so both
+       must exist before it runs. -->
+  <script src="/js/headline.js"></script>
+  <script src="/js/ui.js"></script>
+</body>
+</html>
