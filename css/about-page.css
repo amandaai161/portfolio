@@ -11,11 +11,11 @@
    ============================================================ */
 
 :root {
-  /* ---- overrides of the shared black/white tokens (this page only) ---- */
-  --black: #111111;
-  --ink: #111111;
+  /* ---- overrides of the shared black/white tokens (this page only) ----
+     --black, --ink and --muted used to be defined here and nowhere else. They
+     are styles.css's values now, site-wide, so this block keeps only what is
+     still particular to this page: its softer white, and a lighter hairline. */
   --white: #F8F8F8;
-  --muted: rgba(17, 17, 17, 0.55);
   --line: rgba(17, 17, 17, 0.16);
 
   /* ---- accent system: light surfaces unified to #EAEEEC ---- */

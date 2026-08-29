@@ -21,11 +21,20 @@
    ========================================================================== */
 .pf-footer-host {
 
-  --black: #000000;
+  /* Amanda's brand black, #111111, not #000. It was defined only in
+     about-page.css, as a per-page override; she asked for it site-wide:
+     "That is the black which aligned to my brand. Use that replacing all the
+     black elements in the entire site." The four project landing pages keep
+     their own palettes -- this token does not reach them, only the portfolio's
+     own chrome does.
+     --muted and --line are derived from it and move with it, as they do in
+     about-page.css. --white is deliberately NOT changed: she asked for the
+     black. */
+  --black: #111111;
   --white: #ffffff;
-  --ink: #000000;
-  --muted: rgba(0, 0, 0, 0.55);
-  --line: rgba(0, 0, 0, 0.18);
+  --ink: #111111;
+  --muted: rgba(17, 17, 17, 0.55);
+  --line: rgba(17, 17, 17, 0.18);
   --line-light: rgba(255, 255, 255, 0.35);
 
   --container-max: 1720px;

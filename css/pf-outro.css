@@ -80,7 +80,7 @@
 
    The tokens are spelled out rather than read from :root, because this file
    loads on five pages that do not take v3's global stylesheet. The values are
-   v3's: --black #000, --white #fff, --fw-medium 500, --ease and --ease-out.
+   v3's: --black #111111 (Amanda's brand black), --white #fff, --fw-medium 500.
 
    Deliberately dropped from the previous build: the translateY(-3px) lift and
    the box-shadow on hover. v3's button does not do that -- it INVERTS, which is
@@ -91,9 +91,9 @@
   gap: 0.7em;
   margin: 0;
   padding: 0.85em 1.5em;
-  border: 1.5px solid #000000;
+  border: 1.5px solid #111111;
   border-radius: 0;
-  background: #000000;
+  background: #111111;
   color: #ffffff;
   font-family: var(--pf-font);
   font-size: clamp(15px, 1.1vw, 20px);
@@ -107,8 +107,8 @@
   transition: background 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
               color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.pf-process__cta:hover { background: #ffffff; color: #000000; }
-.pf-process__cta:focus-visible { outline: 2px solid #000000; outline-offset: 4px; }
+.pf-process__cta:hover { background: #ffffff; color: #111111; }
+.pf-process__cta:focus-visible { outline: 2px solid #111111; outline-offset: 4px; }
 .pf-process__arrow {
   width: 1.6em;
   height: auto;

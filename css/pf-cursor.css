@@ -20,7 +20,8 @@
    fine and hover-capable.
    ========================================================================== */
 .cursor {
-  --black: #000000;
+  /* Amanda's brand black. Kept in step with styles.css's --black. */
+  --black: #111111;
   --white: #ffffff;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

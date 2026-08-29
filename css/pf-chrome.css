@@ -62,9 +62,10 @@
   --pf-fw-medium: 500;
   --pf-fw-semibold: 600;
 
-  --pf-ink: #000000;
+  /* Amanda's brand black. Kept in step with styles.css's --black. */
+  --pf-ink: #111111;
   --pf-paper: #ffffff;
-  --pf-muted: rgba(0, 0, 0, 0.55);
+  --pf-muted: rgba(17, 17, 17, 0.55);
   --pf-line: rgba(0, 0, 0, 0.18);
   --pf-shot: #e8e8e8;
 
@@ -121,6 +122,15 @@
   padding: 0;
   font-family: var(--pf-font);
   letter-spacing: var(--pf-tr-body);
+}
+
+/* ---- not on a phone ----
+   Amanda: "In mobile, please just hide the hamburger nav button. Let's don't
+   use it." It was landing squarely on four of the five pages' own burgers --
+   two hamburger icons in the same corner -- and the pages' own navigation is
+   right there anyway. 760px is the breakpoint the rest of this file uses. */
+@media (max-width: 760px) {
+  .pf-dock { display: none; }
 }
 
 /* The page is still loading. Both of these are the host pages' own signals:
