@@ -30,10 +30,6 @@
   <link rel="stylesheet" href="/css/pf-cursor.css">
 <link rel="stylesheet" href="/css/pf-outro.css">
 
-<style>
-  /* Kayn's --forest, the footer plate. */
-  .pf-outro { --pf-tail: #2A462D; }
-</style>
 </head>
 <body>
 
@@ -456,16 +452,14 @@
 </footer>
 
 <!-- ==================== THE PROCESS ====================
-     This page is the work; the process breakdown is a separate page on
-     amanda-design.com. So the page ends, and then this arrives over it — a
-     sheet sliding in from the right rather than one more section underneath.
+     This page is the work; the process breakdown is a separate page. So the
+     page ends, and then this arrives over it — a sheet sliding in from the
+     right rather than one more section underneath.
 
-     The mechanic is in pf-outro.css (a sticky pin) and pf-outro.js (one
-     translateX). Read pf-outro.css's header before changing the structure of
-     this block: the panel/sheet/slack nesting is what makes the arithmetic
-     come out with no jump and no dead scroll at the end. -->
+     IT DOES NOT EXTEND THE PAGE. .pf-outro--live is position:fixed, so this
+     block contributes nothing to the document's height. Read pf-outro.css's
+     header before changing anything here. -->
 <div class="pf-outro" data-pf-outro>
-  <div class="pf-outro__panel">
     <div class="pf-outro__sheet">
 
       <section class="pf-process" aria-labelledby="pfProcessHead">
@@ -597,8 +591,6 @@
       </div>
 
     </div>
-  </div>
-  <div class="pf-outro__slack" aria-hidden="true"></div>
 </div>
 
 <noscript>

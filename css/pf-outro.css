@@ -279,121 +279,75 @@
 /* ============================================================================
    THE COVER
    ----------------------------------------------------------------------------
-   The-process section arrives as a sheet sliding in from the right over the end
-   of the project page, rather than as one more section under it.
+   The-process section and the footer arrive as a sheet sliding in from the
+   right over the end of the page.
 
-   HOW THE PIN WORKS. Let C be this block's document offset after the negative
-   margin — which is exactly the page's own maximum scroll — S the slack height,
-   H the panel height and vh the viewport.
+   IT DOES NOT EXTEND THE PAGE. Amanda: "Once the respective pages reach the end
+   of the page, they should stop scrolling... the page reach end of the section ->
+   stop scrolling -> instead, the-process section appears." So .pf-outro--live is
+   position: fixed and out of flow entirely: the host page's scrollHeight is
+   exactly what it was before this chrome existed. An earlier build pinned a
+   sticky panel against a slack spacer and scrubbed the slide against scroll
+   position, which added ~1.9 viewports of document and is what she is
+   describing as "scrolling endlessly". None of that machinery is here --
+   .pf-outro__panel, .pf-outro__slack, --pf-vh, --pf-pin, --pf-sweep and
+   --pf-tail are all gone, along with the negative margin and the tail band.
 
-     phase 1, scrollY in [C, C+S]
-       A sticky box taller than the viewport with top:0 pins its top at 0 and
-       unsticks only when its containing block's bottom catches its own bottom.
-       The container is H+S tall and the panel sits at the top of it, so the
-       panel is pinned for exactly S. pf-outro.js sweeps the sheet across during
-       this, from translateX(100%) to 0.
+   IT RUNS ON ITS OWN CLOCK, not on scroll. "WITHOUT SCROLL-DRIVEN. So, just
+   immediate effect, intro and outro." One CSS transition, 0.6s.
 
-     phase 2, scrollY > C+S
-       The panel travels normally. The-process scrolls up and the footer follows.
+   The overlay scrolls internally -- the-process plus the footer is about two
+   screens -- and overscroll-behavior: contain stops that scroll chaining back to
+   the page underneath once it bottoms out. That is why no overflow lock is
+   needed on body or html, which matters: several of these pages have their own
+   position: sticky elements that an overflow lock on body would silently break.
 
-     and there is no dead scroll at the end
-       document height = C + H + S, so max scroll = C + H + S - vh. The panel's
-       bottom reaches the viewport bottom at scrollY = C + S + H - vh. The same
-       number. The document ends exactly as the footer bottoms out.
-
-   WHY THE NEGATIVE MARGIN. Without it the block would begin one viewport below
-   the page's last screen, so the reader would scroll a whole empty screen before
-   anything started. -100vh puts C on the page's own max scroll instead: the
-   sweep begins the moment the page underneath has nothing left to show.
-
-   WHY ::before. Behind the incoming sheet the page underneath keeps scrolling,
-   by up to S. This paints everything BELOW its last screen in that page's own
-   footer color (--pf-tail, set per page), so the drift has nothing to reveal
-   and there is no seam. It deliberately starts one viewport down: the last
-   screen itself must stay untouched and visible.
-
-   WHY overflow:clip AND NOT hidden. The sheet is translated a full width to the
-   right at rest, which would otherwise widen the document. `clip` removes it
-   without creating a scroll container — `hidden` would create one, and a scroll
-   container is exactly what breaks position:sticky. `hidden` is left in front of
-   it only as the fallback declaration for engines without `clip`.
-
-   WHY THE DEFAULT IS FLAT. pf-outro.js ADDS .pf-outro--live once it has checked
-   that it can run. No JS, reduced motion, a viewport under 900px, or a panel
-   shorter than the viewport, and this is ordinary content at the end of the
-   page — rather than a sheet parked off-screen where nobody can reach it.
+   The default state is FLAT: ordinary content at the end of the page. pf-outro.js
+   ADDS .pf-outro--live once it has checked it can run. No JS, reduced motion, or
+   a viewport under 900px, and the section is simply the last thing on the page --
+   never a fixed sheet parked off-screen where nobody can reach it.
    ========================================================================== */
 .pf-outro {
   position: relative;
-  z-index: 900;
   display: block;
   margin: 0;
+  padding: 0;
 }
-/* No UA default is safe to lean on here: the C + H + S identity above only
-   holds if these three boxes contribute exactly their content height to
-   .pf-outro, with nothing to collapse out of it (.pf-outro is not a BFC). */
-.pf-outro__panel { position: static; margin: 0; padding: 0; }
-.pf-outro__sheet { position: relative; background: var(--pf-paper); transform: none; margin: 0; padding: 0; }
-.pf-outro__slack { display: none; margin: 0; padding: 0; }
+.pf-outro__sheet {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  background: var(--pf-paper);
+}
 
 .pf-outro--live {
-  /* pf-outro.js's measure() always sets --pf-vh before this class is added,
-     so the var() fallback is the only declaration needed here — a preceding
-     bare -100vh would not be reachable as a fallback anyway: if the custom
-     property were unset AND the engine also lacked svh support, the whole
-     declaration goes invalid at computed-value time and resets to its
-     initial value, not to this rule's earlier declaration. Custom-property
-     support is already assumed everywhere else in pf- chrome. */
-  margin-top: calc(-1 * var(--pf-vh, 100svh));
-  /* The pinned panel must not swallow clicks on the page's last screen while
-     the sheet is still off to the right. Only the sheet takes them back. */
-  pointer-events: none;
-}
-.pf-outro--live::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* Same reasoning as .pf-outro--live's margin-top above. */
-  top: var(--pf-vh, 100svh);
-  z-index: -1;
-  background: var(--pf-tail, #000);
-}
-.pf-outro--live .pf-outro__panel {
-  position: sticky;
-  top: 0;
-  overflow: hidden;
-  overflow: clip;
-}
-.pf-outro--live .pf-outro__sheet {
-  transform: translate3d(100%, 0, 0);
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  /* The leading edge, as a box-shadow rather than a pseudo-element: it travels
+     with the panel, needs no second element, and cannot be clipped by the
+     overlay's own overflow the way an absolutely-positioned strip would be.
+     While the sheet is parked off-screen the shadow is off-screen with it. */
+  box-shadow: -40px 0 80px rgba(0, 0, 0, 0.28);
   will-change: transform;
-  pointer-events: auto;
+  /* NO transition here. Adding .pf-outro--live is what first sets the
+     translateX(100%), and a transition on this rule would ANIMATE that initial
+     parking -- the sheet would be seen sliding off to the right on page load,
+     from a start frame where it covers the whole page. The transition arrives a
+     frame later, with .pf-outro--armed, once the parked position has been
+     committed. Same reflow-then-transition dance the dock menu does. */
+  transition: none;
 }
-/* The sheet's leading edge, so it reads as something laid on top rather than a
-   panel swapped in. Its resting position is geometrically INSIDE the panel's
-   clip box, not outside it — the sheet itself rests at translateX(100%), so
-   this 120px band (translateX(-100%) of itself, flush against the sheet's own
-   left edge) lands flush against the viewport's right edge, not off it.
-   Clipping cannot hide it at rest, so opacity does instead: --pf-sweep is the
-   same eased progress pf-outro.js's paint() drives the transform from, 0 at
-   rest and 1 once the sweep completes, so the shadow only shows up once the
-   sheet is actually arriving. */
-.pf-outro--live .pf-outro__sheet::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 120px;
-  transform: translateX(-100%);
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0));
-  opacity: var(--pf-sweep, 0);
-  pointer-events: none;
+.pf-outro--live.pf-outro--armed {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.pf-outro--live .pf-outro__slack {
-  display: block;
-  /* Same reasoning as .pf-outro--live's margin-top above. */
-  height: var(--pf-pin, 90svh);
+.pf-outro--live.is-shown { transform: translateX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-outro--live.pf-outro--armed { transition-duration: 0.01ms; }
 }
