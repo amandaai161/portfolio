@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/pf-chrome.css">
   <link rel="stylesheet" href="/css/pf-footer.css">
+  <link rel="stylesheet" href="/css/pf-cursor.css">
 <link rel="stylesheet" href="/css/pf-outro.css">
 
 <style>
@@ -900,7 +901,7 @@
               <!-- Dead on purpose, for now. When the process page is live this
                    becomes <a class="pf-process__cta" href="https://amanda-design.com/project/aspire-design-system">
                    — same class, same styling, nothing else to change. -->
-              <button type="button" class="pf-process__cta">
+              <button type="button" class="pf-process__cta" data-cursor="See the process">
                 <span>See the full process breakdown</span>
                 <svg class="pf-process__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
               </button>
@@ -1031,5 +1032,9 @@
 <script src="links.js"></script>
 <script src="/js/pf-chrome.js"></script>
 <script src="/js/pf-outro.js"></script>
+<!-- The portfolio cursor: v3's black dot with its white ring, on every page.
+     Amanda: "keep the black dot following the cursor in all pages." -->
+<div class="cursor" aria-hidden="true"><span class="cursor__label">See project</span></div>
+<script src="/js/cursor.js"></script>
 </body>
 </html>

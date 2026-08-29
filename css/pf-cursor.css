@@ -1,0 +1,142 @@
+/* ============================================================================
+   THE CURSOR DOT — v3's, on pages that do not load v3's global stylesheets
+   ----------------------------------------------------------------------------
+   Amanda: "Please also keep the black dot following the cursor in all pages."
+
+   This is v3's css/cursor.css verbatim, preceded by the tokens it reads from
+   :root on amanda-design.com. They are declared on .cursor itself here, because
+   the five project pages cannot load v3's styles.css or type-system.css.
+
+   Declaring --black and --white matters even though cursor.css falls back to
+   #000/#fff: a fallback only fires when the property is UNSET, and a host page
+   that defines its own --black on :root would otherwise repaint the dot with it.
+
+   font-family is set here and not in v3's file, where the label inherits Figtree
+   from body. On a project page it would inherit that page's own typeface, so the
+   pill would be set in five different fonts. It is portfolio chrome, so it is
+   Figtree everywhere.
+
+   js/cursor.js needs no change: it stands down on its own unless the pointer is
+   fine and hover-capable.
+   ========================================================================== */
+.cursor {
+  --black: #000000;
+  --white: #ffffff;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --fs-body: 1rem;
+  --fw-medium: 500;
+
+  font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing: border-box;
+}
+.cursor *, .cursor *::before, .cursor *::after { box-sizing: border-box; }
+
+/* ============================================================
+   Dot cursor (studionamma-style). Follows the pointer with a
+   lerp, and swells into a labelled pill over [data-cursor]
+   elements. Fine-pointer devices only — touch gets nothing, and
+   the native cursor is restored if JS never runs.
+
+   BLACK dot with a WHITE outline ring — Amanda's call after
+   seeing the alternative on the real page: "the inverted color
+   doesn't work, please make it back to black dot + white
+   outline." An earlier build painted this white with
+   mix-blend-mode: difference so it inverted against whatever it
+   was over. That is gone entirely. The ring is what keeps it
+   readable on the black .contact section, which is the case the
+   blend was there to solve; a plain black dot with a white ring
+   reads on both surfaces without the blend's side effects (a
+   difference-blended element forces its own stacking context and
+   flattens its whole subtree before compositing, which is why the
+   pill's label previously had to be painted black to knock out of
+   it — a rule that made no sense read on its own).
+   ============================================================ */
+
+.cursor {
+  --dot: 14px;
+  /* Halved from 2px on Amanda's note that the outline read too thick.
+     1px still separates the dot from the black .contact section, which is
+     the only thing the ring is here for. */
+  --ring: 1px;
+  --pill-w: 156px;
+  --pill-h: 46px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 999px;
+  background: var(--black, #000000);
+  /* box-shadow, not border: a border participates in the box model, so with
+     the global border-box sizing it would eat 2px off each side of the 14px
+     dot and leave a 10px core. A spread-only shadow paints the ring outside
+     the box, follows border-radius through the pill transition for free, and
+     keeps the dot's own geometry exactly what --dot says it is. */
+  box-shadow: 0 0 0 var(--ring) var(--white, #ffffff);
+  color: var(--white, #ffffff);
+
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, width, height;
+  transition:
+    width 0.34s var(--ease-out),
+    height 0.34s var(--ease-out),
+    opacity 0.25s var(--ease);
+}
+
+.cursor.is-awake { opacity: 1; }
+
+.cursor.is-pill {
+  width: var(--pill-w);
+  height: var(--pill-h);
+}
+
+.cursor__label {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.2s var(--ease) 0.08s, transform 0.28s var(--ease-out) 0.08s;
+  /* Plain white on the black pill. (It used to be black, to knock itself out
+     of the difference blend — with the blend gone that would now render
+     black-on-black.) */
+  color: var(--white, #ffffff);
+}
+
+.cursor.is-pill .cursor__label {
+  opacity: 1;
+  transform: none;
+}
+
+/* GROWTH DIRECTION. js/cursor.js anchors this element by its LEFT edge and
+   its VERTICAL CENTRE (`translate(0, -50%)`), not by its centre — so when
+   .is-pill widens it from 14px to 156px, all 142px of that growth goes to
+   the RIGHT and the pill keeps starting exactly where the dot was.
+
+   With the old centre anchoring (`translate(-50%, -50%)`) the pill grew
+   symmetrically instead: at 156px wide its left edge landed ~60px to the
+   LEFT of the pointer, so a dot that was sitting politely below-right of the
+   cursor turned into a pill sitting squarely underneath it — Amanda's "its
+   position is just below the cursor when extended which is very off".
+   Nothing in this file encodes that; it is purely the transform js/cursor.js
+   writes, noted here because this rule set is where anyone would look for
+   it first. */
+
+/* The native cursor is deliberately LEFT VISIBLE. The dot does not
+   replace the system cursor — it accompanies it. So there is no `cursor:
+   none` rule anywhere; .cursor carries pointer-events: none above so the
+   dot can never intercept a click. */
+
+@media (hover: none), (pointer: coarse) {
+  .cursor { display: none; }
+}
