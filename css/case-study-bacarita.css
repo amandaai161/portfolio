@@ -1,0 +1,350 @@
+/* ============================================================
+   Amanda Idris — Case Study: Bacarita Creative Hub
+   Extends case-study.css (shared shell / sidebar / TOC / AI box /
+   panels / image placeholders / responsive) with the Bacarita
+   purple brand palette + the components unique to this case study:
+     · design-objective rows        (.cs-goals / .cs-goal)
+     · 6-step design process        (.cs-process / .cs-pstep)
+     · Unique Selling Points panel  (.cs-usp)
+     · user personas                (.cs-personas / .cs-persona)
+     · problem → solution table     (.cs-ps)
+     · "The Level-Up Lab" cards     (.cs-lab*)
+   Typography uses the shared type system; spacings mirror the
+   existing case-study clamp scale (closest match per element).
+   Only the two brand colours change from the Kayn case study.
+   ============================================================ */
+
+.cs-page {
+  /* Bacarita purple brand palette (sampled from the brief) */
+  --cs-green: #4b367a;        /* dark brand purple — objective rows, USP panel, pills */
+  --cs-green-soft: #eeeafb;   /* light brand lavender — step notes, persona cards */
+  --cs-card: #eaeeec;         /* neutral card — Level-Up Lab blocks */
+  --cs-solution: #33b72c;     /* solution marker (green) */
+  /* --cs-orange (#f04b26 problem marker) + --cs-ink / --cs-muted / --cs-line
+     are inherited from case-study.css */
+}
+
+/* soft-lavender image placeholder tint (fallback while images load) */
+.cs-ph--tint { --cs-ph: #f1eefb; background: #f1eefb; }
+
+/* design showcase: the final landing-page mockup, stacked seamlessly top→bottom
+   (images butt together with NO gap; only the outer container is rounded) */
+.cs-showcase {
+  margin-top: clamp(28px, 3vw, 48px);   /* breathing room below the section title */
+  border: 1px solid rgba(24, 24, 24, 0.1);   /* very subtle hairline */
+  background: var(--cs-soft);
+}
+.cs-showcase img,
+.cs-showcase video { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   DESIGN OBJECTIVES — full-width dark-navy rows
+   (icon in an outlined circle + bold-lead copy)
+   ============================================================ */
+.cs-goals { display: flex; flex-direction: column; gap: clamp(12px, 1.2vw, 18px); }
+.cs-goal {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 1.7vw, 24px);
+  padding: clamp(20px, 1.9vw, 28px);
+  border-radius: var(--cs-radius);
+  background: var(--cs-green);
+  color: #fff;
+}
+.cs-goal__icon {
+  flex: none;
+  width: clamp(46px, 3.4vw, 54px);
+  height: clamp(46px, 3.4vw, 54px);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.cs-goal__icon svg { width: 22px; height: 22px; }
+.cs-goal p { color: rgba(255, 255, 255, 0.86); }
+.cs-goal strong { color: #fff; font-weight: var(--fw-bold); }
+
+/* ============================================================
+   6-STEP DESIGN PROCESS
+   number column (with connecting line) + pill / title / note
+   ============================================================ */
+.cs-process { display: flex; flex-direction: column; margin-top: clamp(28px, 3vw, 48px); }
+.cs-pstep {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: clamp(16px, 1.6vw, 26px);
+  align-items: start;
+  padding-bottom: clamp(28px, 3vw, 48px);
+}
+.cs-pstep:last-child { padding-bottom: 0; }
+/* vertical line linking the step numbers (flush to the circle, no gap) */
+.cs-pstep:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 36px;
+  bottom: 0;
+  width: 1.5px;
+  background: var(--cs-line);
+  transform: translateX(-50%);
+}
+.cs-pstep__num {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0.75px solid var(--cs-ink);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-pstep__body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.cs-pstep__label {
+  align-self: flex-start;
+  background: var(--cs-green);
+  color: #fff;
+  border-radius: 999px;
+  padding: 9px 16px;
+  white-space: nowrap;
+}
+.cs-pstep__heading { display: flex; flex-direction: column; gap: 6px; }
+.cs-pstep__sub { color: var(--cs-ink); }
+.cs-pstep__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--cs-green-soft);
+  border-radius: var(--cs-radius-lg);
+  padding: clamp(18px, 1.8vw, 24px);
+}
+.cs-pstep__dot {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  color: var(--cs-green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.cs-pstep__dot svg { width: 100%; height: 100%; }
+.cs-pstep__note p { min-width: 0; }
+
+/* ============================================================
+   RESEARCH — bold-lead paragraph
+   ============================================================ */
+.cs-rich strong { font-weight: var(--fw-bold); }
+
+/* ============================================================
+   UNIQUE SELLING POINTS — dark-navy panel
+   ============================================================ */
+.cs-usp {
+  margin-top: clamp(24px, 2.6vw, 40px);
+  background: var(--cs-green);
+  color: #fff;
+  border-radius: var(--cs-radius-lg);
+  padding: clamp(28px, 3vw, 44px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.2vw, 32px);
+}
+.cs-usp__head { display: flex; align-items: center; gap: 16px; }
+.cs-usp__badge {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.cs-usp__badge svg { width: 24px; height: 24px; }
+.cs-usp__title { color: #fff; }
+.cs-usp__list { list-style: none; display: flex; flex-direction: column; gap: clamp(18px, 1.9vw, 26px); }
+.cs-usp__item { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 14px; align-items: start; }
+.cs-usp__num { color: rgba(255, 255, 255, 0.55); font-weight: var(--fw-semibold); }
+.cs-usp__item p { color: rgba(255, 255, 255, 0.86); }
+.cs-usp__item strong { color: #fff; font-weight: var(--fw-bold); }
+
+/* ============================================================
+   USER PERSONAS — light-blue cards
+   ============================================================ */
+.cs-personas {
+  margin-top: clamp(24px, 2.6vw, 40px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 1.6vw, 24px);
+}
+.cs-persona {
+  background: var(--cs-green-soft);
+  border-radius: var(--cs-radius-lg);
+  padding: clamp(20px, 1.9vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.7vw, 22px);
+}
+.cs-persona__id { display: flex; align-items: center; gap: 16px; }
+.cs-persona__avatar {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+}
+.cs-persona__name { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cs-persona__role { color: var(--cs-ink); }
+.cs-persona__pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs-persona__pill {
+  border: 1px solid var(--cs-green);
+  border-radius: 999px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+.cs-persona__quote { border-left: 2px solid var(--cs-ink); padding-left: 18px; }
+.cs-persona__bio { color: var(--cs-muted); }
+
+/* ============================================================
+   PROBLEM → SOLUTION
+   problem (orange marker) · arrow · solution (green marker) + note
+   ============================================================ */
+.cs-ps { margin-top: clamp(20px, 2vw, 30px); display: flex; flex-direction: column; }
+.cs-ps__cols { /* shared grid template for the header + rows */ }
+.cs-ps__head,
+.cs-ps__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) 32px minmax(0, 1.45fr);
+  gap: clamp(14px, 1.6vw, 25px);
+}
+.cs-ps__head { padding-bottom: 14px; }
+.cs-ps__head .cs-ps__h-prob { grid-column: 1; color: var(--cs-orange); }
+.cs-ps__head .cs-ps__h-sol { grid-column: 3; color: var(--cs-green); }
+.cs-ps__row {
+  align-items: center;
+  padding: clamp(22px, 2.2vw, 32px) 0;
+  border-top: 1px solid var(--cs-line);
+}
+.cs-ps__prob,
+.cs-ps__sol-title { display: flex; align-items: flex-start; gap: 12px; }
+.cs-ps__bullet {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.06em;
+}
+.cs-ps__bullet svg { width: 100%; height: 100%; }
+.cs-ps__bullet--prob { color: var(--cs-orange); }
+.cs-ps__bullet--sol { color: var(--cs-solution); }
+.cs-ps__arrow {
+  flex: none;
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-ps__arrow svg { width: 16px; height: 16px; }
+.cs-ps__sol { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cs-ps__sol-desc { color: var(--cs-muted); }
+
+/* ============================================================
+   THE LEVEL-UP LAB
+   ============================================================ */
+.cs-lab-banner {
+  margin-top: clamp(8px, 1vw, 16px);
+  background: var(--cs-ink);
+  color: #fff;
+  border-radius: var(--cs-radius-lg);
+  padding: clamp(22px, 2.3vw, 32px);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.6vw, 20px);
+}
+.cs-lab-banner__icon { flex: none; width: 30px; height: 30px; color: #fff; margin-top: 1px; }
+.cs-lab-banner p { color: #fff; }
+.cs-lab {
+  margin-top: clamp(16px, 1.8vw, 24px);
+  background: var(--cs-card);
+  border-radius: var(--cs-radius-lg);
+  padding: clamp(24px, 2.6vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.8vw, 24px);
+}
+.cs-lab__head { display: flex; align-items: center; gap: 14px; }
+.cs-lab__icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-lab__icon svg { width: 22px; height: 22px; }
+.cs-lab__list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.cs-lab__list li { position: relative; padding-left: 26px; }
+.cs-lab__list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cs-ink);
+}
+.cs-lab__list strong { font-weight: var(--fw-bold); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+/* persona pair → single column once the content column narrows */
+@media (max-width: 900px) {
+  .cs-personas { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  /* objective rows: icon stacks ABOVE the text */
+  .cs-goal { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+  /* step notes: icon stacks ABOVE the text */
+  .cs-pstep__note { flex-direction: column; gap: 12px; }
+
+  /* USP item numbers tuck closer to the copy */
+  .cs-usp__item { grid-template-columns: 1.9em minmax(0, 1fr); gap: 12px; }
+
+  /* problem → solution stacks: problem, a turned arrow, then the solution */
+  .cs-ps__head { display: none; }
+  .cs-ps__row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 12px;
+    padding: clamp(20px, 6vw, 26px) 0;
+  }
+  /* arrow: plain black glyph pointing down (no circle container) */
+  .cs-ps__arrow { transform: rotate(90deg); background: transparent; color: var(--cs-ink); width: auto; height: auto; }
+  .cs-ps__arrow svg { width: 26px; height: 26px; }
+
+  /* design showcase bleeds full-width, edge to edge (cancels the container gutter) */
+  .cs-showcase { margin-inline: calc(var(--gutter) * -1); border-inline: 0; }
+
+  /* breathing room under the Level-Up Lab section before "Other projects" */
+  #levelup { padding-bottom: clamp(28px, 8vw, 48px); }
+}
