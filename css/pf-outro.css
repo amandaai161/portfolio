@@ -329,10 +329,17 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   /* Opaque in its own right, not just via the sheet inside it. A transparent
-     overlay would let the host page show through anywhere the sheet did not
-     reach -- during a rubber-band overscroll, or if its content ever came up
-     shorter than the viewport. */
-  background: var(--pf-paper);
+     overlay lets the host page show through anywhere the sheet does not reach --
+     during a rubber-band overscroll, or if its content ever comes up shorter
+     than the viewport. That is the seam that put a project page's own footer on
+     top of the site footer.
+
+     It is the FOOTER's black rather than paper, because the only edge a reader
+     can actually bounce past is the bottom one, and the bottom of the sheet is
+     the black .contact block. Overscrolling there now reveals more of the same
+     black instead of a white flash. The sheet's own white starts at the top,
+     where .pf-process paints it. */
+  background: #111111;
   transform: translateX(100%);
   will-change: transform;
   /* NO transition here. Adding .pf-outro--live is what first sets the
