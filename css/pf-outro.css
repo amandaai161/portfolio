@@ -72,35 +72,48 @@
   display: block;
 }
 
+/* ---- the CTA ----
+   v3's own .cta__btn / .cta__btn--solid, declaration for declaration (see
+   css/v3.css:1227-1244). Amanda: "The see the full process button is different
+   too here. Please keep it similar to the one we have in the homepage as well.
+   CONSISTENCY!!!!"
+
+   The tokens are spelled out rather than read from :root, because this file
+   loads on five pages that do not take v3's global stylesheet. The values are
+   v3's: --black #000, --white #fff, --fw-medium 500, --ease and --ease-out.
+
+   Deliberately dropped from the previous build: the translateY(-3px) lift and
+   the box-shadow on hover. v3's button does not do that -- it INVERTS, which is
+   what the 1.5px border is there for at rest. Matching it is the whole point. */
 .pf-process__cta {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: clamp(12px, 1.1vw, 22px);
+  gap: 0.7em;
   margin: 0;
-  padding: clamp(16px, 1.3vw, 24px) clamp(22px, 1.9vw, 36px);
-  border: 0;
+  padding: 0.85em 1.5em;
+  border: 1.5px solid #000000;
   border-radius: 0;
-  background: var(--pf-ink);
-  color: var(--pf-paper);
-  font-family: inherit;
-  font-size: clamp(16px, 1.35vw, 24px);
-  font-weight: var(--pf-fw-semibold);
-  line-height: 1.2;
-  letter-spacing: var(--pf-tr-snug);
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--pf-font);
+  font-size: clamp(15px, 1.1vw, 20px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.4s var(--pf-ease), box-shadow 0.4s var(--pf-ease);
+  transition: background 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+              color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.pf-process__cta:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26); }
-.pf-process__cta:active { transform: translateY(-1px); }
-.pf-process__cta:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: 4px; }
+.pf-process__cta:hover { background: #ffffff; color: #000000; }
+.pf-process__cta:focus-visible { outline: 2px solid #000000; outline-offset: 4px; }
 .pf-process__arrow {
-  width: clamp(26px, 2vw, 40px);
+  width: 1.6em;
   height: auto;
   flex: none;
-  transition: transform 0.4s var(--pf-ease);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .pf-process__cta:hover .pf-process__arrow { transform: translateX(5px); }
 
@@ -251,7 +264,12 @@
   .pf-process__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-cards { grid-template-columns: minmax(0, 1fr); }
   .pf-process__shot { aspect-ratio: 4 / 3; }
-  .pf-process__cta { width: 100%; justify-content: space-between; }
+}
+
+/* v3's own breakpoint for this button (css/v3.css:1252-1258): it centres its
+   label on a phone rather than going full-width. */
+@media (max-width: 480px) {
+  .pf-process__cta { justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
