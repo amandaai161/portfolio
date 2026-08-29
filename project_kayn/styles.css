@@ -1,0 +1,1130 @@
+@charset "utf-8";
+/* ============================================================================
+   KAYN 2026
+   ----------------------------------------------------------------------------
+   Every measurement below was read off `claude-handover/kayn 2026 - desktop.png`
+   (1920 x 7512) and `… - mobile.png` (430 x 6334) and expressed as a clamp()
+   that resolves to the comp value at each of those two widths.
+
+   0.  Fonts
+   1.  Tokens
+   2.  Reset & base
+   2b. Lenis
+   3.  Utilities & shell
+   4.  Motion primitives (reveal / line / wipe)
+   5.  Buttons & links
+   6.  Loader
+   7.  Masthead & drawer
+   8.  Hero
+   9.  Film (scroll-scrubbed webm + USP ring)
+   10. Shop
+   11. Duo sections (hair / skin)
+   12. Origin (end CTA)
+   13. Footer
+   14. Reduced motion
+   ========================================================================= */
+
+
+/* ─── 0. FONTS ──────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Carla Sans";
+  src: url("font/CarlaSansLight.woff2") format("woff2");
+  font-weight: 300; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: "Carla Sans";
+  src: url("font/CarlaSansSemibold.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: "Mukta";
+  src: url("font/Mukta-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Mukta";
+  src: url("font/Mukta-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+
+/* ─── 1. TOKENS ─────────────────────────────────────────────────────────── */
+
+:root {
+  /* Palette — sampled from the comps. `--paper` is the brief's F8F5E0, which
+     replaces the comp's FFFEF7. */
+  --paper:      #F8F5E0;
+  --forest:     #2A462D;   /* display ink, footer plate            9.5:1 on paper */
+  --gold:       #CE9828;   /* brand accent                                        */
+  --cream:      #FEFAE0;   /* ink on dark                          9.9:1 on forest */
+  --sand:       #FFF0D0;   /* placeholder plate                                   */
+  --sage:       #B4CCAB;   /* USP pins                                            */
+  --hairline:   #9BA898;   /* the 1px rings on paper                              */
+  --forest-lit: #436546;   /* footer tiles + wordmark watermark                   */
+
+  /* Body ink. The comp uses #7F907E, which is 3.1:1 on paper — under the 4.5:1
+     needed for body copy. This is the same hue two steps darker: 4.7:1. */
+  --ink-body:   #5F7360;
+  --ink-body-comp: #7F907E;   /* flip --ink-body to this for pixel parity */
+
+  /* Type scale, in two halves.
+
+     Display stays fluid: each clamp resolves to the comp value at 430px and at
+     1920px, because a headline that ignores the viewport either breaks its line
+     count on a phone or gets lost on a large screen.
+
+     Everything at reading size is fixed. Seven separately-interpolating body
+     sizes drifted against each other at every width and read as noise; one size
+     for copy and one for the small stuff is the whole system. */
+  --fs-hero:     clamp(52px,  36.62px + 5.436vw, 160px);   /*  60 → 141 */
+  --fs-display:  clamp(38px,  17.89px + 5.839vw, 148px);   /*  43 → 130 */
+  --fs-logo:     clamp(40px,  40.67px + 1.007vw,  66px);   /*  45 →  60 */
+  --fs-card:     clamp(18px,  15.71px + 0.812vw,  33px);   /*  19 →  31 */
+
+  --fs-sub:       48px;
+  --fs-price:     28px;
+  --fs-body:      16px;
+  --fs-body-lg:   16px;
+  --fs-card-body: 16px;
+  --fs-usp-body:  16px;
+  --fs-nav:       16px;
+  --fs-meta:      14px;
+
+  /* USP title still tracks the product-card title. */
+  --fs-usp:      var(--fs-card);
+
+  --lh-hero:    1.26;
+  --lh-display: 1.10;
+  --lh-sub:     1.12;
+
+  /* Measure & rhythm */
+  --shell:       clamp(20px, 11.409vw - 19.06px, 220px);   /*  30 → 200 */
+  --shell-wide:  clamp(18px, 18.17px + 2.752vw,  80px);    /*  30 →  71 */
+  --gap-col:     clamp(22px, 4.9vw - 8px, 75px);
+  --band:        clamp(76px, 1.6px + 17.3vw, 300px);       /* section rhythm */
+
+  /* Hero plate */
+  --scrim-blur:  clamp(11px, 1.68vw, 34px);   /* 20% softer than the first pass */
+  --scrim-tint:  rgba(4, 17, 6, 0.44);
+
+  /* Film ring — comp: Ø574 centred on the bottle, in a 1920x1200 frame (47.8vh).
+     Height-driven, because the stage is exactly one viewport tall and the whole
+     composition has to fit inside it. --ring-cy is measured against the pinned
+     stage, not the comp page. The film's own scale and offset are computed in
+     app.js (fitFilm) from these, so there is no scale token here. */
+  --ring-d:      46vh;
+  --ring-cx:     50%;
+  --ring-cy:     62%;
+
+  /* Easing. One curve for entrances, one for exits, so the whole page moves
+     with the same hand. */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in:   cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+
+/* ─── 2. RESET & BASE ───────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* `clip`, never `hidden`: overflow-x:hidden forces computed overflow-y:auto,
+     which turns this into a scroll container and detaches position:sticky. */
+  overflow-x: clip;
+  scroll-behavior: auto;              /* Lenis owns smooth scrolling */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink-body);
+  font: 400 var(--fs-body)/1.45 "Mukta", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* The loader owns the viewport until the choreography hands over. */
+html[data-motion="pending"] body { overflow: clip; }
+
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+ul { margin: 0; padding: 0; list-style: none; }
+p  { margin: 0; }
+h1, h2, h3 { margin: 0; font-weight: inherit; }
+a  { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+strong { font-weight: 700; color: var(--forest); }
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+::selection { background: var(--gold); color: var(--cream); }
+
+
+/* ─── 2b. LENIS ─────────────────────────────────────────────────────────── */
+/* Verbatim from lenis@1.3.25/dist/lenis.css */
+
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch], .lenis [data-lenis-prevent-vertical],
+.lenis [data-lenis-prevent-horizontal] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+.lenis.lenis-autoToggle { transition-property: overflow; transition-duration: 1ms;
+                          transition-behavior: allow-discrete; }
+
+
+/* ─── 3. UTILITIES & SHELL ──────────────────────────────────────────────── */
+
+.u-sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+.shell { width: 100%; padding-inline: var(--shell); margin-inline: auto; }
+
+.display {
+  font-family: "Carla Sans", "Carla Sans Light", serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0;          /* Carla Sans is already wide; the comps add none */
+  color: var(--forest);
+  hyphens: none;
+}
+.display em { font-style: normal; color: var(--gold); }
+
+
+/* ─── 4. MOTION PRIMITIVES ──────────────────────────────────────────────── */
+
+/* A display line that unmasks upward from its own box. */
+.line { display: block; overflow: hidden; padding-block: 0.02em; }
+.line__in { display: block; will-change: transform, opacity; }
+
+/* The pre-hide is opacity only; every transform from-state is set in app.js.
+   A percentage translate written here resolves to pixels in the computed
+   matrix, so GSAP reads it as y:289px / yPercent:0 and then animating yPercent
+   moves nothing — the line stays parked outside its mask. */
+html[data-motion] .line__in    { opacity: 0; }
+html[data-motion] [data-reveal] { opacity: 0; }
+html[data-motion="off"] .line__in,
+html[data-motion="off"] [data-reveal] { opacity: 1; transform: none; }
+
+/* Figures wipe open, then settle out of a slow scale. */
+html[data-motion] [data-reveal-wipe] { clip-path: inset(0 0 100% 0); }
+html[data-motion="off"] [data-reveal-wipe] { clip-path: none; }
+
+
+/* ─── 5. BUTTONS & LINKS ────────────────────────────────────────────────── */
+
+.btn {
+  --btn-h: clamp(48px, 40.8px + 1.07vw, 62px);
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: clamp(14px, 1.5vw, 28px);
+  min-height: var(--btn-h);
+  padding-inline: clamp(20px, 1.7vw, 34px);
+  font: 400 var(--fs-body)/1 "Mukta", sans-serif;
+  letter-spacing: 0.005em;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .45s var(--ease-soft);
+}
+.btn > span, .btn > svg { position: relative; z-index: 2; }
+.btn__arrow { width: clamp(24px, 1.7vw, 32px); flex: none; transition: transform .5s var(--ease-out); }
+.btn:hover .btn__arrow, .btn:focus-visible .btn__arrow { transform: translateX(6px); }
+
+/* The gold plate wipes up from the bottom on hover — no colour change, just a
+   slightly deeper field, so the brand colour never shifts.
+
+   The wipe sits at z-index -1, not 1. A positioned pseudo-element paints above
+   its parent's own inline content, so at any positive index it hides a bare
+   text label — only a label wrapped in the .btn > span above outruns it. Held
+   below by `isolation: isolate` on .btn, it still covers the parent's gold
+   background but can never cover the words, wrapped or not. */
+.btn--gold { background: var(--gold); color: var(--cream); }
+.btn--gold::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: #B9861D;
+  transform: translate3d(0, 101%, 0);
+  transition: transform .55s var(--ease-out);
+}
+.btn--gold:hover::before, .btn--gold:focus-visible::before { transform: none; }
+
+.btn--ghost { color: var(--cream); box-shadow: inset 0 0 0 2px var(--cream); }
+.btn--ghost::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--cream);
+  transform: translate3d(0, 101%, 0);
+  transition: transform .55s var(--ease-out);
+}
+.btn--ghost:hover, .btn--ghost:focus-visible { color: var(--forest); }
+.btn--ghost:hover::before, .btn--ghost:focus-visible::before { transform: none; }
+
+.btn--sm { --btn-h: clamp(38px, 30.5px + 1.17vw, 54px); padding-inline: clamp(14px, 1.1vw, 22px); }
+.btn--icon {
+  --btn-h: clamp(38px, 30.5px + 1.17vw, 54px);
+  width: var(--btn-h); padding-inline: 0; gap: 0;
+}
+.btn--icon svg { width: 54%; position: relative; z-index: 2; }
+
+/* Inline "more" — rule draws in from the left. */
+/* Inline "more" — no rule at rest; it draws in from the left on hover. */
+.ilink {
+  position: relative; color: var(--forest); white-space: nowrap;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px; background-repeat: no-repeat; background-position: 0 92%;
+  transition: background-size .45s var(--ease-out);
+}
+.ilink:hover, .ilink:focus-visible { background-size: 100% 1px; }
+
+/* "Read more →" — the rule is on the label only, so it does not run under the
+   arrow while the arrow is sliding. */
+.tlink {
+  display: inline-flex; align-items: center; gap: 14px;
+  color: var(--forest); font-weight: 700; font-size: var(--fs-meta);
+  letter-spacing: 0.01em;
+}
+.tlink span {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px; background-repeat: no-repeat; background-position: 0 100%;
+  transition: background-size .45s var(--ease-out);
+}
+.tlink:hover span, .tlink:focus-visible span { background-size: 100% 1px; }
+.tlink svg { width: clamp(26px, 1.7vw, 32px); transition: transform .5s var(--ease-out); }
+.tlink:hover svg, .tlink:focus-visible svg { transform: translateX(7px); }
+
+
+/* ─── 6. LOADER ─────────────────────────────────────────────────────────── */
+
+.loader {
+  position: fixed; inset: 0; z-index: 90;
+  display: grid; place-items: center;
+  background: var(--forest);
+}
+.loader[hidden] { display: none; }
+
+/* Storyboard 1.1 sizes the ring at ~30% of the frame width and the wordmark at
+   ~22%, so the mark is comfortably larger than the masthead slot it shrinks
+   into. Getting this wrong inverts scene 1.3 — the logo grows instead. */
+.loader__stage {
+  position: relative;
+  width: clamp(200px, min(30vw, 52vh), 460px); aspect-ratio: 1;
+  display: grid; place-items: center;
+}
+.loader__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.loader__arc {
+  fill: none; stroke: rgba(254, 250, 224, 0.42); stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  /* A closed circle is emitted as two half-arcs, so the meeting points get
+     round caps and joins — otherwise a hairline notch shows at 12 o'clock. */
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.loader__mark {
+  position: relative;
+  width: 72%; height: auto; aspect-ratio: 551 / 141;
+  fill: var(--cream);
+  will-change: transform;
+}
+/* Absolutely placed so the readout sits just under the ring without pulling the
+   ring and wordmark off the optical centre of the screen. */
+.loader__pct {
+  position: absolute; top: calc(100% + 16px); left: 50%;
+  translate: -50% 0;
+  margin: 0;
+  font-size: 11px; line-height: 1;
+  letter-spacing: 0.22em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(254, 250, 224, 0.55);
+  white-space: nowrap;
+}
+
+
+/* ─── 7. MASTHEAD & DRAWER ──────────────────────────────────────────────── */
+
+/* Two modes.
+   Mode 1 (over the hero): cream on the photograph, full height, hairline rule.
+   Mode 2 (data-solid, from the moment the hero has dissolved): a short bar of
+   frosted paper with the wordmark and links in moss green, and no rule. */
+.masthead {
+  position: fixed; inset: 0 0 auto; z-index: 60;
+  padding-block: clamp(14px, 0.9vw, 22px) 0;
+  color: var(--cream);
+  transition: transform .6s var(--ease-out), background-color .45s linear,
+              backdrop-filter .45s linear, padding-block .45s var(--ease-soft);
+}
+
+.masthead[data-solid="1"] {
+  padding-block: 0;
+  background: rgba(248, 245, 224, 0.86);
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+}
+.masthead[data-solid="1"] .masthead__bar { min-height: clamp(46px, 3.1vw, 58px); }
+.masthead[data-solid="1"] .masthead__mark { height: calc(var(--fs-logo) * 0.42); fill: var(--forest); }
+.masthead[data-solid="1"] .navlink       { color: var(--forest); }
+.masthead[data-solid="1"] .masthead__rule { opacity: 0; }
+.masthead[data-solid="1"] .burger__line   { background: var(--forest); }
+
+.masthead__bar {
+  position: relative;
+  display: grid; align-items: center;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(18px, 3vw, 60px);
+  padding-inline: var(--shell-wide);
+  min-height: clamp(56px, 4.4vw, 84px);
+  transition: min-height .45s var(--ease-soft);
+}
+.masthead__nav { display: flex; align-items: center; gap: clamp(20px, 3.6vw, 72px); }
+.masthead__nav--start { justify-content: flex-end; }
+.masthead__nav--end   { justify-content: flex-start; }
+
+.masthead__brand { display: block; padding-block: 6px; }
+.masthead__mark {
+  width: auto; height: calc(var(--fs-logo) * 0.7);
+  aspect-ratio: 551 / 141; fill: var(--cream);
+  transition: opacity .3s linear, height .45s var(--ease-soft), fill .45s linear;
+}
+/* The loader's mark flies into this slot; the real one appears only at handover. */
+html[data-motion="pending"] .masthead__mark { opacity: 0; }
+
+.navlink {
+  position: relative;
+  font-size: var(--fs-nav); line-height: 1;
+  color: var(--cream);
+  transition: opacity .4s var(--ease-soft), color .45s linear;
+}
+.navlink::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .5s var(--ease-out);
+}
+.navlink:hover::after, .navlink:focus-visible::after { transform: none; }
+
+.masthead__rule {
+  display: block; height: 1px; margin-inline: var(--shell-wide);
+  margin-top: clamp(8px, 0.8vw, 16px);
+  background: rgba(235, 209, 183, 0.55);
+  transform: scaleX(0); transform-origin: 0 50%;
+  transition: opacity .35s linear;
+}
+html[data-motion="off"] .masthead__rule { transform: none; }
+
+/* Burger. Only ever rendered under 900px — the rule is unscoped because there is
+   nowhere else it appears. The tap target stays 44px via the padding, so the
+   mark can be small without becoming hard to hit. */
+.burger {
+  display: none;
+  position: absolute; right: var(--shell-wide); top: 50%; translate: 0 -50%;
+  box-sizing: content-box;
+  width: 25px; height: 17px;
+  padding: 14px 10px;
+}
+.burger__line {
+  position: absolute; left: 10px; right: 10px; height: 1.5px; background: var(--cream);
+  transition: transform .45s var(--ease-out), opacity .25s linear;
+}
+.burger__line:nth-child(2) { top: 14px; }
+.burger__line:nth-child(3) { top: 21.75px; }
+.burger__line:nth-child(4) { top: 29.5px; }
+.burger[aria-expanded="true"] .burger__line:nth-child(2) { transform: translateY(7.75px) rotate(45deg); }
+.burger[aria-expanded="true"] .burger__line:nth-child(3) { opacity: 0; }
+.burger[aria-expanded="true"] .burger__line:nth-child(4) { transform: translateY(-7.75px) rotate(-45deg); }
+
+/* Drawer */
+.drawer {
+  position: fixed; inset: 0; z-index: 55;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 8vh; padding: 18vh var(--shell) 8vh;
+  background: var(--forest);
+  clip-path: inset(0 0 100% 0);
+}
+.drawer[hidden] { display: none; }
+.drawer__nav { display: flex; flex-direction: column; gap: clamp(10px, 2.4vh, 26px); }
+.drawer__nav a {
+  font-family: "Carla Sans", serif; font-weight: 300; text-transform: uppercase;
+  font-size: clamp(34px, 11vw, 62px); line-height: 1.05; color: var(--cream);
+  opacity: 0;
+}
+.drawer__foot {
+  display: flex; justify-content: space-between;
+  font-size: var(--fs-meta); color: rgba(254, 250, 224, 0.6);
+  border-top: 1px solid rgba(254, 250, 224, 0.2); padding-top: 18px;
+}
+
+
+/* ─── 8. HERO ───────────────────────────────────────────────────────────── */
+
+/* 100vh of held frame plus the run in which the copy leaves and the stage
+   dissolves (Storyboard 2.1). The exit run is what sets how fast the hero goes:
+   90svh of it, so the dissolve is unhurried. z-index puts it over the film, which
+   starts underneath it — see the note on .film. */
+.hero {
+  position: relative; z-index: 2;
+  height: 190svh;
+}
+.hero__stage {
+  position: sticky; top: 0;
+  height: 100svh; min-height: 560px;
+  overflow: clip;
+  /* The comp's own under-colour, sampled from the portrait hero's top strip.
+     Matching it exactly means the band above the still — the comp leaves ~94px
+     there in portrait — reads as continuous rather than as a seam. */
+  background: #061404;
+  will-change: opacity;
+}
+.hero__media { position: absolute; inset: 0; z-index: 1; overflow: clip; }
+
+/* Comp framing: the still is rendered 1.5x the viewport width with the focal
+   point at 54.1% / 44.2% of the image. Reproduced exactly by placing that
+   content point at the centre of the frame. */
+/* Framing is a zoom-over-cover plus a focal point; app.js (fitHero) resolves
+   both to pixels on every refresh — see the note there for why it cannot live
+   in `transform` or `translate`.
+
+   --hero-zoom: 1 is "just covers the frame", the smallest the subject can be
+   without letterboxing. The comp rendered the still at 1.5x, so 1 is 33% smaller
+   — as close to the 40% asked for as the frame allows. At zoom 1 the full image
+   width is on screen on desktop, so --focal-x has nothing to choose and only the
+   vertical crop is steered. */
+.hero__img {
+  --hero-zoom: 1;
+  --focal-x: 50%;
+  --focal-y: 44.2%;
+  position: absolute; left: 50%; top: 50%;
+  max-width: none;
+  will-change: transform, opacity;
+}
+/* Portrait needs a lot of image width to cover a tall frame, so cover already
+   sits close to the comp's 321% and there is little room left to shrink. The
+   focal point is the comp's, matched against the source: it is what keeps the
+   dropper in frame. */
+@media (max-aspect-ratio: 92 / 100) {
+  .hero__img { --focal-x: 70.5%; --focal-y: 50%; }
+}
+
+/* Above the plate, not behind it: in the comp the line stays crisp across the
+   blurred half. A backdrop-filter blurs everything painted beneath it.
+   Sized and placed from tokens rather than by letting preserveAspectRatio
+   scale a viewBox — that was rendering it ~1.5x the comp's size. */
+/* Pushed off the left edge so half the circle is on screen and half is cropped:
+   the left edge sits at -50% of its own width. */
+.hero__ring {
+  --hero-ring-d: 53.9vh;                /* 49vh + 10% */
+  position: absolute; z-index: 3;
+  left: calc(-0.5 * var(--hero-ring-d));
+  top:  calc(70% - var(--hero-ring-d) / 2);
+  /* max-width:none, or the global `svg { max-width: 100% }` clamps the circle to
+     the viewport while `left` keeps being computed from the declared diameter —
+     the crop then stops matching the number it was set from. */
+  width: var(--hero-ring-d); max-width: none; aspect-ratio: 1;
+  overflow: visible; pointer-events: none;
+}
+.hero__arc {
+  fill: none; stroke: rgba(254, 250, 224, 0.4); stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  /* A closed circle is emitted as two half-arcs, so the meeting points get
+     round caps and joins — otherwise a hairline notch shows at 12 o'clock. */
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.hero__scrim {
+  position: absolute; inset: 0 50% 0 0; z-index: 2;
+  backdrop-filter: blur(var(--scrim-blur)) saturate(0.92);
+  -webkit-backdrop-filter: blur(var(--scrim-blur)) saturate(0.92);
+  background: var(--scrim-tint);
+  will-change: transform, opacity;
+}
+/* Grain: 128px tile at 95% density / 3% opacity, baked into the PNG, then drawn
+   30% larger so the particles read as film grain rather than harsh noise. */
+.hero__scrim::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("images/grain.png");
+  background-size: 166px 166px;
+}
+
+/* Full width, not the plate's 50%: in the comp "GOLDEN DROP" runs from x197 to
+   x1224 and deliberately crosses the seam at x960 onto the sharp half. Only the
+   lede is held inside the plate.
+
+   The block is a flex column filling the frame with the slack in one auto
+   margin, so a short viewport eats the gap instead of pushing the headline off
+   the top — at 720px tall a fixed comp-derived gap overflowed by 48px. */
+.hero__copy {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column;
+  padding: clamp(84px, 17.75vh, 200px) var(--shell) clamp(40px, 14.6vh, 176px);
+}
+.hero__title {
+  font-size: var(--fs-hero); line-height: var(--lh-hero);
+  color: var(--cream);
+}
+.hero__lede {
+  margin-top: auto;                    /* the auto gap the comp shows as 274px */
+  max-width: min(34ch, 42%);           /* comp: 516px of a 1920 frame */
+  color: var(--cream);
+  font-size: var(--fs-body); line-height: 1.45;
+  margin-bottom: clamp(20px, 2.9vw, 56px);
+}
+.hero__cta { align-self: flex-start; min-width: clamp(180px, 11.4vw, 219px); }
+
+
+/* ─── 9. FILM ───────────────────────────────────────────────────────────── */
+
+/* Pulled fully up under the hero: the section's top lands at 0, so its sticky
+   stage is pinned and the scrub begins on the very first scroll, while the hero
+   is still dissolving on top of it. */
+.film {
+  position: relative; z-index: 1;
+  margin-top: -190svh;                  /* == .hero height, so .film starts at 0 */
+  /* 550 = 100 stage + 90 lead-in + 360 of beats. The lead-in is the stretch that
+     scrubs behind the hero (.hero 190 less one 100 stage); it is added to the
+     height rather than taken out of the beats, so every beat keeps the pixel
+     pacing it had before app.js started offsetting them. */
+  height: 550svh;
+}
+
+.film__stage {
+  position: sticky; top: 0; z-index: 2;
+  height: 100svh; min-height: 560px;
+  display: grid; grid-template-rows: auto 1fr;
+  padding: clamp(48px, 7.8vh, 150px) var(--shell-wide) 0;
+}
+
+/* Everything in the pinned stage is capped by viewport height as well as width.
+   The comp composes section 2 inside a 1200px-tall frame; on a 720px-tall screen
+   the width-driven display size alone would run the headline straight into the
+   USP labels. Comp equivalents: 130/1200 = 10.8vh display, 29/1200 = 2.4vh USP
+   title, 15/1200 = 1.25vh USP body — the vh caps here sit just above those so
+   short screens compress rather than collide. */
+.film__title {
+  position: relative; z-index: 1;
+  font-size: min(var(--fs-display) * 0.88, 8.4vh);
+  line-height: var(--lh-display);
+  text-align: left;
+  /* Capped and centred rather than capped and left-hung: the second line is
+     right-aligned, so the headline reads as a block bracketing the bottle and
+     the bracket has to stay symmetric about the stage's centre line.
+     `width: 100%` is load-bearing — auto margins cancel a grid item's default
+     stretch, so without it the block shrinks to its longest line and the
+     right-aligned line loses the measure it is supposed to hang off. */
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.film__title .line:last-child { text-align: right; }
+
+/* The ring is centred on the bottle, which the comp places at 49.7% of the
+   frame width and 0.5 of the lower band. */
+.film__ring {
+  position: absolute; z-index: 1;
+  left: var(--ring-cx); top: var(--ring-cy);
+  width: var(--ring-d); aspect-ratio: 1;
+  translate: -50% -50%;
+  overflow: visible; pointer-events: none;
+}
+.film__arc {
+  fill: none; stroke: var(--hairline); stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  /* A closed circle is emitted as two half-arcs, so the meeting points get
+     round caps and joins — otherwise a hairline notch shows at 12 o'clock. */
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.film__head { fill: var(--sage); opacity: 0; }
+.film__pins circle { fill: var(--sage); opacity: 0; }
+
+/* Width, height and offset are written by app.js (fitFilm): the film runs the
+   full width of the stage at its native aspect with its bottom edge on the
+   fold, never below 1000px wide. Sizing the box itself rather than scaling a
+   stage-filling element means there is no letterbox padding to reason about —
+   the box *is* the picture. */
+.film__video {
+  position: absolute; left: 0; top: 0; z-index: 3;
+  /* Third of the deliberately-oversized elements (with .hero__img and the two
+     rings) that has to opt out of the global `video { max-width: 100% }` — it
+     runs wider than its container by design, and the cap would silently defeat
+     the 1000px floor on a phone. */
+  max-width: none;
+  object-fit: fill;
+  backface-visibility: hidden;
+  pointer-events: none; user-select: none;
+  background: transparent;
+}
+
+/* USP ring copy. Sibling of the stage and pulled back over it so both pin at
+   top:0; z-index 1 keeps every word behind the bottle (Storyboard 2.2). */
+.usp {
+  position: sticky; top: 0; z-index: 1;
+  margin-top: -100svh; height: 100svh;
+  pointer-events: none;
+}
+/* Adjacent anchors are only 0.7071 x R apart vertically — 117px on a 720-tall
+   stage — so the block has to stay shorter than that or neighbours collide.
+   Width is in vw/vh, not ch: ch tracks the font size, so it shrank the measure
+   at exactly the sizes where more of it was needed. */
+.usp__item {
+  position: absolute;
+  top: calc(var(--ring-cy) + var(--dy) * var(--ring-d) / 2);
+  width: min(27vw, 50vh, 420px);
+  translate: 0 -50%;
+  opacity: 0;
+}
+.usp__item[data-side="left"] {
+  right: calc(100% - var(--ring-cx) + var(--dx-abs) * var(--ring-d) / 2 + clamp(14px, 2.1vw, 42px));
+  text-align: right;
+}
+.usp__item[data-side="right"] {
+  left: calc(var(--ring-cx) + var(--dx-abs) * var(--ring-d) / 2 + clamp(14px, 1.7vw, 32px));
+  text-align: left;
+}
+.usp__item[data-angle="315"] { --dx-abs: 0.7071; --dy: -0.7071; }
+.usp__item[data-angle="270"] { --dx-abs: 1;      --dy: 0; }
+.usp__item[data-angle="225"] { --dx-abs: 0.7071; --dy: 0.7071; }
+.usp__item[data-angle="135"] { --dx-abs: 0.7071; --dy: 0.7071; }
+.usp__item[data-angle="90"]  { --dx-abs: 1;      --dy: 0; }
+.usp__item[data-angle="45"]  { --dx-abs: 0.7071; --dy: -0.7071; }
+
+.usp__title {
+  font: 700 min(var(--fs-usp), 3.3vh)/1.15 "Mukta", sans-serif;
+  color: var(--forest);
+  margin-bottom: 0.5em;
+}
+/* Clamped to three lines so a long line of copy can never push the block into
+   its neighbour, whatever the viewport. */
+.usp__body {
+  font-size: min(var(--fs-usp-body), 2.3vh);
+  line-height: 1.4;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+
+/* ─── 10. SHOP ──────────────────────────────────────────────────────────── */
+
+/* Tighter than the section rhythm: the products read as falling out of the
+   bottle held above them, so the gap has to be short enough to connect them. */
+.shop { padding-block: clamp(34px, 5.4vw, 104px) 0; }
+.shop__grid {
+  display: grid; gap: clamp(40px, 4.6vw, 88px) var(--gap-col);
+  grid-template-columns: repeat(3, 1fr);
+}
+.card { display: flex; flex-direction: column; }
+.card__figure {
+  position: relative; aspect-ratio: 1;
+  background: var(--sand);
+  display: grid; place-items: center;
+  overflow: clip;
+  transition: transform .7s var(--ease-out);
+}
+.card:hover .card__figure { transform: translateY(-6px); }
+/* Overscan, so the parallax drift never pulls an edge into view — 8% above and
+   8% below the frame. The plate is taken out of flow deliberately: a percentage
+   height on an in-flow child is circular against the frame's aspect-ratio, so
+   the browser drops the ratio and lets the photograph's own proportions size the
+   card. Out of flow, the 116% resolves against the ratio and every card crops to
+   the same shape whatever the source file measures.
+
+   The overscan is the parallax budget: app.js drifts the plate +/-5% of its own
+   height, which is 5.8% of the frame, so the 8% here leaves a margin either way.
+   Raise the drift and this has to rise with it or an edge swings into view. */
+.card__figure > * {
+  position: absolute; left: 0; top: -8%;
+  width: 100%; height: 116%;
+  will-change: transform;
+}
+.card__figure img { object-fit: cover; }
+
+/* Roughly double the comp's internal spacing — as drawn the card reads cramped. */
+.card__buy {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  margin-top: clamp(22px, 2.4vw, 46px);
+}
+.card__price { font: 700 var(--fs-price)/1 "Mukta", sans-serif; color: var(--gold); }
+.card__actions { display: flex; gap: clamp(6px, 0.55vw, 11px); }
+
+.card__name {
+  font: 700 var(--fs-card)/1.15 "Mukta", sans-serif; color: var(--forest);
+  margin-top: clamp(20px, 2.1vw, 40px);
+}
+.card__desc {
+  font-size: var(--fs-card-body); line-height: 1.4;
+  margin-top: clamp(14px, 1.2vw, 24px);
+}
+.card__meta {
+  font-size: var(--fs-meta); color: var(--ink-body); opacity: 0.72;
+  margin-top: clamp(18px, 1.9vw, 38px);
+}
+
+
+/* ─── 11. DUO (hair / skin) ─────────────────────────────────────────────── */
+
+.duo { padding-block: var(--band) 0; }
+.duo__grid {
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 738fr) minmax(0, 618fr);
+  column-gap: clamp(28px, 1.7vw, 33px);
+}
+.duo__figure { margin: 0; overflow: clip; isolation: isolate; }
+.duo__figure img { width: 100%; aspect-ratio: 1000 / 886; object-fit: cover; }
+
+.duo--flip .duo__grid { grid-template-columns: minmax(0, 656fr) minmax(0, 738fr); }
+.duo--flip .duo__figure { order: 2; }
+.duo--flip .duo__copy   { order: 1; }
+
+.duo__copy { padding-top: clamp(0px, 0.6vw, 12px); }
+.duo__title {
+  font-size: var(--fs-sub); line-height: var(--lh-sub);
+  margin-bottom: clamp(20px, 3.1vw, 60px);
+}
+/* While the section is two columns the display has only ~45% of the width to
+   live in. The comp's 78.5px at 1920 is 4.09vw, and "GOLD STANDARD" — the
+   longest line in either duo — needs the measure/8.465 to stay unwrapped; 4.1vw
+   satisfies both ends. Below the stacking breakpoint the full width is available
+   and the plain clamp is correct again. */
+@media (min-width: 1181px) {
+  .duo__title { font-size: min(var(--fs-sub), 4.1vw); }
+}
+/* The comp's 30ch measure left a third of the column empty and stranded the
+   "Read more" out on its own; the copy now fills its column. */
+.duo__body { font-size: var(--fs-body-lg); line-height: 1.42; max-width: 46ch; }
+.duo__copy .tlink { margin-top: clamp(16px, 1.4vw, 28px); }
+
+
+/* ─── 12. ORIGIN ────────────────────────────────────────────────────────── */
+
+/* All-positive stacking. A z-index:-2 media layer under `isolation: isolate`
+   never painted here — the promoted (will-change: transform) image layer ends up
+   behind the section's own background. Nothing about this layout needs negative
+   indices, so it does not use them. */
+.origin {
+  position: relative;
+  margin-top: var(--band);
+  padding-block: clamp(70px, 11.9vw, 229px) clamp(60px, 11.4vw, 219px);
+  overflow: clip;
+  background: #22331F;
+  color: var(--cream);
+}
+/* isolation confines the parallax image's compositing layer to this wrapper.
+   Without it the promoted layer composites above the scrim and the copy — the
+   photo ends up painting over everything that should sit on top of it. */
+.origin__media {
+  position: absolute; inset: 0; z-index: 0;
+  overflow: clip; isolation: isolate;
+}
+.origin__img {
+  width: 100%; height: 112%; object-fit: cover; object-position: 50% 42%;
+  margin-top: -6%;                     /* headroom for the parallax drift */
+}
+/* Keeps the cream copy legible over the photograph. */
+.origin__scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(100deg, rgba(20, 36, 22, 0.96) 0%,
+                                      rgba(20, 36, 22, 0.90) 26%,
+                                      rgba(20, 36, 22, 0.62) 50%,
+                                      rgba(20, 36, 22, 0.22) 76%,
+                                      rgba(20, 36, 22, 0.06) 100%);
+}
+/* Same treatment as the hero's, cropped harder: 35% on screen, 65% off the left
+   edge, so the left edge sits at -65% of its own width, and set a little below
+   the section's midline. */
+.origin__ring {
+  --origin-ring-d: 70vh;
+  position: absolute; z-index: 2;
+  left: calc(-0.65 * var(--origin-ring-d));
+  top:  calc(54% - var(--origin-ring-d) / 2);
+  width: var(--origin-ring-d); max-width: none; aspect-ratio: 1;
+  overflow: visible; pointer-events: none;
+}
+.origin__arc {
+  fill: none; stroke: rgba(254, 250, 224, 0.34); stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  /* A closed circle is emitted as two half-arcs, so the meeting points get
+     round caps and joins — otherwise a hairline notch shows at 12 o'clock. */
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.origin__inner { position: relative; z-index: 3; max-width: min(100%, 1920px); }
+.origin__title {
+  color: var(--cream);
+  font-size: var(--fs-sub); line-height: var(--lh-sub);
+  margin-bottom: clamp(18px, 2.8vw, 53px);
+}
+.origin__title em { color: var(--gold); }
+.origin__body {
+  color: var(--cream); max-width: 42ch;
+  font-size: var(--fs-body); line-height: 1.28;
+  margin-bottom: clamp(22px, 2.1vw, 41px);
+}
+.origin__actions { display: flex; flex-wrap: wrap; gap: clamp(12px, 0.9vw, 18px); }
+.origin__actions .btn { min-width: clamp(150px, 10.3vw, 198px); }
+
+
+/* ─── 13. FOOTER ────────────────────────────────────────────────────────── */
+
+.foot {
+  position: relative; isolation: isolate;
+  overflow: clip;
+  background: var(--forest); color: var(--cream);
+  padding-block: clamp(46px, 4.3vw, 82px) 0;
+}
+.foot__inner {
+  position: relative; z-index: 2;
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1fr) auto;
+  row-gap: clamp(60px, 14vw, 270px);
+}
+.foot__social { display: flex; gap: clamp(10px, 1.05vw, 20px); }
+.social {
+  width: clamp(42px, 3.13vw, 60px); aspect-ratio: 1;
+  display: grid; place-items: center;
+  background: var(--forest-lit);
+  transition: background-color .4s var(--ease-soft), transform .5s var(--ease-out);
+}
+.social svg { width: 54%; fill: var(--cream); }
+.social:hover { background: var(--gold); transform: translateY(-4px); }
+
+.foot__cols {
+  grid-row: 1; grid-column: 2;
+  display: grid; grid-auto-flow: column; gap: clamp(24px, 4.7vw, 90px);
+  align-items: start;
+}
+.foot__col { display: grid; gap: clamp(12px, 1.1vw, 21px); font-size: var(--fs-nav); }
+.foot__col--lead {
+  gap: clamp(16px, 1.8vw, 35px); font-weight: 700;
+  padding-right: clamp(20px, 4.2vw, 80px);
+  border-right: 1px solid rgba(254, 250, 224, 0.28);
+}
+.foot__head { color: rgba(254, 250, 224, 0.55); }
+.foot__col a { position: relative; }
+.foot__col a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .5s var(--ease-out);
+}
+.foot__col a:hover::after { transform: none; }
+
+.foot__legal {
+  grid-column: 1; grid-row: 2;
+  font-size: var(--fs-meta); line-height: 1.42;
+  color: rgba(254, 250, 224, 0.9);
+}
+
+.foot__watermark {
+  position: absolute; z-index: 1;
+  left: 32%; right: -5%; bottom: 0;
+  aspect-ratio: 551 / 110;
+  fill: var(--forest-lit);
+}
+
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────────────── */
+
+@media (max-width: 1180px) {
+  .duo__grid, .duo--flip .duo__grid { grid-template-columns: 1fr; row-gap: clamp(24px, 4vw, 48px); }
+  .duo--flip .duo__figure { order: 0; }
+  .duo--flip .duo__copy   { order: 0; }
+  .duo__body { max-width: 46ch; }
+  .foot__inner { grid-template-columns: 1fr; row-gap: clamp(44px, 7vw, 90px); }
+  .foot__cols { grid-row: 2; grid-column: 1; }
+  .foot__legal { grid-row: 3; grid-column: 1; }
+  .foot__watermark { left: 0; right: -6%; }
+}
+
+@media (max-width: 900px) {
+  .masthead__nav { display: none; }
+  .burger { display: block; }
+  .masthead__bar { grid-template-columns: 1fr; min-height: clamp(52px, 12vw, 72px); }
+  .masthead__brand { justify-self: start; }
+  /* Mode 1 sits over the hero photograph, where cream is the only value that
+     holds; mode 2 sits on paper, where gold carries the brand without competing
+     with the forest nav beside it. */
+  .masthead__mark { height: calc(var(--fs-logo) * 0.64); fill: var(--cream); }
+  .masthead[data-solid="1"] .masthead__mark { fill: var(--gold); }
+
+  .shop__grid { grid-template-columns: 1fr; gap: clamp(44px, 9vw, 80px); }
+  .card__figure { aspect-ratio: 365 / 290; }
+  .foot__cols { grid-auto-flow: row; gap: clamp(30px, 6vw, 56px); }
+  .foot__col--lead { border-right: 0; padding-right: 0;
+                     border-bottom: 1px solid rgba(254,250,224,.28); padding-bottom: clamp(22px,4vw,34px); }
+}
+
+/* Portrait: the whole section comes out of the pinned overlay and runs as normal
+   flow — headline, then the bottle over its ring, then the six points stacked
+   underneath. Nothing here is sticky and nothing scrubs a full viewport of
+   scroll; the mobile comp is a page you read, not a stage you hold still.
+   This breakpoint is mirrored exactly in app.js's gsap.matchMedia() split —
+   change one and you have to change the other. */
+@media (max-aspect-ratio: 1 / 1) {
+  .film {
+    position: relative; z-index: auto;
+    /* Pulled up by exactly the hero's exit run (190svh section less its 100svh
+       sticky stage). Past that point the hero's stage has faded to nothing and
+       is only scrolling itself off screen, which read as most of a blank
+       viewport between the two sections. Overlapping them removes it; the hero
+       is z-index 2 and paints on top, so nothing shows through until it has
+       gone. app.js hangs this section's reveals off the hero's exit rather than
+       off their own positions for exactly that reason. */
+    margin-top: -90svh; height: auto;
+    padding-bottom: var(--band);
+  }
+  .film__stage {
+    /* relative, not static: still the containing block the ring and the film are
+       positioned against. */
+    position: relative; top: auto;
+    height: auto; min-height: 0;
+    display: block;
+    padding: clamp(56px, 14vw, 110px) var(--shell) 0;
+  }
+  /* Reserve the media area. Both the ring and the film are out of flow, so
+     without this the stage collapses to the height of its headline.
+
+     Sized to the BOTTLE, not to the film. The bottle only occupies y 29.2→94.9%
+     of its frame, so reserving the whole 131.4vw picture was banking 38.3vw of
+     transparent pixels above the dropper as if they were content — that was the
+     gap under the headline. The frame still overhangs upward by that much; it is
+     empty there, and on mobile the bottle never moves, so nothing can appear in
+     it. (Landscape cannot do this — the bottle sweeps the full frame.)
+
+       bottle       = FILM_RING_RATIO 1.35 x 64vw ring        =  86.4vw
+       media        = 16 air + 86.4 bottle + 10 air           = 112.4vw
+       ring centre  = 10 + 86.4/2 from the bottom             =  53.2vw   */
+  .film__stage::after { content: ""; display: block; height: 112.4vw; }
+
+  /* Sized off the same token as the hair / skin and end-CTA headings so the
+     three read as one level, rather than off the display step the desktop
+     section uses. */
+  .film__title {
+    text-align: left; max-width: none; margin-inline: 0;
+    font-size: var(--fs-sub); line-height: var(--lh-sub);
+  }
+  /* One block, one reveal, but the two clauses keep their own lines: each .line
+     stays a block so "for the purest you" starts fresh, and each wraps
+     internally. The mask comes off because per-line masking cannot hold a line
+     that has rewrapped — the mask slides vertically and the second visual line
+     is simply outside it. */
+  .film__title .line { display: block; overflow: visible; }
+  html[data-motion] .film__title .line__in { transform: none; opacity: 1; }
+  .film__title .line:last-child { text-align: left; padding-left: 0; }
+
+  /* The ring stays on mobile, anchored to the BOTTOM of the stage so its centre
+     does not move when the headline rewraps to a different number of lines. */
+  .film__ring {
+    display: block;
+    --ring-d: 64vw;
+    left: 50%; right: auto;
+    top: auto; bottom: calc(53.2vw - var(--ring-d) / 2);
+    translate: -50% 0;
+  }
+  /* Nothing on the ring is animated here — it is a closed circle behind a still.
+     No anchors to mark (the six points are a list below, not a dial) and no
+     travelling head, because nothing is being drawn. */
+  .film__pins, .film__head { display: none; }
+
+  .usp {
+    position: static; margin-top: 0; height: auto;
+    display: grid; gap: clamp(24px, 6.2vw, 40px);
+    padding: clamp(30px, 8vw, 60px) var(--shell) 0;
+    pointer-events: auto;
+  }
+  .usp__item {
+    position: static; width: auto; translate: none; text-align: left !important;
+    right: auto !important; left: auto !important;
+  }
+  html[data-motion="off"] .usp__item { opacity: 1; }
+  .usp__title { margin-bottom: 0.3em; }
+}
+
+@media (max-aspect-ratio: 3 / 4) {
+  /* Portrait comp (430x931): the frosted plate is a band across the base of the
+     frame, the display sits over the open image above it, and every piece is
+     placed against the frame rather than stacked — percentages read straight off
+     the comp. */
+  /* Deep enough that the lede sits inside the blur rather than straddling its
+     top edge — at the comp's 25.2% the first line of "Experience the secret…"
+     landed 2px above the plate. */
+  .hero__scrim { inset: auto 0 0 0; height: 32%; }
+  .hero__copy { display: block; padding: 0; }
+  .hero__title {
+    position: absolute; top: 14.9%; left: 0; right: 0;
+    padding-inline: var(--shell); margin: 0;
+  }
+  .hero__lede {
+    position: absolute; bottom: 14.1%; left: 0; right: 0;
+    padding-inline: var(--shell); margin: 0; max-width: none;
+  }
+  .hero__cta {
+    position: absolute; bottom: 4.7%; left: var(--shell); right: var(--shell);
+    width: auto; align-self: auto;
+  }
+  /* Drive the diameter, not the width: `left` and `top` are both derived from
+     the custom property, so overriding `width` alone slides the crop. */
+  .hero__ring   { --hero-ring-d: 120vw; }
+  .origin__ring { --origin-ring-d: 120vw; }
+  .origin__actions .btn { flex: 1 1 100%; }
+
+  /* A phone-shaped crop of a 16:9 photograph only shows ~500px of its 2000px
+     width, so the framing has to be chosen rather than centred: at 50% the
+     window lands on empty rug. 82% puts the hands, the bowl and the sack of
+     nuts in frame — the part of the picture that is about the work. */
+  .origin__img { object-position: 82% 50%; }
+
+}
+
+/* Per-line masking only works while each line genuinely fits on one line: the
+   mask slides vertically, so a line that rewraps to two is clipped by its own
+   overflow. Below 900px "GOLDEN DROP" starts to run out of measure, and the
+   portrait comp deliberately breaks the H1 as GOLDEN / DROP OF / NATURE. In both
+   cases the spans go inline so the browser can rewrap, and app.js lifts the
+   whole title instead. */
+@media (max-width: 900px), (max-aspect-ratio: 3 / 4) {
+  .hero__title .line,
+  .hero__title .line__in { display: inline; overflow: visible; }
+  html[data-motion] .hero__title .line__in { transform: none; opacity: 1; }
+}
+
+
+/* ─── 14. MOTION OFF ────────────────────────────────────────────────────── */
+/* app.js sets data-motion="off" for prefers-reduced-motion *and* for the case
+   where GSAP never arrived, so both fall back to the same static layout. */
+
+html[data-motion="off"] .loader { display: none; }
+html[data-motion="off"] .hero { height: 100svh; }
+html[data-motion="off"] .hero__stage { position: static; }
+html[data-motion="off"] .film { height: auto; margin-top: 0; padding-bottom: var(--band); }
+html[data-motion="off"] .film__stage {
+  position: static; height: auto; min-height: 0;
+  padding-bottom: clamp(40px, 8vw, 90px);
+}
+html[data-motion="off"] .film__ring { display: none; }
+html[data-motion="off"] .film__video {
+  position: static; height: auto; aspect-ratio: 1920 / 1080; transform: none;
+}
+html[data-motion="off"] .usp {
+  position: static; margin-top: 0; height: auto;
+  display: grid; gap: clamp(24px, 3vw, 44px);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  padding-inline: var(--shell); pointer-events: auto;
+}
+html[data-motion="off"] .usp__item {
+  position: static; width: auto; translate: none; opacity: 1; transform: none;
+  text-align: left !important; right: auto !important; left: auto !important;
+}
+html[data-motion="off"] .masthead { position: absolute; }
+/* The rings are drawn by the timelines; with motion off, show them complete. */
+html[data-motion="off"] .film__head { opacity: 0; }
+html[data-motion="off"] .film__pins circle { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

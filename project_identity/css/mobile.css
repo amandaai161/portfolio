@@ -1,0 +1,559 @@
+/* ==========================================================================
+   Identity — narrow screens
+   --------------------------------------------------------------------------
+   Everything responsive lives here so the desktop sheets stay exactly as they
+   were signed off. Nothing in this file applies at 900px and above.
+
+   Two breakpoints do the work:
+
+     900px   the layout switches from the 1440 desktop composition to a single
+             column. The deck stands down here too (js/deck.js), the map drops
+             its 38 labels for the chapter list, and the header collapses into
+             a sheet. It is the same line in CSS and JS on purpose.
+
+     600px   phone tuning: the type scale bottoms out, grids go to one column,
+             and the paddings tighten.
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · type + layout tokens
+   --------------------------------------------------------------------------
+   The desktop scale (80 / 54 / 28 / 24 / 18 / 16 / 14) is a 1440 scale: 80px
+   over a 375px screen is four words a line. Below 900 the display sizes get a
+   scale of their own that is fluid rather than stepped, so a 390 phone and a
+   large tablet each get a size that suits them instead of the nearest step.
+
+   The clamps are written so the vw term only governs between roughly 360 and
+   the point where each hits its ceiling — no size ever exceeds its desktop
+   value, and none drops below what stays comfortable at 360.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  :root {
+    --t-h1: clamp(32px, 9.6vw, 60px);
+    --t-h2: clamp(25px, 7.4vw, 42px);
+    --t-h3: clamp(19px, 5.3vw, 26px);
+    --t-sub: clamp(17px, 4.8vw, 22px);
+    --t-body-lg: clamp(16px, 4.3vw, 18px);
+    --t-body: 16px;
+    --t-body-sm: 14px;
+
+    --gutter: 24px;
+    --nav-gutter: 20px;
+    --nav-h: 64px;
+    --grid-gap: 16px;
+  }
+
+  /* display type needs a touch more leading once the measure is short */
+  .t-h1 { line-height: 1.06; }
+  .t-h2 { line-height: 1.1; }
+  .t-h3 { line-height: 1.4; }
+
+  body { letter-spacing: 0; }
+
+  /* the 46px desktop control is below the 44px touch target once it has a
+     border, and the wide side padding stops fitting two buttons on a phone */
+  .btn { height: 50px; padding-inline: 26px; font-size: var(--t-body); }
+  .btn--nav { height: 46px; }
+  .btn-row { flex-wrap: wrap; gap: 10px; }
+}
+
+@media (max-width: 599px) {
+  :root { --gutter: 20px; }
+  .btn { padding-inline: 22px; }
+  /* one full-width action reads better than two half-width ones */
+  .btn-row > .btn { flex: 1 1 auto; min-width: 0; }
+}
+
+/* large phones and tablets in portrait: single-column, but a 720px column is
+   a 100-character measure, so the text blocks are held to a reading width */
+@media (min-width: 600px) and (max-width: 899px) {
+  .pillars__grid { max-width: 620px; margin-inline: auto; }
+  .intro__col { max-width: 640px; }
+  .footer__cols { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ==========================================================================
+   1b · the middle range (900–1279)
+   --------------------------------------------------------------------------
+   The deck is still running here and the layout is still the desktop one, but
+   the 1440 composition has run out of room: 80px display type, 80px gutters
+   and a three-column intro all need width the window no longer has. Every
+   value below reaches its signed-off size at 1280 and holds it above, so the
+   desktop as approved is untouched — this only fills in what happens under it.
+   ========================================================================== */
+
+@media (min-width: 900px) and (max-width: 1279px) {
+  :root {
+    --t-h1: clamp(56px, 6.25vw, 80px);
+    --t-h2: clamp(38px, 4.22vw, 54px);
+    --t-h3: clamp(22px, 2.19vw, 28px);
+    --t-sub: clamp(19px, 1.88vw, 24px);
+    --gutter: clamp(44px, 6.25vw, 80px);
+    --nav-gutter: clamp(30px, 5vw, 64px);
+  }
+
+  /* the slides are pinned to the viewport, so anything that does not fit is
+     clipped rather than pushed down — these ranges buy the height back */
+  .slide { padding-block: 84px; }
+  .slide--hero { padding-top: calc(var(--nav-h) + 84px); }
+
+  /* three columns give out before the deck does: the copy column narrows to
+     ~230px and runs past the photos. Photos take the row, copy takes the width */
+  .intro__title { margin-bottom: 44px; }
+  .intro__grid { grid-template-columns: 1fr 1fr; }
+  .intro__media { align-self: start; max-height: 38vh; height: auto; }
+  .intro__col { grid-column: 1 / -1; margin-top: 4px; gap: 18px; }
+  .intro__text { font-size: var(--t-body-lg); line-height: 1.45; }
+
+  .numbers__title { margin-bottom: 52px; }
+  .stat { min-height: 0; padding: 32px 14px; }
+  .stat__value { font-size: clamp(26px, 3.05vw, 54px); }
+  .stat__label { font-size: var(--t-body); }
+
+  .pillars__lede { margin-bottom: 48px; }
+  .pillar { min-height: 0; padding: 24px 18px 22px; }
+
+  /* the arrows need 84px outside the card and there is no longer 84px */
+  .testi { --card-w: min(1100px, 100vw - 200px); }
+  .testi__nav--prev { left: calc(50% - var(--card-w) / 2 - 62px); }
+  .testi__nav--next { right: calc(50% - var(--card-w) / 2 - 62px); }
+
+  .cta__copy { padding: 56px 32px 56px var(--gutter); }
+  .footer__cols { gap: 56px; }
+}
+
+/* ==========================================================================
+   2 · header
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  .nav__inner {
+    width: min(100% - var(--nav-gutter) * 2, 100%);
+    grid-template-columns: auto 1fr;
+    gap: 0;
+  }
+
+  .nav__logo { height: 28px; }
+
+  .has-js .nav__toggle {
+    grid-column: 2;
+    justify-self: end;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    color: var(--fg);
+  }
+
+  .nav__toggle-bars { position: relative; display: block; width: 22px; height: 12px; }
+
+  .nav__toggle-bars i {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.32s var(--ease-in-out), opacity 0.2s var(--ease-out);
+  }
+
+  .nav__toggle-bars i:first-child { top: 0; }
+  .nav__toggle-bars i:last-child { bottom: 0; }
+
+  .nav.is-open .nav__toggle-bars i:first-child { transform: translateY(5.25px) rotate(45deg); }
+  .nav.is-open .nav__toggle-bars i:last-child { transform: translateY(-5.25px) rotate(-45deg); }
+
+  /* The sheet fills the viewport, but `inset: 0` cannot say so: .nav carries a
+     transform for its hide-on-scroll, which makes it the containing block for
+     any fixed descendant. .nav sits at the viewport's top-left, so anchoring
+     there and sizing in viewport units gets the same box. */
+  .has-js .nav__menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: -1;                       /* behind the bar, above the page */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: calc(var(--nav-h) + 40px) var(--gutter) 48px;
+    background: rgba(8, 1, 16, 0.92);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s var(--ease-out), visibility 0.3s;
+  }
+
+  .nav.is-open .nav__menu { opacity: 1; visibility: visible; }
+
+  .nav__links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: clamp(28px, 8vw, 40px);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .nav__links a {
+    display: block;
+    padding-block: 6px;
+    transform: translateY(14px);
+    opacity: 0;
+    transition: transform 0.45s var(--ease-out), opacity 0.35s var(--ease-out);
+  }
+
+  .nav.is-open .nav__links a { transform: none; opacity: 0.95; }
+  .nav.is-open .nav__links a:nth-child(2) { transition-delay: 0.05s; }
+  .nav.is-open .nav__links a:nth-child(3) { transition-delay: 0.1s; }
+  .nav.is-open .nav__links a:nth-child(4) { transition-delay: 0.15s; }
+
+  .nav__actions { justify-content: stretch; margin-top: 36px; }
+  .nav__actions .btn { width: 100%; height: 54px; }
+
+  /* the page must not scroll behind the open sheet */
+  .has-menu, .has-menu body { overflow: hidden; }
+}
+
+/* Without scripting the toggle can do nothing, so it never appears and the bar
+   simply stops being a bar: it scrolls with the page and wraps its own links. */
+@media (max-width: 899px) {
+  html:not(.has-js) .nav { position: static; height: auto; padding-block: 16px; }
+  html:not(.has-js) .nav__inner { grid-template-columns: 1fr; gap: 14px; }
+  html:not(.has-js) .nav__links { flex-direction: row; flex-wrap: wrap; gap: 8px 20px; font-size: var(--t-body); }
+  html:not(.has-js) .nav__links a { opacity: 0.95; transform: none; }
+  html:not(.has-js) .nav__actions { justify-content: flex-start; margin: 0; }
+  html:not(.has-js) .nav__actions .btn { width: auto; height: 46px; }
+  html:not(.has-js) .slide--hero { padding-top: 72px; }
+}
+
+@media (min-width: 900px) {
+  .nav__menu { display: contents; }
+}
+
+.nav__toggle { display: none; }
+
+/* ==========================================================================
+   3 · the stacked deck
+   --------------------------------------------------------------------------
+   With .js-deck off the slides are back in normal flow. They keep their
+   intro/outro, only now it is earned on the way past rather than driven by a
+   pinned dissolve — see initReveals() in js/ui.js.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  .slide {
+    min-height: 0;
+    padding-block: 88px;
+  }
+
+  .slide--hero {
+    min-height: 100svh;
+    padding-top: calc(var(--nav-h) + 72px);
+    padding-bottom: 88px;
+  }
+
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    transition: opacity 0.6s var(--ease-out) var(--reveal-delay, 0ms),
+                transform 0.7s var(--ease-out) var(--reveal-delay, 0ms);
+  }
+
+  .js-reveal [data-reveal].is-revealed { opacity: 1; transform: none; }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ==========================================================================
+   4 · the gradient field
+   --------------------------------------------------------------------------
+   The composition is authored in vw against a 1440 stage, so on a 390px phone
+   it renders at 27% and leaves the lower half of a tall viewport black. It is
+   scaled back up from the top edge instead of being re-authored — the blur
+   scales with it, which is what keeps the wash reading as the same effect.
+   js/gradient.js reads --grad-scale so the keyframe travel matches.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  .gradient-field__stage {
+    --grad-scale: 1.75;
+    transform: scale(var(--grad-scale));
+    transform-origin: 50% 0;
+  }
+}
+
+@media (max-width: 599px) {
+  .gradient-field__stage { --grad-scale: 2.35; }
+}
+
+/* ==========================================================================
+   5 · sections
+   ========================================================================== */
+
+/* ---- 1 · hero ------------------------------------------------------------ */
+
+@media (max-width: 899px) {
+  .hero__eyebrow { margin-bottom: 18px; }
+  .hero__title { margin-bottom: 20px; }
+  .hero__lede { max-width: 34ch; margin-bottom: 36px; }
+  .hero__actions { justify-content: center; }
+}
+
+/* ---- 2 · intro ----------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .intro__title { margin-bottom: 36px; }
+
+  .intro__grid { grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
+
+  /* the copy runs the full width under the pair of photos */
+  .intro__col { grid-column: 1 / -1; gap: 20px; margin-top: 12px; }
+  .intro__media { max-height: none; height: auto; }
+  .intro__text { font-size: var(--t-body-lg); line-height: 1.45; }
+}
+
+@media (max-width: 599px) {
+  .intro__grid { grid-template-columns: 1fr; }
+}
+
+/* ---- 3 · numbers --------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .numbers__title { margin-bottom: 36px; }
+  .numbers__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { min-height: 0; padding: 28px 16px; }
+  .stat__value { font-size: clamp(28px, 7.4vw, 40px); margin-bottom: 8px; }
+  .stat__label { font-size: var(--t-body-sm); }
+}
+
+/* ---- 4 · map ------------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .slide--map { padding-block: 88px 72px; }
+  .map__title { margin-bottom: 14px; }
+
+  .idmap {
+    --map-ratio: 2.61;      /* must match MOBILE_VIEW in js/map.js */
+    margin-top: 28px;
+  }
+
+  /* width-led here rather than height-led: there is no room to spare either
+     way, so the map simply takes the column and keeps its own proportion */
+  .idmap__stage {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--map-ratio);
+  }
+
+  /* territories are a few pixels across at this size — they stay tappable and
+     they still animate in, but the list below is the interface */
+  .idmap__geo path { stroke-width: 1.1; }
+
+  .idmap__list {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 28px 0 0;
+    padding: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .idmap__list[data-collapsed="true"] li:nth-child(n + 13) { display: none; }
+
+  .idmap__row { padding: 12px 14px; }
+  .idmap__row-name { font-size: var(--t-body-sm); }
+  .idmap__row-n { font-size: 12px; }
+
+  .idmap__more {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--r-pill);
+    font-size: var(--t-body-sm);
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  /* the sheet becomes a sheet: bottom-anchored, above the grain and the bar */
+  .idmap__panel {
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 80;
+    width: auto;
+    max-height: 88svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 30px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+    background: rgba(8, 1, 16, 0.94);
+    border: 0;
+    border-top: 1px solid rgb(85 1 203 / 0.75);
+    box-shadow: 0 -30px 70px -30px rgb(85 1 203 / 0.9);
+  }
+
+  /* the desktop side-anchoring is more specific than the block above, so the
+     two sides have to be unpicked explicitly */
+  .idmap__panel.is-left,
+  .idmap__panel.is-right {
+    top: auto;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+  }
+
+  .idmap__panel.is-on { transform: translateY(0); }
+
+  .idmap__close { top: 18px; right: 16px; width: 40px; height: 40px; }
+  .idmap__close svg { width: 14px; height: 14px; }
+  .idmap__name { font-size: var(--t-h3); }
+  .idmap__stat b { font-size: 34px; }
+  .idmap__meta { margin-top: 24px; }
+  .idmap__cta { justify-content: center; gap: 14px; padding: 15px 22px; }
+}
+
+@media (min-width: 900px) {
+  .idmap__more { display: none; }
+}
+
+@media (max-width: 599px) {
+  .idmap__list { grid-template-columns: 1fr; }
+  .idmap__list[data-collapsed="true"] li:nth-child(n + 9) { display: none; }
+}
+
+/* ---- 5 · pillars --------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .pillars__title { margin-bottom: 16px; }
+  .pillars__lede { margin-bottom: 36px; }
+  .pillars__grid { grid-template-columns: 1fr; gap: 12px; }
+
+  .pillar {
+    min-height: 0;
+    padding: 26px 22px 22px;
+  }
+
+  /* no hover on touch: the accent state is the resting state, softened */
+  .pillar::before { background-image: linear-gradient(180deg,
+      rgb(var(--accent-rgb) / 0) 62%, rgb(var(--accent-rgb) / 0.3) 100%); }
+
+  .pillar__logo { height: 26px; margin-bottom: 22px; }
+  .pillar__more { padding-top: 26px; color: rgb(var(--accent-rgb)); }
+}
+
+/* ---- 6 · testimonials ---------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .testimonials__title { margin-bottom: 32px; }
+
+  .testi {
+    --card-w: min(560px, 100vw - var(--gutter) * 2);
+    --card-h: auto;
+    --card-gap: 16px;
+  }
+
+  /* the desktop card lays its parts over a full-bleed photograph; at this width
+     a 1.9:1 photo cropped to a portrait card loses the subject, so the picture
+     goes back into the flow and the copy sits under it */
+  .testi__card {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .testi__photo {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 4;
+    object-position: 50% 28%;
+  }
+
+  .testi__card::after { content: none; }
+
+  .testi__body { position: static; padding: 24px 22px 0; }
+
+  .testi__meta { flex-wrap: wrap; gap: 4px 0; margin-bottom: 16px; }
+  .testi__quote { max-width: none; }
+
+  .testi__logo {
+    position: static;
+    align-self: flex-start;
+    margin: 22px 22px 24px;
+  }
+
+  .testi__mark { height: 27px; }
+
+  /* arrows want a pointer and 84px of margin either side — neither exists */
+  .testi__nav { display: none; }
+  .testi__dots { margin-top: 28px; }
+  .testi__dot { width: 8px; height: 8px; }
+}
+
+/* ---- 7 · cta ------------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .cta {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .cta__copy { padding: 88px var(--gutter); }
+  .cta__inner { max-width: none; }
+  .cta__title { max-width: 16ch; margin-bottom: 24px; }
+  .cta__lede { max-width: none; margin-bottom: 36px; }
+  .cta__panel { aspect-ratio: 4 / 3; }
+
+  /* the band is portrait now, so the composition is re-hung to fill it */
+  .cta__gradient .blob { --blob-blur: 26vw; }
+  .cta__gradient .blob--a { left: -20%; top: 34%; width: 150%; height: 96%; }
+  .cta__gradient .blob--b { left: -10%; top: -22%; width: 140%; height: 46%; }
+  .cta__gradient .blob--c { left: -55%; top: 8%; width: 210%; height: 52%; }
+}
+
+/* ---- footer -------------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .footer { padding-block: 72px 32px; }
+
+  .footer__top {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+  }
+
+  .footer__logo { height: 30px; }
+  .footer__tagline { margin: 20px 0 26px; }
+  .footer__social a { width: 46px; height: 46px; }
+
+  .footer__cols {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 24px;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .footer__meta { gap: 24px; }
+}

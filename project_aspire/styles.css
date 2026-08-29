@@ -1,0 +1,2599 @@
+/* =============================================================================
+   Aspire 2026 — homepage, all seven sections and the footer
+   Reference artboard: 1440px content width (screenshots are 1452px incl. a 6px
+   frame border on each side).
+
+   Sections 1–3 were measured off PNGs on disk — "Homepage Animation 1/2/3.png",
+   "Homepage Section 1 (Revised).png", "Homepage Section 2.png". Sections 4–7 and
+   the footer had no PNG to measure: their geometry is estimated off pasted
+   screenshots and rounded to the 8px rhythm. See the README for which is which.
+   ========================================================================== */
+
+:root{
+  /* ---------- palette (sampled from the reference PNGs) ---------- */
+  --ink:            #1D2D3C;   /* headline + nav links */
+  --ink-soft:       #43505C;   /* sub-headline */
+  --ink-muted:      #757575;   /* input placeholder */
+  /* Aspire green. Given, not sampled — the supplied Aspire Logo.svg is #08A554,
+     which is a different, duller green, so the logo used in the nav is a
+     recoloured variant rather than the file as delivered. */
+  --green:          #00C25F;
+  --green-rgb:      0 194 95;   /* same colour, for the focus ring's alpha */
+  --green-hover:    #00AB54;   /* same hue (149.5°), 88% of the brightness */
+  /* #00C25F is a 2.4:1 colour on white, so it cannot carry normal-sized text and
+     meet WCAG AA. This is the same hue (149.0° against 149.4°) taken dark enough
+     to: 4.7:1 on the stat chips' mint wash, 5.5:1 on white. Used only where green
+     *is* the text on a light surface, not for fills. */
+  --green-ink:      #007A3B;
+  --hairline:       #E5E5E5;
+  --white:          #FFFFFF;
+
+  /* the bright brand mint. One value, four jobs: the product-card hover asked
+     for in the brief, the CTA banner's primary button, the stat chips' wash, and
+     the two light logo variants (where it is baked into the SVG). */
+  --mint-solid:     #28DE80;
+  --mint-solid-rgb: 40 222 128;
+  --mint-solid-hi:  #1FC46F;   /* its hover */
+
+  /* product section (sampled from "Homepage Section 2.png") */
+  --card-bg:        #F7FAFC;   /* rgb(247,250,252) */
+  --card-bg-hover:  var(--mint-solid);
+
+  /* navy — the CTA band, the testimonial media and the footer. Read off the
+     pasted screenshots by eye: unlike every other colour here there is no PNG on
+     disk to sample, so treat these three as first approximations. */
+  /* Sampled off aspireweb_cta_image.webp's own backdrop (every edge of the file
+     reads #13334F), so the CTA banner's panel and the photograph are one surface
+     with no seam. The footer shares it — it was always meant to be the same navy,
+     and a measured value beats the one I had eyeballed off a screenshot. */
+  --navy:           #13334F;   /* CTA banner, footer */
+  --navy-deep:      #04263C;   /* testimonial tiles + photo scrim */
+  --navy-deep-rgb:  4 38 60;   /* same colour, for the scrim's alpha stops */
+  --navy-tile-hi:   #0A3855;   /* an inactive testimonial tile on hover */
+  --on-navy:        #FFFFFF;   /* headings and column titles on navy */
+  --on-navy-soft:   #DAE5EE;   /* footer links */
+  --on-navy-dim:    #9FB6C8;   /* footer legal copy */
+  --navy-rule:      rgb(255 255 255 / .16);
+
+  /* background field — sampled from the blurred blobs in the reference PNGs
+     (peak aqua rgb(122,231,224), peak mint rgb(149,237,219)) */
+  --aqua:           #6FE4DF;
+  --aqua-soft:      #A2EEEB;
+  --mint:           #77E6C0;
+  --mint-soft:      #A8EFD6;
+
+  /* ---------- layout ---------- */
+  --content-w:      1440px;   /* design content width */
+  --anim-max-w:     1100px;   /* the webm's width at rest. The gradient field
+                                 keeps its own size — see geo.bgH in hero.js. */
+  /* One spine for the whole page. This used to be 1248 (the product grid measured
+     3 × 400 + 2 × 24 off its reference PNG) while the benefit rows ran at 1070 and
+     everything from the CTA down at 1310 — three different insets down one page.
+     They are all --section-w now; the cards just come out 420 instead of 400. */
+  --grid-w:         var(--section-w);
+  --gutter:         65px;     /* logo x = 65 from content edge */
+  --section-w:      1310px;   /* the nav's own span (--content-w less two
+                                 --gutter at the reference size), shared by the
+                                 testimonial row and the footer. A literal, not
+                                 the calc: --content-w becomes 100% below 720 and
+                                 the derived form would then take the gutter off
+                                 twice, on top of the padding already doing it. */
+  --nav-h:          76px;
+
+  /* =========================================================================
+     TYPE SCALE
+     One scale, one tracking rule, four line-heights. Every text style on the
+     page is a pairing of these — nothing sets a size, weight, line-height or
+     letter-spacing of its own.
+
+       role         @1440  @390  line-height   tracking   weight   used by
+       display      64     40    tight  1.1    -0.022em   600      hero h1
+       h2           48     32    tight  1.1    -0.022em   600      section titles +
+                                                                   CTA banner headline
+       testimonial  40     28    snug   1.25   -0.022em   400      testimonial quote
+       h3           32     24    snug   1.25   -0.02em    600      benefit rows
+       h4           24     20    snug   1.25   -0.02em    600      product cards,
+                                                                   business cards,
+                                                                   stat figures
+       body-lg      18     16    loose  1.5    -0.014em   400      hero sub,
+                                                                   benefit body,
+                                                                   business sub,
+                                                                   closing-CTA sub
+       body         16     16    loose  1.5    -0.011em   400/500/600
+                                                                   card body, nav,
+                                                                   buttons, arrow
+                                                                   links, footer
+                                 ui     1.2               400/600  footer links and
+                                                                   column titles,
+                                                                   stat labels
+       fine         12     12    loose  1.5     0em       400      footer legal only
+
+     `fine` is the one step sections 4–7 added that survives: the footer's regulatory
+     paragraphs read ~11px in the mock, where 16 is not a serious option. It is not a
+     return of the 15px `small` that came out of the scale earlier — that one had no
+     job left.
+
+     Two things changed shape here. `h2-sm` is gone: it existed because the CTA
+     headline and the testimonial quote both measured ~40px, and those two have since
+     parted company — the headline is `h2` (48 on desktop) and the quote has its own
+     `testimonial` step at regular weight. And `lead` is now `body-lg`, which is a
+     rename plus a fix: at 15px it had become *smaller* than `body` on every viewport
+     under 1280, inverting the one thing the role is for. 16 is the floor now.
+
+     `h4` and `body-lg` used to be fixed at 24 and a 15px floor. Both are fluid now,
+     which is what carries the mobile sizes.
+
+     Tracking follows Inter's own optical curve, ls = -0.0223 + 0.185·e^(-0.1745·px),
+     rounded to the nearest 0.001em, rather than being fitted per element. That
+     replaces the seven unrelated values this file used to carry (-0.004, -0.005,
+     -0.006, -0.01, -0.011, -0.0155 and +0.003em) — see the README for what moved.
+     ====================================================================== */
+  --font: 'Inter', 'Inter var', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          Helvetica, Arial, sans-serif;
+
+  /* Sizes — fluid, with the UPPER bound the measured reference size at 1440 and the
+     LOWER bound the specified mobile size. The floor is deliberately not put in the
+     720px block: a `:root` override there would make the type jump *up* as the
+     viewport narrows past 720 (34 → 40 for display), because every clamp had already
+     bottomed out by 765px. Raising the floor instead keeps the ramp monotonic. The
+     trade is that the floor arrives earlier, so tablets get the mobile size:
+
+       token         floor reached at   @1440   @390
+       display              900px          64     40
+       h2                   960px          48     32
+       testimonial         1008px          40     28
+       h3                  1080px          32     24
+       h4                  1200px          24     20
+       body-lg             1280px          18     16                                */
+  --fs-display:     clamp(40px, 4.445vw, 64px);
+  --fs-h2:          clamp(32px, 3.334vw, 48px);
+  /* The testimonial quote's own step. It was `h2-sm`, which existed only because two
+     unrelated things measured ~40px in the mocks; the CTA headline has gone to `h2`,
+     so the quote is the last one left and it gets a role of its own instead. */
+  --fs-testimonial: clamp(28px, 2.778vw, 40px);
+  --fs-h3:          clamp(24px, 2.223vw, 32px);
+  --fs-h4:          clamp(20px, 1.667vw, 24px);
+  /* was `lead` */
+  --fs-body-lg:     clamp(16px, 1.25vw, 18px);
+  --fs-body:        16px;
+  --fs-fine:        12px;
+
+  /* line-heights */
+  --lh-tight:       1.1;
+  --lh-snug:        1.25;
+  --lh-loose:       1.5;
+  --lh-ui:          1.2;    /* single-line controls, so leading is irrelevant */
+
+  /* tracking */
+  --ls-display:     -0.022em;
+  --ls-h2:          -0.022em;
+  --ls-testimonial: -0.022em;   /* -0.0221em at 40px, -0.0209em at 28px: one value
+                                   covers both ends, because the curve is nearly flat
+                                   above ~26px */
+  --ls-h3:          -0.02em;
+  --ls-h4:          -0.02em;
+  --ls-body-lg:     -0.014em;   /* was --ls-lead */
+  --ls-body:        -0.011em;
+  --ls-fine:        0em;      /* the curve gives +0.0005em at 12px */
+
+  /* weights — 400 body, 500 nav, 600 headings and controls. No bold. */
+  --wt-regular:     400;
+  --wt-medium:      500;
+  --wt-semibold:    600;
+
+  /* ---------- email capture ---------- */
+  --signup-w:       470px;
+  --signup-h:       58px;
+  --signup-btn-h:   var(--btn-h);   /* the pill's 5px inset comes from
+                                       --signup-h being 10px taller */
+
+  /* ---------- buttons ----------
+     One height everywhere, taken from the hero's submit and rounded up: 48px is
+     also the comfortable end of the 44px minimum touch target, so the nav, the CTA
+     banner and both email captures all present the same size. Padding is the only
+     thing a context retunes, and only when the copy would otherwise crowd. */
+  --btn-h:          48px;
+  --btn-px:         28px;
+
+  /* ---------- client logo marquee ---------- */
+  --logo-gap:       70px;   /* measured edge-to-edge between logos */
+  --logo-row-h:     78px;   /* tallest logo (nextbillion.ai, 86×78) */
+  --marquee-secs:   45s;    /* one full cycle = 2105px, so ≈47px/s */
+
+  /* ---------- vertical rhythm (reference y-positions) ----------
+     "Homepage Section 1 (Revised).png", artboard 1348 tall:
+     nav 0–76 · title cap-top 149 · sub cap-top 308 · form 400–448 ·
+     logo row 519.5–597.5 · webm 622–1284 · frame bottom 1348
+     Values are margins between boxes, back-solved from those cap-heights. */
+  --sp-nav-title:    clamp(34px, 5.1vh, 61px);  /* 76  -> title box 137 */
+  --sp-title-sub:    clamp(16px, 2.1vh, 24px);  /* 277 -> sub box 301 */
+  --sp-sub-form:     clamp(20px, 3.2vh, 38px);  /* 357 -> form 395 */
+  --sp-form-clients: clamp(30px, 6vh, 71px);    /* form end -> logo row 519.5 */
+  --sp-clients-anim: clamp(12px, 2.1vh, 25px);  /* logo row -> webm 622 */
+  --sp-anim-bottom:  clamp(24px, 5.4vh, 64px);  /* 1284 -> 1348 */
+  --sp-anim-title:   40px;                      /* webm bottom edge -> the
+                                                   product headline's cap-top,
+                                                   once the section has docked */
+
+  /* benefit section — an 8px rhythm, from the pasted reference's proportions
+     (heading -> body 30, body -> link 53, row -> row 86) */
+  --sp-benefits-top:    120px;
+  --sp-benefits-head:   104px;
+  --sp-benefits-bottom: 160px;
+  --sp-benefit-heading: 32px;
+  --sp-benefit-body:    48px;
+
+  /* sections 4–6 and the footer. Estimated off the pasted screenshots, not
+     measured off a PNG — the crops are tight, so the outer padding in
+     particular is inferred rather than read. Rounded to the 8px rhythm. */
+  --cta-radius:          16px;
+  --sp-cta-band:         64px;  /* section padding above and below the banner */
+  --sp-cta-pad:          48px;  /* copy inset inside the banner's right half */
+  --sp-cta-title:        40px;  /* logo -> headline */
+  --sp-cta-actions:      40px;  /* headline -> button row */
+
+  /* These are box-to-box margins, as everywhere else in this file except
+     --sp-anim-title: add ~9px at h2 and ~6px at h4 to get to the cap-top. */
+  --sp-section-top:     120px;  /* section top -> h2 */
+  --sp-section-bottom:  120px;
+  --sp-business-sub:     32px;  /* h2 -> supporting line */
+  --sp-business-grid:    80px;  /* supporting line -> card row */
+  --sp-business-title:   24px;  /* photo -> card title */
+  --sp-business-body:    16px;  /* card title -> body */
+  --sp-business-link:    24px;  /* body -> "Learn more" */
+
+  --sp-quote-attrib:     48px;  /* quote -> attribution (the minimum: the foot is
+                                   pushed to the card's own bottom) */
+  --sp-quote-pad:        48px;  /* padding inside the quote card */
+  --sp-attrib-role:      12px;  /* name -> role */
+
+  /* testimonial switcher (6) */
+  --tstl-col-w:         338px;  /* the photo / tile column */
+  --tstl-gap:            24px;  /* column gap */
+  --tstl-stack-gap:      16px;  /* photo <-> tiles */
+  --tstl-tile-h:         68px;  /* an inactive tile's minimum height */
+  --tstl-radius:         12px;
+  /* Logo boxes. Fixed on both axes + object-fit, so three lockups of different
+     proportions come out optically the same size — see .tstl__logo. */
+  --tstl-logo-w:          52%;
+  --tstl-logo-h:         40px;
+  --tstl-logo-w-on:       59%;  /* the active photo's logo, a touch larger */
+  --tstl-logo-h-on:      44px;
+  /* Both states measure the logo off the tile's BOTTOM edge, so switching moves
+     one number instead of changing alignment — 14px happens to centre a 40px logo
+     in a 68px tile, and only then can the move be animated. */
+  --tstl-logo-inset:     14px;
+  --tstl-logo-inset-on:  28px;
+  --tstl-secs:          .52s;   /* the expand / collapse */
+  --tstl-ease:          cubic-bezier(.32, .72, 0, 1);
+  --tstl-scrim:           45%;  /* how far up the photo the dark scrim reaches */
+  --stat-w:             216px;
+  --stat-h:              78px;
+  --stat-gap:            16px;
+
+  /* closing CTA (7) */
+  --sp-endcta-top:       80px;
+  --sp-endcta-bottom:    80px;
+  --sp-endcta-sub:       24px;  /* h2 -> supporting line */
+  --sp-endcta-form:      48px;  /* supporting line -> the action row */
+  --sp-endcta-actions:   36px;  /* email capture -> "Talk to Sales" */
+  /* The box the blob field is laid out in, measured up from the section's bottom.
+     It is a reference frame, not a clip: the blobs are three to four times its height
+     and their crests reach well above it, which is what makes the colour's top edge
+     uneven. 59.46% is 220px of the section's 370. */
+  --endcta-wash-h:     59.46%;
+  --endcta-wash-op:         1;  /* was 0.8 — the blur is what keeps the copy clear
+                                   now, so the colour itself can be full strength */
+  --endcta-ramp-h:        58%;  /* the base ramp's slice of that box, bottom-anchored */
+  /* 34, not 76. The blur has to be a fraction of the band, not half of it: at 76
+     on a 140px band the colour was smeared over ~230px and most of each blob's ink
+     landed below the section and got clipped, which left the whole wash paler than
+     the flat ramp it replaced. 34 keeps the hero's blur-to-band ratio in the same
+     range and still spreads each crest over ~50px. */
+  --endcta-blur:         40px;
+
+  --sp-footer-top:       80px;
+  --sp-footer-col:       28px;  /* column title -> first link */
+  --sp-footer-social:    32px;  /* logo -> social icons */
+  --sp-footer-rule:      64px;  /* columns -> hairline */
+  --sp-footer-meta:      40px;  /* hairline -> locale/policy row */
+  --sp-footer-legal:     48px;  /* locale row -> legal copy */
+  --sp-footer-bottom:    48px;
+  --footer-link-gap:     18px;  /* 37px pitch on 16/1.2 */
+  --footer-brand-w:     200px;  /* brand column; the 24px grid gap takes the
+                                   first link column out to x289 as in the mock */
+
+  /* =========================================================================
+     ANIMATION KNOBS — everything you'd want to tune lives here
+     ====================================================================== */
+
+  /* scroll runway ------------------------------------------------------- */
+  --anim-lead:      140px;  /* dead-zone before anything happens
+                               ( = "2 scroll points", 1 wheel notch ≈ 100px ) */
+  --scrub-length:   700px;  /* PHASE 1 — the webm plays frame by frame while
+                               the composition stays exactly where it is.
+                               700px over 61 frames ≈ 11.5px per frame. */
+  --move-length:    520px;  /* PHASE 2 — starts only once the last frame is
+                               reached: the webm shrinks and travels up, and
+                               the copy fades out at the same time. */
+  --settle-length:  240px;  /* PHASE 3 — the stretch after the move where the
+                               product section finishes arriving and docks under
+                               the animation. With --anim-shrink-s2 at 1 the
+                               composition is simply *held* here, which is what
+                               stops the webm carrying on shrinking as the
+                               section takes over. The section is lifted (see
+                               --dock-span in hero.js) so it lands exactly as
+                               this phase ends, which keeps the two from being
+                               separated by a long stretch of empty scrolling. */
+  --scroll-ease:    0.28;   /* 0–1. Lower = more trailing/smoother, 1 = locked
+                               rigidly to the scroll position. See the .smooth-on
+                               override below: when scroll.js is easing the scroll
+                               position itself this becomes 1, because two lerps in
+                               series read as lag rather than smoothness. This
+                               value is the one that applies when it stands down —
+                               reduced motion, or a touch device — so the
+                               composition keeps its own trailing either way. */
+
+  /* end state ----------------------------------------------------------- */
+  --anim-scale-end: 0.75;   /* webm shrinks by 25%.  (The reference PNGs
+                               actually measure 0.687 — i.e. ~31% smaller.
+                               Change this one number to match them.) */
+  --anim-end-gap:   18px;   /* gap between nav bottom and webm top at the end
+                               (reference: nav 76 -> webm top 94) */
+
+  /* product-section header state -----------------------------------------
+     The header band asked for is ~40% of the screen, with the product section
+     taking the other 60%. The phase-2 end state already *is* 39.5% of a
+     1198-tall screen, so there is no room left to shrink into: at a 40% band any
+     further scaling would push the box down the screen rather than up (a 8%
+     shrink needs the top at y130 instead of y94). So phase 3 holds the
+     composition exactly where phase 2 left it.
+
+     Both knobs below are live, not dead: lower --anim-shrink-s2 and the webm
+     shrinks again as the section docks, but the header band gets smaller than
+     40% by the same token. The measured reference is 0.605 with a -15px gap,
+     which lands the band at 24% — the state that read as too small. */
+  --anim-shrink-s2: 1;      /* 1 = held at the phase-2 size */
+  --anim-s2-gap:    18px;   /* webm top vs nav bottom; matches --anim-end-gap,
+                               so the box neither rises nor sinks in phase 3 */
+  --dock-tail:      32px;   /* white space left below the last card row once the
+                               section has docked */
+  --anim-s2-min:    0.35;   /* A 40% header only leaves room for all six cards on
+                               a screen as tall as the 1198 reference. On a
+                               shorter one the header yields instead — the webm
+                               shrinks in phase 3 by however much it takes for the
+                               grid plus --dock-tail to fit underneath. This is
+                               the floor on that: if even shrinking this far would
+                               not make the section fit (a re-flowed two- or
+                               one-column grid, say) the header is left alone and
+                               the section just scrolls like any other. */
+
+  /* white fade over the composition -------------------------------------
+     Fraction of the webm's on-screen height that the fade spans, measured
+     bottom-up. The gradient eases in, so a 0.49 element only becomes
+     *perceptible* about 45% up — which is the "around 40%" in the brief.
+     Matching "Homepage Animation 1.png" pixel-for-pixel needs 0.49 (fitted
+     against its alpha ramp: mean error 1/255, vs 23/255 at 0.40).
+     For a literal 40% -> 30%, set 0.40 / 0.30 here. */
+  --fade-start:     0.49;   /* at rest        — reads as ~40% */
+  --fade-end:       0.37;   /* fully scrolled — reads as ~30% */
+
+  /* parallax ------------------------------------------------------------ */
+  --bg-parallax:    0.95;   /* PHASES 1–2. Background travels 95% as far as the
+                               webm's visual centre — "a little less". Fitted
+                               by correlating "Homepage Animation 1.png" against
+                               "…3.png": the band shifts 465px against the
+                               webm's 482px of perceived travel (0.966). */
+  --bg-parallax-s2: 0.40;   /* PHASE 3, same rule but much weaker — the same
+                               correlation against "Homepage Section 2.png"
+                               gives 49px of band travel against 123px. */
+
+  /* copy fade ----------------------------------------------------------- */
+  --copy-fade-end:  0.42;   /* fraction of PHASE 2 after which the headline,
+                               sub-headline, form and client logos are gone */
+
+  /* smooth scrolling (scroll.js) ------------------------------------------ */
+  --scroll-smooth:  0.085;  /* fraction of the remaining distance covered each
+                               frame. Lower = a longer, softer glide. */
+  --scroll-step:    1.25;   /* Wheel multiplier. Above 1 on purpose: on a
+                               trackpad the OS already emits a continuous stream
+                               of small deltas, so the target never gets far
+                               enough ahead of the position for the lerp to have
+                               anything to catch up on — the glide was there but
+                               only a few pixels long. Amplifying gives it real
+                               distance to cover. Set both back to 0.11 / 1 for
+                               the subtler version. */
+
+  /* frame cache --------------------------------------------------------- */
+  --frame-budget-mb: 240;   /* memory ceiling for the decoded frame cache;
+                               the capture resolution is derived from it */
+
+  /* product section intro ------------------------------------------------
+     Fires when the section comes within --intro-lead of its docked position —
+     not when it enters the viewport, which is what used to leave a long gap with
+     the headline visible but nowhere near the animation.
+
+     The cue lands at (runway − --intro-lead) of scroll, so this is the second
+     lever on how soon the section shows up: the four phase lengths above set
+     where the runway ends, and this sets how far before that the intro fires. */
+  --intro-lead:     260px;
+  --reveal-shift:   22px;   /* .reveal--down starts above, --up starts below */
+  --reveal-shift-x: 40px;   /* .reveal--left / --right, for the benefit rows */
+  --reveal-secs:    .68s;
+  --reveal-step:    .07s;   /* per-card / per-column stagger */
+
+  /* arrow used by .link-arrow, masked so it takes the link's colour */
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10' viewBox='0 0 24 10'%3E%3Cpath d='M0.7 5h21.6M18.2 1.4 22.6 5l-4.4 3.6' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  /* benefit media -------------------------------------------------------- */
+  --benefit-speed:  0.5;    /* autoplaying loops, at half their native rate.
+                               Custom properties inherit, so a row can override
+                               it — benefits.js reads the value off each <video>
+                               rather than once from :root. Only the FX row is a
+                               video now; rows 1 and 3 are stills. */
+  --rail-secs:      40s;    /* the perks row's logo rail. One cycle slides one
+                               six-tile set — 1020px at a 530 square, so ~26px/s,
+                               which is the pace the webm drifted at once
+                               --benefit-speed had halved it. */
+
+  /* icon hover ----------------------------------------------------------- */
+  --icon-fps:       30;     /* the icon webms' native rate */
+  --icon-speed:     1.7;    /* played back this much faster than native, so a
+                               ~0.75s clip lands in ~0.44s. Applies to the
+                               rewind as well. */
+  --card-hover-secs: .32s;  /* background colour ease in and out of hover */
+}
+
+
+/* ============================================================== RESET */
+*,*::before,*::after{ box-sizing:border-box; }
+html{
+  -webkit-text-size-adjust:100%;
+  /* Covers what scroll.js does not: anchor jumps, focus scrolls, scrollIntoView.
+     scroll.js handles the wheel, and stands down under reduced motion — this
+     honours it natively. */
+  scroll-behavior:smooth;
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+}
+/* scroll.js adds this to <html> only when it is actually driving the scroll, and
+   it does so before hero.js reads its config. So the hero's own easing is handed
+   over rather than being switched off on faith. */
+html.smooth-on{ --scroll-ease:1; }
+body{
+  margin:0;
+  background:var(--white);
+  color:var(--ink);
+  font-family:var(--font);
+  font-synthesis-weight:none;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  /* `clip`, not `hidden`: `hidden` would make <body> a scroll container and
+     can break the sticky scene pin. */
+  overflow-x:clip;
+}
+img,svg,video,canvas{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button,input{ font:inherit; color:inherit; }
+
+
+/* ================================================================ NAV */
+.nav{
+  position:fixed;
+  inset:0 0 auto;
+  z-index:100;
+  height:var(--nav-h);
+  background:var(--white);   /* opaque — the composition scrolls under it */
+}
+.nav__inner{
+  height:100%;
+  max-width:var(--content-w);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+.nav__logo{ flex:none; display:block; }
+.nav__logo img{ height:36px; width:auto; }
+
+.nav__links{
+  /* centred in the content box, exactly as in the reference */
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:40px;
+}
+.nav__links a{
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-medium);
+  letter-spacing:var(--ls-body);
+  color:var(--ink);
+  transition:color .18s ease;
+}
+.nav__links a:hover{ color:var(--green); }
+
+.nav__actions{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+.nav__login{
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-body);
+  transition:color .18s ease;
+}
+.nav__login:hover{ color:var(--green); }
+
+/* ------------------------------------------------- mobile nav (burger + panel)
+   Both are display:none up here, which is what keeps the duplicate link set out of
+   the accessibility tree on desktop. The 1100 block below turns them on — that is
+   where .nav__links was already being hidden, so between 721 and 1100 the links had
+   previously been unreachable by any means. Nothing at or above 1100 changes. */
+.nav__burger{ display:none; }
+.nav__menu{ display:none; }
+
+
+/* ============================================================= BUTTON */
+/* Size lives on .btn as two custom properties so a context can retune it — the
+   CTA banner's pair sit on 24px of padding, not the nav's 32 — while the
+   --primary / --mint / --ghost variants only ever carry colour. */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:0;
+  cursor:pointer;
+  height:var(--btn-h);
+  padding-inline:var(--btn-px);
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-body);
+  border-radius:999px;
+  white-space:nowrap;
+  transition:background-color .18s ease, transform .18s ease;
+}
+.btn:active{ transform:translateY(1px); }
+
+.btn--primary{ background:var(--green);      color:var(--white); }
+.btn--primary:hover{ background:var(--green-hover); }
+
+/* on navy: the bright mint reads as the primary, an outlined pill as the second */
+.btn--mint{ background:var(--mint-solid);    color:var(--navy-deep); }
+.btn--mint:hover{ background:var(--mint-solid-hi); }
+
+.btn--ghost{
+  background:transparent;
+  color:var(--on-navy);
+  /* inset shadow, not a border: .btn's height is fixed, and a border would eat
+     2px of it and misalign the pair */
+  box-shadow:inset 0 0 0 1px rgb(255 255 255 / .55);
+}
+.btn--ghost:hover{ background:rgb(255 255 255 / .1); }
+
+
+/* ============================================================== SCENE
+   Three layers, bottom to top:
+
+     .hero__bg    z 0   fixed to the viewport, outside .scene
+     .products    z 1   its white background is what hides the field's tail
+     .scene__pin  z 2   the webm + white fade the section slides under
+
+   The field has to sit *below* the product section, which is why it lives
+   outside the pin; hero.js keeps it travelling with the pin via --bg-pin.  */
+.scene{ position:relative; }
+
+.scene__pin{
+  position:sticky;
+  top:0;
+  z-index:2;
+  height:100vh;
+  height:100svh;
+  overflow:hidden;
+  /* Both paddings are real layout, so hero.js can read them back resolved —
+     getComputedStyle can't evaluate a clamp() held in a custom property. */
+  padding-top:var(--nav-h);
+  padding-bottom:var(--sp-anim-bottom);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  isolation:isolate;
+  pointer-events:none;       /* let clicks reach .products once copy is gone */
+}
+
+.scene__runway{
+  height:calc(var(--anim-lead) + var(--scrub-length) + var(--move-length)
+              + var(--settle-length));
+}
+
+/* ---------------------------------------------- 1. background field */
+.hero__bg{
+  position:fixed;
+  z-index:0;
+  left:0;
+  right:0;
+  /* --bg-top / --bg-h are written by hero.js so the band sits over the webm */
+  top:var(--bg-top, 50%);
+  height:var(--bg-h, 660px);
+  /* --bg-pin is the pinned stage's own offset: 0 while stuck, negative once
+     the pin releases at the end of the scene, so the field leaves with it. */
+  transform:translate3d(0, calc(var(--bg-pin, 0px) + var(--bg-shift, 0px)), 0);
+  will-change:transform;
+  pointer-events:none;
+  isolation:isolate;         /* keep the blobs' multiply blending to themselves */
+}
+.hero__bg-field{
+  position:absolute;
+  inset:0;
+  /* 52, up from 44, so the larger blobs stay proportionally soft — and so the
+     joins between neighbours blend rather than showing as two overlapping discs */
+  filter:blur(52px);
+  /* soften the band's own top/bottom so it melts into the white page */
+  -webkit-mask-image:linear-gradient(to bottom,
+      transparent 0%, #000 7%, #000 84%, transparent 100%);
+          mask-image:linear-gradient(to bottom,
+      transparent 0%, #000 7%, #000 84%, transparent 100%);
+}
+
+/* left/top are the blob's CENTRE — `translate` handles the offset so
+   `transform` stays free for the drift animation. */
+.blob{
+  position:absolute;
+  translate:-50% -50%;
+  border-radius:50%;
+  mix-blend-mode:multiply;
+  will-change:transform;
+}
+
+/* Thirteen blobs, not eight, and each ~18% larger than the centres traced off the
+   reference PNGs. Eight left the field reading as separate shapes: nothing had a
+   centre between x35% and x56%, so a white channel ran top to bottom through the
+   middle, and the lower right was empty. The five added ones (-6, -7, -8, aqua-4,
+   aqua-5) exist to bridge those, not to add new peaks — hence their lower opacity.
+
+   Coverage is what matters here, so the centres are laid out to leave no strip of
+   the band without a blob overlapping it, allowing for the ±11–18% each one drifts. */
+
+/* mint ribbon — sweeps from lower-left up to the top-right corner */
+.blob--mint-1{ left:2%;   top:64%; width:47%; height:68%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 76%);
+  opacity:.80; animation:drift-a 15s linear infinite; }
+.blob--mint-2{ left:16%;  top:60%; width:43%; height:61%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 76%);
+  opacity:.94; animation:drift-b 18s linear infinite; }
+.blob--mint-3{ left:56%;  top:46%; width:43%; height:61%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 78%);
+  opacity:.86; animation:drift-c 16s linear infinite; }
+.blob--mint-4{ left:76%;  top:38%; width:50%; height:68%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 76%);
+  opacity:1;   animation:drift-d 20s linear infinite; }
+.blob--mint-5{ left:93%;  top:27%; width:45%; height:64%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 76%);
+  opacity:.72; animation:drift-b 23s linear infinite reverse; }
+
+/* aqua ribbon — crosses the mint one through the left half */
+.blob--aqua-1{ left:10%; top:33%; width:38%; height:54%;
+  background:radial-gradient(closest-side, var(--aqua-soft) 0%, transparent 76%);
+  opacity:.90; animation:drift-c 17s linear infinite reverse; }
+.blob--aqua-2{ left:25%; top:46%; width:40%; height:57%;
+  background:radial-gradient(closest-side, var(--aqua) 0%, transparent 74%);
+  opacity:.98; animation:drift-b 19s linear infinite reverse; }
+.blob--aqua-3{ left:35%; top:42%; width:33%; height:52%;
+  background:radial-gradient(closest-side, var(--aqua) 0%, transparent 76%);
+  opacity:.74; animation:drift-a 14s linear infinite reverse; }
+
+/* the bridges — the white channel at x42–50%, the gap between mint-3 and mint-4,
+   the left edge below the aqua chain, and the empty lower right */
+.blob--aqua-4{ left:45%; top:37%; width:38%; height:55%;
+  background:radial-gradient(closest-side, var(--aqua-soft) 0%, transparent 78%);
+  opacity:.70; animation:drift-c 21s linear infinite; }
+.blob--mint-6{ left:44%; top:54%; width:46%; height:64%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 78%);
+  opacity:.68; animation:drift-d 24s linear infinite reverse; }
+.blob--mint-7{ left:66%; top:43%; width:44%; height:62%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 78%);
+  opacity:.62; animation:drift-a 22s linear infinite; }
+.blob--aqua-5{ left:1%;  top:45%; width:36%; height:52%;
+  background:radial-gradient(closest-side, var(--aqua-soft) 0%, transparent 78%);
+  opacity:.66; animation:drift-b 26s linear infinite; }
+.blob--mint-8{ left:85%; top:57%; width:46%; height:62%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 78%);
+  opacity:.60; animation:drift-c 25s linear infinite reverse; }
+
+/* Closed circular paths + linear timing = seamless, jerk-free loops.
+   Different periods per blob so the composite never visibly repeats. */
+@keyframes drift-a{
+    0%{ transform:translate3d(   0%,  0%,0); }
+   25%{ transform:translate3d(  11%, -7%,0); }
+   50%{ transform:translate3d(   0%,-14%,0); }
+   75%{ transform:translate3d( -11%, -7%,0); }
+  100%{ transform:translate3d(   0%,  0%,0); }
+}
+@keyframes drift-b{
+    0%{ transform:translate3d(   0%,  0%,0); }
+   25%{ transform:translate3d(  -9%,  9%,0); }
+   50%{ transform:translate3d(   0%, 18%,0); }
+   75%{ transform:translate3d(   9%,  9%,0); }
+  100%{ transform:translate3d(   0%,  0%,0); }
+}
+@keyframes drift-c{
+    0%{ transform:translate3d(   0%,  0%,0); }
+   25%{ transform:translate3d(  13%,  9%,0); }
+   50%{ transform:translate3d(   2%, 16%,0); }
+   75%{ transform:translate3d( -11%,  7%,0); }
+  100%{ transform:translate3d(   0%,  0%,0); }
+}
+@keyframes drift-d{
+    0%{ transform:translate3d(   0%,  0%,0); }
+   25%{ transform:translate3d( -11%, -9%,0); }
+   50%{ transform:translate3d( -18%,  2%,0); }
+   75%{ transform:translate3d(  -9%, 11%,0); }
+  100%{ transform:translate3d(   0%,  0%,0); }
+}
+
+/* ------------------------------------------------------- 2. hero copy
+   Full width, because the logo marquee bleeds edge to edge; the text block
+   inside it carries the content width and gutter. */
+.hero__copy{
+  position:relative;
+  z-index:3;
+  width:100%;
+  opacity:var(--copy-opacity, 1);
+  will-change:opacity;
+  pointer-events:auto;       /* the pin itself is pointer-events:none */
+}
+.hero__text{
+  max-width:var(--content-w);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+  text-align:center;
+}
+.hero__title{
+  margin:var(--sp-nav-title) 0 0;
+  font-size:var(--fs-display);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);              /* semibold — nothing on the page is bold */
+  letter-spacing:var(--ls-display);
+  color:var(--ink);
+}
+.hero__sub{
+  margin:var(--sp-title-sub) auto 0;
+  max-width:690px;   /* breaks the line after "operations", as in the reference */
+  font-size:var(--fs-body-lg);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body-lg);
+  color:var(--ink-soft);
+}
+
+/* ----------------------------------------------------------- 3. form */
+.signup{
+  margin:var(--sp-sub-form) auto 0;
+  width:var(--signup-w);
+  max-width:100%;
+  height:var(--signup-h);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:5px;
+  background:var(--white);
+  border:1px solid var(--hairline);
+  border-radius:999px;
+}
+.signup__input{
+  flex:1 1 auto;
+  min-width:0;
+  height:100%;
+  padding-inline:20px 0;
+  border:0;
+  background:transparent;
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body);
+  /* The input has no box of its own — the pill around it is the visible control —
+     so its own outline is dropped and the pill takes the focus ring instead.
+     Something has to: two email fields with no focus indicator is a 2.4.7 failure,
+     and :has() is the only way to style a parent from a child's focus state. */
+  outline:none;
+}
+.signup:has(.signup__input:focus-visible){
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgb(var(--green-rgb) / .25);
+}
+.signup__input::placeholder{ color:var(--ink-muted); }
+/* The submit is the same .btn as everywhere else; --signup-btn-h exists only so
+   the pill's 5px inset stays right if --signup-h is ever retuned. It tracks
+   --btn-h by default, so there is one number to change, not two. */
+.signup__btn{
+  flex:none;
+  height:var(--signup-btn-h);
+  padding-inline:var(--btn-px);
+}
+
+/* -------------------------------------------- 3b. client logo marquee
+   The logo SVGs are exported at the sizes they're used at, already carrying
+   the reference's opacity, so they need no colour treatment — just laying
+   out at intrinsic size with the measured 70px gap and centring vertically. */
+.marquee{
+  /* full-bleed: the reference crops the logos hard at the artboard edges */
+  margin-top:var(--sp-form-clients);
+  overflow:hidden;
+  height:var(--logo-row-h);
+}
+.marquee__track{
+  display:flex;
+  width:max-content;
+  /* one cycle slides exactly one set, so the seam is never visible */
+  animation:marquee var(--marquee-secs) linear infinite;
+  will-change:transform;
+}
+.marquee__set{
+  display:flex;
+  align-items:center;
+  gap:var(--logo-gap);
+  padding-right:var(--logo-gap);   /* makes each set exactly 50% of the track */
+  height:var(--logo-row-h);
+}
+.marquee__set img{
+  flex:none;
+  width:auto;             /* honour the SVGs' intrinsic size */
+  max-width:none;
+}
+@keyframes marquee{
+  from{ transform:translate3d(0,0,0); }
+  to  { transform:translate3d(-50%,0,0); }
+}
+
+/* ------------------------------------------------------ 4. the WEBM
+   The <video> only exists to decode frames into the cache; the <canvas> is
+   what's on screen, showing whichever frame the scroll position asks for. */
+.hero__anim{
+  position:relative;
+  z-index:1;
+  margin-top:var(--sp-clients-anim);
+  /* Width is --anim-max-w, narrowed if the viewport or the room left in the pin
+     demands it; height follows the 2880×1324 aspect. hero.js feeds
+     --anim-avail-h and --stage-w (the latter measured, so a scrollbar can't
+     push the video past the viewport). */
+  height:min(var(--anim-avail-h, 662px),
+             calc(min(var(--stage-w, 100vw), var(--anim-max-w)) * 1324 / 2880));
+  aspect-ratio:2880 / 1324;
+  width:auto;
+  flex:none;
+  transform-origin:50% 0;
+  transform:translate3d(0, var(--anim-shift, 0px), 0) scale(var(--anim-scale, 1));
+  will-change:transform;
+}
+.hero__anim video,
+.hero__anim canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+/* Until the first frame lands in the cache, the <video> itself is what shows. */
+.hero__anim canvas{ opacity:0; }
+.hero__anim.is-canvas video{ opacity:0; }
+.hero__anim.is-canvas canvas{ opacity:1; }
+
+/* -------------------------------------------------- 5. white fade */
+.hero__fade{
+  position:absolute;
+  z-index:2;
+  left:0;
+  right:0;
+  top:var(--fade-top, 100%);
+  height:var(--fade-total-h, 330px);
+  pointer-events:none;
+  /* Stop positions trace the actual alpha ramp measured off
+     "Homepage Animation 1.png" — linear, then easing into solid white.
+     Past --fade-h it stays solid, which is what hides the background band's
+     tail and masks the next section as it slides up underneath. */
+  background:linear-gradient(to bottom,
+    rgba(255,255,255,0)     0,
+    rgba(255,255,255,.10)   calc(var(--fade-h, 320px) * .09),
+    rgba(255,255,255,.32)   calc(var(--fade-h, 320px) * .275),
+    rgba(255,255,255,.54)   calc(var(--fade-h, 320px) * .46),
+    rgba(255,255,255,.755)  calc(var(--fade-h, 320px) * .645),
+    rgba(255,255,255,.893)  calc(var(--fade-h, 320px) * .83),
+    #fff                    var(--fade-h, 320px),
+    #fff                    100%);
+}
+
+
+/* =================================================== PRODUCT SECTION
+   Sits between the blurred field (z 0) and the pinned webm + fade (z 2), so
+   its own white background is what hides the field's tail as it rises, and
+   the composition above it stays the section's header.
+
+   The section docks with its top edge on the webm's bottom edge — which is what
+   "Homepage Section 2.png" captures. --dock-span is that gap between the docked
+   webm's bottom and the bottom of the screen, written by hero.js; using it both
+   as a lift and as the height means the section arrives exactly as the last
+   scroll phase ends, and the docked composition is the page's resting state
+   instead of something you have to scroll another screen to reach. */
+.products{
+  position:relative;
+  z-index:1;
+  background:var(--white);
+  /* --sp-anim-title is the gap to the headline's *cap-top*; the headline's own
+     box sits 0.186em above that at line-height 1.1, hence the subtraction. */
+  padding:calc(var(--sp-anim-title) - var(--fs-h2) * 0.186) var(--gutter) 0;
+  margin-top:calc(-1 * var(--dock-span, 0px));
+  /* No bottom padding on purpose: min-height already supplies the white space
+     below the cards, and any padding on top of it would make the section taller
+     than --dock-span and let the page scroll *past* the docked composition,
+     pushing the headline back up behind the animation. */
+  min-height:var(--dock-span, 60svh);
+}
+
+.products__title{
+  margin:0 auto 45px;                 /* headline baseline 424 -> cards 480 */
+  max-width:var(--content-w);
+  text-align:center;
+  font-size:var(--fs-h2);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);              /* semibold — nothing on the page is bold */
+  letter-spacing:var(--ls-h2);
+  color:var(--ink);
+  text-wrap:balance;
+}
+
+.products__grid{
+  list-style:none;
+  margin:0 auto;
+  padding:0;
+  max-width:var(--grid-w);
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+
+/* ------------------------------------------------------------- the card
+   400×227 with 28px padding; the icon animation occupies the 200×75 slot
+   the reference draws as a grey plate. */
+.card{
+  position:relative;
+  min-height:227px;
+  padding:28px;
+  border-radius:12px;
+  background-color:var(--card-bg);
+  transition:background-color var(--card-hover-secs) ease;
+}
+.card:hover{ background-color:var(--card-bg-hover); }
+
+.card__icon{
+  position:relative;
+  width:200px;
+  height:75px;
+  margin-bottom:19px;        /* icon bottom 583 -> title cap-top 607.5 */
+}
+.card__icon video,
+.card__icon canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:left center;
+}
+/* The <video> only decodes; once frames are cached the canvas takes over so
+   the animation can run backwards as well as forwards. */
+.card__icon canvas{ opacity:0; }
+.card__icon.is-canvas video{ opacity:0; }
+.card__icon.is-canvas canvas{ opacity:1; }
+
+.card__title{
+  margin:0 0 5px;            /* -> body line-1 baseline 672.5 */
+  font-size:var(--fs-h4);
+  line-height:var(--lh-snug);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h4);
+  color:var(--ink);
+}
+.card__body{
+  margin:0;
+  font-size:var(--fs-body);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body);
+  color:var(--ink-soft);
+}
+
+/* =================================================== BENEFIT SECTION
+   Zig-zag rows: a 530×530 square and a text block, alternating sides, each row
+   vertically centred.
+
+   This is the one section that deliberately does NOT run the full --section-w.
+   At 1310 the 530 square left a 717px text column, so a zig-zag row read as a
+   square with a lot of empty air beside it. 1100 puts the two halves at 530 and
+   522 — 50:50, which is what the layout is for. The text block fills its column
+   rather than carrying a cap of its own.
+
+   The squares are a still, a video and a still-plus-logo-rail respectively. */
+.benefits{
+  --benefit-w:        1100px;   /* 530 media + 48 gap + 522 text = 50:50 */
+  --benefit-media:    530px;
+  /* No cap of its own — 522 IS the measure now. The three bodies run 500 / 487 /
+     1092 on one line, so the first two still clear it in one line and neither can
+     strand the single word ("SaaS", "rates") that a 492 column used to. */
+  --benefit-text-w:   100%;
+  --benefit-gap:      48px;
+  --benefit-row-gap:  88px;
+
+  padding:var(--sp-benefits-top) var(--gutter) var(--sp-benefits-bottom);
+  background:var(--white);
+}
+
+.benefits__title{
+  margin:0 auto var(--sp-benefits-head);
+  max-width:var(--content-w);
+  text-align:center;
+  font-size:var(--fs-h2);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h2);
+  color:var(--ink);
+  text-wrap:balance;
+}
+
+.benefit{
+  max-width:var(--benefit-w);
+  margin-inline:auto;
+  display:grid;
+  grid-template-columns:var(--benefit-media) 1fr;
+  gap:var(--benefit-gap);
+  align-items:center;          /* text centred against the square */
+}
+/* The row is the full section width now, so the text COLUMN is ~717 — far too
+   wide for a heading, which would stop wrapping and run out in one line. The text
+   block keeps the reference's own 492 and sits against the square; the slack ends
+   up as outer margin, alternating sides down the zig-zag. */
+.benefit__text{ max-width:var(--benefit-text-w); }
+.benefit + .benefit{ margin-top:var(--benefit-row-gap); }
+
+/* Flip the columns without reordering the markup, so the reading order stays
+   media-then-text and a single-column layout needs no undoing. The track sizes
+   have to be mirrored as well as the order — otherwise the media lands in the
+   1fr column and comes out narrower than the square it is meant to be. */
+.benefit--flip{ grid-template-columns:1fr var(--benefit-media); }
+.benefit--flip > .benefit__media{ order:2; }
+
+.benefit__media{
+  position:relative;
+  aspect-ratio:1 / 1;
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--card-bg);   /* shows while the media is still loading */
+  /* query container for the logo rail below — see .rail */
+  container-type:inline-size;
+}
+.benefit__media video,
+.benefit__img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* --------------------------------------------------- perks row: logo rail
+   A markup rebuild of the perks webm, which was this row's photo with a row of
+   frosted tiles drifting across it. Measured off the clip's first frame at its
+   native 600×600: tiles 179 square on a 192 pitch, band top at 388, 33 clear of
+   the bottom. Two identical sets slide one set per cycle, so the seam never
+   shows — the same trick as the client marquee, reusing its keyframes.
+
+   Sized in cqw (percent of the square's own width) rather than off
+   --benefit-media: in one column the square goes full-width and can end up far
+   narrower than 530, and px values would leave the tiles hugely oversized. */
+.rail{
+  --rail-tile:   29.81cqw;   /* 158 of 530 */
+  --rail-gap:     2.26cqw;   /*  12 of 530 */
+  --rail-radius:  1.89cqw;   /*  10 of 530 */
+
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:5.47cqw;            /*  29 of 530 */
+  height:var(--rail-tile);
+}
+.rail__track{
+  display:flex;
+  height:100%;
+  width:max-content;
+  animation:marquee var(--rail-secs) linear infinite;
+  will-change:transform;
+}
+.rail__set{
+  display:flex;
+  height:100%;
+  gap:var(--rail-gap);
+  padding-right:var(--rail-gap);   /* makes each set exactly 50% of the track */
+}
+/* Frosted glass: 45% white over the photo, an 80% white edge, and the backdrop
+   blurred behind it. The blur radius scales with the tile so the frosting reads
+   the same at any square size. */
+.rail__tile{
+  flex:none;
+  width:var(--rail-tile);
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:var(--rail-radius);
+  background:rgb(255 255 255 / .45);
+  border:1.5px solid rgb(255 255 255 / .8);
+  -webkit-backdrop-filter:blur(1.9cqw);
+  backdrop-filter:blur(1.9cqw);
+}
+.rail__tile img{
+  width:62%;
+  height:auto;
+}
+
+/* ------------------------------------ cashback row: notification loop
+   A markup rebuild of the reference clip, measured off it at its native 600×600:
+
+     card   388 × 91, top edge at 19, holding the 666×86 PNG at exactly half size
+     pill   171 × 54, right edge 41 in, bottom edge 141 up
+
+   Sized in cqw for the same reason the rail above is: in one column the square
+   goes full-width and is nowhere near 530, and px values would leave the card
+   either swimming or overflowing.
+
+   Three transactions, two stacks — the cards share one slot at the top, the pills
+   share one anchor above the tablet. Every element runs the SAME keyframes a
+   third of the loop apart, which is what the clip does: card 2 enters on the
+   exact frame card 1 starts leaving.
+
+   --notif-loop is the only knob. The keyframe stops are fractions of it, so
+   changing it rescales the whole sequence:
+
+     0      → 13.89%   card slides down, pill pops in      (1.00s at 7.2s)
+     13.89% → 33.33%   hold                                (1.40s)
+     33.33% → 41.67%   card fades where it stands, pill
+                       shrinks away towards the tablet     (0.60s)
+     41.67% → 100%     off-stage, waiting its turn         (4.20s)
+
+   33.33% is load-bearing: it is exactly one cycle, so it coincides with the next
+   card's 0%. */
+.notif{
+  --notif-loop:      7.2s;    /* 2.4s a notification, 2.4× the clip's 1.0s — the
+                                 "slower than the reference" ask. One knob: the
+                                 stagger is loop/3 and the stops are fractions. */
+  --notif-card-w:  64.67cqw;  /* 388 of 600 */
+  /* 25.8 and 22.5 of 600, not the 27.5 and 24 the clip measures: box-sizing is
+     border-box for the width but the height is content-driven, so the 1.5px edge
+     below eats into both. These are the values that put the outer box back on
+     388 × 91 and the row back on 333 wide. */
+  --notif-pad-x:    4.30cqw;
+  --notif-pad-y:    3.75cqw;
+  --notif-radius:   1.89cqw;  /* the rail tile's radius, so the two squares frost
+                                 identically */
+  --notif-pill-fs:  5cqw;     /*  30 of 600. Cap height 22 measured off the clip,
+                                 ÷ Inter's 0.7273em cap. */
+  --notif-fly-x:  -12.8cqw;   /* −77 — the pill's drift towards the tablet */
+  --notif-fly-y:    8.9cqw;   /* +53.5 */
+  --notif-fly-scale: .3;      /* it left at ~0.32 of full size */
+
+  position:absolute;
+  inset:0;
+}
+.notif__cards{
+  position:absolute;
+  left:0;
+  right:0;
+  top:3.17cqw;                /* 19 of 600 */
+  display:grid;
+  justify-items:center;
+}
+.notif__pills{
+  position:absolute;
+  right:6.83cqw;              /*  41 of 600 */
+  bottom:23.5cqw;             /* 141 */
+  display:grid;
+  justify-items:end;
+}
+/* All three in the one grid cell, so each stack is exactly one item tall and the
+   incoming card lands where the outgoing one is still standing. */
+.notif__card,
+.notif__pill{
+  grid-area:1 / 1;
+  animation-duration:var(--notif-loop);
+  animation-delay:calc(var(--n) * var(--notif-loop) / 3);
+  animation-iteration-count:infinite;
+  /* backwards fill, so rows 2 and 3 wait their turn off-stage instead of sitting
+     on top of row 1 until their delay elapses */
+  animation-fill-mode:both;
+  will-change:transform, opacity;
+}
+/* Same frosting as .rail__tile: 45% white, an 80% white edge, blurred backdrop. */
+.notif__card{
+  width:var(--notif-card-w);
+  padding:var(--notif-pad-y) var(--notif-pad-x);
+  border-radius:var(--notif-radius);
+  background:rgb(255 255 255 / .45);
+  border:1.5px solid rgb(255 255 255 / .8);
+  -webkit-backdrop-filter:blur(1.9cqw);
+  backdrop-filter:blur(1.9cqw);
+  animation-name:notif-card;
+}
+.notif__row{
+  width:100%;
+  height:auto;
+}
+.notif__pill{
+  padding:1.5cqw 2.17cqw;     /* 9 and 13 of 600 */
+  border-radius:2cqw;         /* 12 */
+  background:var(--green);
+  color:var(--white);
+  font-size:var(--notif-pill-fs);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h4);
+  white-space:nowrap;
+  animation-name:notif-pill;
+}
+
+/* The curves are written out rather than held in custom properties, because
+   `animation-timing-function` inside a keyframe block does not accept `var()` —
+   Chrome drops the declaration and the element's own timing function applies
+   instead, silently. Measured: the literal gives the 5.8% overshoot below, the
+   var() version gives 0.0%.
+
+   Ease-out on the slide, because the clip's card decelerates into place with no
+   overshoot at all. cubic-bezier(.34,1.42,.64,1) peaks 5.8% over at 0.63 of the
+   entry, which is where the clip's two pills peaked (5.2% and 6.3%).
+
+   The pill's exit curve is fitted, not guessed. The clip's outgoing pill had
+   covered 5% of its flight a tenth of the way through and 28% a third of the way
+   through, and had landed by about 0.8. An ease-in loiters at the anchor instead
+   — easeInQuad reaches only 11% at a third, which leaves the pill sitting
+   underneath the incoming one for most of its life, so the gesture never reads.
+   cubic-bezier(.42,.18,.5,1) hits 5% / 32% / 93% against that, and the y2 of 1
+   means it decelerates into the landing rather than slamming.
+
+   The card enters from outside the square, so the overflow clip does the hiding
+   and there is no fade-in to write, only the fade-out at the end. */
+@keyframes notif-card{
+  0%     { transform:translateY(-125%); opacity:1;
+           animation-timing-function:cubic-bezier(.25,.46,.45,.94); }
+  13.89% { transform:translateY(0);     opacity:1; }
+  33.33% { transform:translateY(0);     opacity:1; }
+  41.67% { transform:translateY(0);     opacity:0; }
+  100%   { transform:translateY(0);     opacity:0; }
+}
+/* translate() and scale() in every stop, including the ones that do not need
+   them: matching function lists interpolate per function, mismatched ones make
+   the browser fall back to decomposing a matrix. */
+@keyframes notif-pill{
+  0%     { transform:translate(0,0) scale(0); opacity:1;
+           animation-timing-function:cubic-bezier(.34,1.42,.64,1); }
+  13.89% { transform:translate(0,0) scale(1); opacity:1; }
+  33.33% { transform:translate(0,0) scale(1); opacity:1;
+           animation-timing-function:cubic-bezier(.42,.18,.5,1); }
+  41.67% { transform:translate(var(--notif-fly-x), var(--notif-fly-y))
+                     scale(var(--notif-fly-scale)); opacity:0; }
+  100%   { transform:translate(var(--notif-fly-x), var(--notif-fly-y))
+                     scale(var(--notif-fly-scale)); opacity:0; }
+}
+
+/* The square's width, not the viewport's: in one column it can be 680px on a
+   small tablet or 300 on a phone, and it is the square that decides whether the
+   row's type is readable. Widening the card claws back most of it — at a 350px
+   square the PNG lands at 0.43 of native against 0.44 on the desktop layout. */
+@container (max-width:430px){
+  .notif{
+    --notif-card-w:  88cqw;
+    --notif-pad-x:    3.4cqw;
+    --notif-pad-y:    3cqw;
+    --notif-radius:   2.4cqw;
+    --notif-pill-fs:  6.6cqw;
+  }
+}
+
+.benefit__heading{
+  margin:0 0 var(--sp-benefit-heading);
+  font-size:var(--fs-h3);
+  line-height:var(--lh-snug);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h3);
+  color:var(--ink);
+}
+/* lead, not body: measured off the reference at ~18.5px, and it is the same
+   supporting-copy role as the hero sub-headline.
+
+   No max-width of its own any more — it takes --benefit-text-w with the rest of
+   the block, which is what stopped the first two rows dropping a single word onto
+   a second line. `text-wrap: pretty` is the guard if the copy changes: where it is
+   supported the browser will not leave a short last line it can avoid. */
+.benefit__body{
+  margin:0 0 var(--sp-benefit-body);
+  text-wrap:pretty;
+  font-size:var(--fs-body-lg);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body-lg);
+  color:var(--ink-soft);
+}
+
+/* ------------------------------------------ testimonial: mobile-only parts
+   Off on desktop. `display: contents` on the card wrapper is what keeps the
+   desktop layout byte-identical: the wrapper's box disappears and the quote and
+   the figcaption stay direct children of the <figure>, exactly as before it was
+   added. A plain <div> has no semantics to lose that way. */
+.tstl__m-logo{ display:none; }
+.tstl__m-card{ display:contents; }
+.tstl__m-who{ display:none; }
+
+/* --------------------------------------------------------- arrow link */
+.link-arrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-body);
+  color:var(--green);
+}
+.link-arrow__icon{
+  width:24px;
+  height:10px;
+  flex:none;
+  background:currentColor;
+  /* masked so the arrow always matches the link colour */
+  -webkit-mask:var(--arrow) no-repeat center / contain;
+          mask:var(--arrow) no-repeat center / contain;
+  transition:transform .22s cubic-bezier(.22,.61,.36,1);
+}
+.link-arrow:hover{ color:var(--green-hover); }
+.link-arrow:hover .link-arrow__icon{ transform:translateX(5px); }
+
+
+/* ======================================================= CTA SECTION (4)
+   An inset banner, not a full-bleed band: a rounded navy card on --section-w with
+   a 50/50 split — the card photograph on the left, copy and two buttons on the
+   right.
+
+   The card's height comes from the photo. `aspect-ratio` on the media cell gives
+   the auto-sized grid row a definite contribution (its column width is resolved
+   first), and 700×510 at half of 1310 is 477 — the banner height in the mock. The
+   copy panel stretches to match, and if the copy is ever the taller of the two the
+   row grows and the absolutely-positioned photo covers the extra. */
+.cta{
+  padding:var(--sp-cta-band) var(--gutter);
+  background:var(--white);
+}
+.cta__banner{
+  max-width:var(--section-w);
+  margin-inline:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  overflow:hidden;
+  border-radius:var(--cta-radius);
+  background:var(--navy);
+}
+.cta__media{
+  position:relative;
+  aspect-ratio:700 / 510;
+}
+.cta__img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.cta__copy{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  padding:48px var(--sp-cta-pad);
+}
+.cta__logo{ display:block; }
+.cta__logo img{ display:block; height:28px; width:auto; }
+
+/* `h2` now, not the retired `h2-sm`, so this headline is 48px on desktop rather than
+   40. The 460px cap was tuned to hold the mock's break after "powerful" at 40px and
+   cannot at 48 — the first line alone measures ~485 — so it goes up to 560, which is
+   the narrowest that still breaks in the same place. Still inside the banner's 655px
+   copy column. */
+.cta__title{
+  margin:var(--sp-cta-title) 0 0;
+  max-width:min(560px, 100%);
+  font-size:var(--fs-h2);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h2);
+  color:var(--on-navy);
+}
+.cta__actions{
+  margin-top:var(--sp-cta-actions);
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+
+/* ================================================== BUSINESS SECTION (5)
+   Centred heading, a supporting line, then three photo cards. The row reuses
+   --grid-w so the cards land on the same 400px columns as the product cards
+   further up; the mock reads 410 on an 80px gutter, so snapping to the existing
+   spine costs ~10px a card and buys one alignment for the whole page. */
+.business,
+.testimonial{
+  padding:var(--sp-section-top) var(--gutter) var(--sp-section-bottom);
+  background:var(--white);
+}
+.business__title{
+  margin:0 auto;
+  max-width:var(--section-w);
+  text-align:center;
+  font-size:var(--fs-h2);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h2);
+  color:var(--ink);
+  text-wrap:balance;
+}
+/* 560px is what reproduces the mock's break after "corporations," without a
+   hard <br>, which would strand a single word on narrow screens. */
+.business__sub{
+  margin:var(--sp-business-sub) auto 0;
+  max-width:560px;
+  text-align:center;
+  font-size:var(--fs-body-lg);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body-lg);
+  color:var(--ink-soft);
+}
+.business__grid{
+  list-style:none;
+  margin:var(--sp-business-grid) auto 0;
+  padding:0;
+  max-width:var(--grid-w);
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+.business__card{ text-align:center; }
+.business__img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:41 / 40;        /* the photos are 410×400 */
+  object-fit:cover;
+  border-radius:8px;
+  background:var(--card-bg);   /* shows while the photo is still loading */
+}
+.business__name{
+  margin:var(--sp-business-title) 0 0;
+  font-size:var(--fs-h4);
+  line-height:var(--lh-snug);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h4);
+  color:var(--ink);
+}
+.business__body{
+  margin:var(--sp-business-body) 0 0;
+  font-size:var(--fs-body);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body);
+  color:var(--ink-soft);
+}
+.business__card .link-arrow{ margin-top:var(--sp-business-link); }
+
+
+/* =============================================== TESTIMONIAL SECTION (6)
+   A three-way switcher, built as an ARIA tab set. The left column is the tablist:
+   the selected customer shows as a 4:5 photograph with its logo over a scrim, the
+   other two as short navy tiles carrying just their logo. Clicking a tile selects
+   it — the whole interaction, as asked.
+
+   Two heights have to agree and neither is hardcoded:
+
+   * The card's height is the *longest* quote's, so it never changes as you switch.
+     All three panels sit in one grid cell (`grid-area: 1 / 1`), so the cell is as
+     tall as the tallest of them; the two that are not showing are hidden with
+     `visibility`, which keeps them in layout — and out of the a11y tree and the
+     tab order — where `display:none` or `hidden` would collapse the trick.
+   * The tablist matches it. The photo is fixed by its aspect ratio, so the two
+     tiles are `flex: 1 1` and absorb whatever is left over. */
+.testimonial__row{
+  max-width:var(--section-w);
+  margin-inline:auto;
+  display:grid;
+  grid-template-columns:var(--tstl-col-w) 1fr;
+  gap:var(--tstl-gap);
+  align-items:stretch;
+}
+
+/* ------------------------------------------------------- the tablist
+   Switching is an accordion: the selected tile expands to the photo while the
+   previous one collapses back to a logo tile, the two sharing the column's free
+   space frame by frame.
+
+   The moving part is `flex-grow`, transitioned 0 → 1. Every tile has the same
+   68px basis and only the selected one grows, so it takes whatever the column has
+   spare; mid-transition both are partly grown and the pair sums to the same
+   height throughout, which is what makes one look like it is handing space to the
+   other. `flex-grow` is a plain number, so it interpolates — where `aspect-ratio`
+   and `flex: none`, which is what this used to be, simply snap.
+
+   The column's min-height is what keeps the expanded tile at the photos' 4:5: it
+   asks for exactly the height that leaves the grown tile 1.25 × the column width
+   once the two collapsed tiles and the gaps are taken out. */
+.tstl__tabs{
+  display:flex;
+  flex-direction:column;
+  gap:var(--tstl-stack-gap);
+  min-height:calc(var(--tstl-col-w) * 1.25
+                  + 2 * var(--tstl-stack-gap) + 2 * var(--tstl-tile-h));
+}
+.tstl__tab{
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  /* a real <button>: reset the UA chrome rather than fake it with a div */
+  appearance:none;
+  margin:0;
+  padding:0;
+  border:0;
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+  border-radius:var(--tstl-radius);
+  background:var(--navy-deep);
+  flex:0 0 var(--tstl-tile-h);
+  min-height:var(--tstl-tile-h);
+  transition:flex-grow var(--tstl-secs) var(--tstl-ease),
+             background-color .2s ease;
+}
+.tstl__tab:hover{ background:var(--navy-tile-hi); }
+.tstl__tab:focus-visible{ outline:2px solid var(--green); outline-offset:3px; }
+
+.tstl__tab[aria-selected="true"]{
+  flex-grow:1;
+  cursor:default;
+  background:var(--navy-deep);
+}
+.tstl__photo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity var(--tstl-secs) var(--tstl-ease);
+}
+.tstl__tab[aria-selected="true"] .tstl__photo{ opacity:1; }
+
+/* The logos are white and these photographs are bright at the bottom, hence the
+   scrim. It is on every tile rather than only the selected one so it can fade in
+   with the photo instead of appearing under it. */
+.tstl__tab::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:var(--tstl-scrim);
+  z-index:1;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--tstl-secs) var(--tstl-ease);
+  background:linear-gradient(to top,
+      rgb(var(--navy-deep-rgb) / .85) 0%,
+      rgb(var(--navy-deep-rgb) / .45) 45%,
+      rgb(var(--navy-deep-rgb) / 0)  100%);
+}
+.tstl__tab[aria-selected="true"]::after{ opacity:1; }
+
+/* A fixed box plus `object-fit: contain`, so three lockups of quite different
+   proportions come out optically the same size with no per-logo number.
+
+   Not `max-width` + `max-height` on an auto-sized image: when both are violated
+   the CSS sizing algorithm picks one axis, and Glints (294×72) came out 43px tall
+   against a 40px cap. A definite box cannot get that wrong.
+
+   `align-self: end` in both states, so growing changes three lengths and no
+   alignment — `align-self` would snap, these interpolate. */
+.tstl__logo{
+  position:relative;
+  z-index:2;
+  align-self:end;
+  width:var(--tstl-logo-w);
+  height:var(--tstl-logo-h);
+  margin-bottom:var(--tstl-logo-inset);
+  object-fit:contain;
+  transition:width         var(--tstl-secs) var(--tstl-ease),
+             height        var(--tstl-secs) var(--tstl-ease),
+             margin-bottom var(--tstl-secs) var(--tstl-ease);
+}
+.tstl__tab[aria-selected="true"] .tstl__logo{
+  width:var(--tstl-logo-w-on);
+  height:var(--tstl-logo-h-on);
+  margin-bottom:var(--tstl-logo-inset-on);
+}
+
+/* --------------------------------------------------- the quote panels */
+.tstl__panels{
+  display:grid;
+  border-radius:var(--tstl-radius);
+  background:var(--card-bg);
+}
+/* A real crossfade: the outgoing quote fades out while the incoming fades in, both
+   over the accordion's own duration so the whole switch reads as one movement.
+
+   No `visibility` here. Hiding with `visibility` would flip in one frame and cut
+   the fade, and delaying it leaves the outgoing panel focusable and in the a11y
+   tree for the length of the delay. Instead testimonial.js moves `tabindex` and
+   `aria-hidden`, which take it out of the tab order and the a11y tree instantly
+   while it is still on screen fading. `pointer-events` covers the mouse. */
+.tstl__panel{
+  grid-area:1 / 1;
+  display:flex;
+  flex-direction:column;
+  margin:0;                    /* <figure> ships with 1em 40px */
+  padding:var(--sp-quote-pad);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--tstl-secs) var(--tstl-ease);
+}
+.tstl__panel.is-on{
+  opacity:1;
+  pointer-events:auto;
+}
+/* Its own step now — `testimonial`, 40 / 28 — and regular rather than medium. The
+   size at 1440 is unchanged; only the weight moved. */
+.tstl__quote{
+  margin:0 0 var(--sp-quote-attrib);
+  font-size:var(--fs-testimonial);
+  line-height:var(--lh-snug);  /* 50px pitch; the mock's reads ~48 */
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-testimonial);
+  color:var(--ink);
+}
+/* auto drops the foot to the card's bottom; --sp-quote-attrib is the floor */
+.tstl__foot{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:24px;
+}
+.tstl__name,
+.tstl__role{
+  margin:0;
+  font-size:var(--fs-body);
+  line-height:var(--lh-loose);
+  letter-spacing:var(--ls-body);
+}
+.tstl__name{ font-weight:var(--wt-semibold); color:var(--ink); }
+.tstl__role{ margin-top:var(--sp-attrib-role); font-weight:var(--wt-regular); color:var(--ink-soft); }
+
+.tstl__stats{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--stat-gap);
+}
+/* `min-width: min-content` is the floor under the width: "$110,000" at 24px is
+   ~98px of unbreakable glyphs, and a --stat-w narrower than that spills the figure
+   out of its chip (it did, by 18px, at 721). At the floor the pair wraps to one
+   chip per row instead — .tstl__stats already carries flex-wrap. */
+.stat{
+  width:var(--stat-w);
+  min-width:min-content;
+  min-height:var(--stat-h);
+  padding:12px 16px;
+  border-radius:8px;
+  background:rgb(var(--mint-solid-rgb) / .16);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  text-align:center;
+}
+.stat__value{
+  font-size:var(--fs-h4);
+  line-height:var(--lh-snug);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h4);
+  color:var(--green-ink);
+}
+.stat__label{
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body);
+  color:var(--green-ink);
+}
+
+
+/* ================================================= CLOSING CTA (7)
+   The wash is pinned to the section's bottom edge rather than floating behind the
+   copy, so it reads as the page running out. `overflow:hidden` on the section is
+   what gives it the clean cut where the footer begins — the blur would otherwise
+   bleed straight into the navy.
+
+   Third attempt, and the failures are the design:
+
+     v1  five bare blobs. Wherever two circles missed each other a white wedge
+         showed through, which read as blue-gap-blue-gap-green.
+     v2  a linear ramp plus two radial blooms, and an eased 16-stop mask to fade
+         the top. No gaps — but the mask is a `linear-gradient(to bottom)`, so the
+         alpha at any height is the SAME right across the page. That makes the top
+         boundary perfectly horizontal no matter how organic the colour under it
+         is, and a horizontal boundary is exactly what "placed in a straight line"
+         describes. The mask was the bug, not the colour.
+     v3  blobs again, but with the three things v1 lacked, so no boundary is
+         straight and no gap can open:
+
+           1  a real `filter: blur()` over the whole group. v1 had none: its blobs
+              were only as soft as their own radial falloff, so their edges met as
+              visible arcs. The blur is also what the top fade now *is* — there is
+              no mask on this element at all, which is what lets the boundary
+              follow the blobs' own varied heights.
+           2  a base ramp underneath, confined to the bottom of the box. It cannot
+              be seen as a line because the blobs always rise above it, and it
+              guarantees every column of the bottom edge has colour.
+           3  ten blobs, not five, each with a different crest height, laid out so
+              that allowing for their drift no vertical strip is left uncovered.
+
+   Blobs overhang the left, right and bottom edges so the blur's falloff happens
+   outside the visible area on those three sides; only the top is meant to be soft.
+   They reuse `.blob` and the hero's `drift-*` keyframes — same idiom, one place to
+   change how this page's colour behaves. */
+.endcta{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  padding:var(--sp-endcta-top) var(--gutter) var(--sp-endcta-bottom);
+  background:var(--white);
+}
+.endcta__wash{
+  position:absolute;
+  inset:auto 0 0;
+  height:var(--endcta-wash-h);
+  opacity:var(--endcta-wash-op);
+  z-index:0;
+  pointer-events:none;
+
+  /* The blur is applied here, over the base ramp AND every blob, so the whole
+     group softens as one surface instead of ten separately-soft discs. It is also
+     the entire top fade — there is deliberately NO mask on this element, because
+     a `linear-gradient(to bottom)` mask fades at the same height at every x and
+     that is what made v2 read as a straight line. */
+  filter:blur(var(--endcta-blur));
+  isolation:isolate;         /* keep the blobs' multiply blending to themselves */
+
+  /* The base ramp — the bottom slice of the box only, so it sits under the blobs'
+     crests and never shows as an edge of its own. Its job is the guarantee v1
+     could not make: no column of the bottom edge is ever colourless. */
+  background-image:linear-gradient(100deg,
+      var(--aqua)      0%,
+      var(--aqua-soft) 27%,
+      var(--mint-soft) 63%,
+      var(--mint)     100%);
+  background-repeat:no-repeat;
+  background-position:0 100%;
+  background-size:100% var(--endcta-ramp-h);
+}
+
+/* Ten blobs. `top` over 100% puts the centre below the section's bottom edge, so
+   what shows is the blob's upper half and the falloff on the other three sides is
+   outside the visible box. The crest heights are the point of the whole exercise:
+   they run 4 / 30 / 12 / 44 / 20 / 52 / 16 / 38 / 8 / 46 percent up the box, so the
+   colour's upper boundary rises and dips across the page instead of stopping level.
+
+   Widths overhang generously — neighbours overlap by at least a third even at the
+   far end of their drift, which is what stops a wedge of white opening between two
+   of them the way it did in v1.
+
+   Each one is `.blob .wblob--*`: the absolute placement, the centre-origin
+   `translate`, the circle and the multiply blending all come from `.blob`, which is
+   the hero's. Only the geometry and the colour are local. */
+
+/* All ten share a centre 12px BELOW the section's bottom edge — 105.45% of the
+   220px band — so what shows is each blob's upper half and the falloff on the left,
+   right and bottom lands outside the visible box. Crest height therefore comes from
+   each blob's HEIGHT, not its top, which decouples "how high does the colour reach
+   here" from "is the bottom covered here".
+
+   The crest is NOT the top of the box. It is where the radial gradient reaches its
+   `transparent K%` stop, so for a blob of height h with its centre at Cy the colour
+   starts at `Cy − K·h/2`. Heights are solved backwards from that, against a target
+   crest expressed as a percentage down the SECTION:
+
+     x        -2    13    27    41    55    68    82    98      (% across)
+     crest    19    15    24    33    35    26    15    19      (% down the section)
+     K       .74   .76   .76   .78   .78   .76   .74   .76
+     height  383   391   351   303   294   342   401   373      (% of the band)
+
+   Two peaks at 15% and a trough at 35% — the colour covers the bottom 85% of the
+   section at x13 and x82 and the bottom 65% through x41–55. Crest to trough is 74px
+   of amplitude, against 33px before, so the wave carries even though neighbours
+   overlap by more than half their colour width.
+
+   The crests must vary SMOOTHLY. An earlier pass alternated them 15 / 33 / 20 / 40
+   between neighbours and it scalloped: a pale wedge opened between the aqua and the
+   mint at x33–48, which read as exactly the gap this section is not allowed to have.
+   One broad wave — peak, gentle trough, peak — is the shape the reference has. */
+
+/* aqua along the left two thirds */
+.wblob--aqua-1{ left:-2%; top:105.45%; width:44%; height:419%;
+  background:radial-gradient(closest-side, var(--aqua) 0%, transparent 74%);
+  opacity:.96; animation:drift-a 21s linear infinite; }
+.wblob--aqua-2{ left:13%; top:105.45%; width:46%; height:422%;
+  background:radial-gradient(closest-side, var(--aqua) 0%, transparent 76%);
+  opacity:1;   animation:drift-c 25s linear infinite reverse; }
+.wblob--aqua-3{ left:27%; top:105.45%; width:44%; height:382%;
+  background:radial-gradient(closest-side, var(--aqua) 0%, transparent 76%);
+  opacity:.94; animation:drift-b 23s linear infinite; }
+.wblob--aqua-4{ left:41%; top:105.45%; width:44%; height:342%;
+  background:radial-gradient(closest-side, var(--aqua-soft) 0%, transparent 78%);
+  opacity:.90; animation:drift-d 28s linear infinite reverse; }
+
+/* mint along the right two thirds, overlapping the aqua through the trough so the
+   hand-over from one to the other is a blend rather than a seam */
+.wblob--mint-1{ left:55%; top:105.45%; width:44%; height:337%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 78%);
+  opacity:.90; animation:drift-c 24s linear infinite; }
+.wblob--mint-2{ left:68%; top:105.45%; width:46%; height:377%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 76%);
+  opacity:1;   animation:drift-a 27s linear infinite reverse; }
+.wblob--mint-3{ left:82%; top:105.45%; width:44%; height:433%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 74%);
+  opacity:.96; animation:drift-b 22s linear infinite; }
+.wblob--mint-4{ left:98%; top:105.45%; width:44%; height:408%;
+  background:radial-gradient(closest-side, var(--mint) 0%, transparent 76%);
+  opacity:.92; animation:drift-d 26s linear infinite; }
+
+/* Two low, wide bridges, crests at 48% and 50% down the section. Their crests sit
+   below every other blob's, so they cannot flatten or interrupt the wave; they are
+   there to keep the bottom continuous through the two places the chain above is
+   thinnest, including at the far end of its drift. */
+.wblob--brdg-1{ left:34%; top:105.45%; width:52%; height:249%;
+  background:radial-gradient(closest-side, var(--aqua-soft) 0%, transparent 80%);
+  opacity:.74; animation:drift-b 30s linear infinite reverse; }
+.wblob--brdg-2{ left:75%; top:105.45%; width:50%; height:241%;
+  background:radial-gradient(closest-side, var(--mint-soft) 0%, transparent 80%);
+  opacity:.72; animation:drift-c 32s linear infinite; }
+
+.endcta__inner{
+  position:relative;
+  z-index:1;
+  max-width:var(--section-w);
+  margin-inline:auto;
+  text-align:center;
+}
+.endcta__title{
+  margin:0;
+  font-size:var(--fs-h2);
+  line-height:var(--lh-tight);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-h2);
+  color:var(--ink);
+  text-wrap:balance;
+}
+.endcta__sub{
+  margin:var(--sp-endcta-sub) 0 0;
+  font-size:var(--fs-body-lg);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body-lg);
+  color:var(--ink-soft);
+}
+.endcta__actions{
+  margin-top:var(--sp-endcta-form);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:var(--sp-endcta-actions);
+}
+/* Literally the hero's capture — no size overrides, only the margin, which has to
+   be restated because .signup carries the hero's own. */
+.endcta__form{ margin:0; }
+/* on white, next to a green button, the arrow link reads better in ink */
+.link-arrow--ink{ color:var(--ink); }
+/* --green-ink, not --green: this one starts out as an accessible ink colour and
+   hovering to the 3.2:1 brand green would take it below AA on the way. */
+.link-arrow--ink:hover{ color:var(--green-ink); }
+
+
+/* ============================================================== FOOTER */
+.footer{
+  padding:var(--sp-footer-top) var(--gutter) var(--sp-footer-bottom);
+  background:var(--navy);
+}
+.footer__inner{ max-width:var(--section-w); margin-inline:auto; }
+
+.footer__top{
+  display:grid;
+  grid-template-columns:var(--footer-brand-w) repeat(5, 1fr);
+  gap:24px;
+}
+.footer__brand img{ display:block; height:30px; width:auto; }
+.footer__social{
+  margin-top:var(--sp-footer-social);
+  display:flex;
+  gap:22px;
+}
+.footer__social a{
+  display:block;
+  width:20px;
+  height:20px;
+  color:var(--on-navy-soft);
+  transition:color .18s ease;
+}
+.footer__social a:hover{ color:var(--on-navy); }
+.footer__social svg{ display:block; width:100%; height:100%; }
+
+.footer__col-title{
+  margin:0 0 var(--sp-footer-col);
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-semibold);
+  letter-spacing:var(--ls-body);
+  color:var(--on-navy);
+}
+.footer__list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:var(--footer-link-gap);
+}
+/* Direct children only: the store badge links live inside .footer__meta, and a
+   descendant selector here would outrank .footer__stores and give them the meta
+   row's colour and an underline. */
+.footer__list a,
+.footer__meta > a,
+.footer__meta > span{
+  font-size:var(--fs-body);
+  line-height:var(--lh-ui);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-body);
+  color:var(--on-navy-soft);
+}
+.footer__list a{ transition:color .18s ease; }
+.footer__list a:hover,
+.footer__meta > a:hover{ color:var(--on-navy); }
+
+.footer__rule{
+  margin:var(--sp-footer-rule) 0 0;
+  border:0;
+  border-top:1px solid var(--navy-rule);
+}
+.footer__meta{
+  margin-top:var(--sp-footer-meta);
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:24px;
+}
+.footer__meta > a{ text-decoration:underline; text-underline-offset:3px; }
+.footer__locale{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:var(--on-navy-soft);
+}
+.footer__locale svg{ flex:none; width:16px; height:16px; }
+
+/* The supplied badge artwork. Height is the constant; each keeps its own width
+   (the Apple asset is 3:1, the Google one 3.38:1) rather than being stretched to
+   match, which is what the brand guidelines require anyway. */
+.footer__stores{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.footer__stores a{ display:block; }
+.footer__stores img{ display:block; height:44px; width:auto; }
+
+.footer__legal{
+  margin-top:var(--sp-footer-legal);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  font-size:var(--fs-fine);
+  line-height:var(--lh-loose);
+  font-weight:var(--wt-regular);
+  letter-spacing:var(--ls-fine);
+  color:var(--on-navy-dim);
+}
+.footer__legal p{ margin:0; }
+.footer__legal a{
+  color:var(--on-navy-dim);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.footer__legal a:hover{ color:var(--on-navy-soft); }
+
+
+/* ------------------------------------------------------------- the intro
+   Four directions: the product headline drops in from above so it reads as
+   coming out of the animation, its cards rise from below, and the benefit rows
+   come in from their own side — media and text from opposite edges. */
+.reveal{ opacity:0; }
+.reveal--down { transform:translate3d(0, calc(-1 * var(--reveal-shift)), 0); }
+.reveal--up   { transform:translate3d(0, var(--reveal-shift), 0); }
+.reveal--left { transform:translate3d(calc(-1 * var(--reveal-shift-x)), 0, 0); }
+.reveal--right{ transform:translate3d(var(--reveal-shift-x), 0, 0); }
+
+.js .reveal{
+  --reveal-delay:calc(var(--stagger, 0) * var(--reveal-step));
+  transition:opacity   var(--reveal-secs) ease                          var(--reveal-delay),
+             transform var(--reveal-secs) cubic-bezier(.22,.61,.36,1)   var(--reveal-delay);
+}
+/* A card is both .card and .reveal, and `transition` is one property — the rule
+   above would otherwise wipe out the hover colour transition. Restate both, and
+   keep the stagger off the colour so hovering never feels delayed. */
+.js .card.reveal{
+  transition:opacity        var(--reveal-secs) ease                        var(--reveal-delay),
+             transform      var(--reveal-secs) cubic-bezier(.22,.61,.36,1) var(--reveal-delay),
+             background-color var(--card-hover-secs) ease 0s;
+}
+.reveal.is-in{
+  opacity:1;
+  transform:none;
+}
+/* Without JS nothing would ever get .is-in, so never hide it in the first place */
+html:not(.js) .reveal{ opacity:1; transform:none; }
+
+
+/* =========================================================== RESPONSIVE
+   The reference artboard is 1440×1198, and the composition reproduces it
+   exactly at that size. Below it, the vertical rhythm and the webm scale
+   down together so the whole animation — fade included — still fits the
+   first screen. Small-screen art direction is deliberately minimal; the
+   brief only covers the desktop layout. */
+/* The revised hero artboard is 1348px tall, and the whole composition — fade
+   included — has to fit one screen, so on a short viewport something has to
+   give. Rather than letting the webm absorb all of it (at 1452×900 it would end
+   up 527px wide), the *rhythm* compresses too. Anything at or above the
+   reference's own 1198px is untouched.
+
+   The type does not compress here, despite what this comment claimed for a while:
+   --fs-title / --fs-sub / --lh-sub were survivors of the pre-type-scale system and
+   nothing read them, so the hero's --fs-display and --fs-body-lg clamps (which are
+   viewport-*width* based) are what actually govern. They are gone now. If the type
+   should give on a short screen too, that is a real change, not a restored line. */
+@media (min-width:721px) and (max-height:1100px){
+  :root{
+    --signup-h:        54px;
+    --btn-h:           44px;   /* the whole set, not just this one */
+    --sp-nav-title:    clamp(24px, 4.2vh, 61px);
+    --sp-title-sub:    clamp(12px, 1.8vh, 24px);
+    --sp-sub-form:     clamp(16px, 2.6vh, 38px);
+    --sp-form-clients: clamp(22px, 4.4vh, 71px);
+    --sp-clients-anim: clamp(10px, 1.6vh, 25px);
+    --sp-anim-bottom:  clamp(18px, 3.2vh, 64px);
+    --logo-row-h:      clamp(48px, 6.2vh, 78px);
+  }
+  /* keep the tallest logo inside the shorter row instead of cropping it */
+  .marquee__set img{ height:auto; max-height:var(--logo-row-h); width:auto; }
+}
+
+@media (max-width:1340px){
+  /* No padding-inline overrides here any more. .products and .benefits used to
+     hardcode 40px while --gutter was still 65, which inset those two sections
+     differently from every other one through this whole band. They take --gutter
+     like everything else now; it drops to 40 at 1100 for all of them together. */
+
+  /* the square gives way before the text column does */
+  .benefit{ grid-template-columns:minmax(0, var(--benefit-media)) 1fr; }
+  .benefit--flip{ grid-template-columns:1fr minmax(0, var(--benefit-media)); }
+}
+@media (max-width:1100px){
+  :root{ --gutter:40px; --nav-h:68px; --sp-cta-pad:40px; }
+
+  /* ---- 1. the header becomes logo + burger ---- */
+  .nav__links,
+  .nav__actions{ display:none; }
+  .nav__burger{
+    display:block;
+    position:relative;
+    margin-left:auto;
+    appearance:none;
+    -webkit-appearance:none;
+    margin-block:0;
+    padding:0;
+    border:0;
+    background:none;
+    cursor:pointer;
+    width:44px;               /* the touch-target floor, not the icon's size */
+    height:44px;
+  }
+  .nav__burger-bar{
+    position:absolute;
+    left:11px;
+    right:11px;
+    height:2px;
+    border-radius:2px;
+    background:var(--ink);
+    transition:transform .22s ease, opacity .18s ease;
+  }
+  .nav__burger-bar:nth-child(1){ top:15px; }
+  .nav__burger-bar:nth-child(2){ top:21px; }
+  .nav__burger-bar:nth-child(3){ top:27px; }
+  /* into an X: the middle bar goes, the outer two meet in the centre and cross */
+  .nav.is-open .nav__burger-bar:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .nav.is-open .nav__burger-bar:nth-child(2){ opacity:0; }
+  .nav.is-open .nav__burger-bar:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  /* `top:100%` is the nav bar's own height, so the panel always hangs off the bar
+     whatever --nav-h is. Closed state is visibility, not display: display cannot
+     transition, and visibility is what takes the links out of the tab order and the
+     accessibility tree — opacity alone would leave them focusable. The 0s delay is
+     what lets the fade play out before it disappears. */
+  .nav__menu{
+    display:flex;
+    flex-direction:column;
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    padding:8px var(--gutter) 24px;
+    background:var(--white);
+    border-top:1px solid var(--hairline);
+    box-shadow:0 18px 40px rgb(19 51 79 / .10);
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(-8px);
+    transition:opacity .22s ease, transform .22s ease, visibility 0s .22s;
+  }
+  .nav.is-open .nav__menu{
+    visibility:visible;
+    opacity:1;
+    transform:none;
+    transition:opacity .22s ease, transform .22s ease, visibility 0s;
+  }
+  .nav__menu-links{ display:flex; flex-direction:column; }
+  .nav__menu a{
+    font-size:var(--fs-body);
+    line-height:var(--lh-ui);
+    letter-spacing:var(--ls-body);
+    color:var(--ink);
+  }
+  .nav__menu-links a,
+  .nav__menu-login{
+    display:block;
+    padding-block:14px;
+    font-weight:var(--wt-medium);
+  }
+  .nav__menu-login{
+    border-top:1px solid var(--hairline);
+    font-weight:var(--wt-semibold);
+  }
+  /* The hero's submit, not the nav's 44px pill: in the panel this is the same kind
+     of full-width primary action, so it takes --signup-h like the email capture's
+     button does. */
+  .nav__menu-cta{ margin-top:12px; width:100%; height:var(--signup-h); }
+  .products__grid{ grid-template-columns:repeat(2, 1fr); }
+  /* five link columns at ~135px would wrap "Partner Case Studies" — three wide
+     columns with the brand on its own row above them reads far better. */
+  .footer__top{ grid-template-columns:repeat(3, 1fr); row-gap:48px; }
+  .footer__brand-col{ grid-column:1 / -1; }
+  .testimonial{ --tstl-col-w:280px; }
+  /* Re-flowed to two or one column the grid is taller than --dock-span anyway,
+     so the section scrolls like a normal one and wants real breathing room. */
+  .products{ padding-bottom:120px; }
+  .benefits{ --benefit-gap:40px; --benefit-row-gap:72px; }
+  :root{ --sp-benefits-head:72px; --sp-benefits-top:96px; }
+}
+
+/* The testimonial's two-column layout stops working before the page's other
+   breakpoints do. The quote column narrows much faster than the photo, so the card
+   grows and the tablist — which stretches to match it — hands the surplus to the
+   two tiles: at 721px they reach 302px each, three times their height, for a logo
+   that has not grown at all. One column from 900 down instead, where the tablist
+   sits above the card and stops stretching to it. */
+@media (max-width:900px){
+  .testimonial__row{ grid-template-columns:1fr; align-items:start; }
+  /* One column, so --tstl-col-w is no longer the column's real width and the
+     min-height calc has to be restated against the content width instead. It has
+     to stay a definite height either way — that free space is what flex-grow
+     animates into, and without it the accordion would not move at all. */
+  .tstl__tabs{
+    min-height:calc((100vw - 2 * var(--gutter)) * 1.25
+                    + 2 * var(--tstl-stack-gap) + 2 * var(--tstl-tile-h));
+  }
+}
+
+@media (max-width:720px){
+  :root{
+    --gutter:20px;
+    --nav-h:64px;
+    --content-w:100%;
+    --signup-w:100%;
+    --signup-h:54px;
+    /* Stacked, the two are a matched pair rather than a button nested in a pill,
+       so the submit takes the field's height instead of --btn-h's 44. This is
+       exactly what --signup-btn-h was factored out for. */
+    --signup-btn-h:var(--signup-h);
+    --anim-lead:120px;
+    --scrub-length:620px;
+    --move-length:520px;
+    --sp-anim-bottom:clamp(16px, 2.2vh, 28px);
+    /* Half the size it was — 28 from 56, gaps 22 from 44. The duration halves with
+       it: one cycle is one set's width, so leaving it at 32s on a track that is now
+       half as wide would run the marquee at half the speed. 16s holds the pace. */
+    --logo-gap:22px;
+    --logo-row-h:28px;
+    --marquee-secs:16s;
+  }
+  .nav__inner{ gap:12px; }
+  .nav__logo img{ height:28px; }
+  .nav__actions{ gap:14px; }
+  .marquee__set img{ height:auto; max-height:var(--logo-row-h); width:auto; }
+
+  /* ---- 5. the scene stops being a pin; the hero is ordinary page content ----
+     A phone has no room to spend a whole screen holding a composition still, and
+     the runway cost four screens of scroll before the product section arrived.
+     `position: static` on the pin is the whole switch: the runway collapses, the
+     product section stops sliding underneath, and the white fade that existed only
+     to mask that slide has no job left. hero.js watches the same 720px query and
+     stands down (see `flat` there) — the clip plays itself instead of scrubbing.
+
+     Everything hero.js would have written falls back to its static value at the
+     var(), so nothing here has to undo a transform. */
+  /* `overflow: hidden` is kept from the base rule on purpose. At height:auto it
+     cannot cut anything vertically, and it is what crops the 20%-larger animation
+     below at the screen edges — `body { overflow-x: clip }` does NOT contain that
+     bleed, which showed up as a 438px scrollWidth against a 390px viewport. The
+     blurred field is positioned against `.scene`, not the pin, so it is unaffected. */
+  .scene__pin{
+    position:static;
+    height:auto;
+    /* 20, from 56. The product section brings its own padding-top on top of this,
+       so the two together were 90px between the animation's bottom edge and the
+       section title — a whole dead screen-third on a phone. */
+    padding-bottom:20px;
+    pointer-events:auto;   /* nothing overlaps here, so the copy is clickable */
+  }
+  .scene__runway{ display:none; }
+  .hero__fade{ display:none; }
+  /* Absolute, not fixed: the field belongs to the hero block now and has to leave
+     with it. Pinned to the block's bottom so it sits under the animation.
+
+     `overflow: hidden` is not decoration — it is what stops the nav going out of
+     frame. The blobs deliberately hang past both edges (mint-5 sits at left:93%
+     with width:45%), and while the field was `fixed` that cost nothing, because a
+     fixed element never contributes to the document's scrollable width. Absolute,
+     it does: 453px of scroll width against a 390px viewport. The browser then
+     widens the layout viewport to match, and `.nav` — `position: fixed`, so sized
+     to the initial containing block — came out 451 wide and hung off the screen.
+     The nav was the symptom; this is the cause. */
+  .hero__bg{
+    position:absolute;
+    top:auto;
+    bottom:0;
+    height:var(--bg-h, 660px);
+    overflow:hidden;
+    transform:none;
+  }
+  /* --dock-span is never written, and its own fallback is 60svh of min-height —
+     which would be a screen of dead space under the cards. */
+  .products{ margin-top:0; min-height:0; }
+
+  /* ---- 4. the animation, 20% larger ---- */
+  /* It was capped at the stage width, i.e. the viewport. 120% bleeds it 10% past
+     each edge, which `body { overflow-x: clip }` absorbs. Height comes from the
+     aspect ratio now that there is no pin height to fit inside. */
+  .hero__anim{
+    width:120%;
+    max-width:none;
+    height:auto;
+    transform:none;
+  }
+  .products{ padding-inline:20px; padding-bottom:90px; }
+  .products__grid{ grid-template-columns:1fr; }
+  /* one column: the square goes full width and the text sits under it */
+  .benefits{
+    --benefit-row-gap:56px;
+    padding-inline:20px;
+  }
+  .benefit,
+  .benefit--flip{ grid-template-columns:1fr; gap:28px; }
+  .benefit--flip > .benefit__media{ order:0; }
+  :root{
+    --sp-benefits-top:72px; --sp-benefits-head:48px; --sp-benefits-bottom:96px;
+    --sp-benefit-heading:20px; --sp-benefit-body:32px;
+    /* sideways entrances read badly in a single column */
+    --reveal-shift-x:0px;
+    /* sections 4–7 */
+    --sp-cta-band:32px; --sp-cta-pad:24px; --sp-cta-title:24px; --sp-cta-actions:32px;
+    --cta-radius:12px;
+    --sp-section-top:72px; --sp-section-bottom:96px;
+    --sp-business-grid:48px; --sp-business-sub:20px;
+    --sp-quote-pad:28px; --sp-quote-attrib:32px;
+    --sp-endcta-top:64px; --sp-endcta-bottom:64px; --sp-endcta-form:32px;
+    --sp-endcta-actions:24px;
+    --sp-footer-top:56px; --sp-footer-rule:48px; --sp-footer-bottom:40px;
+    /* On :root, not on .btn — an element's own custom property beats an inherited
+       one, so declaring these on .btn would defeat every contextual retune,
+       including .cta__actions' 24px, which is the whole point of the two knobs. */
+    --btn-h:44px; --btn-px:20px;   /* 44 is the touch-target floor */
+  }
+  /* ---- 6. product icons, 30% smaller (200×75 -> 140×53) ---- */
+  .card__icon{ width:140px; height:53px; }
+
+  /* ---- 7. the CTA banner stacks copy FIRST, photo underneath ----
+     The photo is first in the DOM because that is the desktop reading order
+     (image left, copy right); `order` flips it here rather than moving the markup,
+     which would invert the desktop layout too. Its buttons stack as well. */
+  .cta__banner{ grid-template-columns:1fr; }
+  .cta__media{ order:2; }
+  .cta__copy{ order:1; }
+  /* align-self is the load-bearing one: .cta__copy is a column with
+     align-items:flex-start, so this row is shrink-to-fit and `width:100%` on the
+     buttons would resolve against a box only as wide as the longer label. */
+  .cta__actions{ flex-direction:column; align-items:stretch; align-self:stretch; }
+  .cta__actions .btn{ width:100%; }
+
+  .business__grid{ grid-template-columns:1fr; gap:48px; }
+
+  /* ---- 8. the testimonial becomes a swipeable carousel ----
+     The desktop design is a tablist whose tiles expand into the photograph. That
+     needs two columns and a tall card, and it has neither here, so mobile gets a
+     different component off the same DOM: one slide per customer, swiped, with the
+     tabs demoted to dots underneath.
+
+     The swipe itself is native — `overflow-x: auto` plus scroll snapping. No touch
+     handler, so it keeps the platform's own momentum and rubber-banding, which is
+     the one thing a JS implementation never gets right. testimonial.js only keeps
+     the dots and the scroll position in step (see its `carousel` half). */
+  /* Flex, not block, purely so `order` is available: the tablist comes first in the
+     DOM because that is the desktop reading order (pick a customer, then read the
+     quote), and as dots it belongs under the card instead.
+
+     `align-items: stretch` is not a default here — it is undoing the 900px block's
+     `align-items: start`, which was written for a grid. On a flex column that value
+     makes every child shrink-to-fit on the cross axis, so the strip sized to its
+     own content (681px on a 390px screen, overflowing the frame) and the dot row
+     collapsed to the width of three dots and sat against the left edge. One
+     declaration, both symptoms. */
+  .testimonial__row{ display:flex; flex-direction:column; align-items:stretch; }
+  .tstl__tabs{ order:2; }
+  .tstl__panels{ order:1; }
+
+  .tstl__panels{
+    display:flex;
+    /* the negative margin lets the slides run to the screen edges while the
+       padding keeps the first and last one inset like the others */
+    margin-inline:calc(-1 * var(--gutter));
+    padding-inline:var(--gutter);
+    gap:12px;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;   /* don't hand the gesture to the page */
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    background:none;                 /* the card moves inside each slide */
+    border-radius:0;
+  }
+  .tstl__panels::-webkit-scrollbar{ display:none; }
+
+  /* grid-area:auto undoes the all-in-one-cell stacking the desktop crossfade needs;
+     opacity 1 undoes the crossfade itself. Both panels are simply present now. */
+  .tstl__panel{
+    grid-area:auto;
+    flex:0 0 100%;
+    scroll-snap-align:center;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:0;
+    opacity:1;
+    pointer-events:auto;
+    transition:none;
+  }
+
+  /* the navy bar the sketch puts above the card */
+  .tstl__m-logo{
+    display:grid;
+    place-items:center;
+    padding:20px;
+    border-radius:var(--tstl-radius);
+    background:var(--navy-deep);
+  }
+  .tstl__m-logo img{ height:32px; width:auto; }
+
+  .tstl__m-card{
+    display:flex;
+    flex-direction:column;
+    padding:var(--sp-quote-pad);
+    border-radius:var(--tstl-radius);
+    background:var(--card-bg);
+  }
+  .tstl__m-who{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .tstl__m-avatar{
+    flex:none;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    object-fit:cover;
+  }
+  .tstl__m-name{
+    margin:0;
+    font-size:var(--fs-body);
+    line-height:var(--lh-ui);
+    font-weight:var(--wt-semibold);
+    letter-spacing:var(--ls-body);
+    color:var(--ink);
+  }
+  .tstl__m-role{
+    margin:6px 0 0;
+    font-size:var(--fs-body);
+    line-height:var(--lh-ui);
+    font-weight:var(--wt-regular);
+    letter-spacing:var(--ls-body);
+    color:var(--ink-soft);
+  }
+
+  /* The name and role are repeated in .tstl__m-who, which is aria-hidden — so this
+     one is taken off the screen rather than out of the tree. `display: none` here
+     would leave the pair announced nowhere at all. */
+  .tstl__who{
+    position:absolute;
+    width:1px;
+    height:1px;
+    margin:-1px;
+    padding:0;
+    overflow:hidden;
+    clip-path:inset(50%);
+    white-space:nowrap;
+  }
+  .tstl__foot{ flex-direction:column; align-items:stretch; gap:24px; }
+  /* stacked, full width, as the sketch has them */
+  .tstl__stats{ --stat-w:100%; width:100%; flex-direction:column; }
+
+  /* ---- the tabs, demoted to dots ---- */
+  .tstl__tabs{
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    gap:16px;                  /* between 8px dots, so 24px centre to centre */
+    min-height:0;              /* the desktop accordion's runway is not wanted */
+    margin-top:28px;
+  }
+  /* The button IS the dot — 8px of ink — and the tap target is an invisible
+     ::before laid over it. Sizing the button itself to 44 was the mistake: the flex
+     gap then measures between 44px boxes, so three 8px dots sat 52px apart and read
+     as three unrelated marks instead of one group. Decoupling the two lets 16px of
+     gap put the dots 24px centre to centre, which is the sketch's spacing, while
+     the 24×44 hit areas tile exactly — no overlap, no dead strip between them. */
+  .tstl__tab{
+    flex:0 0 auto;
+    position:relative;
+    width:8px;
+    height:8px;
+    min-height:0;
+    overflow:visible;          /* the desktop tile clips; the hit area must not be */
+    border-radius:50%;
+    background:var(--navy-deep);
+    opacity:.22;
+    transition:opacity .18s ease;
+  }
+  .tstl__tab::after{ display:none; }
+  /* The accordion's `flex-grow: 1` on the selected tile is an attribute selector,
+     so `flex: 0 0 auto` above cannot outrank it — it has to be restated. Without
+     this the active dot stretches to fill the whole row. */
+  .tstl__tab[aria-selected="true"]{ flex-grow:0; opacity:1; }
+  /* the tile's photograph and logo are what the desktop tab is made of */
+  .tstl__photo,
+  .tstl__tab .tstl__logo{ display:none; }
+  /* the target: no paint of its own, it exists only to be tapped */
+  .tstl__tab::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:24px;
+    height:44px;
+    transform:translate(-50%, -50%);
+  }
+
+  /* ---- 3 + 9. the email capture stacks: field on top, button under it ----
+     Both captures are the same component, so this covers the hero and the closing
+     CTA at once. The pill wrapper stops being the visible control — it becomes a
+     bare column — and the input takes over its background, border and radius. The
+     focus ring has to move with it: on desktop the wrapper carries the ring through
+     :has(), because the input has no box of its own there. Here it does, so the
+     :has() rule is neutralised and the input rings itself. Leaving both live would
+     draw two rings, one inside the other. */
+  .signup{
+    flex-direction:column;
+    align-items:stretch;
+    height:auto;
+    gap:12px;
+    padding:0;
+    background:none;
+    border:0;
+    border-radius:0;
+  }
+  .signup__input{
+    flex:none;
+    height:var(--signup-h);
+    padding-inline:20px;
+    background:var(--white);
+    border:1px solid var(--hairline);
+    border-radius:999px;
+  }
+  .signup:has(.signup__input:focus-visible){
+    border-color:transparent;
+    box-shadow:none;
+  }
+  .signup__input:focus-visible{
+    border-color:var(--green);
+    box-shadow:0 0 0 3px rgb(var(--green-rgb) / .25);
+  }
+  .signup__btn{ width:100%; }
+
+  .endcta__actions{ flex-direction:column; }
+  .footer__top{ grid-template-columns:repeat(2, 1fr); }
+  .footer__stores{ margin-left:0; }
+}
+
+
+/* =================================================== REDUCED MOTION */
+@media (prefers-reduced-motion:reduce){
+  .blob{ animation:none !important; }
+  /* switching testimonials still works, it just cuts instead of animating */
+  .tstl__tab,
+  .tstl__photo,
+  .tstl__logo,
+  .tstl__tab::after,
+  .tstl__panel,
+  .tstl__panel.is-on{ transition:none; }
+  /* The marquee is the whole point of the sub-section, so it keeps moving —
+     just much more slowly. The intro and the icon playback are dropped, but the
+     hover colour still eases: a cross-fade is not the kind of motion this
+     setting is asking to remove. */
+  .marquee__track{ animation-duration:calc(var(--marquee-secs) * 3); }
+  /* Same call for the perks rail: it stands in for a video that keeps playing
+     under this setting, so slowing it beats freezing it on three logos. */
+  .rail__track{ animation-duration:calc(var(--rail-secs) * 3); }
+  /* The notification loop does NOT get that treatment. The marquee and the rail
+     are one continuous drift, which slowing makes gentler; this is a sequence of
+     pop-ins with a back overshoot and something flying across the frame, which is
+     the motion this setting is actually asking about. So it holds the first
+     transaction still and drops the rest — the square still says "spend earns
+     cashback", it just stops moving. `animation:none` also drops the transforms,
+     which is what leaves the card down and the pill at full size. */
+  .notif__card,
+  .notif__pill{ animation:none; opacity:0; }
+  .notif__card:first-child,
+  .notif__pill:first-child{ opacity:1; }
+  .reveal{ opacity:1 !important; transform:none !important; }
+  .link-arrow__icon{ transition:none; }
+  .js .reveal,
+  .js .card.reveal{ transition:background-color var(--card-hover-secs) ease; }
+}

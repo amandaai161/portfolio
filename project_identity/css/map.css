@@ -1,0 +1,318 @@
+/* ==========================================================================
+   Identity — section 4, the interactive member map
+   Styling carried over from the signed-off working file, retuned to the
+   page's own tokens (pure-white foreground, sharp corners, Inter).
+   ========================================================================== */
+
+.idmap {
+  --map-line: #8a5cf0;          /* resting territory outline */
+  --map-line-hot: #b18cff;      /* hovered                   */
+  --map-ink: #1b0733;           /* text on the white pills   */
+  --map-tint: #efe4ff;          /* pill hover fill           */
+  --map-edge: #c9a6ff;          /* pill hover edge           */
+  --map-h: min(58vh, 600px);
+  --map-ratio: 2.55;      /* must match VIEW in js/map.js */
+  position: relative;
+  margin-top: 44px;
+}
+
+.slide--map { padding-block: 96px 64px; }
+
+.map__head { text-align: center; }
+.map__title { margin-bottom: 20px; }
+
+.map__lede {
+  max-width: 680px;
+  margin: 0 auto;
+  color: var(--fg-body);
+}
+
+/* the stage keeps the svg's own 2:1 frame so the archipelago never letterboxes
+   inside a box that is the wrong shape for it */
+.idmap__stage {
+  position: relative;
+  height: var(--map-h);
+  width: min(100%, calc(var(--map-h) * var(--map-ratio)));
+  margin-inline: auto;
+}
+
+.idmap__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ---- territories --------------------------------------------------------- */
+
+.idmap__geo path {
+  fill: none;
+  pointer-events: all;
+  cursor: pointer;
+  stroke: var(--map-line);
+  stroke-opacity: 0.68;
+  stroke-width: 1.35;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.2s, stroke 0.2s, stroke-opacity 0.2s, stroke-width 0.2s;
+}
+
+.idmap__geo path.is-dim { opacity: 0.42; transition: opacity 0.18s; }
+
+/* Java reads as one territory until you open it */
+.idmap__geo path.is-merged { stroke-opacity: 0.44; }
+
+.idmap__geo path.is-off { opacity: 0.13; pointer-events: none; transition: opacity 0.4s; }
+
+.idmap__geo path.is-hot:not(.is-off) {
+  fill: rgba(138, 92, 240, 0.18);
+  opacity: 1;
+  stroke: var(--map-line-hot);
+  stroke-opacity: 1;
+  stroke-width: 1.9;
+  filter: url(#idmap-glow-soft);
+}
+
+.idmap__geo path.is-sel:not(.is-off) {
+  fill: var(--fg);
+  opacity: 1;
+  stroke: var(--fg);
+  stroke-opacity: 1;
+  stroke-width: 1.6;
+  filter: url(#idmap-glow);
+}
+
+/* ---- labels -------------------------------------------------------------- */
+
+.idmap__pills { transition: opacity 0.3s ease; }
+
+.idmap__pill { cursor: pointer; }
+
+.idmap__pill rect {
+  fill: var(--fg);
+  stroke: var(--fg);
+  stroke-width: 1;
+  transition: fill 0.16s, stroke 0.16s;
+}
+
+.idmap__pill text {
+  fill: var(--map-ink);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  transition: fill 0.16s;
+}
+
+.idmap__pill.is-big text { font-size: 17px; font-weight: 500; letter-spacing: 0.01em; }
+
+.idmap__pill:hover rect,
+.idmap__pill.is-hot rect { fill: var(--map-tint); stroke: var(--map-edge); }
+
+.idmap__pill:hover text,
+.idmap__pill.is-hot text { fill: #2e0a5c; }
+
+.idmap__pill.is-sel rect,
+.idmap__pill.is-sel:hover rect,
+.idmap__pill.is-sel.is-hot rect { fill: var(--grad-1); stroke: #8c46ff; }
+
+.idmap__pill.is-sel text,
+.idmap__pill.is-sel:hover text,
+.idmap__pill.is-sel.is-hot text { fill: var(--fg); }
+
+/* ---- detail sheet -------------------------------------------------------- */
+
+.idmap__panel {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  width: 344px;
+  padding: 34px 30px 30px;
+  /* The frosted look comes from the blur; the legibility has to come from the
+     fill, because the map behind carries white labels and because Safari and
+     older engines drop backdrop-filter entirely. Both are turned up. */
+  background: rgba(9, 1, 20, 0.93);
+  border: 1px solid rgb(120 40 220 / 0.55);
+  box-shadow: 0 30px 80px -34px rgb(85 1 203 / 0.9),
+              inset 0 1px 0 rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(44px) saturate(1.15);
+  -webkit-backdrop-filter: blur(44px) saturate(1.15);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out), transform 0.38s var(--ease-out);
+}
+
+.idmap__panel.is-right { right: 0; left: auto; transform: translate(26px, -50%); }
+.idmap__panel.is-left { left: 0; right: auto; transform: translate(-26px, -50%); }
+
+.idmap__panel.is-on {
+  opacity: 1;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.idmap__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.idmap__close svg { width: 12px; height: 12px; }
+.idmap__close:hover { color: var(--fg); background: rgba(255, 255, 255, 0.08); }
+
+.idmap__eyebrow {
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grad-3);
+}
+
+.idmap__name {
+  margin: 10px 0 0;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  padding-right: 26px;
+}
+
+.idmap__region {
+  align-self: flex-start;
+  margin-top: 14px;
+  padding: 5px 12px;
+  border: 1px solid rgb(85 1 203 / 0.7);
+  border-radius: var(--r-pill);
+  background: rgb(85 1 203 / 0.22);
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grad-2);
+}
+
+.idmap__stats {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 18px;
+}
+
+.idmap__stat b {
+  display: block;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.idmap__stat span {
+  display: block;
+  margin-top: 9px;
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.idmap__meta {
+  margin: 30px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.idmap__meta dt {
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.idmap__meta dd { margin: 6px 0 18px; font-size: var(--t-body); font-weight: 500; line-height: 1.4; }
+.idmap__meta dd:last-child { margin-bottom: 0; }
+
+.idmap__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 26px;
+  padding: 13px 22px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--map-ink);
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  transition: background-color 0.16s, border-color 0.16s;
+}
+
+.idmap__cta span { color: var(--grad-1); transition: transform 0.16s; }
+.idmap__cta:hover { background: var(--map-tint); border-color: var(--map-edge); }
+.idmap__cta:hover span { transform: translateX(3px); }
+
+/* ---- without javascript -------------------------------------------------- */
+/*  Every territory here is drawn by js/map.js, so with scripting off the stage
+    would be an empty box. The dotted plate the section shipped with before the
+    map existed stands in for it.                                              */
+
+.idmap:not(.is-ready) .idmap__stage { display: none; }
+
+.idmap__fallback {
+  width: min(1228px, 100%);
+  aspect-ratio: 1228 / 458;
+  margin-inline: auto;
+  background: var(--fg);
+  -webkit-mask: url("../images/map-indonesia.svg") no-repeat center / contain;
+          mask: url("../images/map-indonesia.svg") no-repeat center / contain;
+}
+
+.idmap__note {
+  margin-top: 20px;
+  text-align: center;
+  font-size: var(--t-body-sm);
+  color: var(--fg-muted);
+}
+
+/* ---- the chapter list ---------------------------------------------------- */
+/*  Offscreen on desktop, where the map itself is the interface — but present,
+    focusable and readable, which is the only keyboard route into 38 SVG paths.
+    Below 900px it becomes the interface.                                     */
+
+.idmap__list {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.idmap__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: left;
+  transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.idmap__row-name { font-size: var(--t-body); font-weight: 500; }
+.idmap__row-n { font-size: var(--t-body-sm); color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.idmap__row:hover { border-color: rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.04); }
+.idmap__row[aria-current="true"] { border-color: var(--fg); background: rgba(255, 255, 255, 0.09); }

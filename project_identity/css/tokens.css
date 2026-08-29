@@ -1,0 +1,60 @@
+/* ==========================================================================
+   Identity — design tokens (v2)
+   Values are taken from materials/system - colors.png + system - typography.png
+   ========================================================================== */
+
+:root {
+  /* ---- surface ---------------------------------------------------------- */
+  --bg: #0c021a;          /* main background   */
+  --bg-2: #331478;        /* secondary surface */
+  --fg: #ffffff;          /* foreground        */
+
+  /* ---- gradient ramp ---------------------------------------------------- */
+  --grad-1: #5501cb;      /* deepest purple  — blob C */
+  --grad-2: #be90ff;      /* mid purple      — blob B */
+  --grad-3: #b4b1ff;      /* lavender        — blob A */
+
+  /* ---- pillar accents --------------------------------------------------- */
+  --connect: #aeff00;
+  --collaborate: #ffaa00;
+  --contribute: #519aff;
+
+  /* ---- text ------------------------------------------------------------- */
+  --fg-strong: var(--fg);
+  --fg-body: rgba(255, 255, 255, 0.8);
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-faint: rgba(255, 255, 255, 0.25);
+
+  /* ---- type ------------------------------------------------------------- */
+  --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-brand: "iBrand", var(--font);
+
+  --t-h1: 80px;
+  --t-h2: 54px;
+  --t-h3: 28px;
+  --t-sub: 24px;
+  --t-body-lg: 18px;
+  --t-body: 16px;
+  --t-body-sm: 14px;
+
+  /* ---- layout ----------------------------------------------------------- */
+  --container: 1600px;   /* was 1280 (the 1440 comp canvas − 80px gutters), +25% */
+  --gutter: 80px;
+  --nav-gutter: 64px;
+  --nav-h: 72px;
+  --grid-gap: 24px;
+
+  /* ---- grain (speckle pass + overlay pass, see base.css) ---------------- */
+  --grain-field: 0.07;
+  --grain-soft: 0.42;
+  --grain-quote: 0.12;
+  --grain-quote-soft: 0.35;
+
+  /* ---- radii ------------------------------------------------------------ */
+  --r-pill: 999px;
+  --r-md: 12px;
+
+  /* ---- motion ----------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}

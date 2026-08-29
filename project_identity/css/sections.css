@@ -1,0 +1,673 @@
+/* ==========================================================================
+   Identity — section layout (desktop, 1440 canvas)
+   ========================================================================== */
+
+/* ---- nav ----------------------------------------------------------------- */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s var(--ease-out), opacity 0.3s var(--ease-out);
+  will-change: transform;
+}
+
+/* scrolled down and not asked for: park it above the fold */
+.nav.is-hidden {
+  transform: translate3d(0, calc(-1 * var(--nav-h) - 8px), 0);
+  opacity: 0;
+}
+
+.nav__inner {
+  width: min(1312px, 100% - var(--nav-gutter) * 2);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav__logo {
+  height: 34px;
+  width: auto;
+  color: var(--fg);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  font-size: var(--t-body);
+  font-weight: 400;
+  letter-spacing: -0.08px;
+  white-space: nowrap;
+}
+
+.nav__links a { opacity: 0.95; transition: opacity 0.2s var(--ease-out); }
+.nav__links a:hover { opacity: 0.7; }
+
+.nav__actions { display: flex; justify-content: flex-end; }
+
+/* ==========================================================================
+   The deck — sections 1-6 dissolve into each other in place while the page
+   scrolls. Every slide sits in the same pinned frame; js/deck.js drives the
+   opacity and the small intro/outro offset of each slide's content.
+   ========================================================================== */
+
+/* without js the slides simply stack and scroll — the deck styles below only
+   switch on once deck.js has flagged the document */
+.deck { position: relative; z-index: 1; }
+
+.slide {
+  display: grid;
+  align-content: center;
+  min-height: 100vh;
+  padding-block: 108px;
+}
+
+/* one viewport per slide, plus whatever extra hold the slides asked for
+   (data-dwell), plus one for the sticky stage itself */
+.js-deck .deck { height: calc((var(--deck-span, 5) + 1) * 100vh); }
+
+.js-deck .deck__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.js-deck .slide {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.js-deck .slide.is-live { visibility: visible; }
+.js-deck .slide.is-active { pointer-events: auto; }
+
+/* content of a slide drifts a touch as the slide dissolves in and out */
+[data-reveal] {
+  transform: translate3d(0, var(--reveal-y, 0px), 0);
+  will-change: transform;
+}
+
+/* ---- 1 · hero ------------------------------------------------------------ */
+
+.slide--hero {
+  padding-top: calc(var(--nav-h) + 108px);
+  text-align: center;
+}
+
+.hero__eyebrow {
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  color: var(--grad-3);
+  margin-bottom: 24px;
+}
+
+.hero__title { margin-bottom: 24px; }
+
+.hero__lede {
+  max-width: 900px;
+  margin: 0 auto 44px;
+  color: var(--fg-body);
+}
+
+.hero__actions { justify-content: center; }
+
+/* ---- 2 · intro ----------------------------------------------------------- */
+
+.intro__title {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+/* the two photos take more of the row than the copy column */
+.intro__grid {
+  display: grid;
+  grid-template-columns: 1.08fr 1.08fr 0.84fr;
+  gap: var(--grid-gap);
+  align-items: stretch;
+}
+
+.intro__media {
+  aspect-ratio: 410 / 362;
+  max-height: 46vh;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro__col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.intro__text {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.08px;
+  color: var(--fg);
+}
+
+/* ---- 3 · numbers --------------------------------------------------------- */
+
+.numbers__title {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.numbers__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat {
+  min-height: 192px;
+  padding: 40px 20px;
+  border: 1px solid var(--fg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.stat__value {
+  font-size: var(--t-h2);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  font-size: var(--t-body-lg);
+  line-height: 1.2;
+  letter-spacing: -0.08px;
+  color: var(--fg-body);
+}
+
+/* ---- 4 · map ------------------------------------------------------------- */
+/*  see css/map.css — the section is a component of its own                    */
+
+/* ---- 5 · pillars --------------------------------------------------------- */
+
+.pillars__title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pillars__lede {
+  max-width: 680px;
+  margin: 0 auto 64px;
+  text-align: center;
+  color: var(--fg-body);
+}
+
+.pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gap);
+}
+
+/* the whole card is the link */
+.pillar {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 362px;
+  padding: 28px 20px 24px;
+  border: 1px solid rgb(var(--accent-rgb));
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 0 0 rgb(var(--accent-rgb) / 0);
+  transition: box-shadow 0.75s var(--ease-in-out),
+              border-color 0.75s var(--ease-in-out);
+}
+
+/* `background-image` can't tween between two gradients, so the two states are
+   stacked layers that cross-fade — that's what makes the wash move smoothly */
+.pillar::before,
+.pillar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: opacity 0.75s var(--ease-in-out);
+}
+
+.pillar::before {                       /* rest: 75% clear, 25% accent */
+  background-image: linear-gradient(
+    180deg,
+    rgb(var(--accent-rgb) / 0) 75%,
+    rgb(var(--accent-rgb) / 0.3) 100%
+  );
+  opacity: 1;
+}
+
+.pillar::after {                        /* hover: 50 / 50 */
+  background-image: linear-gradient(
+    180deg,
+    rgb(var(--accent-rgb) / 0) 50%,
+    rgb(var(--accent-rgb) / 0.32) 100%
+  );
+  opacity: 0;
+}
+
+.pillar:hover::before,
+.pillar:focus-visible::before { opacity: 0; }
+
+.pillar:hover::after,
+.pillar:focus-visible::after { opacity: 1; }
+
+.pillar:hover,
+.pillar:focus-visible {
+  border-color: rgb(var(--accent-rgb));
+  box-shadow: 0 0 28px rgb(var(--accent-rgb) / 0.35),
+              inset 0 0 22px rgb(var(--accent-rgb) / 0.12);
+}
+
+.pillar--connect     { --accent-rgb: 174 255 0; }
+.pillar--collaborate { --accent-rgb: 255 170 0; }
+.pillar--contribute  { --accent-rgb: 81 154 255; }
+
+/* the card carries no grain of its own — the page-wide layers already run
+   over it, and doubling up only muddied the wash */
+.pillar > * { position: relative; z-index: 2; }
+
+.pillar__logo {
+  height: 32px;
+  width: auto;
+  align-self: flex-start;      /* stop the flex column stretching the SVG */
+  margin-bottom: 32px;
+}
+
+.pillar__body {
+  display: block;
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--fg-body);
+}
+
+/* the label stays put; only the arrow travels */
+.pillar__more {
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  font-size: var(--t-body);
+  font-weight: 400;
+  color: var(--fg-body);
+  transition: color 0.75s var(--ease-in-out);
+}
+
+.pillar__more .arrow {
+  width: 26px;
+  height: 8px;
+  flex: 0 0 auto;
+  transition: transform 0.75s var(--ease-in-out);
+}
+
+.pillar:hover .pillar__more,
+.pillar:focus-visible .pillar__more { color: rgb(var(--accent-rgb)); }
+
+.pillar:hover .pillar__more .arrow,
+.pillar:focus-visible .pillar__more .arrow { transform: translateX(8px); }
+
+/* ---- 6 · testimonials ---------------------------------------------------- */
+
+.testimonials__title {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.testi {
+  --card-w: min(1100px, 100vw - 340px);
+  --card-h: clamp(400px, 58vh, 500px);
+  --card-gap: 48px;
+  position: relative;
+}
+
+.testi__viewport {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.testi__viewport.is-dragging { cursor: grabbing; }
+
+.testi__track {
+  display: flex;
+  gap: var(--card-gap);
+  padding-left: calc((100vw - var(--card-w)) / 2);
+  transform: translate3d(0, 0, 0);      /* js/ui.js writes the slide offset */
+  transition: transform 0.7s var(--ease-out);
+  will-change: transform;
+}
+
+.testi__viewport.is-dragging .testi__track { transition: none; }
+
+.testi__card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  flex: 0 0 var(--card-w);
+  height: var(--card-h);
+  padding: 32px;
+  border: 1px solid var(--fg);
+  background: #120131;
+  transition: opacity 0.7s var(--ease-out);
+  user-select: none;
+}
+
+.testi__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;     /* faces sit high; the copy takes the floor */
+  -webkit-user-drag: none;
+}
+
+/* the scrim the quote is legible against */
+.testi__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* two passes: one up from the floor for the quote, one in from the left,
+     because every word on the card is set flush left */
+  background:
+    linear-gradient(180deg,
+      rgba(12, 2, 26, 0.06) 0%,
+      rgba(12, 2, 26, 0.16) 30%,
+      rgba(12, 2, 26, 0.74) 62%,
+      rgba(12, 2, 26, 0.95) 100%),
+    linear-gradient(90deg,
+      rgba(12, 2, 26, 0.52) 0%,
+      rgba(12, 2, 26, 0.14) 44%,
+      rgba(12, 2, 26, 0) 68%);
+}
+
+/* only dims once the carousel is running, so it stays readable without js */
+.testi__card[data-active="false"] { opacity: 0.25; }
+
+.testi__body {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 32px;
+  z-index: 2;
+}
+
+.testi__meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.testi__name {
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.testi__role {
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  margin-left: 16px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.testi__quote {
+  max-width: 620px;
+  color: var(--fg);
+}
+
+/* the client's own mark, reversed out of the photograph — no plaque, because
+   the plaque was reading louder than the logo it was carrying */
+.testi__logo {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  color: var(--fg);
+}
+
+.testi__mark {
+  height: 34px;
+  width: auto;
+  display: block;
+  overflow: visible;      /* getBBox ignores stroke; let the caps spill a hair */
+  filter: drop-shadow(0 1px 10px rgba(12, 2, 26, 0.55));
+}
+
+/* prev / next */
+.testi__nav {
+  position: absolute;
+  top: calc(var(--card-h) / 2);
+  transform: translateY(-50%);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(12, 2, 26, 0.45);
+  color: var(--fg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out),
+              opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.testi__nav svg { width: 24px; height: 24px; }
+.testi__nav:hover { background: rgba(12, 2, 26, 0.8); border-color: var(--fg); }
+.testi__nav:active { transform: translateY(-50%) scale(0.94); }
+.testi__nav[disabled] { opacity: 0.25; pointer-events: none; }
+
+.testi__nav--prev { left: calc(50% - var(--card-w) / 2 - 84px); }
+.testi__nav--next { right: calc(50% - var(--card-w) / 2 - 84px); }
+
+.testi__dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 44px;
+}
+
+.testi__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fg-faint);
+  transition: background-color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.testi__dot:hover { background: rgba(255, 255, 255, 0.5); }
+.testi__dot[aria-selected="true"] { background: var(--fg); }
+
+/* ---- 7 · cta ------------------------------------------------------------- */
+
+.cta {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: max(680px, 66vh);
+  overflow: hidden;
+}
+
+.cta__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  padding: 64px 40px 64px var(--gutter);
+}
+
+.cta__inner { max-width: 600px; }
+
+/* the widths below hold the comp's line breaks */
+.cta__title {
+  max-width: 540px;
+  line-height: 1.075;
+  margin-bottom: 36px;
+}
+
+.cta__lede {
+  max-width: 585px;
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--fg-body);
+  margin-bottom: 54px;
+}
+
+.cta__panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- footer -------------------------------------------------------------- */
+
+.footer {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  padding-block: 96px 40px;
+}
+
+.footer__top {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto;
+  gap: 64px;
+  padding-bottom: 72px;
+}
+
+.footer__logo {
+  height: 34px;
+  width: auto;
+  color: var(--fg);
+}
+
+.footer__tagline {
+  margin: 24px 0 32px;
+  max-width: 34ch;
+  font-size: var(--t-body-lg);
+  line-height: 1.5;
+  color: var(--fg-body);
+}
+
+.footer__cols {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 96px;
+}
+
+/* the CTA that used to sit here has gone: on a portfolio piece a second
+   "Become a Partner" was a button with nowhere to go */
+.footer__social {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__social a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  color: var(--fg-body);
+  transition: color 0.25s var(--ease-out), background-color 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out);
+}
+
+.footer__social svg { width: 19px; height: 19px; }
+
+.footer__social a:hover {
+  color: var(--bg);
+  background: var(--fg);
+  border-color: var(--fg);
+}
+
+.footer__col-title {
+  margin: 0 0 20px;
+  font-size: var(--t-body-sm);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grad-3);
+}
+
+.footer__col li + li { margin-top: 12px; }
+
+.footer__col a,
+.footer__meta a {
+  font-size: var(--t-body);
+  font-weight: 400;
+  color: var(--fg-body);
+  transition: color 0.25s var(--ease-out);
+}
+
+.footer__col a:hover,
+.footer__meta a:hover { color: var(--fg); }
+
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer__legal {
+  font-size: var(--t-body-sm);
+  color: var(--fg-muted);
+}
+
+.footer__meta {
+  display: flex;
+  gap: 32px;
+}
+
+.footer__meta a { font-size: var(--t-body-sm); }

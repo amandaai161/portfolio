@@ -1,0 +1,381 @@
+/* ============================================================================
+   THE-PROCESS SECTION
+   ----------------------------------------------------------------------------
+   The overview + CTA that lands after a project page finishes: what the project
+   was, and a way through to the full process breakdown on amanda-design.com.
+
+   Built to Amanda's sketch. Column ratios are the sketch's own, read off its
+   1920 canvas — 45/55 for the shot and the meta block, 19/81 for the decisions
+   heading and its three cards.
+
+   Requires pf-chrome.css to be loaded first: every size below resolves against
+   the --pf-* tokens declared there.
+   ========================================================================== */
+.pf-process {
+  display: block;
+  margin: 0;
+  padding-block: clamp(64px, 7vw, 132px) clamp(64px, 7vw, 130px);
+  background: var(--pf-paper);
+  color: var(--pf-ink);
+  font-family: var(--pf-font);
+  letter-spacing: var(--pf-tr-body);
+}
+
+.pf-process__wrap {
+  width: 100%;
+  max-width: calc(1720px + clamp(20px, 5.2vw, 100px) * 2);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5.2vw, 100px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 6vw, 118px);
+}
+
+/* Two lines because the markup says two lines, not because a width cap happens
+   to break it there. */
+.pf-process__head {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pf-fs-h1);
+  font-weight: var(--pf-fw-medium);
+  line-height: var(--pf-lh-tight);
+  letter-spacing: var(--pf-tr-display);
+  color: inherit;
+}
+.pf-process__line { display: block; }
+
+/* ---- the shot + the meta block ------------------------------------------- */
+.pf-process__top {
+  display: grid;
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  gap: clamp(32px, 3.4vw, 62px);
+  align-items: center;
+}
+
+/* A placeholder surface with the CTA sitting in it. Drop a real preview image
+   in as a <img class="pf-process__shot-img"> and it fills the same box. */
+.pf-process__shot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 21 / 10;
+  padding: clamp(20px, 2vw, 40px);
+  background: var(--pf-shot);
+  overflow: hidden;
+}
+.pf-process__shot-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pf-process__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(12px, 1.1vw, 22px);
+  margin: 0;
+  padding: clamp(16px, 1.3vw, 24px) clamp(22px, 1.9vw, 36px);
+  border: 0;
+  border-radius: 0;
+  background: var(--pf-ink);
+  color: var(--pf-paper);
+  font-family: inherit;
+  font-size: clamp(16px, 1.35vw, 24px);
+  font-weight: var(--pf-fw-semibold);
+  line-height: 1.2;
+  letter-spacing: var(--pf-tr-snug);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.4s var(--pf-ease), box-shadow 0.4s var(--pf-ease);
+}
+.pf-process__cta:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26); }
+.pf-process__cta:active { transform: translateY(-1px); }
+.pf-process__cta:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: 4px; }
+.pf-process__arrow {
+  width: clamp(26px, 2vw, 40px);
+  height: auto;
+  flex: none;
+  transition: transform 0.4s var(--pf-ease);
+}
+.pf-process__cta:hover .pf-process__arrow { transform: translateX(5px); }
+
+.pf-process__meta { display: flex; flex-direction: column; gap: clamp(16px, 1.5vw, 26px); }
+
+.pf-process__title {
+  margin: 0;
+  font-size: var(--pf-fs-h4);
+  font-weight: var(--pf-fw-medium);
+  line-height: var(--pf-lh-tight);
+  letter-spacing: var(--pf-tr-heading);
+  color: inherit;
+}
+
+.pf-process__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-pill {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--pf-ink);
+  border-radius: 999px;
+  font-size: var(--pf-fs-body-sm);
+  font-weight: var(--pf-fw-regular);
+  line-height: 1.2;
+  letter-spacing: var(--pf-tr-body);
+  white-space: nowrap;
+  color: inherit;
+}
+
+.pf-process__desc {
+  max-width: 62ch;
+  margin: 0;
+  font-size: var(--pf-fs-body-lg);
+  font-weight: var(--pf-fw-regular);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-body);
+  color: inherit;
+}
+
+.pf-process__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 26px);
+  margin: clamp(8px, 1vw, 18px) 0 0;
+  padding: 0;
+}
+.pf-fact { display: flex; flex-direction: column; gap: 6px; }
+.pf-fact dt {
+  margin: 0;
+  font-size: var(--pf-fs-eyebrow);
+  font-weight: var(--pf-fw-semibold);
+  line-height: var(--pf-lh-label);
+  letter-spacing: var(--pf-tr-wide);
+  text-transform: uppercase;
+  color: var(--pf-muted);
+}
+.pf-fact dd {
+  margin: 0;
+  font-size: var(--pf-fs-body);
+  font-weight: var(--pf-fw-regular);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-body);
+  color: inherit;
+}
+
+/* ---- the three decisions ------------------------------------------------- */
+.pf-process__bottom {
+  display: grid;
+  /* 24/76, not the sketch's original 19/81: at 19fr the heading column reads
+     232px at 1440 wide, and "Three key design decisions that shaped the
+     outcome." wraps to four lines at --pf-fs-h5 regardless of where (or
+     whether) a manual break sits in the copy -- the column is just too
+     narrow for the sentence at that type size. 24/76 is the smallest bump
+     off 19/81 that brings it to three lines at 1440 without a wholesale
+     rebalance of the client's sketch. */
+  grid-template-columns: minmax(0, 24fr) minmax(0, 76fr);
+  gap: clamp(32px, 4.7vw, 90px);
+  align-items: center;
+}
+
+.pf-process__decisions {
+  margin: 0;
+  font-size: var(--pf-fs-h5);
+  font-weight: var(--pf-fw-medium);
+  line-height: var(--pf-lh-snug);
+  letter-spacing: var(--pf-tr-snug);
+  color: inherit;
+}
+
+.pf-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.5vw, 28px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.2vw, 22px);
+  margin: 0;
+  padding: clamp(24px, 2vw, 38px);
+  border: 1px solid var(--pf-ink);
+  border-radius: 18px;
+  background: var(--pf-paper);
+}
+.pf-card__dot {
+  display: block;
+  width: clamp(44px, 3vw, 56px);
+  height: clamp(44px, 3vw, 56px);
+  flex: none;
+  border: 1px solid var(--pf-ink);
+  border-radius: 50%;
+}
+.pf-card__title {
+  margin: 0;
+  font-size: var(--pf-fs-h6);
+  font-weight: var(--pf-fw-semibold);
+  line-height: var(--pf-lh-snug);
+  letter-spacing: var(--pf-tr-snug);
+  color: inherit;
+}
+.pf-card__body {
+  margin: 0;
+  font-size: var(--pf-fs-body);
+  font-weight: var(--pf-fw-regular);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-body);
+  color: inherit;
+}
+
+/* ---- narrow ------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .pf-process__top,
+  .pf-process__bottom { grid-template-columns: minmax(0, 1fr); }
+  .pf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .pf-process__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pf-cards { grid-template-columns: minmax(0, 1fr); }
+  .pf-process__shot { aspect-ratio: 4 / 3; }
+  .pf-process__cta { width: 100%; justify-content: space-between; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-process__cta, .pf-process__arrow { transition-duration: 0.01ms; }
+}
+
+/* ============================================================================
+   THE COVER
+   ----------------------------------------------------------------------------
+   The-process section arrives as a sheet sliding in from the right over the end
+   of the project page, rather than as one more section under it.
+
+   HOW THE PIN WORKS. Let C be this block's document offset after the negative
+   margin — which is exactly the page's own maximum scroll — S the slack height,
+   H the panel height and vh the viewport.
+
+     phase 1, scrollY in [C, C+S]
+       A sticky box taller than the viewport with top:0 pins its top at 0 and
+       unsticks only when its containing block's bottom catches its own bottom.
+       The container is H+S tall and the panel sits at the top of it, so the
+       panel is pinned for exactly S. pf-outro.js sweeps the sheet across during
+       this, from translateX(100%) to 0.
+
+     phase 2, scrollY > C+S
+       The panel travels normally. The-process scrolls up and the footer follows.
+
+     and there is no dead scroll at the end
+       document height = C + H + S, so max scroll = C + H + S - vh. The panel's
+       bottom reaches the viewport bottom at scrollY = C + S + H - vh. The same
+       number. The document ends exactly as the footer bottoms out.
+
+   WHY THE NEGATIVE MARGIN. Without it the block would begin one viewport below
+   the page's last screen, so the reader would scroll a whole empty screen before
+   anything started. -100vh puts C on the page's own max scroll instead: the
+   sweep begins the moment the page underneath has nothing left to show.
+
+   WHY ::before. Behind the incoming sheet the page underneath keeps scrolling,
+   by up to S. This paints everything BELOW its last screen in that page's own
+   footer color (--pf-tail, set per page), so the drift has nothing to reveal
+   and there is no seam. It deliberately starts one viewport down: the last
+   screen itself must stay untouched and visible.
+
+   WHY overflow:clip AND NOT hidden. The sheet is translated a full width to the
+   right at rest, which would otherwise widen the document. `clip` removes it
+   without creating a scroll container — `hidden` would create one, and a scroll
+   container is exactly what breaks position:sticky. `hidden` is left in front of
+   it only as the fallback declaration for engines without `clip`.
+
+   WHY THE DEFAULT IS FLAT. pf-outro.js ADDS .pf-outro--live once it has checked
+   that it can run. No JS, reduced motion, a viewport under 900px, or a panel
+   shorter than the viewport, and this is ordinary content at the end of the
+   page — rather than a sheet parked off-screen where nobody can reach it.
+   ========================================================================== */
+.pf-outro {
+  position: relative;
+  z-index: 900;
+  display: block;
+  margin: 0;
+}
+/* No UA default is safe to lean on here: the C + H + S identity above only
+   holds if these three boxes contribute exactly their content height to
+   .pf-outro, with nothing to collapse out of it (.pf-outro is not a BFC). */
+.pf-outro__panel { position: static; margin: 0; padding: 0; }
+.pf-outro__sheet { position: relative; background: var(--pf-paper); transform: none; margin: 0; padding: 0; }
+.pf-outro__slack { display: none; margin: 0; padding: 0; }
+
+.pf-outro--live {
+  /* pf-outro.js's measure() always sets --pf-vh before this class is added,
+     so the var() fallback is the only declaration needed here — a preceding
+     bare -100vh would not be reachable as a fallback anyway: if the custom
+     property were unset AND the engine also lacked svh support, the whole
+     declaration goes invalid at computed-value time and resets to its
+     initial value, not to this rule's earlier declaration. Custom-property
+     support is already assumed everywhere else in pf- chrome. */
+  margin-top: calc(-1 * var(--pf-vh, 100svh));
+  /* The pinned panel must not swallow clicks on the page's last screen while
+     the sheet is still off to the right. Only the sheet takes them back. */
+  pointer-events: none;
+}
+.pf-outro--live::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Same reasoning as .pf-outro--live's margin-top above. */
+  top: var(--pf-vh, 100svh);
+  z-index: -1;
+  background: var(--pf-tail, #000);
+}
+.pf-outro--live .pf-outro__panel {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  overflow: clip;
+}
+.pf-outro--live .pf-outro__sheet {
+  transform: translate3d(100%, 0, 0);
+  will-change: transform;
+  pointer-events: auto;
+}
+/* The sheet's leading edge, so it reads as something laid on top rather than a
+   panel swapped in. Its resting position is geometrically INSIDE the panel's
+   clip box, not outside it — the sheet itself rests at translateX(100%), so
+   this 120px band (translateX(-100%) of itself, flush against the sheet's own
+   left edge) lands flush against the viewport's right edge, not off it.
+   Clipping cannot hide it at rest, so opacity does instead: --pf-sweep is the
+   same eased progress pf-outro.js's paint() drives the transform from, 0 at
+   rest and 1 once the sweep completes, so the shadow only shows up once the
+   sheet is actually arriving. */
+.pf-outro--live .pf-outro__sheet::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 120px;
+  transform: translateX(-100%);
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0));
+  opacity: var(--pf-sweep, 0);
+  pointer-events: none;
+}
+.pf-outro--live .pf-outro__slack {
+  display: block;
+  /* Same reasoning as .pf-outro--live's margin-top above. */
+  height: var(--pf-pin, 90svh);
+}

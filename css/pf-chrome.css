@@ -1,0 +1,430 @@
+/* ============================================================================
+   PORTFOLIO CHROME — the floating site nav and the main footer
+   ----------------------------------------------------------------------------
+   Dropped into five hand-built landing pages that share nothing: five resets,
+   five token vocabularies, five scroll engines. So:
+
+     · every selector is `pf-` prefixed
+     · every custom property is declared on the component roots below, NEVER on
+       :root — `--nav-h`, `--white`, `--bg` and `--line` all already mean
+       something different on at least one of these pages
+     · every property this file depends on is set explicitly. The host resets
+       zero out margins, list markers, button chrome and heading weights, so a
+       UA default is never a safe assumption here.
+
+   Load this BEFORE pf-outro.css: the type tokens below are what that file sizes
+   itself from.
+   ========================================================================== */
+
+/* ---- box model ----
+   These three components drop into five unrelated codebases, so they cannot
+   assume a host reset. Every one of the five pages happens to set
+   `box-sizing: border-box` globally today, and without it `width: 100%` plus
+   `padding-inline` on the wraps below overflows by twice the gutter. Scoped to
+   the component roots and their descendants so nothing leaks back out into a
+   host page. */
+.pf-dock, .pf-dock *, .pf-dock *::before, .pf-dock *::after,
+.pf-outro, .pf-outro *, .pf-outro *::before, .pf-outro *::after,
+.pf-foot, .pf-foot *, .pf-foot *::before, .pf-foot *::after,
+.pf-dock::before, .pf-dock::after, .pf-outro::before, .pf-outro::after, .pf-foot::before, .pf-foot::after {
+  box-sizing: border-box;
+}
+
+/* ---- shared tokens ----------------------------------------------------------
+   The steps are lifted from portfolio_v3/css/type-system.css so the-process
+   section and the footer are typographically the same site as amanda-design.com.
+   Only the steps actually used are carried; the fluid clamps are the originals,
+   unchanged. */
+.pf-dock,
+.pf-outro,
+.pf-foot {
+  --pf-font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --pf-fs-h1: clamp(2.5rem, 1.73rem + 2.4vw, 4rem);        /* 40 → 64 */
+  --pf-fs-h4: clamp(1.625rem, 1.3rem + 1.0vw, 2.5rem);     /* 26 → 40 */
+  --pf-fs-h5: clamp(1.5rem, 1.31rem + 0.6vw, 2rem);        /* 24 → 32 */
+  --pf-fs-h6: clamp(1.375rem, 1.25rem + 0.39vw, 1.75rem);  /* 22 → 28 */
+  --pf-fs-body-lg: 1.125rem;   /* 18 */
+  --pf-fs-body: 1rem;          /* 16 */
+  --pf-fs-body-sm: 0.875rem;   /* 14 */
+  --pf-fs-eyebrow: 0.6875rem;  /* 11 */
+
+  --pf-lh-tight: 1.04;
+  --pf-lh-snug: 1.18;
+  --pf-lh-normal: 1.45;
+  --pf-lh-label: 1.25;
+
+  --pf-tr-display: -0.04em;
+  --pf-tr-heading: -0.03em;
+  --pf-tr-snug: -0.02em;
+  --pf-tr-body: -0.01em;
+  --pf-tr-wide: 0.06em;
+
+  --pf-fw-regular: 400;
+  --pf-fw-medium: 500;
+  --pf-fw-semibold: 600;
+
+  --pf-ink: #000000;
+  --pf-paper: #ffffff;
+  --pf-muted: rgba(0, 0, 0, 0.55);
+  --pf-line: rgba(0, 0, 0, 0.18);
+  --pf-shot: #e8e8e8;
+
+  --pf-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Phone scale, from the same source file. Token-level, so every rule below
+     inherits it without a second selector. */
+}
+
+@media (max-width: 760px) {
+  .pf-dock,
+  .pf-outro,
+  .pf-foot {
+    --pf-fs-h1: 2.5rem;
+    --pf-fs-h4: 1.5rem;
+    --pf-fs-h5: 1.375rem;
+    --pf-fs-h6: 1.25rem;
+    --pf-fs-eyebrow: 0.75rem;
+    --pf-lh-tight: 1.14;
+    --pf-lh-snug: 1.24;
+    --pf-lh-normal: 1.55;
+    --pf-lh-label: 1.3;
+    --pf-tr-display: -0.025em;
+    --pf-tr-heading: -0.02em;
+    --pf-tr-snug: -0.015em;
+  }
+}
+
+/* ============================================================================
+   THE FLOATING NAV DOCK
+   ----------------------------------------------------------------------------
+   Fixed to the top right of every page, above everything. z-index 9000 clears
+   the highest value any of the five pages uses (nobi, 200) by a wide margin, so
+   this never has to be re-tuned when one of them gains a layer.
+
+   --pf-dock-top is set per page in that page's own <style> block, because the
+   five headers are different heights and this button must sit UNDER the header
+   band rather than on top of its right-most control (kayn's burger, sinan's
+   CTA). Default 88px if a page forgets.
+   ========================================================================== */
+.pf-dock {
+  position: fixed;
+  top: var(--pf-dock-top, 88px);
+  right: var(--pf-dock-right, clamp(16px, 2.4vw, 40px));
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--pf-font);
+  letter-spacing: var(--pf-tr-body);
+}
+
+/* The page is still loading. Both of these are the host pages' own signals:
+   kayn holds <html data-motion="pending"> until the loader hands over, nobi
+   holds <body class="is-loading">. The dock must not float over either. */
+html[data-motion="pending"] .pf-dock,
+body.is-loading .pf-dock {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pf-dock__btn {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid var(--pf-ink);
+  border-radius: 50%;
+  background: var(--pf-paper);
+  color: var(--pf-ink);
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
+  transition: transform 0.35s var(--pf-ease), box-shadow 0.35s var(--pf-ease);
+}
+.pf-dock__btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2); }
+.pf-dock__btn:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: 3px; }
+
+/* Three bars that fold into an X. The middle bar fades rather than rotating,
+   which is what keeps the two diagonals meeting at the centre. */
+.pf-dock__bars { position: relative; display: block; width: 20px; height: 12.4px; }
+.pf-dock__bars i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.6px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.4s var(--pf-ease), opacity 0.2s linear;
+}
+.pf-dock__bars i:nth-child(1) { top: 0; }
+.pf-dock__bars i:nth-child(2) { top: 5.4px; }
+.pf-dock__bars i:nth-child(3) { top: 10.8px; }
+.pf-dock.is-open .pf-dock__bars i:nth-child(1) { transform: translateY(5.4px) rotate(45deg); }
+.pf-dock.is-open .pf-dock__bars i:nth-child(2) { opacity: 0; }
+.pf-dock.is-open .pf-dock__bars i:nth-child(3) { transform: translateY(-5.4px) rotate(-45deg); }
+
+.pf-dock__menu {
+  min-width: 212px;
+  margin: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--pf-ink);
+  border-radius: 14px;
+  background: var(--pf-paper);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(-8px) scale(0.97);
+  transform-origin: 100% 0;
+  transition: opacity 0.26s linear, transform 0.34s var(--pf-ease);
+}
+.pf-dock__menu[hidden] { display: none; }
+.pf-dock.is-open .pf-dock__menu { opacity: 1; transform: none; }
+
+.pf-dock__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--pf-ink);
+  background: transparent;
+  text-decoration: none;
+  font-size: var(--pf-fs-body);
+  font-weight: var(--pf-fw-medium);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-snug);
+  transition: background-color 0.25s linear;
+}
+.pf-dock__link:hover { background: rgba(0, 0, 0, 0.06); }
+.pf-dock__link:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: -2px; }
+
+.pf-dock__ext { width: 12px; height: 12px; flex: none; opacity: 0.55; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-dock__btn,
+  .pf-dock__bars i,
+  .pf-dock__menu,
+  .pf-dock__link { transition-duration: 0.01ms; }
+}
+
+@media (max-width: 600px) {
+  .pf-dock__btn { width: 46px; height: 46px; }
+  .pf-dock__menu { min-width: 190px; }
+}
+
+/* ============================================================================
+   THE MAIN FOOTER
+   ----------------------------------------------------------------------------
+   Amanda's site footer, rebuilt standalone so it can be dropped onto pages that
+   share no stylesheet with portfolio_v3. Same composition, same measured
+   numbers — the headline's 13.87cqw fill figure is hers, arrived at by
+   measuring "Let's get in touch!" in Figtree 500 at -0.045em (7.1718em wide, so
+   filling a measure means font-size = measure / 7.1718 = 13.94%, with ~0.5%
+   held back for sub-pixel rounding).
+
+   cqw and not vw, and that is the whole point of the container-type line: vw
+   counts the classic scrollbar's width and the container does not, so a vw
+   figure overshoots by the scrollbar every time. The vw value outside @supports
+   is the fallback for a browser without container queries, deliberately the
+   conservative one.
+   ========================================================================== */
+.pf-foot {
+  display: block;
+  margin: 0;
+  padding-block: clamp(64px, 8vw, 150px) clamp(40px, 4vw, 60px);
+  background: var(--pf-ink);
+  color: var(--pf-paper);
+  font-family: var(--pf-font);
+  letter-spacing: var(--pf-tr-body);
+}
+
+.pf-foot__wrap {
+  width: 100%;
+  max-width: calc(1720px + clamp(20px, 5.2vw, 100px) * 2);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5.2vw, 100px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 100px);
+  container-type: inline-size;
+}
+
+.pf-foot__title {
+  margin: 0;
+  font-weight: var(--pf-fw-medium);
+  font-size: max(56px, 11.9vw);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: inherit;
+}
+@supports (container-type: inline-size) {
+  .pf-foot__title { font-size: max(56px, 13.87cqw); }
+}
+
+.pf-foot__details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: clamp(28px, 4vw, 64px);
+}
+.pf-foot__reach { display: flex; align-items: center; gap: clamp(18px, 2.6vw, 44px); }
+
+.pf-foot__email-wrap { position: relative; display: inline-flex; align-items: center; gap: clamp(10px, 1vw, 18px); }
+.pf-foot__email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-weight: var(--pf-fw-medium);
+  font-size: clamp(22px, 2.6vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  cursor: pointer;
+}
+.pf-foot__email:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.pf-foot__copy { width: 0.62em; height: 0.62em; flex: none; opacity: 0.85; transition: opacity 0.3s linear; }
+.pf-foot__email:hover .pf-foot__copy { opacity: 1; }
+
+/* A real mailto: route beside the click-to-copy button, for when copying
+   fails (or can't be trusted to have worked) and for anyone who would rather
+   open their mail client outright. Deliberately quiet: small, muted at rest,
+   so the button carrying the actual address stays the loud element here. */
+.pf-foot__mailto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(26px, 1.6vw, 32px);
+  height: clamp(26px, 1.6vw, 32px);
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.3s linear;
+}
+.pf-foot__mailto:hover, .pf-foot__mailto:focus-visible { opacity: 1; }
+.pf-foot__mailto:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.pf-foot__mailto-icon { width: 62%; height: 62%; display: block; }
+
+/* Underlined at rest, not on hover — the copy toast is the hover feedback. */
+.pf-foot__email-text { position: relative; }
+.pf-foot__email-text::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -0.12em;
+  height: 2px;
+  background: currentColor;
+}
+
+.pf-foot__toast {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--pf-paper);
+  font-size: clamp(12px, 1vw, 15px);
+  font-weight: var(--pf-fw-medium);
+  letter-spacing: var(--pf-tr-body);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.3s linear, transform 0.3s var(--pf-ease);
+}
+.pf-foot__toast::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  flex: none;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 13l4 4L19 7' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.pf-foot__toast.is-shown { opacity: 1; transform: translateY(0); }
+
+.pf-foot__socials { display: flex; align-items: center; gap: 10px; }
+.pf-foot__social {
+  --pf-chip: clamp(28px, 2.4vw, 38px);
+  display: inline-flex;
+  width: var(--pf-chip);
+  height: var(--pf-chip);
+  /* currentColor paints the chip; the glyph is knocked out of it in #181818,
+     so one declaration covers both. Square, no radius. */
+  color: var(--pf-paper);
+  transition: transform 0.3s var(--pf-ease);
+}
+.pf-foot__social:hover { transform: translateY(-3px); }
+.pf-foot__social svg { width: 100%; height: 100%; display: block; }
+
+.pf-foot__nav {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: clamp(4px, 0.5vw, 9px);
+}
+.pf-foot__nav a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: var(--pf-fw-medium);
+  font-size: clamp(16px, 1.25vw, 20px);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-snug);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-size 0.4s var(--pf-ease);
+}
+.pf-foot__nav a:hover { background-size: 100% 1.5px; }
+
+.pf-foot__base {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: clamp(60px, 8vw, 150px);
+}
+.pf-foot__base p {
+  margin: 0;
+  font-size: var(--pf-fs-body);
+  font-weight: var(--pf-fw-regular);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-body);
+  opacity: 0.85;
+}
+
+@media (max-width: 760px) {
+  .pf-foot__title { white-space: normal; }
+  .pf-foot__details { flex-direction: column; gap: 30px; }
+  .pf-foot__reach { flex-wrap: wrap; gap: 18px; }
+  .pf-foot__nav { margin-left: 0; align-items: flex-start; text-align: left; gap: 8px; }
+  .pf-foot__nav a { background-position: 0 100%; }
+  .pf-foot__base { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-foot__social, .pf-foot__nav a, .pf-foot__toast { transition-duration: 0.01ms; }
+}

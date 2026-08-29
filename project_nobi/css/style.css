@@ -1,0 +1,659 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   NOBI Bakery — 2026
+   Minimal luxury editorial. Every size and offset below is measured from
+   "nobi 2026 desktop.png" (1920 wide) and "nobi 2026 mobile.png" (402 wide);
+   each clamp() interpolates between those two comps.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────── FONTS ─────────────────────────────── */
+@font-face{
+  font-family:"Granger";
+  src:url("../font/Granger.woff2") format("woff2"),
+      url("../font/Granger.woff")  format("woff");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Titillium Web";
+  src:url("../font/TitilliumWeb-400.woff2") format("woff2");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Titillium Web";
+  src:url("../font/TitilliumWeb-600.woff2") format("woff2");
+  font-weight:600; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Titillium Web";
+  src:url("../font/TitilliumWeb-700.woff2") format("woff2");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Noto Serif JP Subset";
+  src:url("../font/NotoSerifJP-300-subset.woff2") format("woff2");
+  font-weight:300; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Noto Serif JP Subset";
+  src:url("../font/NotoSerifJP-400-subset.woff2") format("woff2");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+
+/* ─────────────────────────────── TOKENS ─────────────────────────────── */
+:root{
+  /* colour — sampled from the comp */
+  --burgundy:#472128;
+  --burgundy-deep:#36191E;
+  --burgundy-ink:#2B1317;
+  --cream:#FCF2F1;       /* same off-white — one value across the palette */
+  --white:#FCF2F1;        /* the comp's off-white — no pure white anywhere */
+  --brand-red:#B54545;
+  --hair:rgba(252,242,241,.55);
+  --hair-soft:rgba(252,242,241,.32);
+  --muted:rgba(252,242,241,.72);
+
+  /* families — Granger (display) + Titillium Web (UI/body) + Mincho (JP) */
+  --ff-display:"Granger","Didot","Playfair Display",Georgia,serif;
+  --ff-sans:"Titillium Web","Helvetica Neue",Arial,sans-serif;
+  --ff-jp:"Noto Serif JP Subset","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+
+  /* ── type scale: exact at 402px and at 1920px ── */
+  --fs-h1:clamp(64px, calc(48.111px + 3.9526vw), 124px);
+  --fs-h2:clamp(50px, calc(36.759px + 3.2938vw), 100px);
+  --fs-h3:clamp(32px, calc(25.644px + 1.581vw), 56px);
+  --fs-h4:clamp(32px, calc(27.233px + 1.1858vw), 50px);
+  --fs-jp:clamp(16px, calc(14.411px + 0.3953vw), 22px);
+  --fs-jp-lg:clamp(22px, calc(21.47px + 0.1318vw), 24px);
+  --fs-body:clamp(16px, calc(14.941px + 0.2635vw), 20px);
+  --fs-body-lg:clamp(16px, calc(14.146px + 0.4611vw), 23px);
+  --fs-check:clamp(18px, calc(16.676px + 0.3294vw), 23px);
+  --fs-quote:clamp(18px, calc(14.822px + 0.7905vw), 30px);
+  --fs-nav:clamp(16px, calc(15.47px + 0.1318vw), 18px);
+  --fs-link:clamp(18px, calc(16.411px + 0.3953vw), 24px);
+  --fs-small:clamp(15px, calc(14.206px + 0.1976vw), 18px);
+  --fs-btn:clamp(17px, calc(15.676px + 0.3294vw), 22px);
+
+  --ls-display:-.03em;
+
+  /* ── layout ── */
+  --pad-x:28px;
+  --nav-h:clamp(76px, calc(70.704px + 1.3175vw), 96px);      /* mode 1 — at rest */
+  --nav-h-min:clamp(46px, calc(43.352px + 0.6588vw), 56px);  /* mode 2 — scrolled */
+
+  /* testimonial avatars — the row is held at the large size so the section
+     never changes height while one grows and another shrinks */
+  --av-lg:clamp(58px,6.46vw,124px);
+  --av-sm:clamp(31px,3.13vw,60px);
+  --btn-h:clamp(54px, calc(49.233px + 1.1858vw), 72px);
+  --sec-top:clamp(84px, calc(51.169px + 8.1687vw), 208px);   /* 84 → 208 */
+  --gutter:clamp(18px, calc(10.586px + 1.8445vw), 46px);     /* item left gutter 18 → 46 */
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* ─────────────────────────────── RESET ─────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--burgundy);
+  color:var(--cream);
+  font-family:var(--ff-sans);
+  font-size:var(--fs-body);
+  line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+img,svg,video{display:block;max-width:100%}
+img{height:auto}
+h1,h2,h3,h4,p,blockquote,figure,ul{margin:0;padding:0}
+ul{list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:var(--cream);color:var(--burgundy)}
+
+.skip-link{
+  position:fixed;top:-100px;left:16px;z-index:200;
+  background:var(--cream);color:var(--burgundy);padding:10px 16px;
+  font-weight:600;transition:top .2s;
+}
+.skip-link:focus{top:16px}
+:focus-visible{outline:2px solid var(--cream);outline-offset:4px}
+
+/* Lenis */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-stopped{overflow:hidden}
+
+main{position:relative}
+
+/* ───────────────────────── SHARED PRIMITIVES ───────────────────────── */
+.wrap{width:100%;padding-inline:var(--pad-x);margin-inline:auto}
+
+.h-display{
+  font-family:var(--ff-display);
+  font-weight:400;
+  letter-spacing:var(--ls-display);
+  color:var(--white);
+}
+.jp{font-family:var(--ff-jp);font-weight:300;letter-spacing:.06em}
+.label{font-size:var(--fs-jp);line-height:1.4;color:var(--cream)}
+.body{font-size:var(--fs-body);line-height:1.4;color:var(--cream)}
+.body--lg{font-size:var(--fs-body-lg);line-height:1.478}
+
+/* line-draw primitives — JS scales these from 0 */
+.line{display:block;background:var(--hair);will-change:transform}
+.line--h{height:1px;width:100%;transform-origin:left center}
+.line--v{width:2px;transform-origin:center top}
+.rule{
+  position:absolute;left:0;bottom:0;
+  height:1px;width:100%;background:var(--white);
+  transform-origin:left center;
+}
+.rule--flow{position:relative;bottom:auto}
+
+/* heading line-reveal masks — JS splits .line-inner into words → characters,
+   and each character rises out of the shared mask on a short stagger */
+.line-mask{display:block;overflow:hidden;padding-bottom:.02em;margin-bottom:-.02em}
+.line-inner{display:block}
+.line-inner .word{display:inline-block}
+.line-inner .char{display:inline-block;will-change:transform}
+
+/* media: the zoom layer takes hover, the image itself takes the scroll zoom,
+   so the two never compete for one transform property */
+.media{position:relative;overflow:hidden;background:var(--burgundy-deep)}
+.media__zoom{
+  position:absolute;inset:0;display:block;
+  transition:transform .9s var(--ease);
+  will-change:transform;
+}
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.media--hover{cursor:pointer}
+.media--hover:hover .media__zoom,.media--hover:focus-within .media__zoom{transform:scale(1.03)}
+
+/* button */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:clamp(18px,1.46vw,28px);
+  height:var(--btn-h);
+  min-width:min(290px,19.1vw);
+  padding-inline:clamp(22px,1.6vw,30px);
+  background:var(--white);color:var(--burgundy);
+  font-family:var(--ff-sans);font-weight:600;
+  font-size:var(--fs-btn);
+  position:relative;
+  transition:background-color .45s var(--ease),color .45s var(--ease);
+}
+.btn--wide{min-width:min(372px,24.5vw)}
+.btn:hover,.btn:focus-visible{background:#EFDCD8;color:var(--burgundy-ink)}
+.btn__arrow{width:clamp(30px,2.08vw,40px);height:auto;flex:0 0 auto;transition:transform .5s var(--ease)}
+.btn:hover .btn__arrow,.btn:focus-visible .btn__arrow{transform:translateX(10px)}
+
+/* ═══════════════════════════════ NAV ═══════════════════════════════ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:100;
+  height:var(--nav-h);color:var(--white);
+  transition:height .55s var(--ease),background-color .5s var(--ease),backdrop-filter .5s var(--ease);
+}
+.nav__inner{
+  height:100%;padding-inline:var(--pad-x);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+/* opacity, not display — the intro draws this rule with a scaleX tween, so the
+   transform belongs to GSAP and mustn't be fought over here */
+.nav__rule{position:absolute;left:0;bottom:0;background:var(--hair-soft);transition:opacity .4s var(--ease)}
+.nav.is-compact{height:var(--nav-h-min)}
+.nav.is-compact .nav__rule{opacity:0}
+.nav.is-stuck{background:rgba(43,19,23,.92);backdrop-filter:blur(14px) saturate(120%)}
+
+.logo{display:block;line-height:0;color:var(--white)}
+.logo img{height:clamp(26px,1.77vw,34px);width:auto;transition:height .55s var(--ease)}
+.nav.is-compact .logo img{height:clamp(20px,1.3vw,25px)}
+
+.nav__links{display:flex;align-items:center;gap:clamp(30px,2.81vw,54px)}
+.nav__link{font-size:var(--fs-nav);position:relative;padding-block:6px;cursor:pointer}
+.nav__link::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+.nav__link:hover::after{transform:scaleX(1)}
+.nav__search{margin-left:clamp(10px,1.46vw,28px);display:grid;place-items:center}
+.nav__search svg{width:clamp(20px,1.2vw,23px);height:auto;transition:transform .4s var(--ease)}
+.nav__search:hover svg{transform:scale(1.1)}
+
+.nav__burger{display:none;width:34px;height:22px;position:relative}
+.nav__burger span{position:absolute;left:0;right:0;height:1.5px;background:currentColor;transition:transform .45s var(--ease),opacity .3s}
+.nav__burger span:nth-child(1){top:0}
+.nav__burger span:nth-child(2){top:50%;transform:translateY(-50%)}
+.nav__burger span:nth-child(3){bottom:0}
+.nav__burger[aria-expanded="true"] span:nth-child(1){transform:translateY(10px) rotate(45deg)}
+.nav__burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav__burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-10px) rotate(-45deg)}
+
+.mobile-menu{
+  position:fixed;inset:0;z-index:99;
+  background:rgba(43,19,23,.97);backdrop-filter:blur(18px);
+  display:grid;place-items:center;
+  opacity:0;transition:opacity .5s var(--ease);
+}
+/* display:grid above outranks the UA's [hidden]{display:none}, which left an
+   invisible full-viewport panel over the page swallowing every click that
+   wasn't in the nav (z-index 100, the only thing above it). */
+.mobile-menu[hidden]{display:none}
+.mobile-menu.is-open{opacity:1}
+.mobile-menu nav{display:grid;gap:8px;text-align:center}
+.mobile-menu nav button{
+  font-family:var(--ff-display);
+  font-size:clamp(34px,9vw,48px);
+  letter-spacing:var(--ls-display);
+  color:var(--white);padding-block:10px;
+}
+
+/* ═══════════════════════════════ HERO ═══════════════════════════════ */
+.hero{
+  position:relative;min-height:100svh;
+  display:flex;flex-direction:column;
+  overflow:hidden;isolation:isolate;
+}
+.hero__media{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.hero__videos{position:absolute;inset:0;will-change:opacity}
+.hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.hero__video.is-active{opacity:1}
+.hero__scrim{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(20,10,12,.58) 0%,rgba(20,10,12,0) 22%),
+    linear-gradient(102deg,rgba(20,10,12,.7) 0%,rgba(20,10,12,.52) 38%,rgba(20,10,12,.26) 68%,rgba(20,10,12,.42) 100%),
+    linear-gradient(0deg,rgba(20,10,12,.4) 0%,rgba(20,10,12,0) 30%),
+    linear-gradient(0deg,rgba(20,10,12,.18),rgba(20,10,12,.18));   /* flat floor */
+}
+.hero__inner{
+  position:relative;flex:1;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding-inline:var(--pad-x);
+  padding-top:clamp(148px,11.09vw,213px);
+  padding-bottom:clamp(78px,6.82vw,131px);
+}
+.hero__title{font-size:var(--fs-h1);line-height:1.02;max-width:9.5em}
+.hero__line{display:block}
+.hero__title .word{display:inline-block;will-change:opacity}
+.hero__vert-text .char,.item__jp .char{display:inline-block}
+.hero__cta{align-self:flex-start}
+
+/* vertical JP tagline — sits outside .hero so its hairline can descend past it */
+.hero__vert{
+  position:absolute;z-index:5;
+  top:calc(100svh - clamp(180px,20.31vw,390px));
+  left:83.7%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;
+}
+.hero__vert-text{
+  writing-mode:vertical-rl;
+  font-size:clamp(20px,1.46vw,28px);
+  letter-spacing:.375em;
+  color:var(--white);
+  text-shadow:0 1px 14px rgba(20,10,12,.55);
+}
+.hero__vert-line{
+  height:clamp(190px,23.8vw,457px);   /* ends on the top edge of the feature photo */
+  margin-top:clamp(6px,.52vw,10px);
+  background:var(--white);
+}
+.hero__tagline{display:none}
+
+/* ══════════════════════════ GENERIC SECTION ══════════════════════════ */
+.section{position:relative;padding-top:var(--sec-top)}
+.sec-title{font-size:var(--fs-h2);line-height:.94}
+
+/* ══════════════════════ THIS WEEK'S FEATURE ══════════════════════ */
+/* --fgap is the gap under “Uji mochi bun”; the gap between the copy and the
+   section's bottom hairline is defined as 2.5× it, so the ratio always holds */
+.feature{--fgap:17px}
+.feature__grid{margin-top:clamp(45px,calc(72.8px - 1.45vw),67px)}
+.feature__name{font-size:var(--fs-h3);line-height:1;margin-top:17px;margin-bottom:var(--fgap)}
+.feature__text .body{max-width:462px}
+.feature__media{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feature__media .media{aspect-ratio:500/640}
+
+/* ═════════════════════ THE SIGNATURE COLLECTION ═════════════════════ */
+.collection{padding-top:clamp(127px, calc(98.93px + 6.983vw), 233px)}
+.collection .sec-title{margin-bottom:clamp(46px,calc(33.8px + 3.03vw),92px)}
+.collection__row{display:grid;grid-template-columns:1fr;row-gap:clamp(93px,calc(20.2px + 18.1vw),368px)}
+.collection__body{padding-bottom:clamp(122px,calc(43.6px + 19.5vw),418px)}
+
+.item{
+  position:relative;
+  container-type:inline-size;
+  padding-left:var(--gutter);
+  --item-ar:344/368;
+  --rule-h:180cqw;        /* fallback; JS sets the exact px (media height + tail) */
+}
+/* z-index lifts the hairline over the photograph it runs down */
+.item__rule{position:absolute;left:0;top:0;z-index:3;height:var(--rule-h);background:var(--hair)}
+.item .media{
+  aspect-ratio:var(--item-ar);
+  margin-left:calc(-1 * var(--gutter));
+  width:calc(100% + var(--gutter));
+}
+.item__body{padding-top:clamp(29px,calc(26.9px + 0.527vw),37px)}
+.item__label{margin-bottom:0}
+.item__name{font-size:var(--fs-h4);line-height:1;margin-top:17px;margin-bottom:clamp(10px,calc(6px + .99vw),25px)}
+.item__body .body{max-width:97%}
+.item__jp{
+  display:none;
+  position:absolute;left:0;
+  top:calc(var(--rule-h) + 28px);
+  transform:translateX(-50%);
+  writing-mode:vertical-rl;white-space:nowrap;
+  font-size:var(--fs-jp);letter-spacing:.28em;
+  color:var(--white);
+}
+
+/* ════════════════════════════ NOBI DELIGHT ════════════════════════════ */
+.delight{padding-top:clamp(83px, calc(71.35px + 2.8985vw), 127px)}
+.delight__grid{display:grid;grid-template-columns:1fr}
+.delight .sec-title{margin-bottom:0}
+.delight__copy{max-width:640px}
+.delight__divider{display:flex;align-items:center;gap:clamp(16px,1.4vw,27px)}
+.delight__divider .jp{font-size:var(--fs-jp-lg);white-space:nowrap;color:var(--white);line-height:1.4}
+.delight__divider .line{flex:1}
+.delight__media{aspect-ratio:596/478}
+.checklist{display:grid;gap:clamp(18px,calc(17.5px + .13vw),20px)}
+.checklist li{
+  display:grid;grid-template-columns:auto 1fr;
+  gap:clamp(18px,1.04vw,20px);align-items:start;
+  font-size:var(--fs-check);line-height:1.35;
+}
+.checklist .tick{width:clamp(20px,1.2vw,23px);height:auto;color:var(--white);margin-top:.16em}
+
+/* ═══════════════════════════ TESTIMONIALS ═══════════════════════════ */
+.testi{position:relative;overflow:hidden;isolation:isolate;border-block:1px solid var(--white);color:var(--white)}
+.testi__media{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.testi__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.testi__glass{
+  position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(90deg,rgba(30,18,20,.36),rgba(30,18,20,.44));
+  -webkit-backdrop-filter:blur(14px) saturate(105%);
+  backdrop-filter:blur(14px) saturate(105%);
+}
+/* Film grain so the blur reads as glass rather than a flat smear. The tile is
+   dense — 95% of its pixels carry a speck — and laid down at 1:1 so the grain
+   stays pixel-fine, then held at 12% opacity. */
+.testi__glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:url("../images/grain.png");
+  background-size:256px 256px;
+  opacity:.12;
+}
+.testi__inner{position:relative;padding-block:clamp(99px,calc(112.91px - 0.7246vw),110px) clamp(75px,calc(66px + 2.24vw),109px)}
+.testi__head{display:flex;align-items:flex-start;gap:clamp(18px,2.03vw,39px)}
+.testi__rule{flex:0 0 auto;width:clamp(35px,41.09vw,789px);margin-top:clamp(14px,calc(7.64px + 1.581vw),38px);background:var(--white)}
+.testi__title{font-size:var(--fs-h2);line-height:.92}
+.testi__body{padding-inline:var(--pad-x)}
+.testi__quotes{display:grid;margin-top:clamp(82px,calc(51.6px + 7.56vw),197px);max-width:665px}
+/* Every quote shares one grid cell, so the block is sized by the longest of
+   them and the section height never moves. The outgoing quote clears before
+   the incoming one starts, so the two never overprint. */
+.testi__quote{
+  grid-area:1/1;
+  font-size:var(--fs-quote);line-height:1.5;
+  opacity:0;visibility:hidden;
+  transition:opacity .32s var(--ease),visibility 0s linear .32s;
+}
+.testi__quote.is-active{
+  opacity:1;visibility:visible;
+  transition:opacity .45s var(--ease) .3s,visibility 0s linear 0s;
+}
+
+/* min-height holds the row at the large-avatar size: without it the row
+   collapses toward the middle while one avatar grows and another shrinks,
+   and the whole section twitches */
+.testi__people{
+  display:flex;align-items:center;gap:clamp(9px,0.83vw,16px);
+  margin-top:clamp(43px,calc(41.4px + .395vw),49px);
+  min-height:var(--av-lg);
+}
+.avatar{
+  flex:0 0 auto;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(252,242,241,.5);opacity:.62;
+  transition:width .6s var(--ease),height .6s var(--ease),
+             margin .6s var(--ease),opacity .5s var(--ease),box-shadow .4s;
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar--sm{width:var(--av-sm);height:var(--av-sm)}
+.avatar--lg{width:var(--av-lg);height:var(--av-lg);margin-inline:clamp(0px,.47vw,9px);opacity:1;box-shadow:0 0 0 2px rgba(252,242,241,.85)}
+.avatar:hover{opacity:.9}
+.avatar--sm:hover{opacity:.9}
+/* no left margin — the active avatar's own margin plus the flex gap is already
+   enough separation between the portrait and the name */
+.testi__who{display:grid;grid-template-rows:auto auto;margin-left:0;margin-right:clamp(6px,1.4vw,27px);min-width:0;white-space:nowrap}
+.testi__name,.testi__role{opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility 0s linear .3s}
+.testi__name.is-active,.testi__role.is-active{transition:opacity .45s var(--ease) .3s,visibility 0s linear 0s}
+.testi__name{font-weight:700;font-size:clamp(13px,calc(10.55px + .61vw),22px);line-height:1.3}
+.testi__role{font-size:clamp(10px,calc(7.88px + .527vw),18px);line-height:1.3;color:rgba(252,242,241,.9)}
+.testi__name{grid-area:1/1}
+.testi__role{grid-area:2/1}
+.testi__name.is-active,.testi__role.is-active{opacity:1;visibility:visible}
+
+/* ═══════════════════════════════ FOOTER ═══════════════════════════════ */
+.footer{position:relative;padding-top:clamp(72px,calc(50.7px + 5.3vw),152px)}
+.footer__grid{display:grid;grid-template-columns:1fr;gap:clamp(56px,4vw,76px);padding-bottom:clamp(72px,calc(50.7px + 5.3vw),152px)}
+.footer__brand{position:relative}
+.logo--stacked{display:block;line-height:0}
+.logo--stacked img{height:clamp(112px,8.54vw,164px);width:auto}
+
+.footer__nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,1.56vw,30px)}
+.footer__col h3{font-size:var(--fs-link);font-weight:600;color:var(--cream);margin-bottom:clamp(20px,calc(18.7px + .33vw),25px)}
+.footer__col li+li{margin-top:clamp(20px,calc(18.7px + .33vw),25px)}
+.footer__col button{
+  font-size:var(--fs-link);color:var(--cream);
+  position:relative;cursor:pointer;padding-block:2px;text-align:left;
+}
+.footer__col button::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+.footer__col button:hover::after{transform:scaleX(1)}
+
+.insta{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,.78vw,15px)}
+.insta button{display:block;overflow:hidden;aspect-ratio:1;width:100%;cursor:pointer}
+.insta img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.insta button:hover img{transform:scale(1.06)}
+.insta__follow{
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(10px,.83vw,16px);
+  margin-top:clamp(18px,calc(16.4px + .4vw),24px);
+  font-size:var(--fs-link);color:var(--cream);
+}
+.insta__follow svg{width:clamp(19px,1.2vw,23px);height:auto}
+.insta__follow{cursor:pointer}
+/* same underline as the rest of the footer — goes nowhere, hovers like a link */
+.insta__follow span{position:relative;padding-block:2px}
+.insta__follow span::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+.insta__follow:hover span::after,.insta__follow:focus-visible span::after{transform:scaleX(1)}
+
+.footer .rule{background:var(--hair)}
+.footer__legal{
+  text-align:center;font-size:var(--fs-small);color:var(--muted);
+  padding-block:clamp(26px,calc(23.6px + .6vw),35px) clamp(28px,calc(25.6px + .6vw),37px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TABLET  ≥ 768px
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (min-width:768px){
+  :root{--pad-x:clamp(40px,5.2vw,200px)}
+
+  /* align-items:end keeps the two photographs sitting on the section's bottom
+     hairline no matter which column happens to be the taller one */
+  .feature__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,3vw,48px);align-items:end}
+  .feature__text{padding-bottom:calc(var(--fgap) * 2.5)}
+  .collection__row{grid-template-columns:1fr 1fr;column-gap:clamp(32px,3vw,56px)}
+  .item{--item-ar:540/640;--rule-h:155.3cqw}
+  .item__label{display:none}
+  .item__jp{display:block}
+  .item__name{margin-top:0}
+  .delight__grid{grid-template-columns:1fr 1fr;gap:clamp(32px,3vw,48px);align-items:start}
+  .footer__grid{grid-template-columns:1fr}
+  .footer__social{max-width:494px}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DESKTOP  ≥ 1024px  —  the 1920 comp
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (min-width:1024px){
+  :root{--pad-x:clamp(48px,10.4167vw,200px)}
+
+  /* ── feature: text column offset down, two images right ── */
+  .feature__grid{grid-template-columns:33.62% 1fr;gap:0}
+  .feature__text{padding-top:clamp(120px,15.83vw,304px);padding-right:4%}
+  .feature__media{gap:.52vw}
+
+  /* ── collection: two rows, row B flushed right ── */
+  .collection__row{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:17.15%;      /* 224 / 1306 */
+    width:85.92%;           /* 1306 / 1520 */
+    row-gap:0;
+  }
+  .collection__row--a{margin-right:auto}
+  .collection__row--b{margin-left:auto;margin-top:clamp(180px,19.17vw,368px)}
+  /* override the token, not the padding — the photo's negative margin is keyed
+     off --gutter, so the two must stay the same number */
+  .item{--gutter:clamp(24px,2.4vw,46px)}
+
+  /* ── delight: 847 / 34 / 637 ── */
+  .delight__grid{grid-template-columns:55.72% 1fr;column-gap:2.24%}
+  .delight__media{width:93.6%}
+
+  /* ── testimonials ── */
+  .testi__head{padding-left:var(--pad-x)}
+  .testi__title{max-width:14ch}
+  .testi__body{padding-left:53.44%;padding-right:var(--pad-x)}
+  .testi__glass{inset:0 0 0 44.01%}   /* seam at x=845 of 1920 */
+
+  /* ── footer ── */
+  .footer__grid{
+    grid-template-columns:1fr auto;grid-template-rows:auto auto;
+    column-gap:clamp(40px,4vw,80px);row-gap:0;
+  }
+  .footer__brand{grid-column:1;grid-row:1}
+  .footer__nav{grid-column:1;grid-row:2}
+  .footer__social{grid-column:2;grid-row:1 / span 2;max-width:none}
+  .footer__nav{
+    grid-template-columns:repeat(3,clamp(150px,13.02vw,250px));   /* 250 @1920 */
+    justify-content:start;gap:0;
+    margin-top:clamp(40px,4.06vw,78px);
+  }
+  .footer__social{width:clamp(360px,25.73vw,494px)}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE  ≤ 767px  —  the 402 comp
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width:767px){
+  .nav__links{display:none}
+  .nav__burger{display:block}
+
+  .hero__inner{padding-top:clamp(140px,39vw,170px);padding-bottom:clamp(70px,21.6vw,90px)}
+  .hero__title{max-width:none}
+  .hero__cta{align-self:stretch}
+  .hero__cta .btn{width:100%}
+  .hero__vert{display:none}
+  .hero__tagline{
+    position:absolute;left:0;right:var(--pad-x);top:52%;
+    display:flex;align-items:center;gap:clamp(14px,4vw,20px);
+    z-index:2;pointer-events:none;
+  }
+  .hero__tagline .line{flex:1;background:var(--white)}
+  .hero__tagline .jp{
+    font-size:clamp(20px,5.7vw,24px);letter-spacing:.06em;color:var(--white);
+    white-space:nowrap;text-shadow:0 1px 12px rgba(20,10,12,.55);
+  }
+
+  /* Two feature images, bleeding off the left edge. The columns are split in
+     the same ratio as the comp's two crops (197 : 171) so both resolve to the
+     same height and sit together on the section's bottom hairline. */
+  .feature__media{
+    grid-template-columns:197fr 171fr;gap:7px;
+    width:calc(100% + var(--pad-x));
+    margin-left:calc(-1 * var(--pad-x));
+    margin-top:clamp(28px,7.5vw,34px);
+  }
+  .feature__media .media{aspect-ratio:197/310}
+  .feature__media .media:last-child{aspect-ratio:171/310}
+  .feature__text .body{max-width:none}
+
+  /* delight — comp order: title · photo · 特別会員 · copy · checklist · CTA */
+  .delight__text,.delight__aside{display:contents}
+  .delight .sec-title{order:1}
+  .delight__media{
+    order:2;
+    width:calc(100% + var(--pad-x) * 2);
+    margin-left:calc(-1 * var(--pad-x));
+    margin-top:45px;
+    aspect-ratio:402/398;
+  }
+  .delight__divider{order:3;margin-top:31px}
+  .delight__divider .line{display:none}
+  .delight__copy{order:4;margin-top:24px;max-width:none}
+  .checklist{order:5;margin-top:34px}
+  .delight__cta{order:6;margin-top:78px}
+  .delight__cta .btn{width:100%}
+  .delight{padding-bottom:157px}
+
+  .testi__glass{inset:0}
+  .testi__rule{width:35px}
+  .testi__quotes{max-width:none}
+  .testi__people{gap:11px;flex-wrap:nowrap}
+  .testi__who{margin-left:10px}
+  .testi__name,.testi__role{white-space:normal}
+
+  .footer__social{order:-1}
+  .footer__nav{grid-template-columns:1fr 1fr;gap:clamp(32px,8vw,40px)}
+}
+
+@media (min-width:768px){
+  .delight__media{margin-bottom:21px}
+  .delight__copy{margin-top:27px}
+  .delight__divider{margin-top:clamp(60px,12.76vw,194px)}
+  .delight__cta{margin-top:clamp(48px,8.09vw,123px)}
+  .delight{padding-bottom:clamp(90px,10.2vw,155px)}
+}
+
+@media (max-width:400px){
+  .testi__people{gap:8px}
+  .testi__who{margin-left:8px;margin-right:8px}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOTION — pre-animation states (JS owns them from boot)
+   ═══════════════════════════════════════════════════════════════════════ */
+body.js .line,body.js .rule{transform:scaleX(0)}
+body.js .line--v{transform:scaleY(0)}
+body.js .line-inner{visibility:hidden}
+body.js [data-reveal],body.js [data-reveal-left]{opacity:0}
+body.js .hero__title .word{opacity:0}
+body.js .hero__vert-text .char,body.js .item__jp .char{opacity:0}
+body.js .item__jp{opacity:0}
+body.is-loading{cursor:progress}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  body.js .line,body.js .rule,body.js .line--v{transform:none}
+  body.js .line-inner{visibility:visible}
+  body.js [data-reveal],body.js [data-reveal-left]{opacity:1}
+  body.js .hero__title .word,body.js .hero__vert-text .char,body.js .item__jp .char{opacity:1}
+  body.js .item__jp{opacity:1}
+}

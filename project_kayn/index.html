@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" data-motion="pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KAYN — Golden Drop of Nature | 100% Pure Moroccan Argan Oil</title>
+<meta name="description" content="KAYN Argan Oil. First-press, slow-pressed and 99.8% Triterpene verified, sourced direct from Agadir, Morocco. For skin, hair and nails.">
+<meta name="theme-color" content="#2A462D">
+<meta name="color-scheme" content="light only">
+
+<!-- Fonts. Preloaded because the display face paints in the first frame after the
+     loader lifts; a swap there would be visible. -->
+<link rel="preload" href="font/CarlaSansLight.woff2"  as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/Mukta-Regular.woff2"   as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/Mukta-Bold.woff2"      as="font" type="font/woff2" crossorigin>
+
+<!-- The hero still and the film are what the loader is actually waiting on.
+     No `crossorigin` here: these are same-origin and a CORS-mode preload would not
+     match the plain fetch/`<img>` request, costing a second download. -->
+<link rel="preload" href="images/2026kayn-hero.webp" as="image" fetchpriority="high">
+<link rel="preload" href="images/2026kayn-bottle-animation.webm" as="fetch" type="video/webm">
+
+<link rel="stylesheet" href="styles.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/pf-chrome.css">
+<link rel="stylesheet" href="/css/pf-outro.css">
+
+<style>
+  /* Kayn's masthead has no height token — it is padding plus a 16px nav line.
+     Measured at ~72px, so 88px clears it with room. The burger only appears at
+     narrow widths, hence the second value. */
+  .pf-dock { --pf-dock-top: 88px; }
+  @media (max-width: 760px) { .pf-dock { --pf-dock-top: 76px; } }
+  /* Kayn's --forest, the footer plate. */
+  .pf-outro { --pf-tail: #2A462D; }
+</style>
+</head>
+<body>
+
+<!-- ==================== FLOATING SITE NAV ====================
+     Not this project’s nav — Amanda’s. It rides above the page so a visitor who has
+     scrolled into the middle of a long immersive page can still reach the rest
+     of the site without scrolling back. Absolute URLs: this page is deployed
+     away from the site root, where "/about" would 404. -->
+<div class="pf-dock" data-pf-dock>
+  <button class="pf-dock__btn" type="button" aria-expanded="false" aria-controls="pfDockMenu" aria-label="Open site menu">
+    <span class="pf-dock__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+
+  <div class="pf-dock__menu" id="pfDockMenu" hidden>
+    <a class="pf-dock__link" href="https://amanda-design.com/">Home</a>
+    <a class="pf-dock__link" href="https://amanda-design.com/about">About</a>
+    <a class="pf-dock__link" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
+      Resume
+      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </a>
+    <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener">
+      Linkedin
+      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </a>
+    <a class="pf-dock__link" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener">
+      Behance
+      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────────────────────
+     SVG sprite. The wordmark is used in three places (loader, masthead, footer
+     watermark) and is animated in the loader, so it has to be inline SVG rather
+     than an <img>.
+     ─────────────────────────────────────────────────────────────────────────── -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="kayn" viewBox="0 0 551 141">
+    <path d="M212.653 0.793562C246.981 0.793562 276.851 26.5843 276.851 55.946V137.088H257.903V81.1416H154.475L154.287 121.981C152.28 121.981 148.931 121.782 144.696 120.989C140.906 120.195 137.346 118.608 135.339 117.814L135.527 55.946C135.527 26.5843 165.62 0.793562 199.725 0.793562L212.653 0.793562ZM154.475 74.7931H258.126L257.903 55.7476C257.903 55.5492 257.903 55.1525 257.903 54.7557V54.1605C257.012 27.7746 234.721 7.14205 207.304 7.14205H205.297C177.657 7.14205 155.366 27.7746 154.475 54.1605V74.7931ZM156.927 135.897C171.638 135.5 186.127 130.342 197.941 121.415L201.731 124.192C196.604 128.358 191.031 131.731 185.236 134.112C176.765 137.881 166.957 140.063 157.372 140.46C155.812 140.46 154.475 140.46 153.137 140.46C95.6271 140.46 76.68 110.9 65.3118 93.2434C60.4078 85.5062 56.3955 76.9754 52.6061 68.8414L47.925 59.3187L19.6158 86.2997L18.5013 88.2836V137.683H0L0 0.793562L12.9286 0.793562V0.991962L18.2784 0.991962L18.7242 76.777L23.6281 72.214C23.6281 72.214 25.4114 70.8253 26.303 69.8333L97.8562 0.991962C102.537 0.991962 105.881 0.991962 108.556 0.991962L61.0765 46.6217C59.962 47.6136 59.5162 49.2008 60.1849 50.5895C64.8659 60.3106 70.8844 73.4044 77.7946 86.2997C82.0298 93.6402 85.8192 99.7903 90.5003 105.544C95.4042 111.495 101.423 116.852 108.333 121.613C122.599 131.334 139.986 136.492 156.927 135.897Z"/>
+    <path d="M392.419 0L400.666 0L351.892 76.1818C351.223 77.1738 350.777 78.3641 350.777 79.5545L350.289 137.088H332.011L332.722 90.0691C332.722 88.8788 332.276 87.6884 331.607 86.8949L277.845 4.1662L275.17 0L296.346 0L297.238 0.198399L344.759 74.7931L388.407 5.75332L392.419 0Z"/>
+    <path d="M546.904 0.793562L550.916 0.793562V137.088H540.217L423.859 25.5923V137.088H419.847V0.793562L426.088 0.793562L546.904 115.86V0.793562Z"/>
+  </symbol>
+  <symbol id="i-arrow" viewBox="0 0 32 12"><path d="M0 6h28.5M23.6 1 29 6l-5.4 5" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M2.5 3.2h2.1l.9 3m0 0 1.9 8.1h11l2.2-8.1H5.4Zm2.6 11.9a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm9.4 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M15.4 8.2h-2.1V6.9c0-.6.4-.8.7-.8h1.4V3.7h-2c-2.2 0-2.7 1.7-2.7 2.7v1.8H9.1v2.5h1.6V21h2.6v-10.3h1.8l.3-2.5Z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><path d="M12 4.6c2.4 0 2.7 0 3.6.05.9.04 1.3.18 1.6.3.4.16.7.35 1 .65.3.3.5.6.65 1 .12.3.26.7.3 1.6.05.9.05 1.2.05 3.6s0 2.7-.05 3.6c-.04.9-.18 1.3-.3 1.6-.16.4-.35.7-.65 1-.3.3-.6.5-1 .65-.3.12-.7.26-1.6.3-.9.05-1.2.05-3.6.05s-2.7 0-3.6-.05c-.9-.04-1.3-.18-1.6-.3-.4-.16-.7-.35-1-.65-.3-.3-.5-.6-.65-1-.12-.3-.26-.7-.3-1.6C4.6 14.7 4.6 14.4 4.6 12s0-2.7.05-3.6c.04-.9.18-1.3.3-1.6.16-.4.35-.7.65-1 .3-.3.6-.5 1-.65.3-.12.7-.26 1.6-.3C9.3 4.6 9.6 4.6 12 4.6Zm0-1.6c-2.45 0-2.76.01-3.72.06-.96.04-1.61.2-2.18.42a4.4 4.4 0 0 0-1.6 1.03 4.4 4.4 0 0 0-1.03 1.6c-.22.57-.38 1.22-.42 2.18C3 9.24 3 9.55 3 12s.01 2.76.06 3.72c.04.96.2 1.61.42 2.18a4.4 4.4 0 0 0 1.03 1.6 4.4 4.4 0 0 0 1.6 1.03c.57.22 1.22.38 2.18.42.96.05 1.27.06 3.72.06s2.76-.01 3.72-.06c.96-.04 1.61-.2 2.18-.42a4.7 4.7 0 0 0 2.63-2.63c.22-.57.38-1.22.42-2.18.05-.96.06-1.27.06-3.72s-.01-2.76-.06-3.72c-.04-.96-.2-1.61-.42-2.18a4.4 4.4 0 0 0-1.03-1.6 4.4 4.4 0 0 0-1.6-1.03c-.57-.22-1.22-.38-2.18-.42C14.76 3.01 14.45 3 12 3Zm0 4.38a4.62 4.62 0 1 0 0 9.24 4.62 4.62 0 0 0 0-9.24Zm0 7.62a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm5.88-7.8a1.08 1.08 0 1 1-2.16 0 1.08 1.08 0 0 1 2.16 0Z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M21.1 8.2a2.4 2.4 0 0 0-1.7-1.7C17.9 6.1 12 6.1 12 6.1s-5.9 0-7.4.4A2.4 2.4 0 0 0 2.9 8.2C2.5 9.7 2.5 12 2.5 12s0 2.3.4 3.8a2.4 2.4 0 0 0 1.7 1.7c1.5.4 7.4.4 7.4.4s5.9 0 7.4-.4a2.4 2.4 0 0 0 1.7-1.7c.4-1.5.4-3.8.4-3.8s0-2.3-.4-3.8ZM10.1 14.9V9.1l5 2.9-5 2.9Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M6.9 8.9H4.2V20h2.7V8.9Zm.2-3.4a1.6 1.6 0 1 0-3.1 0 1.6 1.6 0 0 0 3.1 0ZM20 13.8c0-2.8-1.5-4.2-3.6-4.2-1.6 0-2.4.9-2.8 1.5V8.9H11V20h2.7v-5.9c0-1.2.5-2 1.6-2 1 0 1.5.7 1.5 2V20H20v-6.2Z"/></symbol>
+</svg>
+
+
+<!-- ───────────────────────────────────────────────────────────────────────────
+     LOADER — Storyboard 1, scenes 1.1 → 1.3.
+
+     The ring is a progress bar bent into a circle: it starts empty at 12
+     o'clock and fills clockwise back to 12 o'clock, tracking the real load of
+     the hero still and the film blob, with the readout counting alongside it.
+     At 100% the readout goes, then the ring erases clockwise from the same
+     point it started. `data-motion` on <html> flips to "ready" at handover.
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <span class="u-sr">Loading KAYN</span>
+  <div class="loader__stage">
+    <svg class="loader__ring" viewBox="0 0 240 240" aria-hidden="true">
+      <!-- Geometry is generated by app.js (see the RINGS block); the data-*
+           attributes are the circle it draws on. -->
+      <path class="loader__arc" data-cx="120" data-cy="120" data-r="118"/>
+    </svg>
+    <svg class="loader__mark" viewBox="0 0 551 141" aria-hidden="true"><use href="#kayn"/></svg>
+    <p class="loader__pct" id="loaderPct" aria-hidden="true">0%</p>
+  </div>
+</div>
+
+
+<!-- ─── MASTHEAD ─────────────────────────────────────────────────────────── -->
+<header class="masthead" id="masthead">
+  <div class="masthead__bar">
+    <nav class="masthead__nav masthead__nav--start" aria-label="Primary">
+      <a class="navlink" href="#">Home</a>
+      <a class="navlink" href="#">About</a>
+    </nav>
+
+    <a class="masthead__brand" href="#" aria-label="KAYN — home">
+      <svg class="masthead__mark" viewBox="0 0 551 141" aria-hidden="true"><use href="#kayn"/></svg>
+    </a>
+
+    <nav class="masthead__nav masthead__nav--end" aria-label="Secondary">
+      <a class="navlink" href="#">Shop</a>
+      <a class="navlink" href="#">Blog</a>
+    </nav>
+
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer">
+      <span class="u-sr">Menu</span>
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+  </div>
+  <span class="masthead__rule" aria-hidden="true"></span>
+</header>
+
+<!-- Mobile drawer. Not in the comps — built to match the masthead's language. -->
+<div class="drawer" id="drawer" hidden>
+  <nav class="drawer__nav" aria-label="Mobile">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Shop</a>
+    <a href="#">Blog</a>
+  </nav>
+  <p class="drawer__foot"><span>KAYN 2026</span><span>Agadir · Morocco</span></p>
+</div>
+
+
+<main id="top">
+
+<!-- ─── HERO — Storyboard 1 scenes 1.4–1.5, then Storyboard 2 scene 2.1 ───── -->
+<section class="hero" id="hero" aria-label="Golden drop of nature">
+  <div class="hero__stage">
+
+    <div class="hero__media" aria-hidden="true">
+      <img class="hero__img" src="images/2026kayn-hero.webp" alt="" fetchpriority="high" decoding="async">
+    </div>
+
+    <!-- Scene 1.4: the second arc — drawn immediately after the loader arc
+         erases, so the line reads as one continuous gesture. -->
+    <svg class="hero__ring" viewBox="0 0 200 200" aria-hidden="true">
+      <path class="hero__arc" data-cx="100" data-cy="100" data-r="99"/>
+    </svg>
+
+    <!-- Scene 1.5: the frosted plate. Blur + grain (95% density, 20% opacity)
+         + a dark tint; it pans in from the left. -->
+    <div class="hero__scrim" aria-hidden="true"></div>
+
+    <div class="hero__copy">
+      <h1 class="hero__title display">
+        <span class="line"><span class="line__in">Golden Drop</span></span>
+        <span class="line"><span class="line__in">of Nature</span></span>
+      </h1>
+      <p class="hero__lede">Experience the secret to timeless beauty, sourced directly from
+        nature. Our oil is expertly crafted to enhance your skin&rsquo;s radiance and
+        hair&rsquo;s natural shine.</p>
+      <a class="btn btn--gold hero__cta" href="#">
+        <span>Shop Now</span>
+        <svg class="btn__arrow" viewBox="0 0 32 12" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── FILM — Storyboard 2. The webm is scrubbed by scroll; every text layer
+         sits behind it (scene 2.2). ─────────────────────────────────────────── -->
+<section class="film" id="film" aria-label="The finest argan, for the purest you">
+
+  <div class="film__stage">
+    <h2 class="film__title display" id="film-title">
+      <span class="line line--from-left"><span class="line__in">The finest argan,</span></span>
+      <span class="line line--from-right"><span class="line__in">for <em>the purest</em> you</span></span>
+    </h2>
+
+    <!-- Scene 2.3: drawn counter-clockwise from 12 o'clock. The travelling head
+         carries a dot; each USP is released as the head passes its anchor. -->
+    <svg class="film__ring" viewBox="-320 -320 640 640" aria-hidden="true">
+      <path class="film__arc" data-cx="0" data-cy="0" data-r="287" data-dir="ccw"/>
+      <circle class="film__head" r="5.5" cx="0" cy="-287"/>
+      <g class="film__pins">
+        <circle r="5.5" data-pin="1"/><circle r="5.5" data-pin="2"/><circle r="5.5" data-pin="3"/>
+        <circle r="5.5" data-pin="4"/><circle r="5.5" data-pin="5"/><circle r="5.5" data-pin="6"/>
+      </g>
+    </svg>
+
+    <video class="film__video" id="film-video" aria-hidden="true" muted playsinline
+           webkit-playsinline preload="auto" disablepictureinpicture
+           disableremoteplayback tabindex="-1"></video>
+  </div>
+
+  <!-- Anchors are 45°-spaced: 10:30 / 9:00 / 7:30 on the left, 1:30 / 3:00 / 4:30
+       on the right. `data-at` is the fraction of the counter-clockwise sweep at
+       which each one is reached, so the copy and the line stay locked together. -->
+  <ul class="usp" id="usp">
+    <li class="usp__item" data-side="left"  data-angle="315" data-at="0.125">
+      <h3 class="usp__title">Direct from Agadir&rsquo;s Heart</h3>
+      <p class="usp__body">Features an independently verified 99.8% Triterpene content. Meticulously sourced from Agadir for pure, restorative power.</p>
+    </li>
+    <li class="usp__item" data-side="left"  data-angle="270" data-at="0.25">
+      <h3 class="usp__title">Hair Resilience Fortified</h3>
+      <p class="usp__body">Actively fortifies the hair&rsquo;s Keratin Matrix by 15%, significantly reducing breakage and restoring structural strength.</p>
+    </li>
+    <li class="usp__item" data-side="left"  data-angle="225" data-at="0.375">
+      <h3 class="usp__title">Sourced with Care &amp; Tradition</h3>
+      <p class="usp__body">Our Slow-Pressed method preserves 100% of beneficial Omegas, ensuring maximum antioxidant and restorative power.</p>
+    </li>
+    <li class="usp__item" data-side="right" data-angle="135" data-at="0.625">
+      <h3 class="usp__title">Nutrient Density for Multi-Use</h3>
+      <p class="usp__body">High Micro-Nutrient Density Factor (MNDF) makes this one oil a powerhouse for 3 key areas: skin, hair, and nails.</p>
+    </li>
+    <li class="usp__item" data-side="right" data-angle="90"  data-at="0.75">
+      <h3 class="usp__title">12-Hour Hydration</h3>
+      <p class="usp__body">Scientifically reduces Trans-Epidermal Water Loss (TEWL) by up to 25%, protecting and plumping your skin all day.</p>
+    </li>
+    <li class="usp__item" data-side="right" data-angle="45"  data-at="0.875">
+      <h3 class="usp__title">Visibly Brighter, Naturally</h3>
+      <p class="usp__body">Promotes an 18% increase in cellular renewal within four weeks, gently accelerating your natural glow and luminosity.</p>
+    </li>
+  </ul>
+</section>
+
+
+<!-- ─── SHOP ─────────────────────────────────────────────────────────────── -->
+<section class="shop" id="shop" aria-label="Shop">
+  <div class="shell">
+    <ul class="shop__grid">
+
+      <li class="card">
+        <div class="card__figure">
+          <img src="images/2026kayn-product1.webp" width="800" height="823" loading="lazy" decoding="async"
+               alt="The 10ml Kayn Argan Oil bottle beside an argan nut, against a sunlit plaster wall.">
+        </div>
+        <div class="card__buy">
+          <p class="card__price">$10</p>
+          <div class="card__actions">
+            <a class="btn btn--gold btn--sm" href="#"><span>Buy Now</span></a>
+            <a class="btn btn--gold btn--icon" href="#" aria-label="Add Kayn Essential Oil 10ml to cart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cart"/></svg>
+            </a>
+          </div>
+        </div>
+        <h3 class="card__name">Kayn Essential Oil 10ml</h3>
+        <p class="card__desc">This high-potency, 99.8% Triterpene serum visibly reduces
+          Trans-Epidermal Water Loss (TEWL) while promoting up to 18% cellular renewal for
+          luminous, hydrated skin&hellip; <a class="ilink" href="#">more</a></p>
+        <p class="card__meta">14.000+ sold</p>
+      </li>
+
+      <li class="card">
+        <div class="card__figure">
+          <img src="images/2026kayn-product2.webp" width="800" height="800" loading="lazy" decoding="async"
+               alt="The 20ml Kayn Argan Oil bottle resting in a shallow pool of golden light.">
+        </div>
+        <div class="card__buy">
+          <p class="card__price">$25</p>
+          <div class="card__actions">
+            <a class="btn btn--gold btn--sm" href="#"><span>Buy Now</span></a>
+            <a class="btn btn--gold btn--icon" href="#" aria-label="Add Kayn Essential Oil 20ml to cart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cart"/></svg>
+            </a>
+          </div>
+        </div>
+        <h3 class="card__name">Kayn Essential Oil 20ml</h3>
+        <p class="card__desc">This high-potency, 99.8% Triterpene serum visibly reduces
+          Trans-Epidermal Water Loss (TEWL) while promoting up to 18% cellular renewal for
+          luminous, hydrated skin&hellip; <a class="ilink" href="#">more</a></p>
+        <p class="card__meta">7.000+ sold</p>
+      </li>
+
+      <li class="card">
+        <div class="card__figure">
+          <img src="images/2026kayn-product3.webp" width="800" height="800" loading="lazy" decoding="async"
+               alt="The 150ml Kayn Conditioner on a stone plinth with olive foliage and moss.">
+        </div>
+        <div class="card__buy">
+          <p class="card__price">$15</p>
+          <div class="card__actions">
+            <a class="btn btn--gold btn--sm" href="#"><span>Buy Now</span></a>
+            <a class="btn btn--gold btn--icon" href="#" aria-label="Add Kayn Conditioner 150ml to cart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cart"/></svg>
+            </a>
+          </div>
+        </div>
+        <h3 class="card__name">Kayn Conditioner 150ml</h3>
+        <p class="card__desc">Enriched with Slow-Pressed Omegas, this formula seals the
+          cuticle, delivering deep, lasting hydration and reducing breakage for ultimate
+          manageability and shine&hellip; <a class="ilink" href="#">more</a></p>
+        <p class="card__meta">3.000+ sold</p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+<!-- ─── HAIR ─────────────────────────────────────────────────────────────── -->
+<section class="duo" id="hair" aria-label="The elegance your hair deserves">
+  <div class="shell duo__grid">
+    <figure class="duo__figure" data-reveal-wipe>
+      <img src="images/2026kayn-benefit-hair.webp" width="1000" height="886" loading="lazy" decoding="async"
+           alt="A dropper of KAYN argan oil applied along the parting of dark hair.">
+    </figure>
+    <div class="duo__copy" data-reveal-group>
+      <!-- No data-reveal: a heading made of .line spans is revealed per line by
+           initReveals(), and the group pass skips it. Carrying the attribute as
+           well left the <h2> itself pinned at opacity 0 by the CSS pre-hide. -->
+      <h2 class="duo__title display">
+        <span class="line"><span class="line__in">The elegance</span></span>
+        <span class="line"><span class="line__in"><em>your hair</em></span></span>
+        <span class="line"><span class="line__in">deserves</span></span>
+      </h2>
+      <p class="duo__body" data-reveal>Our Slow-Pressed Argan oil actively works on a molecular level
+        to transform hair health. It significantly fortifies the Keratin Matrix,
+        <strong>strengthening strands by up to 15%</strong> to dramatically reduce breakage and split
+        ends. Rich in essential fatty acids and Omegas, it effectively seals the hair cuticle,
+        locking in vital moisture and imparting an unparalleled, lasting shine and softness that
+        transforms dry, dull hair&hellip;</p>
+      <a class="tlink" href="#" data-reveal><span>Read more</span>
+        <svg viewBox="0 0 32 12" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── SKIN ─────────────────────────────────────────────────────────────── -->
+<section class="duo duo--flip" id="skin" aria-label="The authentic gold standard for skin">
+  <div class="shell duo__grid">
+    <figure class="duo__figure" data-reveal-wipe>
+      <img src="images/2026kayn-benefit-face.webp" width="1000" height="886" loading="lazy" decoding="async"
+           alt="KAYN argan oil beading on the cheekbone beneath a bright, clear eye.">
+    </figure>
+    <div class="duo__copy" data-reveal-group>
+      <!-- No data-reveal: a heading made of .line spans is revealed per line by
+           initReveals(), and the group pass skips it. Carrying the attribute as
+           well left the <h2> itself pinned at opacity 0 by the CSS pre-hide. -->
+      <h2 class="duo__title display">
+        <span class="line"><span class="line__in">The authentic</span></span>
+        <span class="line"><span class="line__in">gold standard</span></span>
+        <span class="line"><span class="line__in"><em>for skin</em></span></span>
+      </h2>
+      <p class="duo__body" data-reveal>This potent serum features an independently verified 99.8%
+        Triterpene content, delivering superior anti-inflammatory and restorative benefits to the
+        dermis. It scientifically reduces <strong>Trans-Epidermal Water Loss (TEWL) by up to
+        25%</strong> for deep, all-day hydration, while promoting up to 18% cellular renewal,
+        resulting in visibly diminished fine lines and a refined, luminous, and healthy
+        complexion&hellip;</p>
+      <a class="tlink" href="#" data-reveal><span>Read more</span>
+        <svg viewBox="0 0 32 12" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── ORIGIN / END CTA ─────────────────────────────────────────────────── -->
+<section class="origin" id="origin" aria-label="Unveiling the secret of Moroccan purity">
+  <div class="origin__media" aria-hidden="true">
+    <img class="origin__img" src="images/2026kayn-footer.webp" width="2000" height="1064"
+         loading="lazy" decoding="async" alt="">
+  </div>
+  <!-- Own element, not a pseudo-element on the media: the image is promoted to
+       its own compositing layer for the parallax, and a ::after inside that
+       subtree did not paint over it. -->
+  <div class="origin__scrim" aria-hidden="true"></div>
+  <svg class="origin__ring" viewBox="0 0 200 200" aria-hidden="true">
+    <path class="origin__arc" data-cx="100" data-cy="100" data-r="99"/>
+  </svg>
+
+  <div class="shell origin__inner" data-reveal-group>
+    <!-- see the note on .duo__title: line-revealed headings take no data-reveal -->
+    <h2 class="origin__title display">
+      <span class="line"><span class="line__in">Unveiling</span></span>
+      <span class="line"><span class="line__in">the secret of</span></span>
+      <span class="line"><span class="line__in"><em>Moroccan</em></span></span>
+      <span class="line"><span class="line__in"><em>purity</em></span></span>
+    </h2>
+    <p class="origin__body" data-reveal>Our commitment to quality begins at the source: a personal,
+      direct partnership with a trusted factory in Agadir, Morocco. This artisanal ritual ensures
+      every First-Press drop is 100% pure, meticulously Slow-Pressed to preserve all beneficial
+      Omegas, delivering the highest efficacy and authentic Moroccan legacy to your routine.</p>
+    <div class="origin__actions" data-reveal>
+      <a class="btn btn--gold" href="#">
+        <span>Discover</span>
+        <svg class="btn__arrow" viewBox="0 0 32 12" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+      <a class="btn btn--ghost" href="#"><span>Shop Now</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ─── FOOTER ───────────────────────────────────────────────────────────── -->
+<footer class="foot" aria-label="Site footer">
+  <div class="shell foot__inner">
+
+    <div class="foot__social" data-reveal-group>
+      <a class="social" href="#" aria-label="KAYN on Facebook" data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-facebook"/></svg></a>
+      <a class="social" href="#" aria-label="KAYN on Instagram" data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg></a>
+      <a class="social" href="#" aria-label="KAYN on YouTube" data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-youtube"/></svg></a>
+      <a class="social" href="#" aria-label="KAYN on LinkedIn" data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg></a>
+    </div>
+
+    <nav class="foot__cols" aria-label="Footer">
+      <ul class="foot__col foot__col--lead" data-reveal-group>
+        <li data-reveal><a href="#">Home</a></li>
+        <li data-reveal><a href="#">Shop</a></li>
+        <li data-reveal><a href="#">Blog</a></li>
+        <li data-reveal><a href="#">Testimonials</a></li>
+      </ul>
+      <ul class="foot__col" data-reveal-group>
+        <li class="foot__head" data-reveal>Company</li>
+        <li data-reveal><a href="#">Feedback</a></li>
+        <li data-reveal><a href="#">About Us</a></li>
+        <li data-reveal><a href="#">Partner with us</a></li>
+        <li data-reveal><a href="#">Career</a></li>
+      </ul>
+      <ul class="foot__col" data-reveal-group>
+        <li class="foot__head" data-reveal>Legal</li>
+        <li data-reveal><a href="#">Privacy Policy</a></li>
+        <li data-reveal><a href="#">Terms &amp; Conditions</a></li>
+        <li data-reveal><a href="#">Certifications</a></li>
+      </ul>
+    </nav>
+
+    <p class="foot__legal" data-reveal>&copy; KAYN 2026<br>All rights reserved</p>
+  </div>
+
+  <!-- viewBox crops the wordmark's lower third, the way the comp runs it off the
+       bottom of the page. <use> needs explicit dimensions: without them the
+       symbol's own viewBox would letterbox the glyph instead of being cropped. -->
+  <svg class="foot__watermark" viewBox="0 0 551 110" preserveAspectRatio="xMinYMin slice" aria-hidden="true">
+    <use href="#kayn" width="551" height="141"/>
+  </svg>
+</footer>
+
+<!-- ==================== THE PROCESS ====================
+     This page is the work; the process breakdown is a separate page on
+     amanda-design.com. So the page ends, and then this arrives over it — a
+     sheet sliding in from the right rather than one more section underneath.
+
+     The mechanic is in pf-outro.css (a sticky pin) and pf-outro.js (one
+     translateX). Read pf-outro.css's header before changing the structure of
+     this block: the panel/sheet/slack nesting is what makes the arithmetic
+     come out with no jump and no dead scroll at the end. -->
+<div class="pf-outro" data-pf-outro>
+  <div class="pf-outro__panel">
+    <div class="pf-outro__sheet">
+
+      <section class="pf-process" aria-labelledby="pfProcessHead">
+        <div class="pf-process__wrap">
+          <h2 class="pf-process__head" id="pfProcessHead">
+            <span class="pf-process__line">That&rsquo;s the outcome.</span>
+            <span class="pf-process__line">Here&rsquo;s how it was built.</span>
+          </h2>
+
+          <div class="pf-process__top">
+            <div class="pf-process__shot">
+              <!-- Dead on purpose, for now. When the process page is live this
+                   becomes <a class="pf-process__cta" href="https://amanda-design.com/project/kayn">
+                   — same class, same styling, nothing else to change. -->
+              <button type="button" class="pf-process__cta">
+                <span>See the full process breakdown</span>
+                <svg class="pf-process__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              </button>
+            </div>
+
+            <div class="pf-process__meta">
+              <h3 class="pf-process__title">Kayn Argan Oil</h3>
+              <ul class="pf-process__pills">
+                <li class="pf-pill">Brand Design</li>
+                <li class="pf-pill">Web Design</li>
+              </ul>
+              <p class="pf-process__desc">Elevates Kayn Argan Oil with a sophisticated, premium aesthetic that reflects its authentic Moroccan origin with elegant touch to build a strong digital presence.</p>
+              <dl class="pf-process__facts">
+                <div class="pf-fact"><dt>Year</dt><dd>2025</dd></div>
+                <div class="pf-fact"><dt>Duration</dt><dd>2 weeks</dd></div>
+                <div class="pf-fact"><dt>Company</dt><dd>KAYN</dd></div>
+                <div class="pf-fact"><dt>Industry</dt><dd>Beauty</dd></div>
+              </dl>
+            </div>
+          </div>
+
+          <!-- Stand-in copy. Grounded in the real work so the section can be
+               judged as a design, but Amanda is writing the final three. A
+               replacement is a text edit and nothing else. -->
+          <div class="pf-process__bottom">
+            <h3 class="pf-process__decisions">Three key design decisions that shaped the outcome.</h3>
+            <ul class="pf-cards">
+              <li class="pf-card">
+                <span class="pf-card__dot" aria-hidden="true"></span>
+                <h4 class="pf-card__title">Premium is pace, not ornament</h4>
+                <p class="pf-card__body">The page moves slowly and holds still. A scroll-scrubbed film of the bottle earns attention where a carousel of product shots would have spent it, because at this price point the buyer is being asked to slow down.</p>
+              </li>
+              <li class="pf-card">
+                <span class="pf-card__dot" aria-hidden="true"></span>
+                <h4 class="pf-card__title">Moroccan origin without the cliché</h4>
+                <p class="pf-card__body">Provenance is carried by material, color and typographic restraint rather than pattern or postcard imagery, so the product reads as authentic instead of themed.</p>
+              </li>
+              <li class="pf-card">
+                <span class="pf-card__dot" aria-hidden="true"></span>
+                <h4 class="pf-card__title">One product, one path</h4>
+                <p class="pf-card__body">There is a single route through the page — origin, benefit, product, buy. A three-SKU brand does not need navigation. It needs a sequence, and every link on the page points along it.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pf-foot">
+        <div class="pf-foot__wrap">
+          <h2 class="pf-foot__title">Let&rsquo;s get in touch!</h2>
+
+          <div class="pf-foot__details">
+            <div class="pf-foot__reach">
+              <div class="pf-foot__email-wrap">
+                <button type="button" class="pf-foot__email" data-pf-copy="amandaalfattah@gmail.com" aria-label="Copy amandaalfattah@gmail.com to clipboard">
+                  <svg class="pf-foot__copy" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="pf-foot__email-text">amandaalfattah@gmail.com</span>
+                </button>
+                <a class="pf-foot__mailto" href="mailto:amandaalfattah@gmail.com" aria-label="Email amandaalfattah@gmail.com directly">
+                  <svg class="pf-foot__mailto-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+                <span class="pf-foot__toast" role="status" aria-live="polite"></span>
+              </div>
+
+              <div class="pf-foot__socials">
+                <a class="pf-foot__social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" aria-label="Visit my Behance">
+                  <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor"/>
+                    <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818"/>
+                  </svg>
+                </a>
+                <a class="pf-foot__social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" aria-label="Chat on Linkedin">
+                  <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <nav class="pf-foot__nav" aria-label="Footer">
+              <a href="https://amanda-design.com/">Home</a>
+              <a href="https://amanda-design.com/about">About</a>
+              <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">Resume</a>
+            </nav>
+          </div>
+
+          <div class="pf-foot__base">
+            <p>Site by Amanda Alfatah Idris. Built with Claude Code</p>
+            <p>&copy;2026 Amanda Idris. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+  <div class="pf-outro__slack" aria-hidden="true"></div>
+</div>
+
+<noscript>
+  <style>
+    html[data-motion="pending"] body{overflow:visible}
+    .loader{display:none}
+    .masthead{position:absolute}
+    .masthead__mark{opacity:1!important}
+    .masthead__rule{transform:none!important}
+    .hero{height:100svh!important}
+    .hero__stage{position:static!important}
+    .film{margin-top:0!important}
+    .hero__scrim,.hero__copy,.hero__media,.hero__ring{opacity:1!important;transform:none!important}
+    [data-reveal],[data-reveal-wipe],.line__in,.usp__item{opacity:1!important;transform:none!important;clip-path:none!important}
+    .film{height:auto!important;padding-bottom:8vw}
+    .film__stage{position:static!important;height:auto!important;min-height:0!important;padding-block:12vh}
+    .film__ring,.film__video{display:none}
+    .usp{margin-top:0!important;position:static!important;height:auto!important;
+         display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+         padding-inline:var(--shell)}
+    .usp__item{position:static!important;width:auto;translate:none!important;
+               text-align:left!important;right:auto!important;left:auto!important}
+  </style>
+</noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.25/dist/lenis.min.js" defer></script>
+<script src="links.js" defer></script>
+<script src="film.js" defer></script>
+<script src="app.js" defer></script>
+<script src="/js/pf-chrome.js" defer></script>
+<script src="/js/pf-outro.js" defer></script>
+</body>
+</html>
