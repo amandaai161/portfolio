@@ -1,0 +1,685 @@
+<title>Master Tokens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap">
+
+<style>
+/* ============================================================================
+   MASTER TOKENS — the reference sheet for amanda-design.com
+   ----------------------------------------------------------------------------
+   Built in the system it documents: Figtree, brand black, paper ground, squared
+   1.5px outlines, one grey. Every type step below is rendered at its real token
+   value, so the page is its own specimen.
+   ========================================================================== */
+
+/* ---- the site's own tokens, restated so the page can demonstrate them ---- */
+:root {
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-display-1: 5rem;
+  --fs-display-2: 4.375rem;
+  --fs-h1: clamp(2.5rem, 1.73rem + 2.4vw, 4rem);
+  --fs-h2: clamp(2.125rem, 1.45rem + 2.1vw, 3.5rem);
+  --fs-h3: clamp(1.875rem, 1.39rem + 1.5vw, 3rem);
+  --fs-h4: clamp(1.625rem, 1.3rem + 1.0vw, 2.5rem);
+  --fs-h5: clamp(1.5rem, 1.31rem + 0.6vw, 2rem);
+  --fs-h6: clamp(1.375rem, 1.25rem + 0.39vw, 1.75rem);
+  --fs-body-lg: 1.125rem;
+  --fs-body: 1rem;
+  --fs-body-sm: 0.875rem;
+  --fs-body-tiny: 0.6875rem;
+  --fs-eyebrow-1: 0.8125rem;
+  --fs-eyebrow-2: 0.6875rem;
+
+  --lh-display: 0.98;
+  --lh-tight: 1.04;
+  --lh-snug: 1.18;
+  --lh-normal: 1.45;
+  --lh-label: 1.25;
+
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.03em;
+  --tracking-snug: -0.02em;
+  --tracking-body: -0.01em;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.07em;
+
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---- this page's own surface, in the site's palette ---- */
+  --ground: #f4f4f4;
+  --paper: #ffffff;
+  --ink: #111111;
+  --muted: rgba(17, 17, 17, 0.55);
+  --hairline: rgba(17, 17, 17, 0.18);
+  --outline: #111111;
+  --fill-soft: #ececec;
+  --swatch-ring: rgba(17, 17, 17, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0d0d0d;
+    --paper: #171717;
+    --ink: #f2f2f2;
+    --muted: rgba(242, 242, 242, 0.58);
+    --hairline: rgba(242, 242, 242, 0.18);
+    --outline: #f2f2f2;
+    --fill-soft: #2b2b2b;
+    --swatch-ring: rgba(242, 242, 242, 0.34);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0d0d0d;
+  --paper: #171717;
+  --ink: #f2f2f2;
+  --muted: rgba(242, 242, 242, 0.58);
+  --hairline: rgba(242, 242, 242, 0.18);
+  --outline: #f2f2f2;
+  --fill-soft: #2b2b2b;
+  --swatch-ring: rgba(242, 242, 242, 0.34);
+}
+
+/* ---- mobile scale, the site's own ≤760px retune ---- */
+@media (max-width: 760px) {
+  :root {
+    --fs-display-1: 3.5rem;
+    --fs-display-2: 3rem;
+    --fs-h1: 2.5rem;
+    --fs-h2: 2rem;
+    --fs-h3: 1.75rem;
+    --fs-h4: 1.5rem;
+    --fs-h5: 1.375rem;
+    --fs-h6: 1.25rem;
+    --fs-body-tiny: 0.75rem;
+    --lh-display: 1.06;
+    --lh-tight: 1.14;
+    --lh-snug: 1.24;
+    --lh-normal: 1.55;
+    --lh-label: 1.3;
+    --tracking-display: -0.025em;
+    --tracking-heading: -0.02em;
+    --tracking-snug: -0.015em;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1160px;
+  margin-inline: auto;
+  padding: clamp(36px, 6vw, 96px) clamp(20px, 5vw, 64px) clamp(72px, 9vw, 140px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(52px, 6vw, 92px);
+}
+
+/* ---- masthead ---------------------------------------------------------- */
+.mast { display: flex; flex-direction: column; gap: 20px; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow-2);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mast h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.mast p { max-width: 62ch; color: var(--muted); font-size: var(--fs-body-lg); }
+
+.rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+.rule {
+  border: 1.5px solid var(--outline);
+  background: var(--paper);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.rule b {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-snug);
+}
+.rule span { font-size: var(--fs-body-sm); color: var(--muted); }
+
+/* ---- sections ---------------------------------------------------------- */
+section { display: flex; flex-direction: column; gap: 24px; }
+.sechead { display: flex; flex-direction: column; gap: 9px; border-top: 1.5px solid var(--outline); padding-top: 18px; }
+.sechead h2 {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-heading);
+}
+.sechead p { max-width: 68ch; color: var(--muted); font-size: var(--fs-body-sm); }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.875em; letter-spacing: 0; }
+
+/* ---- tables ------------------------------------------------------------ */
+.tablewrap { overflow-x: auto; border: 1.5px solid var(--outline); background: var(--paper); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; }
+th, td {
+  text-align: left;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--fs-body-sm);
+  vertical-align: middle;
+}
+thead th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow-2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1.5px solid var(--outline);
+  white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num, th.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.tok { font-family: var(--font-mono); font-size: 0.8125rem; white-space: nowrap; }
+td.note { color: var(--muted); }
+
+/* ---- colour swatches --------------------------------------------------- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(196px, 1fr)); gap: 14px; }
+.sw { border: 1.5px solid var(--outline); background: var(--paper); display: flex; flex-direction: column; }
+.sw__chip { height: 82px; border-bottom: 1.5px solid var(--outline); box-shadow: inset 0 0 0 1px var(--swatch-ring); }
+.sw__body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 4px; }
+.sw__name { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: var(--fw-medium); }
+.sw__hex { font-family: var(--font-mono); font-size: var(--fs-body-sm); color: var(--muted); }
+.sw__use { font-size: var(--fs-body-sm); color: var(--muted); margin-top: 3px; }
+
+/* ---- the container convention ------------------------------------------ */
+.demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.demo__box { border: 1.5px solid var(--outline); background: var(--paper); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.demo__inner { background: var(--fill-soft); padding: 14px 16px; font-size: var(--fs-body-sm); }
+.demo__meter { height: 26px; background: var(--fill-soft); position: relative; }
+.demo__meter i { position: absolute; inset: 0 auto 0 0; width: 68%; background: var(--ink); display: block; }
+.demo__cap { font-size: var(--fs-body-sm); color: var(--muted); }
+/* Inverted in both themes by construction: ink on ground becomes ground on ink,
+   so it never needs a colour declared inside a theme block. */
+.demo__box--solid { background: var(--ink); border-color: var(--ink); color: var(--ground); }
+.demo__box--solid .demo__cap { color: inherit; opacity: 0.66; }
+
+/* ---- the type ramp ----------------------------------------------------- */
+.ramp { border: 1.5px solid var(--outline); background: var(--paper); }
+.step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding: 20px clamp(16px, 2.4vw, 26px);
+  border-bottom: 1px solid var(--hairline);
+}
+.step:last-child { border-bottom: 0; }
+@media (min-width: 840px) {
+  .step { grid-template-columns: minmax(0, 1fr) 268px; align-items: baseline; gap: 28px; }
+}
+.step__spec { min-width: 0; overflow-x: auto; }
+.step__meta { display: flex; flex-direction: column; gap: 3px; }
+.step__tok { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: var(--fw-medium); }
+.step__num { font-family: var(--font-mono); font-size: var(--fs-body-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+.step__use { font-size: var(--fs-body-sm); color: var(--muted); }
+
+/* the specimen line for each step, at its own real token value */
+.sp { display: block; white-space: nowrap; font-weight: var(--fw-medium); }
+.sp-display-1 { font-size: var(--fs-display-1); line-height: var(--lh-display); letter-spacing: var(--tracking-display); }
+.sp-display-2 { font-size: var(--fs-display-2); line-height: var(--lh-display); letter-spacing: var(--tracking-display); }
+.sp-h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: var(--tracking-display); }
+.sp-h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: var(--tracking-heading); }
+.sp-h3 { font-size: var(--fs-h3); line-height: var(--lh-tight); letter-spacing: var(--tracking-heading); }
+.sp-h4 { font-size: var(--fs-h4); line-height: var(--lh-tight); letter-spacing: var(--tracking-heading); }
+.sp-h5 { font-size: var(--fs-h5); line-height: var(--lh-snug); letter-spacing: var(--tracking-snug); }
+.sp-h6 { font-size: var(--fs-h6); line-height: var(--lh-snug); letter-spacing: var(--tracking-snug); font-weight: var(--fw-semibold); }
+.sp-body-lg { font-size: var(--fs-body-lg); line-height: var(--lh-normal); letter-spacing: var(--tracking-body); font-weight: var(--fw-regular); white-space: normal; }
+.sp-body { font-size: var(--fs-body); line-height: var(--lh-normal); letter-spacing: var(--tracking-body); font-weight: var(--fw-regular); white-space: normal; }
+.sp-body-sm { font-size: var(--fs-body-sm); line-height: var(--lh-normal); letter-spacing: var(--tracking-body); font-weight: var(--fw-regular); white-space: normal; }
+.sp-body-tiny { font-size: var(--fs-body-tiny); line-height: var(--lh-label); letter-spacing: var(--tracking-body); font-weight: var(--fw-medium); white-space: normal; }
+.sp-eyebrow-1 { font-size: var(--fs-eyebrow-1); line-height: var(--lh-label); letter-spacing: var(--tracking-wider); text-transform: uppercase; font-weight: var(--fw-semibold); }
+.sp-eyebrow-2 { font-size: var(--fs-eyebrow-2); line-height: var(--lh-label); letter-spacing: var(--tracking-wide); text-transform: uppercase; font-weight: var(--fw-semibold); }
+
+/* ---- weight row -------------------------------------------------------- */
+.weights { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.wt { border: 1.5px solid var(--outline); background: var(--paper); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.wt__glyph { font-size: var(--fs-h4); line-height: 1; letter-spacing: var(--tracking-heading); }
+.wt__tok { font-family: var(--font-mono); font-size: 0.8125rem; }
+.wt__num { font-family: var(--font-mono); font-size: var(--fs-body-sm); color: var(--muted); }
+
+/* ---- footer ------------------------------------------------------------ */
+.foot { border-top: 1.5px solid var(--outline); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+.foot p { font-size: var(--fs-body-sm); color: var(--muted); max-width: 72ch; }
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--outline); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">amanda-design.com · design system</p>
+    <h1>Master tokens</h1>
+    <p>Every colour and type value the site is built from, at the names the CSS
+      actually uses. This page is set in those tokens — each step below renders
+      at its own real value, so what you see is what ships.</p>
+
+    <div class="rules">
+      <div class="rule">
+        <b>One black</b>
+        <span>#111111 everywhere. Not #000, and not a second near-black hiding in a component.</span>
+      </div>
+      <div class="rule">
+        <b>Outline, not fill</b>
+        <span>Containers are paper with a 1.5px black outline. Grey is a fill inside one, never the container itself.</span>
+      </div>
+      <div class="rule">
+        <b>One grey</b>
+        <span>#ECECEC, for a progress track, a filled bar or a nested panel. Nothing else.</span>
+      </div>
+      <div class="rule">
+        <b>Squared corners</b>
+        <span>No radius on containers. <code>--radius-media</code> exists only for imagery.</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== COLOUR ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Master colour</h2>
+      <p>Declared on <code>:root</code> in <code>css/styles.css</code>. Swatches show the literal
+        value, so they read the same in either theme.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="sw">
+        <div class="sw__chip" style="background:#111111"></div>
+        <div class="sw__body">
+          <span class="sw__name">--black</span>
+          <span class="sw__hex">#111111</span>
+          <span class="sw__use">The brand black. Ink, outlines, solid fills.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#111111"></div>
+        <div class="sw__body">
+          <span class="sw__name">--ink</span>
+          <span class="sw__hex">#111111</span>
+          <span class="sw__use">Body text. Same value as <code>--black</code>, kept separate so text and surface can diverge later.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#ffffff"></div>
+        <div class="sw__body">
+          <span class="sw__name">--white</span>
+          <span class="sw__hex">#FFFFFF</span>
+          <span class="sw__use">Paper. The about page softens this to #F8F8F8 for itself only.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#ececec"></div>
+        <div class="sw__body">
+          <span class="sw__name">--fill-soft</span>
+          <span class="sw__hex">#ECECEC</span>
+          <span class="sw__use">The one grey. Progress tracks, filled bars, nested panels.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#111111"></div>
+        <div class="sw__body">
+          <span class="sw__name">--line-strong</span>
+          <span class="sw__hex">#111111</span>
+          <span class="sw__use">Structural outline, always 1.5px.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:rgba(17,17,17,0.55)"></div>
+        <div class="sw__body">
+          <span class="sw__name">--muted</span>
+          <span class="sw__hex">rgba(17, 17, 17, .55)</span>
+          <span class="sw__use">Secondary text, captions, meta.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:rgba(17,17,17,0.18)"></div>
+        <div class="sw__body">
+          <span class="sw__name">--line</span>
+          <span class="sw__hex">rgba(17, 17, 17, .18)</span>
+          <span class="sw__use">Hairline. Table rows, internal dividers.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:rgba(255,255,255,0.35)"></div>
+        <div class="sw__body">
+          <span class="sw__name">--line-light</span>
+          <span class="sw__hex">rgba(255, 255, 255, .35)</span>
+          <span class="sw__use">Hairline on the black footer.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo__box">
+        <span class="demo__cap">Container — paper, 1.5px outline</span>
+        <div class="demo__inner">Nested panel — <code>--fill-soft</code></div>
+      </div>
+      <div class="demo__box">
+        <span class="demo__cap">Meter — grey track, black fill</span>
+        <span class="demo__meter"><i></i></span>
+      </div>
+      <div class="demo__box demo__box--solid">
+        <span class="demo__cap">Solid</span>
+        <span>Reserved for one element per view — a stat card, an active state, the footer.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TYPE SCALE ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Master typography</h2>
+      <p>Figtree, 300–700, from Google Fonts. Fourteen steps. The headings are fluid
+        <code>clamp()</code> values that reach their maximum around a 1600px viewport;
+        body and label steps are fixed. Each line below is set in its own token —
+        resize this window and the ramp moves with it.</p>
+    </div>
+
+    <div class="ramp">
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-display-1">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-display-1</span>
+          <span class="step__num">80px fixed · mobile 56px</span>
+          <span class="step__use">Hero metrics</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-display-2">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-display-2</span>
+          <span class="step__num">70px fixed · mobile 48px</span>
+          <span class="step__use">Big stat numbers</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h1">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h1</span>
+          <span class="step__num">40 → 64px · mobile 40px</span>
+          <span class="step__use">Page section</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h2">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h2</span>
+          <span class="step__num">34 → 56px · mobile 32px</span>
+          <span class="step__use">Case-study title</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h3">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h3</span>
+          <span class="step__num">30 → 48px · mobile 28px</span>
+          <span class="step__use">Section heading</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h4">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h4</span>
+          <span class="step__num">26 → 40px · mobile 24px</span>
+          <span class="step__use">Card / project title</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h5">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h5</span>
+          <span class="step__num">24 → 32px · mobile 22px</span>
+          <span class="step__use">Sub-section heading</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-h6">Design Systems Architect</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-h6</span>
+          <span class="step__num">22 → 28px · mobile 20px</span>
+          <span class="step__use">Block / tab title · SemiBold</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-body-lg">Turns complex, fast-moving brands into coherent visual systems — where creative craft meets digital infrastructure.</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-body-lg</span>
+          <span class="step__num">18px · mobile 18px</span>
+          <span class="step__use">Lead paragraph</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-body">Turns complex, fast-moving brands into coherent visual systems — where creative craft meets digital infrastructure.</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-body</span>
+          <span class="step__num">16px · mobile 16px</span>
+          <span class="step__use">Default body, nav</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-body-sm">Turns complex, fast-moving brands into coherent visual systems — where creative craft meets digital infrastructure.</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-body-sm</span>
+          <span class="step__num">14px · mobile 14px</span>
+          <span class="step__use">Dense body, captions</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-body-tiny">Turns complex, fast-moving brands into coherent visual systems.</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-body-tiny</span>
+          <span class="step__num">11px · mobile 12px</span>
+          <span class="step__use">Meta labels · Medium</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-eyebrow-1">Selected work</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-eyebrow-1</span>
+          <span class="step__num">13px · +0.07em · SemiBold</span>
+          <span class="step__use">Section eyebrow</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__spec"><span class="sp sp-eyebrow-2">Selected work</span></div>
+        <div class="step__meta">
+          <span class="step__tok">--fs-eyebrow-2</span>
+          <span class="step__num">11px · +0.06em · SemiBold</span>
+          <span class="step__use">Small eyebrow, chip label</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DESKTOP vs MOBILE ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Desktop and mobile</h2>
+      <p>One breakpoint governs the whole system: <strong>760px</strong>. Below it the headings
+        drop to fixed sizes, leading opens up and negative tracking relaxes, because tight
+        tracking hurts legibility at small sizes. Body steps hold at 16px and above so copy
+        never shrinks on a phone.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th class="num">Desktop</th>
+            <th class="num">@ 1440px</th>
+            <th class="num">Mobile ≤760</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="tok">--fs-display-1</td><td class="num">80px</td><td class="num">80.00</td><td class="num">56px</td><td class="note">Hero metrics</td></tr>
+          <tr><td class="tok">--fs-display-2</td><td class="num">70px</td><td class="num">70.00</td><td class="num">48px</td><td class="note">Big stat numbers</td></tr>
+          <tr><td class="tok">--fs-h1</td><td class="num">40 → 64px</td><td class="num">62.24</td><td class="num">40px</td><td class="note">Page section</td></tr>
+          <tr><td class="tok">--fs-h2</td><td class="num">34 → 56px</td><td class="num">53.44</td><td class="num">32px</td><td class="note">Case-study title</td></tr>
+          <tr><td class="tok">--fs-h3</td><td class="num">30 → 48px</td><td class="num">43.84</td><td class="num">28px</td><td class="note">Section heading</td></tr>
+          <tr><td class="tok">--fs-h4</td><td class="num">26 → 40px</td><td class="num">35.20</td><td class="num">24px</td><td class="note">Card / project title</td></tr>
+          <tr><td class="tok">--fs-h5</td><td class="num">24 → 32px</td><td class="num">29.60</td><td class="num">22px</td><td class="note">Sub-section heading</td></tr>
+          <tr><td class="tok">--fs-h6</td><td class="num">22 → 28px</td><td class="num">25.62</td><td class="num">20px</td><td class="note">Block / tab title</td></tr>
+          <tr><td class="tok">--fs-body-lg</td><td class="num">18px</td><td class="num">18.00</td><td class="num">18px</td><td class="note">Lead paragraph</td></tr>
+          <tr><td class="tok">--fs-body</td><td class="num">16px</td><td class="num">16.00</td><td class="num">16px</td><td class="note">Default body, nav</td></tr>
+          <tr><td class="tok">--fs-body-sm</td><td class="num">14px</td><td class="num">14.00</td><td class="num">14px</td><td class="note">Dense body, captions</td></tr>
+          <tr><td class="tok">--fs-body-tiny</td><td class="num">11px</td><td class="num">11.00</td><td class="num">12px</td><td class="note">Meta labels</td></tr>
+          <tr><td class="tok">--fs-eyebrow-1</td><td class="num">13px</td><td class="num">13.00</td><td class="num">13px</td><td class="note">Section eyebrow</td></tr>
+          <tr><td class="tok">--fs-eyebrow-2</td><td class="num">11px</td><td class="num">11.00</td><td class="num">11px</td><td class="note">Small eyebrow</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th class="num">Desktop</th>
+            <th class="num">Mobile ≤760</th>
+            <th>Applies to</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="tok">--lh-display</td><td class="num">0.98</td><td class="num">1.06</td><td class="note">Display steps, single line</td></tr>
+          <tr><td class="tok">--lh-tight</td><td class="num">1.04</td><td class="num">1.14</td><td class="note">H1–H4</td></tr>
+          <tr><td class="tok">--lh-snug</td><td class="num">1.18</td><td class="num">1.24</td><td class="note">H5, H6</td></tr>
+          <tr><td class="tok">--lh-normal</td><td class="num">1.45</td><td class="num">1.55</td><td class="note">All body copy</td></tr>
+          <tr><td class="tok">--lh-label</td><td class="num">1.25</td><td class="num">1.30</td><td class="note">Eyebrows, tiny labels</td></tr>
+          <tr><td class="tok">--tracking-display</td><td class="num">−0.04em</td><td class="num">−0.025em</td><td class="note">Display, H1</td></tr>
+          <tr><td class="tok">--tracking-heading</td><td class="num">−0.03em</td><td class="num">−0.02em</td><td class="note">H2–H4</td></tr>
+          <tr><td class="tok">--tracking-snug</td><td class="num">−0.02em</td><td class="num">−0.015em</td><td class="note">H5, H6</td></tr>
+          <tr><td class="tok">--tracking-body</td><td class="num">−0.01em</td><td class="num">−0.01em</td><td class="note">Body — unchanged</td></tr>
+          <tr><td class="tok">--tracking-wide</td><td class="num">+0.06em</td><td class="num">+0.06em</td><td class="note">Eyebrow 2, all-caps</td></tr>
+          <tr><td class="tok">--tracking-wider</td><td class="num">+0.07em</td><td class="num">+0.07em</td><td class="note">Eyebrow 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== WEIGHTS ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Weights</h2>
+      <p>Five, and they compose with any role class via the <code>.fw-*</code> helpers.
+        Medium carries the headings; Regular carries the copy; SemiBold is for eyebrows,
+        H6 and emphasis inside a paragraph.</p>
+    </div>
+    <div class="weights">
+      <div class="wt"><span class="wt__glyph" style="font-weight:300">Aa</span><span class="wt__tok">--fw-light</span><span class="wt__num">300 · rare, large sizes only</span></div>
+      <div class="wt"><span class="wt__glyph" style="font-weight:400">Aa</span><span class="wt__tok">--fw-regular</span><span class="wt__num">400 · body copy</span></div>
+      <div class="wt"><span class="wt__glyph" style="font-weight:500">Aa</span><span class="wt__tok">--fw-medium</span><span class="wt__num">500 · headings, nav, buttons</span></div>
+      <div class="wt"><span class="wt__glyph" style="font-weight:600">Aa</span><span class="wt__tok">--fw-semibold</span><span class="wt__num">600 · eyebrows, H6, emphasis</span></div>
+      <div class="wt"><span class="wt__glyph" style="font-weight:700">Aa</span><span class="wt__tok">--fw-bold</span><span class="wt__num">700 · wordmark only</span></div>
+    </div>
+  </section>
+
+  <!-- ==================== ROLE CLASSES ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Role classes</h2>
+      <p>Apply a class rather than reaching for the raw token, so size, weight, leading and
+        tracking always arrive as a set. Read a <code>--fs-*</code> token directly only when
+        you are writing a component's own rule.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Class</th><th>Sets</th><th>Use for</th></tr></thead>
+        <tbody>
+          <tr><td class="tok">.t-display-1 / .t-display-2</td><td class="note">size, display leading, display tracking</td><td class="note">Hero metrics, big numbers</td></tr>
+          <tr><td class="tok">.t-h1 … .t-h6</td><td class="note">size + Medium + tight or snug leading</td><td class="note">Headings. H6 is SemiBold.</td></tr>
+          <tr><td class="tok">.t-body-lg / .t-body / .t-body-sm</td><td class="note">size + Regular + normal leading + body tracking</td><td class="note">Copy at three densities</td></tr>
+          <tr><td class="tok">.t-body-tiny</td><td class="note">11px + Medium + label leading</td><td class="note">Meta labels</td></tr>
+          <tr><td class="tok">.t-eyebrow-1 / .t-eyebrow-2</td><td class="note">size + SemiBold + wide tracking + uppercase</td><td class="note">Section and chip labels</td></tr>
+          <tr><td class="tok">.fw-light … .fw-bold</td><td class="note">weight only</td><td class="note">Composes onto any role class</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== LAYOUT & MOTION ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Layout and motion</h2>
+      <p>The same <code>:root</code> block carries the page shell and the two easing curves
+        every transition on the site uses.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Token</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tok">--container-max</td><td class="tok">1720px</td><td class="note">Content width before the gutters</td></tr>
+          <tr><td class="tok">--gutter</td><td class="tok">clamp(20px, 5.2vw, 100px)</td><td class="note">Page margin. 74.88px at 1440.</td></tr>
+          <tr><td class="tok">--radius-media</td><td class="tok">clamp(6px, 0.55vw, 8px)</td><td class="note">Imagery only. Containers stay square.</td></tr>
+          <tr><td class="tok">--ease</td><td class="tok">cubic-bezier(.22, .61, .36, 1)</td><td class="note">Colour and opacity</td></tr>
+          <tr><td class="tok">--ease-out</td><td class="tok">cubic-bezier(.16, 1, .3, 1)</td><td class="note">Movement — underlines, slides, the cover</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== WHERE THEY LIVE ==================== -->
+  <section>
+    <div class="sechead">
+      <h2>Where the tokens live</h2>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>File</th><th>Holds</th></tr></thead>
+        <tbody>
+          <tr><td class="tok">css/styles.css</td><td class="note">Colour, layout and motion tokens on <code>:root</code>. The source of truth.</td></tr>
+          <tr><td class="tok">css/type-system.css</td><td class="note">The type scale, the role classes, and the ≤760px retune. Loads after styles.css.</td></tr>
+          <tr><td class="tok">css/master-header.css</td><td class="note">The master header, scoped under <code>.master-header</code> for pages that cannot take the global reset.</td></tr>
+          <tr><td class="tok">css/master-footer.css</td><td class="note">The master footer, scoped under <code>.master-footer</code>, same reason.</td></tr>
+          <tr><td class="tok">scripts/gen-master-chrome.py</td><td class="note">Generates both scoped files from the two above. Regenerate; never hand-edit them.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="foot">
+      <p><strong>The one exception.</strong> Aspire, Identity, Kayn and NOBI are hand-built
+        landing pages with their own palettes, and these tokens do not reach them. Only the
+        portfolio's own furniture on those pages — the master footer, the-process section,
+        the nav dock and the cursor — follows this system.</p>
+      <p>Hazen and the seven case-study pages are fully on it.</p>
+    </div>
+  </section>
+
+</div>
