@@ -717,7 +717,7 @@ html.motion .headhold { height: 40vh; }
 
 
 
-/* The two full-bleed rules that bracket the SINAN row. */
+/* The two full-bleed rules that bracket the HAZEN row. */
 .srule {
   height: 1px;
   background: var(--black);
@@ -739,28 +739,28 @@ html.motion .headhold { height: 40vh; }
   white-space: nowrap;
 }
 
-/* ---------- SINAN row ---------- */
-.sinan {
+/* ---------- HAZEN row ---------- */
+.hazen {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) minmax(0, 2.4fr) minmax(200px, 1fr);
   gap: clamp(24px, 3vw, 60px);
   align-items: start;
   padding-block: clamp(40px, 5vw, 96px);
 }
-.sinan__lead { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 24px); align-items: flex-start; }
-.sinan__title { font-weight: var(--fw-regular); }
-.sinan__pill { margin: 0; }
+.hazen__lead { display: flex; flex-direction: column; gap: clamp(14px, 1.4vw, 24px); align-items: flex-start; }
+.hazen__title { font-weight: var(--fw-regular); }
+.hazen__pill { margin: 0; }
 
-.sinan__media {
+.hazen__media {
   aspect-ratio: 16 / 9;
   background: #bfbfbf;
   overflow: hidden;
   transform-origin: center center;
 }
-.sinan__media img { width: 100%; height: 100%; object-fit: cover; }
+.hazen__media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Sits low in its column, as in the sketch. */
-.sinan__desc { align-self: end; max-width: 34ch; }
+.hazen__desc { align-self: end; max-width: 34ch; }
 
 /* ---------- The paired projects (slides 2 and 3) ----------
    Two cards, deliberately not aligned: the left one carries its text ABOVE
@@ -843,8 +843,8 @@ html.motion .headhold { height: 40vh; }
 }
 
 @media (max-width: 760px) {
-  .sinan { grid-template-columns: 1fr; }
-  .sinan__desc { align-self: start; max-width: none; }
+  .hazen { grid-template-columns: 1fr; }
+  .hazen__desc { align-self: start; max-width: none; }
 }
 
 /* ---------- Motion-only start states for #selected ----------
@@ -853,10 +853,10 @@ html.motion .headhold { height: 40vh; }
    a failed script load can never leave the section blank.            */
 @media (min-width: 761px) {
   html.motion .srule { transform: scaleX(0); }
-  html.motion .sinan__title,
-  html.motion .sinan__pill,
-  html.motion .sinan__desc { opacity: 0; }
-  html.motion .sinan__media { opacity: 0; transform: scale(0.2); }
+  html.motion .hazen__title,
+  html.motion .hazen__pill,
+  html.motion .hazen__desc { opacity: 0; }
+  html.motion .hazen__media { opacity: 0; transform: scale(0.2); }
 }
 
 /* ---------- Motion-only start states for the paired cards ----------
@@ -1380,7 +1380,7 @@ html.motion #outro .cta {
   .wpair { gap: 64px; }
 
   /* "Right after it takes place, the selected work headline move up to the top
-     of the screen, then the sinan section starts to appear (not moving
+     of the screen, then the hazen section starts to appear (not moving
      together with the headline)."
 
      They were moving together, and the reason is arithmetic rather than
@@ -1416,7 +1416,7 @@ html.motion #outro .cta {
      The five selected projects had no arrival at all on a phone (their
      desktop start states are gated to 761px and up, and their choreography
      with them), so this is where they get one. */
-  html.motion .wslide--sinan .sinan,
+  html.motion .wslide--hazen .hazen,
   html.motion .wslide--pair .wcard { opacity: 0; transform: translateY(60px); }
 
   .other { padding-block: 96px 96px; }
@@ -1427,7 +1427,7 @@ html.motion #outro .cta {
      to 22px, which also puts the two sections on one size — they are the same
      kind of thing and were only different because they came from different
      type-scale steps. */
-  .sinan__title, .wcard__title, .owork__title { font-size: 22px; }
+  .hazen__title, .wcard__title, .owork__title { font-size: 22px; }
 
   /* ---- 9. matching thumbnails ----
      "The 3 other projects' thumbnail, please make it to have the similar size

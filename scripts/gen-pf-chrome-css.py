@@ -103,6 +103,41 @@ BANNER = """/* =================================================================
 }
 """
 
+TAIL = """
+
+/* ---- the wrapper must not exist as a box --------------------------------
+   .header is position: sticky, and a sticky element only travels inside its
+   own containing block. A plain wrapper div is exactly as tall as the header,
+   so the header would unstick the instant it had scrolled its own height --
+   which is to say, never stick at all. display: contents removes the wrapper's
+   box while leaving it in the DOM, so the descendant selectors above still
+   match and the header sticks against the page. Amanda: "Keep the top-navbar
+   always visible on top of the screen." */
+.pf-header-host { display: contents; }
+
+/* ---- the reading progress bar -------------------------------------------
+   v3's header carries the same element the case studies do, but its rules live
+   in v1's css/case-study.css, which the Hazen page does not load. They are
+   restated here, WIDTH-driven rather than transform-driven: case-study.js
+   animates scaleX, and Hazen's own chrome script sets style.width. This file is
+   only ever loaded by Hazen, so it follows Hazen's script. */
+.pf-header-host .cs-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 101;
+  pointer-events: none;
+}
+.pf-header-host .cs-progress__bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--ink);
+}
+"""
+
 JOBS = [
     dict(out="pf-footer.css", scope=".pf-footer-host", what="FOOTER",
          classes=["container", "contact", "footer", "social", "copy-icon", "copy-toast"],
@@ -110,7 +145,7 @@ JOBS = [
     dict(out="pf-header.css", scope=".pf-header-host", what="HEADER",
          classes=["container", "header", "nav", "nav-toggle", "mobile-menu",
                   "ext-arrow", "cs-progress"],
-         types=False),
+         types=False, tail=TAIL),
 ]
 
 for job in JOBS:
@@ -124,7 +159,8 @@ for job in JOBS:
         parts += ["\n\n/* ==== type-system.css, entire ============================================ */\n",
                   scope(types, S)]
     parts += ["\n\n/* ==== chrome.css ========================================================= */\n",
-              scope(collect(chrome, job["classes"]), S), "\n"]
+              scope(collect(chrome, job["classes"]), S)]
+    parts += [job.get("tail", ""), "\n"]
     text = reflow("".join(parts))
     (CSS / job["out"]).write_text(text)
     print(job["out"], "->", len(text), "bytes,", text.count("{"), "braces")

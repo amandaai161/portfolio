@@ -2,7 +2,7 @@
    WORK — four slides through one pinned stage.
    claude-handover/new-interaction-work/.
 
-     1  Claude design skills: SINAN
+     1  Claude design skills: HAZEN
      2  pair 1 — Identity 2.0 + Aspire Web Design System
      3  pair 2 — Kayn Argan Oil + NOBI Bakery
      4  the OTHER WORK. headline
@@ -108,18 +108,18 @@
       tl.to(slide, { opacity: 0, y: -OUT_Y, ease: "none", duration: OUT_D }, exitAt(i));
     });
 
-    /* ---------- slide 1: SINAN ----------
-       Kept exactly as it was (Amanda: "Sinan intro, please keep as it is right
+    /* ---------- slide 1: HAZEN ----------
+       Kept exactly as it was (Amanda: "Hazen intro, please keep as it is right
        now") — the rules wipe in from opposite edges, the thumbnail grows from
        20%, then the text and pill arrive in reading order. */
     (function () {
       var t = slotStart(0);
       tl.to(".srule--top", { scaleX: 1, ease: "none", duration: 0.030 }, t + 0.004)
         .to(".srule--bottom", { scaleX: 1, ease: "none", duration: 0.030 }, t + 0.004)
-        .to(".sinan__media", { scale: 1, opacity: 1, ease: "none", duration: 0.042 }, t + 0.014)
-        .to(".sinan__title", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.040)
-        .to(".sinan__pill", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.048)
-        .to(".sinan__desc", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.055);
+        .to(".hazen__media", { scale: 1, opacity: 1, ease: "none", duration: 0.042 }, t + 0.014)
+        .to(".hazen__title", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.040)
+        .to(".hazen__pill", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.048)
+        .to(".hazen__desc", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.055);
     })();
 
     /* ---------- slides 2 and 3: the paired projects ----------
@@ -195,7 +195,7 @@
 
     /* Published for js/headline.js: where a position on this timeline falls
        in DOCUMENT SCROLL PIXELS. The headline's own beats are specified
-       against the slides ("after pair 2 has gone", "while SINAN is up"), and
+       against the slides ("after pair 2 has gone", "while HAZEN is up"), and
        this is the one honest way to express that without either file guessing
        at the other's numbers. Read fresh on every ScrollTrigger refresh, so it
        survives a resize and the pin spacer changing height. */
@@ -236,7 +236,7 @@
      Start states are in css/v3.css's mobile block, gated on html.motion, so
      a resting page draws them all. */
   mm.add("(max-width: 760px)", function () {
-    var items = work.querySelectorAll(".wslide--sinan .sinan, .wslide--pair .wcard");
+    var items = work.querySelectorAll(".wslide--hazen .hazen, .wslide--pair .wcard");
     if (!items.length) return;
     var tweens = [];
     Array.prototype.forEach.call(items, function (el) {
