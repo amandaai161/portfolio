@@ -105,12 +105,19 @@
     var ENTRY_SCALE = 10;
     var ENTRY_EASE = "power2.out";
 
+    /* The exit is played in BOTH directions -- forward as a slide leaves, and
+       in reverse as the reader scrolls back up to it -- so it gets a symmetric
+       ease rather than an out. A power2.out run backwards starts slow and ends
+       in a rush, which is the wrong shape for an arrival. */
+    var EXIT_EASE = "power2.inOut";
+
     function slotStart(i) { return i * SLOT; }
     function exitAt(i) { return i * SLOT + IN_D + HOLD_D; }
 
-    /* One paused timeline per slide, or null for a slide with no entry of its
-       own (the headline slide). Filled in below. */
+    /* One paused timeline per slide, or null where a slide has none of its own
+       (the headline slide has no entry; the last slide has no exit). */
     var entries = new Array(N);
+    var exits = new Array(N);
 
     var tl = gsap.timeline({
       scrollTrigger: {
@@ -143,10 +150,30 @@
 
     /* ---------- the shared exit ----------
        Every slide but the last leaves the same way: upward, fading. The last
-       one holds until the pin releases and the CTA scrolls up over it. */
+       one holds until the pin releases and the CTA scrolls up over it.
+
+       ON ITS OWN CLOCK, like the entries, and for the same complaint one step
+       further on. Amanda: "The scroll down is all good. The scroll up (going
+       back to the previous section) is still an issue... when I scroll up to
+       go back to pair 1, the pair 1 is already in place too fast."
+
+       Coming back up to a slide is not that slide's entry replaying -- it is
+       its EXIT running backwards, and while that was scrubbed it un-faded a
+       whole slide across the ~195px the exit occupies. One flick of a
+       trackpad and pair 1 was simply back. The arrival going down took 0.66s
+       on a clock; going up it took as long as the flick did. That asymmetry
+       is what read as "too fast".
+
+       Driven the same declarative way as the entries, so it plays forward
+       below the boundary and reverses above it, at the same pace either way.
+       The trigger point is unchanged, so the slot rhythm is exactly as it
+       was; only what happens once it fires is on a clock now. */
     slides.forEach(function (slide, i) {
       if (i === N - 1) return;
-      tl.to(slide, { opacity: 0, y: -OUT_Y, ease: "none", duration: OUT_D }, exitAt(i));
+      exits[i] = gsap.timeline({ paused: true, onComplete: syncClasses,
+                                 onReverseComplete: syncClasses })
+        .to(slide, { opacity: 0, y: -OUT_Y, ease: EXIT_EASE,
+                     duration: OUT_D * ENTRY_SCALE });
     });
 
     /* ---------- slide 1: HAZEN ----------
@@ -253,8 +280,8 @@
       var i = Math.min(N - 1, Math.floor(p / SLOT));
       var e = entries[i];
       if (e && (e.progress() < 1 || e.reversed())) return -1;   // still arriving
-      var into = p - slotStart(i);
-      if (i < N - 1 && into >= IN_D + HOLD_D) return -1;        // already leaving
+      var x = exits[i];
+      if (x && x.progress() > 0) return -1;                     // leaving, or coming back
       return i;
     }
 
@@ -274,12 +301,32 @@
         } else if (j > live) {
           // not reached yet, or the reader has scrolled back above it.
           if (e.progress() > 0 && !e.reversed()) e.reverse();
-        } else if (p - slotStart(j) >= IN_D + HOLD_D) {
+        } else if (p >= exitAt(j)) {
           // scrolled into this slide's exit before its entry finished: land it
           // rather than let it arrive and leave at the same time.
           if (e.progress() < 1) e.pause().progress(1);
         } else if (e.progress() < 1 || e.reversed()) {
           e.play();
+        }
+      }
+    }
+
+    /* The same shape for the exits. Only the live slide's exit is in motion:
+       everything behind it has gone, everything ahead has not started. */
+    function driveExits(p) {
+      var live = Math.min(N - 1, Math.floor(p / SLOT));
+      for (var j = 0; j < N - 1; j++) {
+        var x = exits[j];
+        if (!x) continue;
+
+        if (j < live) {
+          if (x.progress() < 1) x.pause().progress(1);
+        } else if (j > live) {
+          if (x.progress() > 0) x.pause().progress(0);
+        } else if (p >= exitAt(j)) {
+          if (x.progress() < 1 || x.reversed()) x.play();
+        } else if (x.progress() > 0 && !x.reversed()) {
+          x.reverse();
         }
       }
     }
@@ -299,6 +346,7 @@
     function onWorkUpdate(p) {
       lastP = p;
       driveEntries(p);
+      driveExits(p);
       syncClasses();
     }
 
@@ -328,11 +376,14 @@
        invalidate, or a resize would restart an arrival that had finished. */
     function reflowEntries() {
       for (var i = 0; i < N; i++) {
-        var e = entries[i];
-        if (!e) continue;
-        var at = e.progress();
-        e.invalidate();
-        e.progress(at);
+        var each = [entries[i], exits[i]];
+        for (var k = 0; k < 2; k++) {
+          var e = each[k];
+          if (!e) continue;
+          var at = e.progress();
+          e.invalidate();
+          e.progress(at);
+        }
       }
     }
     ScrollTrigger.addEventListener("refresh", reflowEntries);
@@ -342,6 +393,7 @@
       for (var i = 0; i < N; i++) {
         slides[i].classList.remove("is-live", "is-settled");
         if (entries[i]) entries[i].kill();
+        if (exits[i]) exits[i].kill();
       }
       window.V3.work = null;
     };
