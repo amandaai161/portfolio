@@ -170,8 +170,7 @@
        was; only what happens once it fires is on a clock now. */
     slides.forEach(function (slide, i) {
       if (i === N - 1) return;
-      exits[i] = gsap.timeline({ paused: true, onComplete: syncClasses,
-                                 onReverseComplete: syncClasses })
+      exits[i] = gsap.timeline({ paused: true })
         .to(slide, { opacity: 0, y: -OUT_Y, ease: EXIT_EASE,
                      duration: OUT_D * ENTRY_SCALE });
     });
@@ -182,8 +181,7 @@
        20%, then the text and pill arrive in reading order. */
     (function () {
       var S = ENTRY_SCALE;
-      entries[0] = gsap.timeline({ paused: true, onComplete: syncClasses,
-                                   onReverseComplete: syncClasses })
+      entries[0] = gsap.timeline({ paused: true })
         .to(".srule--top", { scaleX: 1, ease: ENTRY_EASE, duration: 0.030 * S }, 0.004 * S)
         .to(".srule--bottom", { scaleX: 1, ease: ENTRY_EASE, duration: 0.030 * S }, 0.004 * S)
         .to(".hazen__media", { scale: 1, opacity: 1, ease: ENTRY_EASE, duration: 0.042 * S }, 0.014 * S)
@@ -213,8 +211,7 @@
 
     Array.prototype.forEach.call(work.querySelectorAll(".wslide--pair"), function (slide, si) {
       var S = ENTRY_SCALE;
-      var entry = gsap.timeline({ paused: true, onComplete: syncClasses,
-                                  onReverseComplete: syncClasses });
+      var entry = gsap.timeline({ paused: true });
       entries[si + 1] = entry;
 
       Array.prototype.forEach.call(slide.querySelectorAll(".wcard"), function (card, ci) {
@@ -261,29 +258,7 @@
        end to end by js/headline.js, which reads the mapping published below
        and writes every one of its own properties itself. This file publishes
        WHEN things happen; it no longer says what the headline looks like. */
-    /* A slide is SETTLED once its entry timeline has finished and before its
-       exit starts. is-live is a wider window -- it opens the moment the slot
-       does, while the cards are still flying in -- and that is the right window
-       for owning the pointer but the wrong one for animating anything. Amanda:
-       "keep them frozen in frame 1 when in-transition (whether intro or outro).
-       The hover animation only occurs when the thumbnails are already in their
-       places."
-
-       Arrival is now a question about the entry timeline rather than about a
-       scroll position, which is the whole point of taking the entries off the
-       scrub: an entry is either running or finished, never parked at 96%.
-
-       The last slide has no exit tween; it holds until the pin releases. */
     var lastP = 0;
-
-    function settledIndex(p) {
-      var i = Math.min(N - 1, Math.floor(p / SLOT));
-      var e = entries[i];
-      if (e && (e.progress() < 1 || e.reversed())) return -1;   // still arriving
-      var x = exits[i];
-      if (x && x.progress() > 0) return -1;                     // leaving, or coming back
-      return i;
-    }
 
     /* Start, finish or unwind each entry to match where the scroll now is.
        Written as a statement about every slide rather than as a reaction to
@@ -331,15 +306,21 @@
       }
     }
 
-    /* Split from onWorkUpdate because the entries also call it: an entry that
-       finishes after the reader has stopped scrolling still has to publish
-       .is-settled, and no scroll event is coming to do it. */
+    /* Which slide owns the pointer. Derived from the scroll position alone, so
+       it is correct the moment onWorkUpdate runs and needs no help from the
+       entry and exit timelines.
+
+       There WAS a second, narrower class here -- .is-settled, true only between
+       the end of a slide's entry and the start of its exit -- so the thumbnail
+       hover could be held off during transitions. It is gone: it closed the
+       instant an exit began, while the card was still fully on screen, so
+       hovering a thumbnail and scrolling on snapped it back to frame 1 in plain
+       sight. js/thumb-video.js follows .is-live now, which closes only once the
+       slot is behind the scroll and the slide is off screen. */
     function syncClasses() {
       var live = Math.min(N - 1, Math.floor(lastP / SLOT));
-      var settled = settledIndex(lastP);
       for (var i = 0; i < N; i++) {
         slides[i].classList.toggle("is-live", i === live);
-        slides[i].classList.toggle("is-settled", i === settled);
       }
     }
 
@@ -391,7 +372,7 @@
     return function () {
       ScrollTrigger.removeEventListener("refresh", reflowEntries);
       for (var i = 0; i < N; i++) {
-        slides[i].classList.remove("is-live", "is-settled");
+        slides[i].classList.remove("is-live");
         if (entries[i]) entries[i].kill();
         if (exits[i]) exits[i].kill();
       }

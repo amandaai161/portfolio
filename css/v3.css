@@ -752,7 +752,11 @@ html.motion .headhold { height: 40vh; }
 .hazen__pill { margin: 0; }
 
 .hazen__media {
-  aspect-ratio: 16 / 9;
+  /* Amanda's clip is 850x532 native, and 850 is the cap she asked for -- so
+     the box is exactly the clip, never an upscale and never a crop. Not the
+     8:5 the pairs use: this one has a ratio of its own. */
+  aspect-ratio: 850 / 532;
+  max-width: 850px;
   background: #bfbfbf;
   overflow: hidden;
   transform-origin: center center;
@@ -801,21 +805,25 @@ html.motion .headhold { height: 40vh; }
 }
 .wcard__media img,
 .wcard__video,
-.wcard__canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hazen__video,
+.thumb-canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* How long one hover pass takes, end to end, forward or back. A duration
    rather than a rate: it holds even if the clips are re-exported at a
    different length or frame count. Read per element by js/thumb-video.js. */
-.wcard__video { --thumb-duration: 0.4s; }
+.wcard__video,
+.hazen__video { --thumb-duration: 0.4s; }
 
 /* The canvas is stacked on the video rather than replacing it, so the handover
    at the end of the capture pass cannot flash a gap. Until .is-canvas it is not
    painted at all; after it, it is the picture and the video is only a decoder.
    js/thumb-video.js creates the element -- there is none in the markup, so a
-   page with no JS keeps the poster and nothing here applies. */
-.wcard__media { position: relative; }
-.wcard__canvas { position: absolute; inset: 0; opacity: 0; }
-.wcard__media.is-canvas .wcard__canvas { opacity: 1; }
+   page with no JS keeps the poster and nothing here applies. One shared class
+   rather than a __canvas per block: the element is the same object on both. */
+.wcard__media,
+.hazen__media { position: relative; }
+.thumb-canvas { position: absolute; inset: 0; opacity: 0; }
+.is-canvas > .thumb-canvas { opacity: 1; }
 
 .wcard__meta { display: flex; flex-direction: column; gap: var(--swork-meta-gap); align-items: flex-start; }
 .wcard__title { font-weight: var(--fw-regular); }

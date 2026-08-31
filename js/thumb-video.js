@@ -12,13 +12,14 @@
    clips' own 0.7s is left alone; re-exporting them shorter needs no change
    here, which is the point of specifying a duration rather than a rate.
 
-   NOTHING ANIMATES DURING A TRANSITION. js/scenes-work.js marks the window
-   between the end of a slide's entry and the start of its exit with
-   .is-settled, and a hover outside that window is recorded but not acted on.
-   Amanda: "keep them frozen in frame 1 when in-transition (whether intro or
-   outro). The hover animation only occurs when the thumbnails are already in
-   their places." .is-live is the wrong signal for this -- it opens the moment
-   the slot does, while the cards are still flying in.
+   A HOVER IS HONOURED WHENEVER THE CARD IS HIT-TESTABLE, transition or not.
+   It was gated on the slide being at rest for a while, which cost more than it
+   bought: hovering a card and then scrolling on snapped the thumbnail back to
+   frame 1 with no animation, right while the reader was looking at it. Amanda:
+   "it's better to revert back the interaction where the thumbnail can be
+   hovered (and animating) while in-transition." So the only reset left fires
+   when a slide stops being the LIVE one, by which point it has finished its
+   exit and is not on screen for the snap to be seen.
 
    A <video> cannot play backwards, and it turns out it cannot be scrubbed
    backwards either. Measured, on these files:
@@ -56,7 +57,9 @@
 (function () {
   "use strict";
 
-  var videos = document.querySelectorAll(".wcard__video");
+  /* Both blocks. The pairs are .wcard, HAZEN is .hazen; each is an <a> with a
+     __media box holding the clip, which is all this file needs of either. */
+  var videos = document.querySelectorAll(".wcard__video, .hazen__video");
   if (!videos.length) return;
 
   var reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -77,7 +80,7 @@
   function Thumb(card, video) {
     var box = video.parentNode;
     var canvas = document.createElement("canvas");
-    canvas.className = "wcard__canvas";
+    canvas.className = "thumb-canvas";
     canvas.setAttribute("aria-hidden", "true");
     box.appendChild(canvas);
 
@@ -175,10 +178,26 @@
       /* From here the canvas owns the picture in both directions: the <video>
          is at its end and, with seeking unavailable, can never go back. */
       if (state === "ready") {
-        box.classList.add("is-canvas");
+        /* THE FIRST-HOVER GLITCH. The <video> is what plays on the capture
+           pass, and `pos` -- the canvas's own playhead -- is not moved by it.
+           So when the canvas took over at the end of that pass it was still
+           reading 0: it painted frame 1 and then played the whole thing again
+           from the start, on top of an animation the reader had just watched.
+           Amanda: "the animation restarted directly before even finished the
+           on going animation... only occurs on very first hover."
+
+           Adopt where the video actually got to. Not when leave() has already
+           handed over mid-pass, though -- it set `pos` to the frame it broke
+           away at and started rewinding from there, and the video has run on to
+           its end behind the canvas since. Taking the video's position then
+           would throw the picture forward to the last frame mid-rewind. */
+        if (!box.classList.contains("is-canvas")) {
+          pos = Math.max(0, count - 1);
+          box.classList.add("is-canvas");
+        }
         paint();
-        if (over && settled()) run(1);
-        else if (pos > 0) { pos = 0; paint(); }
+        if (over) run(1);
+        else if (pos > 0) run(-1);
       }
     }
 
@@ -301,20 +320,15 @@
     }
 
     /* -------------------------------------------------------- interaction */
-    /* Only animate while the card is at rest in its slot. js/scenes-work.js
-       marks that with .is-settled on the slide -- a narrower window than
-       .is-live, which opens while the cards are still flying in. Outside the
-       pinned scene (no motion, or below its breakpoint) the thumbnail is in
-       normal flow and is therefore always in place. */
-    function settled() {
+    function isLive() {
       if (!(window.V3 && window.V3.work)) return true;
       var slide = card.closest ? card.closest(".wslide") : null;
-      return !slide || slide.classList.contains("is-settled");
+      return !slide || slide.classList.contains("is-live");
     }
 
     function enter() {
       over = true;
-      if (reduced.matches || !settled()) return;
+      if (reduced.matches) return;
 
       if (state === "ready") { run(1); return; }
       if (state === "capturing") {
@@ -367,11 +381,11 @@
       warm: warm,
       enter: enter,
       leave: leave,
-      /* Called when the slide leaves its settled window -- it starts its exit,
-         or the reader scrolls back and it starts its entry again. Freeze on
-         frame 1 and stay there for the whole transition. `over` is deliberately
-         NOT cleared: the pointer may still be on the card, and if the slide
-         settles again it should pick the animation back up. */
+      /* Called when the slide stops being the live one -- its slot is behind or
+         ahead of the scroll now, so it has finished its exit and is off screen.
+         Park on frame 1 so it does not come back mid-animation later. `over` is
+         deliberately NOT cleared: the pointer may still be on the card, and if
+         the slide comes round again it should pick the animation back up. */
       freeze: function () {
         stop();
         if (state === "ready") { pos = 0; paint(); }
@@ -385,18 +399,18 @@
           paint();
         }
       },
-      /* The slide came to rest. If the pointer sat on the card through the
-         transition, pointerenter will not fire again -- start it here. Goes
-         through enter() rather than straight to run(1) because the hover that
-         was blocked mid-transition may have been the FIRST one, in which case
-         there is no cache yet and this is where the capture has to begin. */
+      /* The slide is live again. If the pointer sat on the card the whole time,
+         pointerenter will not fire again -- start it here. Goes through enter()
+         rather than straight to run(1) because this may be the first hover the
+         card has had, in which case there is no cache yet and the capture has
+         to begin. */
       resettle: function () {
         if (over) enter();
       },
       get debug() {
         return { src: video.src.split("/").pop(), state: state, frames: count,
                  secs: secondsOf(video), pos: Math.round(pos * 100) / 100,
-                 dir: dir, over: over, settled: settled(),
+                 dir: dir, over: over, live: isLive(),
                  capture: capW + "x" + capH, warmed: warmed,
                  canvas: box.classList.contains("is-canvas") };
       }
@@ -406,7 +420,7 @@
   var thumbs = [];
 
   Array.prototype.forEach.call(videos, function (video) {
-    var card = video.closest ? video.closest(".wcard") : null;
+    var card = video.closest ? video.closest("a") : null;
     if (!card) return;
     var t = Thumb(card, video);
     thumbs.push(t);
@@ -446,27 +460,26 @@
   else if (hoverable.addListener) hoverable.addListener(maybeWarm);
 
   /* ---- the pinned stage --------------------------------------------------
-     Hover alone is not enough to know when a thumbnail may animate. Two gaps:
+     One gap hover alone does not cover: a slide can stop being live under a
+     stationary pointer, and the browser does not reliably fire pointerleave for
+     that -- so a clip could sit parked mid-animation and come back that way the
+     next time its slide came round.
 
-     - A slide is hit-testable (.is-live) from the moment its slot opens, while
-       its cards are still flying in, so a pointer already sitting where a card
-       is about to land would start the animation mid-flight.
-     - A slide can stop being live under a stationary pointer, and the browser
-       does not reliably fire pointerleave for that.
-
-     js/scenes-work.js publishes .is-settled for exactly the window between the
-     end of a slide's entry and the start of its exit. Follow it: freeze on
-     frame 1 for every transition, and pick back up if the card settles again
-     with the pointer still on it. */
-  var slides = document.querySelectorAll(".wslide--pair");
+     .is-live is the right signal, and the only one used here now. It closes
+     when the scroll leaves the slot, by which point the slide has finished its
+     exit and is off screen, so parking it on frame 1 is invisible. (The
+     narrower .is-settled was tried and reverted: it closes the moment an exit
+     STARTS, while the card is still fully visible, which is exactly the
+     no-animation snap Amanda reported.) */
+  var slides = document.querySelectorAll(".wslide");
   if (slides.length && window.MutationObserver) {
     var mo = new MutationObserver(function (records) {
       for (var i = 0; i < records.length; i++) {
         var slide = records[i].target;
-        var isSettled = slide.classList.contains("is-settled");
+        var live = slide.classList.contains("is-live");
         for (var j = 0; j < thumbs.length; j++) {
           if (!slide.contains(thumbs[j].card)) continue;
-          if (isSettled) thumbs[j].resettle();
+          if (live) thumbs[j].resettle();
           else thumbs[j].freeze();
         }
       }

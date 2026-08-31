@@ -2,8 +2,7 @@
 """
 Extract frame 1 of each project thumbnail webm to a .webp poster.
 
-WHY THIS EXISTS. The four selected-project thumbnails on the homepage are webm
-clips that rest on their first frame and animate on hover. Without a poster the
+WHY THIS EXISTS. The five project thumbnails on the homepage are webm clips that rest on their first frame and animate on hover. Without a poster the
 browser has to download the whole clip -- about 1.9MB across the four -- before
 it can show anything at all, and a phone, which has no hover and will never play
 them, would pay that in full. The poster is what a phone loads instead.
@@ -25,7 +24,7 @@ import http.server, json, pathlib, socketserver, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 IMAGES = ROOT / "images"
-NAMES = ["identity", "aspire", "kayn", "nobi"]
+NAMES = ["identity", "aspire", "kayn", "nobi", "hazen"]
 QUALITY = 0.92
 
 PAGE = """<!doctype html><meta charset="utf-8"><title>poster frames</title>
