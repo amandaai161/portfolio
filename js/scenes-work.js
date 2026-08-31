@@ -68,8 +68,49 @@
     var OUT_D = 0.055;
     var OUT_Y = 90;          // px each slide travels upward as it leaves
 
+    /* ---------- entries run on their own clock ----------
+       Amanda: "when it's like 1 or 2 frames near the is-settled I can't really
+       spot whether the thumbnails already done transitioning or still
+       in-transition... The transition should keep playing automatically until
+       they reach is-settled. So not every single frames of this section
+       controlled by scroll-driven."
+
+       A scrubbed entry can be parked anywhere, and its last frames are the
+       ones nobody can see: at 96% the cards look landed but .is-settled is
+       false, so hovering does nothing and there is no way to tell why. Reading
+       until the content arrives and then STOPPING is exactly what a reader
+       does, so that is where they got stuck.
+
+       So the entries -- and only the entries, on the HAZEN slide and the two
+       pairs -- came out of the scrubbed timeline. Crossing into a slot starts
+       one; it then plays to the end on its own, whether or not scrolling
+       continues. There is no partial arrival to be stranded in any more.
+
+       The HOLD and the EXIT are still scrubbed. Scrolling is what carries a
+       slide away, and an exit that auto-played would mean a pixel past the
+       hold committing the whole slide to leave.
+
+       ENTRY_SCALE converts the positions and durations below from the
+       timeline's 0..1 units to seconds. It is 10 because that is what makes
+       the entries take roughly as long as they used to at an ordinary scroll
+       speed -- ~300px of scrubbing, per the note above. Every beat keeps its
+       old proportions, so the choreography Amanda tuned is unchanged; only
+       the clock driving it is different.
+
+       ENTRY_EASE is the one real judgment call here, and it is a change. The
+       old tweens are all `ease: "none"` because a scrubbed tween borrows its
+       easing from the reader's own scroll. On their own clock they have no
+       such input, and linear reads mechanical. Set it back to "none" to have
+       the literal original. */
+    var ENTRY_SCALE = 10;
+    var ENTRY_EASE = "power2.out";
+
     function slotStart(i) { return i * SLOT; }
     function exitAt(i) { return i * SLOT + IN_D + HOLD_D; }
+
+    /* One paused timeline per slide, or null for a slide with no entry of its
+       own (the headline slide). Filled in below. */
+    var entries = new Array(N);
 
     var tl = gsap.timeline({
       scrollTrigger: {
@@ -113,13 +154,15 @@
        now") — the rules wipe in from opposite edges, the thumbnail grows from
        20%, then the text and pill arrive in reading order. */
     (function () {
-      var t = slotStart(0);
-      tl.to(".srule--top", { scaleX: 1, ease: "none", duration: 0.030 }, t + 0.004)
-        .to(".srule--bottom", { scaleX: 1, ease: "none", duration: 0.030 }, t + 0.004)
-        .to(".hazen__media", { scale: 1, opacity: 1, ease: "none", duration: 0.042 }, t + 0.014)
-        .to(".hazen__title", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.040)
-        .to(".hazen__pill", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.048)
-        .to(".hazen__desc", { opacity: 1, ease: "none", duration: 0.020 }, t + 0.055);
+      var S = ENTRY_SCALE;
+      entries[0] = gsap.timeline({ paused: true, onComplete: syncClasses,
+                                   onReverseComplete: syncClasses })
+        .to(".srule--top", { scaleX: 1, ease: ENTRY_EASE, duration: 0.030 * S }, 0.004 * S)
+        .to(".srule--bottom", { scaleX: 1, ease: ENTRY_EASE, duration: 0.030 * S }, 0.004 * S)
+        .to(".hazen__media", { scale: 1, opacity: 1, ease: ENTRY_EASE, duration: 0.042 * S }, 0.014 * S)
+        .to(".hazen__title", { opacity: 1, ease: ENTRY_EASE, duration: 0.020 * S }, 0.040 * S)
+        .to(".hazen__pill", { opacity: 1, ease: ENTRY_EASE, duration: 0.020 * S }, 0.048 * S)
+        .to(".hazen__desc", { opacity: 1, ease: ENTRY_EASE, duration: 0.020 * S }, 0.055 * S);
     })();
 
     /* ---------- slides 2 and 3: the paired projects ----------
@@ -142,7 +185,10 @@
     var CARD_TRAVEL = 0.65;
 
     Array.prototype.forEach.call(work.querySelectorAll(".wslide--pair"), function (slide, si) {
-      var t = slotStart(si + 1);
+      var S = ENTRY_SCALE;
+      var entry = gsap.timeline({ paused: true, onComplete: syncClasses,
+                                  onReverseComplete: syncClasses });
+      entries[si + 1] = entry;
 
       Array.prototype.forEach.call(slide.querySelectorAll(".wcard"), function (card, ci) {
         var media = card.querySelector(".wcard__media");
@@ -157,9 +203,9 @@
         // They already arrive from opposite corners, which is all the
         // difference the pair needs.
         var lead = 0;
-        var mediaEnd = t + lead + 0.048;
+        var mediaEnd = (lead + 0.048) * S;
 
-        tl.fromTo(media, {
+        entry.fromTo(media, {
           x: function () { return dir * CARD_TRAVEL * media.offsetWidth; },
           y: function () { return dir * CARD_TRAVEL * media.offsetHeight; },
           scale: 1.38,
@@ -167,11 +213,11 @@
           filter: "blur(18px)"
         }, {
           x: 0, y: 0, scale: 1, opacity: 1, filter: "blur(0px)",
-          ease: "none", duration: 0.048
-        }, t + lead);
+          ease: ENTRY_EASE, duration: 0.048 * S
+        }, lead * S);
 
         if (meta) {
-          tl.to(meta, { opacity: 1, ease: "none", duration: 0.018 }, mediaEnd);
+          entry.to(meta, { opacity: 1, ease: ENTRY_EASE, duration: 0.018 * S }, mediaEnd);
         }
       });
     });
@@ -188,30 +234,72 @@
        end to end by js/headline.js, which reads the mapping published below
        and writes every one of its own properties itself. This file publishes
        WHEN things happen; it no longer says what the headline looks like. */
-    /* A slide is SETTLED only during its hold: after its entry has finished and
-       before its exit starts. is-live is a wider window -- it opens the moment
-       the slot does, while the cards are still flying in -- and that is the
-       right window for owning the pointer but the wrong one for animating
-       anything. Amanda: "keep them frozen in frame 1 when in-transition
-       (whether intro or outro). The hover animation only occurs when the
-       thumbnails are already in their places."
+    /* A slide is SETTLED once its entry timeline has finished and before its
+       exit starts. is-live is a wider window -- it opens the moment the slot
+       does, while the cards are still flying in -- and that is the right window
+       for owning the pointer but the wrong one for animating anything. Amanda:
+       "keep them frozen in frame 1 when in-transition (whether intro or outro).
+       The hover animation only occurs when the thumbnails are already in their
+       places."
+
+       Arrival is now a question about the entry timeline rather than about a
+       scroll position, which is the whole point of taking the entries off the
+       scrub: an entry is either running or finished, never parked at 96%.
 
        The last slide has no exit tween; it holds until the pin releases. */
+    var lastP = 0;
+
     function settledIndex(p) {
       var i = Math.min(N - 1, Math.floor(p / SLOT));
+      var e = entries[i];
+      if (e && (e.progress() < 1 || e.reversed())) return -1;   // still arriving
       var into = p - slotStart(i);
-      if (into < IN_D) return -1;                          // still arriving
-      if (i < N - 1 && into >= IN_D + HOLD_D) return -1;   // already leaving
+      if (i < N - 1 && into >= IN_D + HOLD_D) return -1;        // already leaving
       return i;
     }
 
-    function onWorkUpdate(p) {
+    /* Start, finish or unwind each entry to match where the scroll now is.
+       Written as a statement about every slide rather than as a reaction to
+       crossing a boundary, so it lands in the right place however far and
+       however fast the reader jumped. */
+    function driveEntries(p) {
       var live = Math.min(N - 1, Math.floor(p / SLOT));
-      var settled = settledIndex(p);
+      for (var j = 0; j < N; j++) {
+        var e = entries[j];
+        if (!e) continue;
+
+        if (j < live) {
+          // passed. It is leaving or gone; do not animate it in behind that.
+          if (e.progress() < 1) e.pause().progress(1);
+        } else if (j > live) {
+          // not reached yet, or the reader has scrolled back above it.
+          if (e.progress() > 0 && !e.reversed()) e.reverse();
+        } else if (p - slotStart(j) >= IN_D + HOLD_D) {
+          // scrolled into this slide's exit before its entry finished: land it
+          // rather than let it arrive and leave at the same time.
+          if (e.progress() < 1) e.pause().progress(1);
+        } else if (e.progress() < 1 || e.reversed()) {
+          e.play();
+        }
+      }
+    }
+
+    /* Split from onWorkUpdate because the entries also call it: an entry that
+       finishes after the reader has stopped scrolling still has to publish
+       .is-settled, and no scroll event is coming to do it. */
+    function syncClasses() {
+      var live = Math.min(N - 1, Math.floor(lastP / SLOT));
+      var settled = settledIndex(lastP);
       for (var i = 0; i < N; i++) {
         slides[i].classList.toggle("is-live", i === live);
         slides[i].classList.toggle("is-settled", i === settled);
       }
+    }
+
+    function onWorkUpdate(p) {
+      lastP = p;
+      driveEntries(p);
+      syncClasses();
     }
 
     /* Published for js/headline.js: where a position on this timeline falls
@@ -233,8 +321,28 @@
     // narrow viewport would otherwise inherit a stale one from the wide layout.
     // Dropping V3.work is what tells js/headline.js there is no pinned slide
     // sequence any more, so it re-anchors its own beats on the next refresh.
+    /* The pairs' travel is a function of each card's measured size, and only
+       tweens inside the scrubbed timeline get those re-evaluated by
+       invalidateOnRefresh. The entries are outside it now, so they need the
+       same treatment by hand -- holding each one's position across the
+       invalidate, or a resize would restart an arrival that had finished. */
+    function reflowEntries() {
+      for (var i = 0; i < N; i++) {
+        var e = entries[i];
+        if (!e) continue;
+        var at = e.progress();
+        e.invalidate();
+        e.progress(at);
+      }
+    }
+    ScrollTrigger.addEventListener("refresh", reflowEntries);
+
     return function () {
-      for (var i = 0; i < N; i++) slides[i].classList.remove("is-live", "is-settled");
+      ScrollTrigger.removeEventListener("refresh", reflowEntries);
+      for (var i = 0; i < N; i++) {
+        slides[i].classList.remove("is-live", "is-settled");
+        if (entries[i]) entries[i].kill();
+      }
       window.V3.work = null;
     };
   });
