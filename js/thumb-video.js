@@ -1,10 +1,24 @@
 /* ============================================================================
    SELECTED-WORK THUMBNAILS — rest, play, rewind
    ----------------------------------------------------------------------------
-   The four selected projects are 800x500 webm clips. Each rests on its first
-   frame, plays forward while its card is hovered, stops on its last frame, and
-   plays BACKWARDS from wherever it got to when the pointer leaves. Amanda:
-   "just like what I did on Aspire's feature section icons."
+   The four selected projects are 800x500 webm clips, 21 frames at 30fps. Each
+   rests on its first frame, plays forward while its card is hovered, stops on
+   its last frame, and plays BACKWARDS from wherever it got to when the pointer
+   leaves. Amanda: "just like what I did on Aspire's feature section icons."
+
+   A pass takes --thumb-duration, 0.4s, in both directions and by both routes:
+   the canvas travels the whole cache in that time, and the first pass -- which
+   is the <video> itself -- gets a playbackRate of duration/0.4 to match. The
+   clips' own 0.7s is left alone; re-exporting them shorter needs no change
+   here, which is the point of specifying a duration rather than a rate.
+
+   NOTHING ANIMATES DURING A TRANSITION. js/scenes-work.js marks the window
+   between the end of a slide's entry and the start of its exit with
+   .is-settled, and a hover outside that window is recorded but not acted on.
+   Amanda: "keep them frozen in frame 1 when in-transition (whether intro or
+   outro). The hover animation only occurs when the thumbnails are already in
+   their places." .is-live is the wrong signal for this -- it opens the moment
+   the slot does, while the cards are still flying in.
 
    A <video> cannot play backwards, and it turns out it cannot be scrubbed
    backwards either. Measured, on these files:
@@ -48,10 +62,16 @@
   var reduced = matchMedia("(prefers-reduced-motion: reduce)");
   var hoverable = matchMedia("(hover: hover) and (pointer: fine)");
 
-  /* Read per element so a single card can be slowed down from CSS alone. */
-  function rateOf(el) {
-    var v = parseFloat(getComputedStyle(el).getPropertyValue("--thumb-speed"));
-    return isNaN(v) || v <= 0 ? 1 : v;
+  /* How long one pass should take, end to end. A DURATION rather than a rate
+     multiplier because that is what Amanda specifies ("can you make them 0.4s")
+     and because it survives a re-export: change the clips' own length or frame
+     count and the hover still takes 0.4s without touching anything here.
+     Read per element, so one card could be given its own timing from CSS. */
+  function secondsOf(el) {
+    var raw = String(getComputedStyle(el).getPropertyValue("--thumb-duration")).trim();
+    var v = parseFloat(raw);
+    if (isNaN(v) || v <= 0) return 0.4;
+    return /ms$/.test(raw) ? v / 1000 : v;
   }
 
   function Thumb(card, video) {
@@ -66,7 +86,6 @@
     var times = [];           /* each frame's mediaTime, for the mid-play handover */
     var count = 0;            /* usable frames, counting from 0 */
     var drawn = -1;
-    var fps = 30;             /* replaced by the real figure once capture ends */
 
     var state = "cold";       /* cold | capturing | ready | failed */
     var attempts = 0;         /* capture passes tried; see finish() */
@@ -74,7 +93,7 @@
     var dir = 0;
     var last = 0;
     var raf = 0;
-    var hovered = false;
+    var over = false;         /* the pointer is physically on the card */
     var warmed = false;
 
     var off, octx, capW = 0, capH = 0;
@@ -152,16 +171,14 @@
       }
 
       state = frames.length ? "ready" : "failed";
-      fps = video.duration > 0 && frames.length
-        ? frames.length / video.duration
-        : 30;
       try { video.pause(); } catch (e) {}
       /* From here the canvas owns the picture in both directions: the <video>
          is at its end and, with seeking unavailable, can never go back. */
       if (state === "ready") {
         box.classList.add("is-canvas");
         paint();
-        if (hovered) run(1); else if (pos > 0) run(-1);
+        if (over && settled()) run(1);
+        else if (pos > 0) { pos = 0; paint(); }
       }
     }
 
@@ -237,7 +254,8 @@
       last = now;
 
       var end = (count || 1) - 1;
-      pos += dir * dt * fps * rateOf(video);
+      /* Travel the whole cache in --thumb-duration, whatever it holds. */
+      pos += dir * dt * (Math.max(1, end) / secondsOf(video));
 
       /* Clamp both ways, but only stop at the end being travelled towards: the
          first frame after a hover has dt 0, and a bare `pos <= 0` test would
@@ -283,9 +301,20 @@
     }
 
     /* -------------------------------------------------------- interaction */
+    /* Only animate while the card is at rest in its slot. js/scenes-work.js
+       marks that with .is-settled on the slide -- a narrower window than
+       .is-live, which opens while the cards are still flying in. Outside the
+       pinned scene (no motion, or below its breakpoint) the thumbnail is in
+       normal flow and is therefore always in place. */
+    function settled() {
+      if (!(window.V3 && window.V3.work)) return true;
+      var slide = card.closest ? card.closest(".wslide") : null;
+      return !slide || slide.classList.contains("is-settled");
+    }
+
     function enter() {
-      hovered = true;
-      if (reduced.matches) return;
+      over = true;
+      if (reduced.matches || !settled()) return;
 
       if (state === "ready") { run(1); return; }
       if (state === "capturing") {
@@ -297,12 +326,17 @@
       }
       if (state === "failed") return;
 
-      try { video.playbackRate = rateOf(video); } catch (e) {}
+      /* The first pass is the <video> itself, so it is the playbackRate that
+         has to hit the target rather than the canvas clock. */
+      try {
+        var d = video.duration;
+        video.playbackRate = d > 0 ? Math.min(8, d / secondsOf(video)) : 1;
+      } catch (e) {}
       var pl = video.play();
       if (pl && pl.then) {
         pl.then(function () {
           capture();
-          if (!hovered) leave();      /* the pointer can leave while play() is pending */
+          if (!over) leave();         /* the pointer can leave while play() is pending */
         }, function () { state = "failed"; });
       } else {
         capture();
@@ -310,7 +344,7 @@
     }
 
     function leave() {
-      hovered = false;
+      over = false;
       if (reduced.matches) return;
 
       if (state === "ready") { run(-1); return; }
@@ -333,18 +367,37 @@
       warm: warm,
       enter: enter,
       leave: leave,
-      /* A slide can stop being the live one under a stationary pointer, and the
-         browser does not reliably fire pointerleave for that. Without this the
-         clip would be parked mid-animation the next time it came round. */
-      reset: function () {
-        hovered = false;
+      /* Called when the slide leaves its settled window -- it starts its exit,
+         or the reader scrolls back and it starts its entry again. Freeze on
+         frame 1 and stay there for the whole transition. `over` is deliberately
+         NOT cleared: the pointer may still be on the card, and if the slide
+         settles again it should pick the animation back up. */
+      freeze: function () {
         stop();
         if (state === "ready") { pos = 0; paint(); }
+        else if (state === "capturing" && count) {
+          /* Interrupted on the first pass, where the <video> is still what is
+             on screen and cannot be wound back -- there is no seeking on these
+             files. Hand over to the canvas on frame 1 and let the capture run
+             on behind it. */
+          pos = 0;
+          box.classList.add("is-canvas");
+          paint();
+        }
+      },
+      /* The slide came to rest. If the pointer sat on the card through the
+         transition, pointerenter will not fire again -- start it here. Goes
+         through enter() rather than straight to run(1) because the hover that
+         was blocked mid-transition may have been the FIRST one, in which case
+         there is no cache yet and this is where the capture has to begin. */
+      resettle: function () {
+        if (over) enter();
       },
       get debug() {
         return { src: video.src.split("/").pop(), state: state, frames: count,
-                 fps: Math.round(fps * 10) / 10, pos: Math.round(pos * 100) / 100,
-                 dir: dir, capture: capW + "x" + capH, warmed: warmed,
+                 secs: secondsOf(video), pos: Math.round(pos * 100) / 100,
+                 dir: dir, over: over, settled: settled(),
+                 capture: capW + "x" + capH, warmed: warmed,
                  canvas: box.classList.contains("is-canvas") };
       }
     };
@@ -393,17 +446,28 @@
   else if (hoverable.addListener) hoverable.addListener(maybeWarm);
 
   /* ---- the pinned stage --------------------------------------------------
-     css/v3.css gives every stacked slide pointer-events:none and
-     js/scenes-work.js re-enables the live one, so hover only ever reaches the
-     slide on screen. Watch that same class to catch the case above. */
+     Hover alone is not enough to know when a thumbnail may animate. Two gaps:
+
+     - A slide is hit-testable (.is-live) from the moment its slot opens, while
+       its cards are still flying in, so a pointer already sitting where a card
+       is about to land would start the animation mid-flight.
+     - A slide can stop being live under a stationary pointer, and the browser
+       does not reliably fire pointerleave for that.
+
+     js/scenes-work.js publishes .is-settled for exactly the window between the
+     end of a slide's entry and the start of its exit. Follow it: freeze on
+     frame 1 for every transition, and pick back up if the card settles again
+     with the pointer still on it. */
   var slides = document.querySelectorAll(".wslide--pair");
   if (slides.length && window.MutationObserver) {
     var mo = new MutationObserver(function (records) {
       for (var i = 0; i < records.length; i++) {
         var slide = records[i].target;
-        if (slide.classList.contains("is-live")) continue;
+        var isSettled = slide.classList.contains("is-settled");
         for (var j = 0; j < thumbs.length; j++) {
-          if (slide.contains(thumbs[j].card)) thumbs[j].reset();
+          if (!slide.contains(thumbs[j].card)) continue;
+          if (isSettled) thumbs[j].resettle();
+          else thumbs[j].freeze();
         }
       }
     });

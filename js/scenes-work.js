@@ -188,9 +188,30 @@
        end to end by js/headline.js, which reads the mapping published below
        and writes every one of its own properties itself. This file publishes
        WHEN things happen; it no longer says what the headline looks like. */
+    /* A slide is SETTLED only during its hold: after its entry has finished and
+       before its exit starts. is-live is a wider window -- it opens the moment
+       the slot does, while the cards are still flying in -- and that is the
+       right window for owning the pointer but the wrong one for animating
+       anything. Amanda: "keep them frozen in frame 1 when in-transition
+       (whether intro or outro). The hover animation only occurs when the
+       thumbnails are already in their places."
+
+       The last slide has no exit tween; it holds until the pin releases. */
+    function settledIndex(p) {
+      var i = Math.min(N - 1, Math.floor(p / SLOT));
+      var into = p - slotStart(i);
+      if (into < IN_D) return -1;                          // still arriving
+      if (i < N - 1 && into >= IN_D + HOLD_D) return -1;   // already leaving
+      return i;
+    }
+
     function onWorkUpdate(p) {
       var live = Math.min(N - 1, Math.floor(p / SLOT));
-      for (var i = 0; i < N; i++) slides[i].classList.toggle("is-live", i === live);
+      var settled = settledIndex(p);
+      for (var i = 0; i < N; i++) {
+        slides[i].classList.toggle("is-live", i === live);
+        slides[i].classList.toggle("is-settled", i === settled);
+      }
     }
 
     /* Published for js/headline.js: where a position on this timeline falls
@@ -213,7 +234,7 @@
     // Dropping V3.work is what tells js/headline.js there is no pinned slide
     // sequence any more, so it re-anchors its own beats on the next refresh.
     return function () {
-      for (var i = 0; i < N; i++) slides[i].classList.remove("is-live");
+      for (var i = 0; i < N; i++) slides[i].classList.remove("is-live", "is-settled");
       window.V3.work = null;
     };
   });

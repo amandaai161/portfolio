@@ -803,10 +803,10 @@ html.motion .headhold { height: 40vh; }
 .wcard__video,
 .wcard__canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-/* How fast the hover animation runs, forward and back, as a multiple of the
-   clip's own rate. Read per element by js/thumb-video.js, so a single card can
-   override it. */
-.wcard__video { --thumb-speed: 1; }
+/* How long one hover pass takes, end to end, forward or back. A duration
+   rather than a rate: it holds even if the clips are re-exported at a
+   different length or frame count. Read per element by js/thumb-video.js. */
+.wcard__video { --thumb-duration: 0.4s; }
 
 /* The canvas is stacked on the video rather than replacing it, so the handover
    at the end of the capture pass cannot flash a gap. Until .is-canvas it is not
