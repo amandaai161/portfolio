@@ -107,13 +107,17 @@
   padding: var(--pad);
 }
 .card-accent {
-  background: var(--acc);
+  /* Amanda: outline, not a grey fill. */
+  background: var(--white);
+  border: 1.5px solid var(--line-strong);
   color: var(--black);
   border-radius: var(--r);
   padding: var(--pad);
 }
 .card-accent-strong {
-  background: #D6DEDB;          /* "Current role" card — a touch darker than the light cards */
+  /* Was a darker sage than its neighbours; now the same outlined paper. */
+  background: var(--white);
+  border: 1.5px solid var(--line-strong);          /* "Current role" card — a touch darker than the light cards */
   color: var(--black);
   border-radius: var(--r);
   padding: var(--pad);
@@ -146,7 +150,7 @@
   min-height: 0;
 }
 .stat-card--dark { background: var(--black); color: var(--white); }
-.stat-card--accent { background: var(--acc); color: var(--black); }
+.stat-card--accent { background: var(--white); border: 1.5px solid var(--line-strong); color: var(--black); }
 .stat-card__num {
   font-weight: 500;
   font-size: clamp(42px, 4.7vw, 80px);   /* large — the cards now have room for it */
@@ -257,12 +261,13 @@
   color: var(--black);
 }
 .lang__bar {
+  /* Amanda: "can use black, + subtle grey bar background." */
   position: relative;
   display: block;
   height: clamp(24px, 2.2vw, 32px);
   border-radius: 0;                          /* squared off */
-  background: transparent;                   /* container = outlined rectangle */
-  border: 1.5px solid #C6D1CD;
+  background: var(--fill-soft);                   /* container = outlined rectangle */
+  border: 0;
   overflow: hidden;
 }
 .lang__bar::before {
@@ -270,7 +275,7 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: var(--lvl, 60%);
-  background: #C6D1CD;                        /* filled portion — solid, single colour */
+  background: var(--black);                        /* filled portion — solid, single colour */
   border-radius: 0;
 }
 .lang__bar span {
@@ -462,7 +467,7 @@
   text-overflow: ellipsis;
   transition: background 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease), filter 0.4s var(--ease);
 }
-.tl-seg--3 { background: #BCCCC6; }     /* Associate Design Manager — distinct accent */
+.tl-seg--3 { background: var(--fill-soft); }     /* Associate Design Manager — distinct accent */
 /* hover: uniform +25% black tint so all 3 bars shift by the same amount */
 .tl-bar--aspire:hover .tl-seg { filter: brightness(0.75); }
 /* selected: all three bars turn solid black */
@@ -586,8 +591,8 @@
   display: inline-flex;
   flex-direction: column;
   padding: 10px 18px;
-  background: #EAEEEC;
-  border: none;
+  background: var(--white);
+  border: 1.5px solid var(--line-strong);
   border-radius: 0;
 }
 .cred__abbr { font-weight: var(--fw-semibold); font-size: var(--fs-h6); line-height: var(--lh-snug); letter-spacing: var(--tracking-snug); }   /* type system: H6 */
@@ -614,8 +619,10 @@
    ============================================================ */
 /* whole chart sits in one solid, square, borderless container with generous padding */
 .tshape {
+  /* Amanda: white ground, black outline. */
   display: block;
-  background: #EAEEEC;
+  background: var(--white);
+  border: 1.5px solid var(--line-strong);
   padding: clamp(32px, 4.5vw, 72px);
 }
 .tshape__cap {             /* type system: Body Large · SemiBold · sentence case */
@@ -647,10 +654,11 @@
 }
 /* grouping panel behind the broad-knowledge fan (rows 4–6) — solid box, no outline/radius */
 .tshape__box {
+  /* The one grey allowed inside an outlined box. */
   grid-column: 1 / 8;
   grid-row: 4 / 7;
   margin: -14px;
-  background: #DDE4E2;
+  background: var(--fill-soft);
   border: none;
   border-radius: 0;
   z-index: 0;
@@ -696,7 +704,7 @@
   transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
 }
 /* hover = subtle accent wash (border stays black) */
-.sk:hover { background: var(--acc-soft); }
+.sk:hover { background: var(--fill-soft); }
 
 /* deep-mastery column — the stem of the T, in solid black */
 .sk--deep {
@@ -721,10 +729,12 @@
 .tools-layout .ab-sec-head { margin-bottom: 0; }
 
 .tools {
+  /* Amanda: white ground, black outline. */
   display: flex;
   flex-direction: column;
   gap: clamp(26px, 3vw, 46px);
-  background: #EAEEEC;
+  background: var(--white);
+  border: 1.5px solid var(--line-strong);
   padding: clamp(24px, 3vw, 48px);
 }
 /* breathing room below the toolkit, before the contact section */
@@ -789,7 +799,7 @@
 }
 .tool__icon.noimg .mono { display: block; }
 /* hover = subtle accent shift (no shadow / no lift) */
-.tool:hover .tool__icon { background: #DDE4E2; }
+.tool:hover .tool__icon { background: var(--fill-soft); }
 .tool__name {              /* type system: Body Normal */
   font-weight: var(--fw-regular);
   font-size: var(--fs-body);
@@ -1023,7 +1033,7 @@
     justify-content: flex-start;
     gap: 9px;
     width: 100%;
-    background: #EAEEEC;
+    background: var(--fill-soft);
     color: rgba(17, 17, 17, 0.62);
     font-weight: 500;
     font-size: var(--fs-body-sm);     /* type system: Body small */
@@ -1137,7 +1147,8 @@
 
   /* tiny T illustration — larger boxes, shorter overall height */
   .m-tshape__ill {
-    background: #EAEEEC;
+    background: var(--white);
+  border: 1.5px solid var(--line-strong);
     padding: clamp(12px, 3.5vw, 18px) clamp(16px, 5vw, 28px);
     display: flex;
     justify-content: center;

@@ -988,8 +988,8 @@ figure{margin:0}
 <!-- Portfolio chrome. This page used to inline it, because it shipped as one
      portable file. Inside v4 it is served from the same root as everything
      else, so it links the shared copies like the other four pages do. -->
-<link rel="stylesheet" href="/css/pf-header.css">
-<link rel="stylesheet" href="/css/pf-footer.css">
+<link rel="stylesheet" href="/css/master-header.css">
+<link rel="stylesheet" href="/css/master-footer.css">
 <link rel="stylesheet" href="/css/pf-cursor.css">
 </head>
 <body>
@@ -1013,10 +1013,10 @@ figure{margin:0}
 
 <!-- THE SITE HEADER — v3's own, replacing the page's hand-built top bar.
      Amanda: "Let's not use the hamburger nav button in this page, instead,
-     please use the usual header." Rules arrive via /css/pf-header.css,
-     scoped under .pf-header-host on the wrapper. #tbar keeps its id, so the
+     please use the usual header." Rules arrive via /css/master-header.css,
+     scoped under .master-header on the wrapper. #tbar keeps its id, so the
      page's own scroll-progress script drives v3's bar unchanged. -->
-<div class="pf-header-host">
+<div class="master-header">
   <header class="header" id="top">
       <div class="container header__inner">
         <a href="/" class="header__name">Amanda Idris</a>
@@ -2094,7 +2094,7 @@ figure{margin:0}
      process breakdown; there is no separate page to send anyone to. -->
 <!-- THE SITE FOOTER — v3's own .contact block, not a re-creation.
      Amanda: "Why not just use the existing one to keep the consistency."
-     The rules arrive via /css/pf-footer.css, scoped under .pf-footer-host so
+     The rules arrive via /css/master-footer.css, scoped under .master-footer so
      they cannot touch this page's own design. Two deliberate departures from
      the homepage's copy of this markup: Home points at "/" rather than "#top"
      (on a project page "#top" would scroll this page, not go home), and the
@@ -2103,11 +2103,11 @@ figure{margin:0}
      scroll-scene hooks and nothing here drives them.
 
      The scope class sits on a WRAPPER rather than on .contact itself: every
-     rule in pf-footer.css is scoped as a DESCENDANT of .pf-footer-host, and a
+     rule in master-footer.css is scoped as a DESCENDANT of .master-footer, and a
      descendant selector does not match the element carrying the class. Putting
      it on .contact would silently drop .contact's own background and padding. -->
 <!-- Amanda: "Add more gap between the last section and footer please." -->
-<div class="pf-footer-host" style="padding-top:clamp(60px,8vw,140px)">
+<div class="master-footer" style="padding-top:clamp(60px,8vw,140px)">
   <section class="contact" id="contact">
     <div class="container">
       <div class="contact__info">

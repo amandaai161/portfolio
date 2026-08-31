@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/pf-chrome.css">
-  <link rel="stylesheet" href="/css/pf-footer.css">
+  <link rel="stylesheet" href="/css/master-footer.css">
   <link rel="stylesheet" href="/css/pf-cursor.css">
 <link rel="stylesheet" href="/css/pf-outro.css">
 
@@ -435,7 +435,7 @@
 
       <!-- THE SITE FOOTER — v3's own .contact block, not a re-creation.
            Amanda: "Why not just use the existing one to keep the consistency."
-           The rules arrive via /css/pf-footer.css, scoped under .pf-footer-host so
+           The rules arrive via /css/master-footer.css, scoped under .master-footer so
            they cannot touch this page's own design. Two deliberate departures from
            the homepage's copy of this markup: Home points at "/" rather than "#top"
            (on a project page "#top" would scroll this page, not go home), and the
@@ -444,10 +444,10 @@
            scroll-scene hooks and nothing here drives them.
 
            The scope class sits on a WRAPPER rather than on .contact itself: every
-           rule in pf-footer.css is scoped as a DESCENDANT of .pf-footer-host, and a
+           rule in master-footer.css is scoped as a DESCENDANT of .master-footer, and a
            descendant selector does not match the element carrying the class. Putting
            it on .contact would silently drop .contact's own background and padding. -->
-      <div class="pf-footer-host">
+      <div class="master-footer">
         <section class="contact" id="contact">
           <div class="container">
             <div class="contact__info">

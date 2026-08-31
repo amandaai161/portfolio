@@ -1,6 +1,6 @@
 """Shared machinery for the scoped chrome stylesheets.
 
-pf-footer.css and pf-header.css both take rules out of v3's own stylesheets and
+master-footer.css and master-header.css both take rules out of v3's own stylesheets and
 re-emit them under a scope class, so they can load on pages that cannot take
 v3's global reset. Both need the same two things: a CSS walker that survives
 comments and nested at-rules, and a collector that finds EVERY rule touching a

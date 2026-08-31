@@ -18,6 +18,14 @@
   --ink: #111111;
   --muted: rgba(17, 17, 17, 0.55);
   --line: rgba(17, 17, 17, 0.18);
+
+  /* ---- structural neutrals ----
+     The site draws containers as a black outline on paper rather than as a grey
+     fill. --line-strong is that outline; --fill-soft is the only grey allowed
+     inside one, for a progress track, a filled bar or a nested panel. Two
+     values, so "subtle grey" means the same thing everywhere it appears. */
+  --line-strong: #111111;
+  --fill-soft: #ECECEC;
   --line-light: rgba(255, 255, 255, 0.35);
 
   --container-max: 1720px;
