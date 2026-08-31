@@ -63,7 +63,7 @@ body.is-dimming .dim { opacity: 1; transition-duration: 220ms; }   /* INTRO spee
   padding: 10px 22px; border-radius: 999px;
   background: var(--white-1); color: var(--black-1);
   font-size: var(--fs-body-lg); font-weight: 500; line-height: 1; white-space: nowrap;
-  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 30px -8px rgba(17, 17, 17, 0.28);
   pointer-events: none; opacity: 0; transition: opacity 0.18s var(--ease-out);
 }
 .cursor-label.is-visible { opacity: 1; }

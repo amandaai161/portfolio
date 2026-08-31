@@ -5,20 +5,40 @@
    ============================================================ */
 
 .cs-page {
-  /* scoped palette (from the Figma) */
-  --cs-ink: #181818;
-  --cs-muted: rgba(24, 24, 24, 0.58);
-  --cs-dark: #181818;
+  /* ---- the page's neutrals ARE the master ramp ----------------------------
+     These were a third palette layer: --cs-ink and --cs-dark were both #181818
+     rather than the brand black, and six near-identical off-whites (#eef1f0,
+     #f7fafc, #f6f6f6, #f4f4f2, #e4e4e4, #e9e9e7) all did the job --fill does
+     everywhere else on the site. Amanda: "please implement the new color
+     scheme to all of them."
+
+     The names stay, because sixty-odd rules read them and they say what the
+     thing is for. Only the values change, and every one now resolves to a
+     master token. A BRAND colour never appears here -- those live in
+     css/case-study-<project>.css and are untouched. */
+  --cs-ink: var(--black-1);      /* body ink, sidebar, headings              */
+  --cs-muted: var(--black-3);    /* secondary text                           */
+  --cs-dark: var(--black-1);     /* dark panels                              */
+  --cs-pill: var(--fill);        /* sidebar pills                            */
+  --cs-soft: var(--white-2);     /* faint panel ground, image placeholder    */
+  --cs-grey: var(--fill);        /* hover tint, icon backing                 */
+  --cs-track: var(--fill);       /* the "before" half of a comparison bar    */
+  --cs-line: var(--line);        /* hairline                                 */
+  --cs-ph: var(--fill);          /* image placeholder, where a project sheet
+                                    does not tint it with its own brand      */
+  /* The "after" half of a comparison bar, and the compare handle's focus
+     ring. It was #215dcc — a blue that belongs to no project, since it is the
+     same on all seven. Black reads as the resolved state against a --fill
+     "before", the same pairing the Hazen chart uses. */
+  --cs-blue: var(--black-1);
+
+  /* The problem marker, paired with --cs-solution in the project sheets. It
+     stays a literal: it is article content, and Amanda asked for the article's
+     own colours to be left alone. Every project sheet reads it. */
   --cs-orange: #f04b26;
-  --cs-blue: #215dcc;
-  --cs-blue-deep: #3b50d8;
-  --cs-pill: #eef1f0;
-  --cs-soft: #f7fafc;
-  --cs-grey: #f6f6f6;
-  --cs-before: #f4f4f2;
-  --cs-track: #e4e4e4;
-  --cs-line: rgba(24, 24, 24, 0.14);
-  --cs-ph: #e9e9e7;
+
+  /* Removed, both genuinely unused: --cs-before (#f4f4f2), --cs-blue-deep
+     (#3b50d8). */
 
   /* Visual direction: square corners. Pills (999px) and circles (50%) are
      intentional exceptions and are set explicitly at their call sites. */
@@ -57,7 +77,7 @@
   padding: 7px 15px 7px 12px;
   border: 1px solid var(--cs-line);
   border-radius: 999px;
-  background: #fff;
+  background: var(--white-1);
   color: var(--cs-ink);
   font: inherit;
   font-size: var(--fs-body-sm);
@@ -104,9 +124,9 @@
   .cs-shell.is-aside-hidden .cs-aside-toggle {
     background: var(--cs-ink);
     border-color: var(--cs-ink);
-    color: #fff;
+    color: var(--white-1);
   }
-  .cs-shell.is-aside-hidden .cs-aside-toggle:hover { background: #000; border-color: #000; }
+  .cs-shell.is-aside-hidden .cs-aside-toggle:hover { background: var(--black-1); border-color: var(--black-1); }
 }
 
 /* ---------- Reading-progress bar (sits at the bottom of the sticky nav) ---------- */
@@ -255,7 +275,7 @@
   width: 100%;
   border-radius: var(--cs-radius);
   background:
-    repeating-linear-gradient(135deg, rgba(24,24,24,0.018) 0 12px, rgba(24,24,24,0) 12px 24px),
+    repeating-linear-gradient(135deg, rgba(17, 17, 17, 0.018) 0 12px, rgba(17, 17, 17, 0) 12px 24px),
     var(--cs-ph);
   display: flex;
   align-items: center;
@@ -263,7 +283,7 @@
   overflow: hidden;
   border: 1px solid var(--cs-line);
 }
-.cs-ph--alt { --cs-ph: #f3f2ef; }
+.cs-ph--alt { --cs-ph: var(--white-2); }
 .cs-ph--hero { margin-bottom: 4px; }
 /* image-bearing frame: drop the hatch, let the real screenshot fill it */
 .cs-ph--img { background: var(--cs-soft); }
@@ -283,7 +303,7 @@
 .cs-ph--cap {
   aspect-ratio: auto;
   height: auto;
-  background: var(--cs-fill, #fff);
+  background: var(--cs-fill, var(--white-1));
   align-items: flex-start;
   container-type: inline-size;
 }
@@ -370,11 +390,11 @@
   padding: clamp(22px, 1.9vw, 32px);
   border-radius: var(--cs-radius);
   background: var(--cs-dark);
-  color: #fff;
+  color: var(--white-1);
   min-height: clamp(240px, 18vw, 315px);
 }
 .cs-obj__num {
-  color: #fff;
+  color: var(--white-1);
   margin-bottom: auto;
   align-self: flex-start;
   display: inline-flex;
@@ -385,7 +405,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.55);
   border-radius: 50%;
 }
-.cs-obj__title { color: #fff; }
+.cs-obj__title { color: var(--white-1); }
 .cs-obj__desc { color: rgba(255, 255, 255, 0.78); }
 
 /* ---------- Challenge list (icon + text) ---------- */
@@ -411,7 +431,7 @@
 
 /* ---------- Generic panels ---------- */
 .cs-panel { border-radius: var(--cs-radius-lg); padding: clamp(28px, 3vw, 48px); }
-.cs-panel--dark { background: var(--cs-dark); color: #fff; }
+.cs-panel--dark { background: var(--cs-dark); color: var(--white-1); }
 .cs-panel--soft { background: var(--cs-soft); }
 
 .cs-workload {
@@ -423,7 +443,7 @@
   padding: clamp(22px, 2.2vw, 32px);  /* reduced container padding */
 }
 .cs-workload__stat {
-  color: #fff;
+  color: var(--white-1);
   letter-spacing: -0.03em;
   line-height: 1.14;
   font-weight: var(--fw-medium);
@@ -487,11 +507,11 @@
   padding: clamp(18px, 1.6vw, 26px);
   border: 1.5px solid var(--cs-ink);
   border-radius: var(--cs-radius);
-  background: #fff;
+  background: var(--white-1);
 }
 .cs-flow__desc { color: var(--cs-muted); flex: 1; }
 /* tool name on the left, logo pinned to the right corner */
-.cs-flow__tool { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #000; margin-top: clamp(22px, 2.4vw, 34px); }
+.cs-flow__tool { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--black-1); margin-top: clamp(22px, 2.4vw, 34px); }
 .cs-flow__logo { width: 1.15em; height: 1.15em; object-fit: contain; flex: none; }
 .cs-flow__arrow {
   display: flex;
@@ -537,7 +557,7 @@
   height: clamp(52px, 4vw, 64px);
   border-radius: 50%;
   border: 1.5px solid var(--cs-ink);
-  background: #fff;
+  background: var(--white-1);
 }
 .cs-step p { padding-top: 0.5em; max-width: 70ch; }
 
@@ -579,7 +599,7 @@
 .cs-acc {
   border: 1px solid var(--cs-line);
   border-radius: var(--cs-radius);
-  background: #fff;
+  background: var(--white-1);
   overflow: hidden;
 }
 .cs-acc__head {
@@ -596,7 +616,7 @@
 .cs-acc__titles { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .cs-acc__sub { color: var(--cs-muted); }
 /* delivery icon (left side, #146AD1, aligned with the title line) */
-.cs-acc__icon { flex: none; color: #146ad1; display: inline-flex; align-self: flex-start; margin-top: 3px; }
+.cs-acc__icon { flex: none; color: var(--black-1); display: inline-flex; align-self: flex-start; margin-top: 3px; }
 .cs-acc__icon svg { width: 30px; height: 30px; }
 /* refined circular chevron toggle */
 .cs-acc__chev {
@@ -610,9 +630,9 @@
 }
 .cs-acc__chev svg { width: 15px; height: 15px; }
 .cs-acc__head:hover .cs-acc__chev { border-color: var(--cs-ink); }
-.cs-acc[open] .cs-acc__chev { transform: rotate(180deg); background: var(--cs-ink); border-color: var(--cs-ink); color: #fff; }
+.cs-acc[open] .cs-acc__chev { transform: rotate(180deg); background: var(--cs-ink); border-color: var(--cs-ink); color: var(--white-1); }
 /* open state — highlight the WHOLE card (head + body), not just the header */
-.cs-acc[open] { background: var(--cs-grey); border-color: rgba(24, 24, 24, 0.28); }
+.cs-acc[open] { background: var(--cs-grey); border-color: rgba(17, 17, 17, 0.28); }
 .cs-acc[open] .cs-acc__head:hover { background: transparent; }
 /* smooth expand/collapse — height is animated in JS (case-study.js) for reliability.
    Keep the panel rendered when closed (override the <details> default hide) so the
@@ -644,7 +664,7 @@
   background: var(--cs-grey);
   border: 1px solid var(--cs-line);
 }
-.cs-chip__icon { flex: none; color: #146ad1; display: inline-flex; }
+.cs-chip__icon { flex: none; color: var(--black-1); display: inline-flex; }
 .cs-chip__icon svg { width: 22px; height: 22px; }
 
 /* ---------- Result stat cards (horizontal 3-up) ---------- */
@@ -663,7 +683,7 @@
   padding: clamp(20px, 2vw, 30px);   /* reduced padding */
 }
 /* number = Display 2 (70px); a unit suffix (.t-h4) sits inline at H4 */
-.cs-result__num { color: #fff; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+.cs-result__num { color: var(--white-1); letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
 .cs-result__num .t-h4 { letter-spacing: -0.02em; }
 .cs-result__label { color: rgba(255, 255, 255, 0.74); }
 
@@ -693,7 +713,7 @@
 .cs-bar__fill--after { background: var(--cs-blue); }
 .cs-bar__val { white-space: nowrap; letter-spacing: 0.02em; }
 .cs-bar__fill--before .cs-bar__val { color: var(--cs-ink); }
-.cs-bar__fill--after .cs-bar__val { color: #fff; }
+.cs-bar__fill--after .cs-bar__val { color: var(--white-1); }
 
 /* ---------- New Design Preview: tabs ---------- */
 .cs-tabs {
@@ -737,7 +757,7 @@
   position: sticky;
   top: var(--header-h);
   z-index: 30;
-  background: #fff;
+  background: var(--white-1);
   padding: 14px 0 18px;
   margin-bottom: clamp(16px, 1.8vw, 26px);
 }
@@ -762,10 +782,10 @@
   grid-area: 1 / 1; /* stack → row height = tallest image; panes stretch, bg fills behind the top-aligned image */
   padding: var(--cmp-pad-top) var(--cmp-pad-x) var(--cmp-pad-bottom);
 }
-.cs-compare__pane--after { background: #EFF4F8; }
+.cs-compare__pane--after { background: var(--white-2); }
 /* BEFORE pane sits on top (later in DOM), clipped to the left of the handle */
 .cs-compare__pane--before {
-  background: #E0E0E0;
+  background: var(--fill);
   clip-path: inset(0 calc(100% - var(--pos)) 0 0);
 }
 .cs-compare__shot {
@@ -780,7 +800,7 @@
   padding: 8px 18px;
   border-radius: 999px;
   background: var(--cs-ink);
-  color: #fff;
+  color: var(--white-1);
   letter-spacing: 0.04em;
   z-index: 3;
   pointer-events: none;
@@ -793,11 +813,11 @@
   bottom: 0;
   left: var(--pos);
   width: 2px;
-  background: #fff;
+  background: var(--white-1);
   transform: translateX(-50%);
   z-index: 4;
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px rgba(24, 24, 24, 0.15);
+  box-shadow: 0 0 0 1px rgba(17, 17, 17, 0.15);
 }
 /* the grip follows the viewport as you scroll (--grip-y is set in JS, since the
    clipped container rules out CSS sticky); the full-height line is draggable anywhere */
@@ -810,11 +830,11 @@
   height: 48px;
   border-radius: 50%;
   background: var(--cs-ink);
-  color: #fff;
+  color: var(--white-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(17, 17, 17, 0.25);
 }
 .cs-compare__grip svg { width: 22px; height: 22px; }
 .cs-compare__handle:focus-visible { outline: 3px solid var(--cs-blue); outline-offset: 2px; }
@@ -833,7 +853,7 @@
 .cs-cmp__row--head span { color: var(--cs-muted); }
 .cs-cmp__row--head .cs-cmp__after-h { color: var(--cs-blue); }
 .cs-cmp__key { align-self: center; display: flex; align-items: center; gap: 10px; }
-.cs-cmp__icon { flex: none; color: #9a9a9a; display: inline-flex; }   /* grey row icons */
+.cs-cmp__icon { flex: none; color: var(--black-4); display: inline-flex; }   /* grey row icons */
 .cs-cmp__icon svg { width: 24px; height: 24px; }
 .cs-cmp__before { color: var(--cs-muted); }
 .cs-cmp__after { color: var(--cs-ink); }   /* black body text; only the AFTER label stays blue */
@@ -880,7 +900,7 @@
   /* transform:none is required — the desktop scale(1.286) would enlarge this
      horizontal pill-chip and overlap the next chip (its transform also makes it
      a stacking context, so its black fill would paint over the neighbour). */
-  .cs-toc__link.is-active { background: var(--cs-ink); color: #fff; border-color: var(--cs-ink); font-size: var(--fs-body-sm); transform: none; }
+  .cs-toc__link.is-active { background: var(--cs-ink); color: var(--white-1); border-color: var(--cs-ink); font-size: var(--fs-body-sm); transform: none; }
 
   .cs-workload { grid-template-columns: 1fr; gap: 18px; }
 }
@@ -1012,7 +1032,7 @@
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: saturate(140%) blur(12px);
     -webkit-backdrop-filter: saturate(140%) blur(12px);
-    box-shadow: 0 10px 22px -14px rgba(24, 24, 24, 0.45);   /* spans edge to edge now */
+    box-shadow: 0 10px 22px -14px rgba(17, 17, 17, 0.45);   /* spans edge to edge now */
     animation: csTocIn 0.32s var(--ease-out) both;
   }
   .cs-toc.is-stuck.is-leaving { animation: csTocOut 0.28s var(--ease-out) both; }
@@ -1118,12 +1138,12 @@
     height: 52px;
     border: 0;
     border-radius: 999px;
-    background: rgba(24, 24, 24, 0.62);
-    color: #fff;
+    background: rgba(17, 17, 17, 0.62);
+    color: var(--white-1);
     cursor: pointer;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-    box-shadow: 0 6px 18px -6px rgba(24, 24, 24, 0.55);
+    box-shadow: 0 6px 18px -6px rgba(17, 17, 17, 0.55);
     z-index: 3;
   }
   .cs-zoom-btn svg { width: 24px; height: 24px; }
@@ -1146,7 +1166,7 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(12, 12, 12, 0.96);
+  background: rgba(17, 17, 17, 0.96);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   overscroll-behavior: contain;
@@ -1183,7 +1203,7 @@
   border: 0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+  color: var(--white-1);
   cursor: pointer;
   z-index: 2;
 }

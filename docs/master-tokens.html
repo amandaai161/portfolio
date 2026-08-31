@@ -722,13 +722,18 @@ a { color: inherit; }
         the nav dock and the cursor — follows this system.</p>
       <p>Hazen is fully on it. The homepage and the about page carry no palette of their
         own at all &mdash; every colour on them resolves to a token above.</p>
-      <p><strong>Still outstanding.</strong> The seven case-study pages keep a third palette
-        layer of their own in <code>css/case-study.css</code>: <code>--cs-ink</code> and
-        <code>--cs-dark</code> are both #181818 rather than the brand black, and six
-        near-identical off-whites (<code>--cs-pill</code>, <code>--cs-soft</code>,
-        <code>--cs-grey</code>, <code>--cs-before</code>, <code>--cs-track</code>,
-        <code>--cs-ph</code>) do the job <code>--fill</code> does everywhere else. The
-        per-project brand colours in those files are deliberate and stay.</p>
+      <p>The seven case-study pages are on it too. Their <code>--cs-*</code> names survive
+        because sixty-odd rules read them and they say what a thing is for, but every one
+        now resolves to a token above: <code>--cs-ink</code> and <code>--cs-dark</code> to
+        <code>--black-1</code>, <code>--cs-muted</code> to <code>--black-3</code>,
+        <code>--cs-line</code> to <code>--line</code>, and the six near-identical off-whites
+        to <code>--fill</code> or <code>--white-2</code>.</p>
+      <p><strong>What deliberately stays off the ramp.</strong> A project's own colours
+        inside its article: Identity's purple and Nexus green, Kayn's forest, Bacarita's
+        violet, NOBI's red, Atlasique's blue, Aspire's warm and blue highlights and its
+        design-system swatches, and the shared problem/solution markers. Those are the work
+        being shown, not the furniture around it. The four immersive landing pages are
+        likewise untouched — only the portfolio's own chrome on them follows this system.</p>
     </div>
   </section>
 

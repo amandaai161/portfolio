@@ -195,7 +195,7 @@
   width: 100%;
   height: auto;
   border-radius: 0;
-  border: 1px solid rgba(24, 24, 24, 0.08);
+  border: 1px solid rgba(17, 17, 17, 0.08);
   background: var(--cs-soft);
 }
 
@@ -212,7 +212,7 @@
 .id-ref__img {
   border-radius: 0;
   overflow: hidden;
-  border: 1px solid rgba(24, 24, 24, 0.08);
+  border: 1px solid rgba(17, 17, 17, 0.08);
   background: var(--cs-soft);
 }
 .id-ref__img img { display: block; width: 100%; height: auto; }
@@ -299,7 +299,7 @@
 .id-sub__img {
   border-radius: var(--cs-radius-lg);
   overflow: hidden;
-  border: 1px solid rgba(24, 24, 24, 0.1);
+  border: 1px solid rgba(17, 17, 17, 0.1);
   background: var(--id-purple-deep);
 }
 .id-sub__img img { display: block; width: 100%; height: auto; }

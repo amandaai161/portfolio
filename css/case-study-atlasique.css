@@ -31,7 +31,7 @@
    (images butt together with NO gap; only the outer container is rounded) */
 .cs-showcase {
   margin-top: clamp(28px, 3vw, 48px);   /* breathing room below the section title */
-  border: 1px solid rgba(24, 24, 24, 0.1);   /* very subtle hairline */
+  border: 1px solid rgba(17, 17, 17, 0.1);   /* very subtle hairline */
   background: var(--cs-soft);
 }
 .cs-showcase img,
