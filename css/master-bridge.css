@@ -1,0 +1,91 @@
+/* ============================================================================
+   THE BRIDGE — the last thing on a project page
+   ----------------------------------------------------------------------------
+   Amanda: "Just a basic element with transparent to black gradient with white
+   text on top of it... so the user can notice that there is an extra section
+   after this."
+
+   The four immersive pages end on their own footer, and on desktop the process
+   sheet is position:fixed -- it adds no height, so nothing below the footer
+   hints that a further gesture does anything. This band is that hint: the page
+   darkens to the sheet's own #111111 and says so out loud.
+
+   ONE THING NEEDS A VALUE PER PAGE. The gradient has to start at the colour of
+   the footer sitting directly above it, and that colour is different on all
+   four pages (identity #0c021a, aspire --navy, kayn --forest, nobi --burgundy).
+   A literally transparent top would show the BODY background instead, which on
+   aspire and kayn is white -- a hard light edge under a dark footer. So the
+   page hands its own footer colour in as --master-bridge-from on the element,
+   and everything else about the bridge is defined once, here.
+
+   Hand-written, unlike master-header.css and master-footer.css: there is no v3
+   original to extract. Every rule is scoped under .master-bridge, and every
+   inherited property is restated, because these five host pages each ship their
+   own reset and their own type defaults.
+   ========================================================================== */
+
+.master-bridge {
+  /* Fallback only. Each page overrides it with its own footer ground. */
+  --master-bridge-from: transparent;
+
+  position: relative;
+  z-index: 1;                 /* identity's footer raises itself; sit level with it */
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  width: 100%;
+  min-height: clamp(180px, 20vw, 280px);
+  margin: 0;
+  padding: clamp(70px, 9vw, 130px) clamp(20px, 5.2vw, 100px) clamp(28px, 3.2vw, 46px);
+
+  /* Reaches full black at 58%, and a gradient holds its last stop, so the
+     bottom 42% is the flat #111111 the process sheet arrives on. */
+  background: linear-gradient(180deg, var(--master-bridge-from) 0%, #111111 58%);
+}
+
+.master-bridge__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.95em;
+
+  margin: 0;
+  color: #ffffff;
+  font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: clamp(16px, 1.35vw, 22px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-transform: none;
+}
+
+.master-bridge__arrow {
+  width: auto;
+  height: 1.5em;
+  flex: none;
+  display: block;
+  overflow: visible;
+  animation: master-bridge-bob 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* A short, slow fall and back. Enough to read as "keep going", not enough to
+   compete with the sheet that follows. */
+@keyframes master-bridge-bob {
+  0%, 100% { transform: translateY(-2px); }
+  50%      { transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .master-bridge__arrow { animation: none; }
+}
+
+/* Phones: the process section is inline below rather than a sheet, so the band
+   only has to introduce it -- it does not have to carry a gesture. */
+@media (max-width: 760px) {
+  .master-bridge {
+    min-height: clamp(140px, 34vw, 200px);
+    padding-top: clamp(52px, 16vw, 90px);
+  }
+}

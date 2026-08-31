@@ -646,11 +646,11 @@ body { background: var(--white-1); }
 }
 /* grouping panel behind the broad-knowledge fan (rows 4–6) — solid box, no outline/radius */
 .tshape__box {
-  /* The one grey allowed inside an outlined box. */
+  /* Amanda: white-2, so the panel reads as a second ground rather than a fill. */
   grid-column: 1 / 8;
   grid-row: 4 / 7;
   margin: -14px;
-  background: var(--fill);
+  background: var(--white-2);
   border: none;
   border-radius: 0;
   z-index: 0;
@@ -887,7 +887,7 @@ body { background: var(--white-1); }
 
   /* skillsets → tiny illustration + 2-tab filter (.m-tshape rules below).
      The boxes have no container, and only one group shows at a time. */
-  .tshape { background: none; padding: 0; }
+  .tshape { background: none; border: none; padding: 0; }
   .tshape__cap, .tshape__broadlabel, .tshape__box { display: none; }
   .tshape__grid {
     display: flex; flex-wrap: wrap; gap: 10px;
@@ -903,10 +903,12 @@ body { background: var(--white-1); }
 
   .tools-layout { grid-template-columns: 1fr; gap: 24px; }
   .tools-layout .ab-sec-head { margin-bottom: 0; }
+  /* Amanda: no container here on mobile — the tiers sit straight on the page. */
+  .tools { background: none; border: none; padding: 0; }
   .tools__tier { gap: 14px; }
   /* icons: smaller boxes, more room between rows, grid flush with the tier title */
   .tier__grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     justify-content: stretch;
     gap: 18px 8px;            /* 18px between rows, 8px between columns */
   }

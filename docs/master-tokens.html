@@ -711,6 +711,7 @@ a { color: inherit; }
           <tr><td class="tok">css/type-system.css</td><td class="note">The type scale, the role classes, and the ≤760px retune. Loads after styles.css.</td></tr>
           <tr><td class="tok">css/master-header.css</td><td class="note">The master header, scoped under <code>.master-header</code> for pages that cannot take the global reset.</td></tr>
           <tr><td class="tok">css/master-footer.css</td><td class="note">The master footer, scoped under <code>.master-footer</code>, same reason.</td></tr>
+          <tr><td class="tok">css/master-bridge.css</td><td class="note">The master bridge &mdash; the band that closes a project page and darkens into the process sheet. Hand-written, scoped under <code>.master-bridge</code>. Its gradient's top stop comes from the page, as <code>--master-bridge-from</code>.</td></tr>
           <tr><td class="tok">scripts/gen-master-chrome.py</td><td class="note">Generates both scoped files from the two above. Regenerate; never hand-edit them.</td></tr>
         </tbody>
       </table>
@@ -718,8 +719,8 @@ a { color: inherit; }
     <div class="foot">
       <p><strong>The one exception.</strong> Aspire, Identity, Kayn and NOBI are hand-built
         landing pages with their own palettes, and these tokens do not reach them. Only the
-        portfolio's own furniture on those pages — the master footer, the-process section,
-        the nav dock and the cursor — follows this system.</p>
+        portfolio's own furniture on those pages — the master footer, the master bridge, the-process
+        section, the nav dock and the cursor — follows this system.</p>
       <p>Hazen is fully on it. The homepage and the about page carry no palette of their
         own at all &mdash; every colour on them resolves to a token above.</p>
       <p>The seven case-study pages are on it too. Their <code>--cs-*</code> names survive

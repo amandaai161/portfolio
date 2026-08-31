@@ -16,6 +16,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/pf-chrome.css">
   <link rel="stylesheet" href="/css/master-footer.css">
+  <link rel="stylesheet" href="/css/master-bridge.css">
   <link rel="stylesheet" href="/css/pf-cursor.css">
 <link rel="stylesheet" href="/css/pf-outro.css">
 
@@ -364,6 +365,25 @@
   <span class="rule rule--flow line line--h" data-line="h"></span>
   <p class="footer__legal">Copyright 2026 NOBI Bakery. Terms &amp; Privacy</p>
 </footer>
+
+<!-- ==================== THE BRIDGE ====================
+     A master element, the same on all four project pages. On desktop the sheet
+     below is position:fixed and adds no height, so without this the page simply
+     stops and nothing suggests one more gesture does anything. The band darkens
+     into the sheet's own black and says so.
+
+     The gradient's top stop is the one value that differs per page -- it has to
+     start at the colour of the footer directly above. Here that is nobi's --burgundy, the ground its footer sits on.
+     Everything else lives in /css/master-bridge.css. -->
+<div class="master-bridge" style="--master-bridge-from: var(--burgundy)">
+  <p class="master-bridge__label">
+    Scroll down to see the full process
+    <svg class="master-bridge__arrow" viewBox="0 0 12 34" fill="none" aria-hidden="true">
+      <path d="M6 1V32M1.4 26.2 6 32l4.6-5.8" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </p>
+</div>
 
 <!-- ==================== THE PROCESS ====================
      This page is the work; the process breakdown is a separate page. So the
