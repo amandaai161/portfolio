@@ -18,7 +18,7 @@
   /* NOBI Bakery brick-red brand palette (sampled from the brief) */
   --cs-green: #ad4242;        /* dark brand brick-red — objective rows, USP panel, pills */
   --cs-green-soft: #fbf2f0;   /* light brand blush — step notes, persona cards */
-  --cs-card: #eaeeec;         /* neutral card — Level-Up Lab blocks */
+  --cs-card: var(--fill);         /* neutral card — Level-Up Lab blocks */
   --cs-solution: #33b72c;     /* solution marker (green) */
   /* --cs-orange (#f04b26 problem marker) + --cs-ink / --cs-muted / --cs-line
      are inherited from case-study.css */

@@ -17,7 +17,7 @@
   /* Kayn green brand palette (sampled from the Figma) */
   --cs-green: #2a462d;        /* dark brand green — objective rows, USP panel, pills */
   --cs-green-soft: #e8f6e2;   /* light green — step notes, persona cards */
-  --cs-card: #eaeeec;         /* neutral card — Level-Up Lab blocks */
+  --cs-card: var(--fill);         /* neutral card — Level-Up Lab blocks */
   --cs-solution: #33b72c;     /* solution marker (green) */
   /* --cs-orange (#f04b26 problem marker) + --cs-ink / --cs-muted / --cs-line
      are inherited from case-study.css */

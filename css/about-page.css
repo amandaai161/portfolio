@@ -15,12 +15,13 @@
   --tile: clamp(8px, 0.9vw, 14px);
 }
 
-/* This page's ground is the secondary light surface, so its panels can be
-   white-1 and read as panels rather than as outlines on their own colour. */
-body { background: var(--white-2); }
+/* Amanda: "The main background color of that page is white-1." Panels are
+   white-1 too, so a container is defined entirely by its black outline —
+   which is the site's convention, stated plainly. */
+body { background: var(--white-1); }
 
 /* Page chrome tinted to the off-white so the blurred header matches the bg */
-.header { background: rgba(248, 250, 252, 0.72); }
+.header { background: rgba(255, 255, 255, 0.72); }
 
 /* Shared section header (eyebrow number + title + intro) ----------------- */
 .ab-sec {
@@ -163,7 +164,7 @@ body { background: var(--white-2); }
   position: relative;
   border-radius: var(--r);
   overflow: hidden;
-  background: #2b342f;
+  background: var(--black-1);   /* was a dark sage */
   isolation: isolate;
   min-height: 320px;
   display: flex;
@@ -277,7 +278,8 @@ body { background: var(--white-2); }
   font-weight: 500;
   font-size: var(--fs-body-sm);   /* type system: Body small */
   letter-spacing: -0.01em;
-  color: #80948D;                           /* muted sage label */
+  /* Sits on the bar's filled portion, which is black now. */
+  color: var(--white-1);
   white-space: nowrap;
 }
 
@@ -704,7 +706,7 @@ body { background: var(--white-2); }
   font-weight: 500;
   letter-spacing: -0.02em;
 }
-.sk--deep:hover { background: #2b2b2b; border-color: #2b2b2b; }
+.sk--deep:hover { background: var(--black-2); border-color: var(--black-2); }
 
 /* ============================================================
    03 — TOOLS
@@ -785,7 +787,7 @@ body { background: var(--white-2); }
   font-weight: 700;
   font-size: var(--fs-h6);   /* type system: H6 */
   letter-spacing: -0.04em;
-  color: #4A524A;
+  color: var(--black-1);
 }
 .tool__icon.noimg .mono { display: block; }
 /* hover = subtle accent shift (no shadow / no lift) */
@@ -978,7 +980,7 @@ body { background: var(--white-2); }
     position: sticky;
     bottom: 0;
     z-index: 95;
-    background: rgba(248, 250, 252, 0.92);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: saturate(140%) blur(12px);
     -webkit-backdrop-filter: saturate(140%) blur(12px);
     border-top: 1px solid var(--line);
@@ -1147,10 +1149,10 @@ body { background: var(--white-2); }
   .m-tshape__ill svg { width: clamp(185px, 60vw, 250px); height: auto; display: block; }
   .ill-deep rect, .ill-broad rect { transition: fill 0.3s var(--ease), stroke 0.3s var(--ease); }
   /* default = Deep Mastery selected */
-  .ill-deep rect { fill: #111111; }
-  .ill-broad rect { fill: var(--white-2); stroke: var(--black-1); stroke-width: 1.5; }
-  .tshape.is-broad .ill-deep rect { fill: var(--white-2); stroke: var(--black-1); stroke-width: 1.5; }
-  .tshape.is-broad .ill-broad rect { fill: #111111; stroke: none; }
+  .ill-deep rect { fill: var(--black-1); }
+  .ill-broad rect { fill: var(--white-1); stroke: var(--black-1); stroke-width: 1.5; }
+  .tshape.is-broad .ill-deep rect { fill: var(--white-1); stroke: var(--black-1); stroke-width: 1.5; }
+  .tshape.is-broad .ill-broad rect { fill: var(--black-1); stroke: none; }
 
   /* caption below the illustration — swaps with the active group */
   .m-tshape__cap {           /* type system: Body Normal */
