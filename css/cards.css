@@ -26,7 +26,7 @@
 /* Zoom is tied to .is-focused (JS-driven queue). Asymmetric timing: intro 220ms,
    outro 140ms — the "in" duration lives on the focused state. */
 .pj.is-focused .pj__media img { transform: scale(1.05); transition-duration: 220ms; }
-.pj__title { font-weight: 500; color: var(--ink); margin-top: clamp(6px, 0.6vw, 10px); }
+.pj__title { font-weight: 500; color: var(--black-1); margin-top: clamp(6px, 0.6vw, 10px); }
 
 /* Info — absolutely positioned so it fades in/out WITHOUT pushing layout. */
 .pj__info {
@@ -42,7 +42,7 @@
 .pj__desc {
   margin-top: 14px;
   font-size: var(--fs-body-lg); font-weight: 400; line-height: 1.4; letter-spacing: -0.01em;
-  color: var(--ink);                                       /* black subtext */
+  color: var(--black-1);                                       /* black subtext */
 }
 
 /* ---------- HOVER: dim + blur the whole page, keep the focused card crisp ---------- */
@@ -61,7 +61,7 @@ body.is-dimming .dim { opacity: 1; transition-duration: 220ms; }   /* INTRO spee
 .cursor-label {
   position: fixed; top: 0; left: 0; z-index: 1000;
   padding: 10px 22px; border-radius: 999px;
-  background: var(--white); color: var(--ink);
+  background: var(--white-1); color: var(--black-1);
   font-size: var(--fs-body-lg); font-weight: 500; line-height: 1; white-space: nowrap;
   box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.28);
   pointer-events: none; opacity: 0; transition: opacity 0.18s var(--ease-out);

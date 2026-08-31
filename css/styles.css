@@ -4,29 +4,40 @@
    ============================================================ */
 
 :root {
-  /* Amanda's brand black, #111111, not #000. It was defined only in
-     about-page.css, as a per-page override; she asked for it site-wide:
-     "That is the black which aligned to my brand. Use that replacing all the
-     black elements in the entire site." The four project landing pages keep
-     their own palettes -- this token does not reach them, only the portfolio's
-     own chrome does.
-     --muted and --line are derived from it and move with it, as they do in
-     about-page.css. --white is deliberately NOT changed: she asked for the
-     black. */
-  --black: #111111;
-  --white: #ffffff;
-  --ink: #111111;
-  --muted: rgba(17, 17, 17, 0.55);
-  --line: rgba(17, 17, 17, 0.18);
+  /* ============================================================
+     MASTER COLOUR
+     ------------------------------------------------------------
+     Two ramps of four, and nothing repeated. Everything that used to be
+     --black, --ink and --line-strong was the same #111111 under three names;
+     it is one token now.
 
-  /* ---- structural neutrals ----
-     The site draws containers as a black outline on paper rather than as a grey
-     fill. --line-strong is that outline; --fill-soft is the only grey allowed
-     inside one, for a progress track, a filled bar or a nested panel. Two
-     values, so "subtle grey" means the same thing everywhere it appears. */
-  --line-strong: #111111;
-  --fill-soft: #ECECEC;
-  --line-light: rgba(255, 255, 255, 0.35);
+     BLACK serves light surfaces: 1 is the ink, the outline and the primary
+     dark ground; 2 is a raised panel on top of 1; 3 and 4 are secondary and
+     tertiary text.
+     WHITE serves dark surfaces, and carries #F8FAFC's cool cast down the ramp
+     so greys on this site are never a flat neutral.
+
+     Contrast, measured: black-3 is 5.33:1 on white-1 and black-4 is 3.45:1,
+     so secondary text passes AA for body and tertiary passes for large text
+     and UI. white-3 is 8.63:1 on black-1 and white-4 is 4.87:1.
+     ============================================================ */
+  --black-1: #111111;   /* ink · outline · primary dark ground   */
+  --black-2: #1C1C1C;   /* secondary dark ground, raised on 1    */
+  --black-3: #6B6B6B;   /* secondary text on a light ground      */
+  --black-4: #8A8A8A;   /* tertiary text, meta, disabled         */
+
+  --white-1: #FFFFFF;   /* primary light ground                  */
+  --white-2: #F8FAFC;   /* secondary light ground                */
+  --white-3: #A9B0B9;   /* secondary text on a dark ground       */
+  --white-4: #7A828E;   /* tertiary text on a dark ground        */
+
+  /* ---- three surface utilities ----
+     Not colours in the ramps above, and not duplicates of them: a hairline is
+     translucent so it rides whatever is underneath, and --fill is the one grey
+     allowed as a fill inside an outlined container. */
+  --line: rgba(17, 17, 17, 0.18);        /* hairline on a light ground */
+  --line-light: rgba(255, 255, 255, 0.35); /* hairline on a dark ground */
+  --fill: #ECECEC;                       /* progress track, filled bar, nested panel */
 
   --container-max: 1720px;
   --gutter: clamp(20px, 5.2vw, 100px);
@@ -61,8 +72,8 @@ html.lenis body { height: auto; }
 
 body {
   font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--ink);
-  background: var(--white);
+  color: var(--black-1);
+  background: var(--white-1);
   line-height: 1.2;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
@@ -173,7 +184,7 @@ ul { list-style: none; }
   height: 44px;
   border: none;
   background: transparent;
-  color: var(--ink);
+  color: var(--black-1);
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -242,17 +253,17 @@ ul { list-style: none; }
    black outline (flat, no shadow). The arrow flips to solid black so it stays
    visible on the white fill. */
 .btn--dark {
-  background: var(--black);
-  color: var(--white);
+  background: var(--black-1);
+  color: var(--white-1);
   outline: 2px solid transparent;
   outline-offset: -2px;
   transition: background 0.4s var(--ease), color 0.4s var(--ease),
     outline-color 0.4s var(--ease), margin-right 0.4s var(--ease-out);
 }
 .btn--dark:hover {
-  background: var(--white);
-  color: var(--black);
-  outline-color: var(--black);
+  background: var(--white-1);
+  color: var(--black-1);
+  outline-color: var(--black-1);
   /* cancels the width growth in layout → button keeps a fixed LEFT edge and
      extends to the RIGHT (overlapping the margin), never reflowing neighbours. */
   margin-right: -0.4em;
@@ -271,7 +282,7 @@ ul { list-style: none; }
   stroke-width: 3;
   transition: stroke 0.4s var(--ease);
 }
-.btn--dark:hover .btn__arrow path { stroke: var(--black); }
+.btn--dark:hover .btn__arrow path { stroke: var(--black-1); }
 
 /* arrow text-link (contact) */
 .link-arrow {
@@ -433,7 +444,7 @@ ul { list-style: none; }
   z-index: 50;
   width: 24px;
   height: 40px;
-  border: 2px solid var(--black);
+  border: 2px solid var(--black-1);
   border-radius: 14px;
   display: flex;
   /* 65% transparency at rest (JS reduces it further as the page scrolls) */
@@ -515,7 +526,7 @@ ul { list-style: none; }
 /* mobile-only labels shown above the card title (hidden on desktop) */
 .card__labels { display: none; }
 .label {
-  border: 1px solid var(--black);
+  border: 1px solid var(--black-1);
   border-radius: 999px;
   padding: 8px 18px;
   font-weight: 300;
@@ -635,7 +646,7 @@ ul { list-style: none; }
   justify-content: flex-end;
   gap: 14px;
   padding: clamp(16px, 1.6vw, 22px);
-  color: var(--white);
+  color: var(--white-1);
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.95));
   opacity: 0;
   transition: opacity 0.5s var(--ease);
@@ -683,8 +694,8 @@ ul { list-style: none; }
    CONTACT + FOOTER
    ============================================================ */
 .contact {
-  background: var(--black);
-  color: var(--white);
+  background: var(--black-1);
+  color: var(--white-1);
   padding-block: clamp(64px, 8vw, 150px) clamp(40px, 4vw, 60px);
 }
 .contact__info {
@@ -762,7 +773,7 @@ ul { list-style: none; }
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.28);
-  color: var(--white);
+  color: var(--white-1);
   font-size: clamp(12px, 1vw, 15px);
   font-weight: 500;
   letter-spacing: -0.01em;

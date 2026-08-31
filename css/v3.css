@@ -36,7 +36,7 @@
      (260px vs 200px), which is intentional: middle-left is the prominent,
      readable position, top-left is the quiet watermark. */
   --mhead-fs-landed: clamp(56px, 13vw, 260px);
-  --rule: 1px solid var(--black);
+  --rule: 1px solid var(--black-1);
   /* ---- Intro stage geometry ----
      "Intro v2" frames 3/4: the demo animation sits DEAD CENTRE of the stage
      and the two headlines are placed relative to it — headline 1 above,
@@ -64,7 +64,7 @@
    #morphHead sits behind the content so the giant type reads as a
    watermark showing through the gaps between cards (sketch 3.2 / 3.4).
    Sections are therefore transparent; only .contact is opaque.        */
-body { background: var(--white); }
+body { background: var(--white-1); }
 .intro__stage { z-index: 2; }
 #work, #other, #cta { position: relative; z-index: 3; background: transparent; }
 
@@ -720,7 +720,7 @@ html.motion .headhold { height: 40vh; }
 /* The two full-bleed rules that bracket the HAZEN row. */
 .srule {
   height: 1px;
-  background: var(--black);
+  background: var(--black-1);
   transform-origin: left center;
 }
 .srule--bottom { transform-origin: right center; }
@@ -729,7 +729,7 @@ html.motion .headhold { height: 40vh; }
 .pill {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--black);
+  border: 1px solid var(--black-1);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: var(--fs-body-sm);
@@ -1097,7 +1097,7 @@ html:not(.motion) .intro__word-img--after {
    names included, because Amanda asked for it to be "just like the
    case study pages" — reusing the component rather than building a
    homepage-only lookalike is what actually makes that true. The one
-   substitution is var(--black) for that file's --cs-ink token,
+   substitution is var(--black-1) for that file's --cs-ink token,
    which v3 does not load; the two are the same value.
 
    .header is already position:sticky with a z-index, so this rides
@@ -1118,7 +1118,7 @@ html:not(.motion) .intro__word-img--after {
   display: block;
   height: 100%;
   width: 100%;
-  background: var(--black);
+  background: var(--black-1);
   transform: scaleX(0);
   transform-origin: left;
   will-change: transform;
@@ -1144,7 +1144,7 @@ html:not(.motion) .intro__word-img--after {
    The CTA's top padding is dropped while it is the head of that
    block: it existed to separate two sections that no longer are two.
    ============================================================ */
-.outro { position: relative; z-index: 3; background: var(--white); }
+.outro { position: relative; z-index: 3; background: var(--white-1); }
 
 /* TWO LINES, BY STRUCTURE. Each line is its own block, so the break cannot
    move: not at a different viewport, not after a webfont swap, and not while
@@ -1229,7 +1229,7 @@ html.motion #outro .cta {
   align-items: center;
   gap: 0.7em;
   padding: 0.85em 1.5em;
-  border: 1.5px solid var(--black);
+  border: 1.5px solid var(--black-1);
   font-size: clamp(15px, 1.1vw, 20px);
   font-weight: var(--fw-medium);
   letter-spacing: -0.01em;
@@ -1240,15 +1240,15 @@ html.motion #outro .cta {
 .cta__btn svg { width: 1.6em; height: auto; flex: none; transition: transform 0.35s var(--ease-out); }
 .cta__btn:hover svg { transform: translateX(5px); }
 
-.cta__btn--solid { background: var(--black); color: var(--white); }
-.cta__btn--solid:hover { background: var(--white); color: var(--black); }
+.cta__btn--solid { background: var(--black-1); color: var(--white-1); }
+.cta__btn--solid:hover { background: var(--white-1); color: var(--black-1); }
 /* The outlined button tints rather than inverting: 15% black on hover, 30%
    while held. Keeping the label and outline black throughout means the button
    never restates itself as a second solid button beside the primary one —
    the two stay visibly primary and secondary at every state. */
-.cta__btn--ghost { background: var(--white); color: var(--black); }
-.cta__btn--ghost:hover { background: rgba(0, 0, 0, 0.15); color: var(--black); }
-.cta__btn--ghost:active { background: rgba(0, 0, 0, 0.30); color: var(--black); }
+.cta__btn--ghost { background: var(--white-1); color: var(--black-1); }
+.cta__btn--ghost:hover { background: rgba(0, 0, 0, 0.15); color: var(--black-1); }
+.cta__btn--ghost:active { background: rgba(0, 0, 0, 0.30); color: var(--black-1); }
 
 @media (max-width: 480px) {
   /* Two full-width buttons stacked read better than two cramped ones that
@@ -1335,7 +1335,7 @@ html.motion #outro .cta {
      (z-index 1) so it reads as a watermark through the gaps. A title bar the
      content passes UNDER has to be in front: above the sections (3) and the
      contact block (4), below the header (100). */
-  html.motion #morphHead { color: var(--black); z-index: 5; }
+  html.motion #morphHead { color: var(--black-1); z-index: 5; }
 
   /* "The Selected work headline is a bit of centered vertically, please fix
      it." It was centred — in the VIEWPORT, which is not the same thing once a
@@ -1368,7 +1368,7 @@ html.motion #outro .cta {
     pointer-events: none;
     background: linear-gradient(
       to bottom,
-      var(--white) calc(100% - 40px),
+      var(--white-1) calc(100% - 40px),
       rgba(255, 255, 255, 0) 100%);
     opacity: var(--mhead-veil, 0);
   }

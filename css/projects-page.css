@@ -102,10 +102,10 @@
 }
 .pcard__title {
   font-weight: 500;
-  color: var(--ink);
+  color: var(--black-1);
 }
 .pcard__desc {
-  color: var(--muted);
+  color: var(--black-3);
 }
 
 /* Tag pills — filled soft chip, no outline (matches the home pills) */
@@ -118,7 +118,7 @@
   background: #eaeeec;
   border-radius: 999px;
   padding: 6px 12px;
-  color: var(--ink);
+  color: var(--black-1);
   white-space: nowrap;
 }
 
@@ -136,7 +136,7 @@
        thumbnail never re-scales, which is what makes the pop feel smooth.) */
     left: -18px;
     right: -18px;
-    background: var(--white);
+    background: var(--white-1);
     border-color: var(--line);
     box-shadow: 0 26px 56px -14px rgba(0, 0, 0, 0.24);
     padding: 18px;                     /* inner gutter around the image */

@@ -276,6 +276,7 @@ td.note { color: var(--muted); }
 /* ---- footer ------------------------------------------------------------ */
 .foot { border-top: 1.5px solid var(--outline); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; }
 .foot p { font-size: var(--fs-body-sm); color: var(--muted); max-width: 72ch; }
+.subnote { font-size: var(--fs-body-sm); color: var(--muted); max-width: 68ch; }
 
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--outline); outline-offset: 3px; }
@@ -293,8 +294,8 @@ a { color: inherit; }
 
     <div class="rules">
       <div class="rule">
-        <b>One black</b>
-        <span>#111111 everywhere. Not #000, and not a second near-black hiding in a component.</span>
+        <b>Two ramps of four</b>
+        <span>Black serves light surfaces, white serves dark ones. Nothing is named twice.</span>
       </div>
       <div class="rule">
         <b>Outline, not fill</b>
@@ -302,7 +303,7 @@ a { color: inherit; }
       </div>
       <div class="rule">
         <b>One grey</b>
-        <span>#ECECEC, for a progress track, a filled bar or a nested panel. Nothing else.</span>
+        <span><code>--fill</code>, #ECECEC, for a progress track, a filled bar or a nested panel. Nothing else.</span>
       </div>
       <div class="rule">
         <b>Squared corners</b>
@@ -315,57 +316,94 @@ a { color: inherit; }
   <section>
     <div class="sechead">
       <h2>Master colour</h2>
-      <p>Declared on <code>:root</code> in <code>css/styles.css</code>. Swatches show the literal
+      <p>Two ramps of four, declared on <code>:root</code> in <code>css/styles.css</code>.
+        <strong>Black serves light surfaces</strong> — 1 is the ink, the outline and the primary
+        dark ground; 2 is a panel raised on top of 1; 3 and 4 are secondary and tertiary text.
+        <strong>White serves dark surfaces</strong>, and carries #F8FAFC's cool cast down the
+        ramp, so the greys on this site are never a flat neutral. Swatches show the literal
         value, so they read the same in either theme.</p>
     </div>
 
+    <p class="eyebrow">Black · for light surfaces</p>
     <div class="swatches">
       <div class="sw">
         <div class="sw__chip" style="background:#111111"></div>
         <div class="sw__body">
-          <span class="sw__name">--black</span>
+          <span class="sw__name">--black-1</span>
           <span class="sw__hex">#111111</span>
-          <span class="sw__use">The brand black. Ink, outlines, solid fills.</span>
+          <span class="sw__use">Ink, outlines, primary dark ground. The brand black.</span>
         </div>
       </div>
       <div class="sw">
-        <div class="sw__chip" style="background:#111111"></div>
+        <div class="sw__chip" style="background:#1C1C1C"></div>
         <div class="sw__body">
-          <span class="sw__name">--ink</span>
-          <span class="sw__hex">#111111</span>
-          <span class="sw__use">Body text. Same value as <code>--black</code>, kept separate so text and surface can diverge later.</span>
+          <span class="sw__name">--black-2</span>
+          <span class="sw__hex">#1C1C1C</span>
+          <span class="sw__use">Secondary dark ground — a panel raised on black-1.</span>
         </div>
       </div>
       <div class="sw">
-        <div class="sw__chip" style="background:#ffffff"></div>
+        <div class="sw__chip" style="background:#6B6B6B"></div>
         <div class="sw__body">
-          <span class="sw__name">--white</span>
+          <span class="sw__name">--black-3</span>
+          <span class="sw__hex">#6B6B6B</span>
+          <span class="sw__use">Secondary text. 5.33:1 on white-1 — passes AA for body.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#8A8A8A"></div>
+        <div class="sw__body">
+          <span class="sw__name">--black-4</span>
+          <span class="sw__hex">#8A8A8A</span>
+          <span class="sw__use">Tertiary text, meta, disabled. 3.45:1 — large text and UI only.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="eyebrow">White · for dark surfaces</p>
+    <div class="swatches">
+      <div class="sw">
+        <div class="sw__chip" style="background:#FFFFFF"></div>
+        <div class="sw__body">
+          <span class="sw__name">--white-1</span>
           <span class="sw__hex">#FFFFFF</span>
-          <span class="sw__use">Paper. The about page softens this to #F8F8F8 for itself only.</span>
+          <span class="sw__use">Primary light ground, and primary text on black.</span>
         </div>
       </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#F8FAFC"></div>
+        <div class="sw__body">
+          <span class="sw__name">--white-2</span>
+          <span class="sw__hex">#F8FAFC</span>
+          <span class="sw__use">Secondary light ground. The about page sits on it.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#A9B0B9"></div>
+        <div class="sw__body">
+          <span class="sw__name">--white-3</span>
+          <span class="sw__hex">#A9B0B9</span>
+          <span class="sw__use">Secondary text on dark. 8.63:1 on black-1.</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw__chip" style="background:#7A828E"></div>
+        <div class="sw__body">
+          <span class="sw__name">--white-4</span>
+          <span class="sw__hex">#7A828E</span>
+          <span class="sw__use">Tertiary text on dark. 4.87:1 — still passes AA for body.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="eyebrow">Three surface utilities</p>
+    <div class="swatches">
       <div class="sw">
         <div class="sw__chip" style="background:#ececec"></div>
         <div class="sw__body">
-          <span class="sw__name">--fill-soft</span>
+          <span class="sw__name">--fill</span>
           <span class="sw__hex">#ECECEC</span>
           <span class="sw__use">The one grey. Progress tracks, filled bars, nested panels.</span>
-        </div>
-      </div>
-      <div class="sw">
-        <div class="sw__chip" style="background:#111111"></div>
-        <div class="sw__body">
-          <span class="sw__name">--line-strong</span>
-          <span class="sw__hex">#111111</span>
-          <span class="sw__use">Structural outline, always 1.5px.</span>
-        </div>
-      </div>
-      <div class="sw">
-        <div class="sw__chip" style="background:rgba(17,17,17,0.55)"></div>
-        <div class="sw__body">
-          <span class="sw__name">--muted</span>
-          <span class="sw__hex">rgba(17, 17, 17, .55)</span>
-          <span class="sw__use">Secondary text, captions, meta.</span>
         </div>
       </div>
       <div class="sw">
@@ -373,7 +411,7 @@ a { color: inherit; }
         <div class="sw__body">
           <span class="sw__name">--line</span>
           <span class="sw__hex">rgba(17, 17, 17, .18)</span>
-          <span class="sw__use">Hairline. Table rows, internal dividers.</span>
+          <span class="sw__use">Hairline on a light ground. Table rows, internal dividers.</span>
         </div>
       </div>
       <div class="sw">
@@ -381,15 +419,19 @@ a { color: inherit; }
         <div class="sw__body">
           <span class="sw__name">--line-light</span>
           <span class="sw__hex">rgba(255, 255, 255, .35)</span>
-          <span class="sw__use">Hairline on the black footer.</span>
+          <span class="sw__use">Hairline on a dark ground. The footer's divider.</span>
         </div>
       </div>
     </div>
+    <p class="subnote">These three are
+      not colours in the ramps and not duplicates of them. A hairline has to be translucent so
+      it rides whatever sits underneath, and <code>--fill</code> is the only grey the system
+      allows as a fill.</p>
 
     <div class="demo">
       <div class="demo__box">
         <span class="demo__cap">Container — paper, 1.5px outline</span>
-        <div class="demo__inner">Nested panel — <code>--fill-soft</code></div>
+        <div class="demo__inner">Nested panel — <code>--fill</code></div>
       </div>
       <div class="demo__box">
         <span class="demo__cap">Meter — grey track, black fill</span>
@@ -665,7 +707,7 @@ a { color: inherit; }
       <table>
         <thead><tr><th>File</th><th>Holds</th></tr></thead>
         <tbody>
-          <tr><td class="tok">css/styles.css</td><td class="note">Colour, layout and motion tokens on <code>:root</code>. The source of truth.</td></tr>
+          <tr><td class="tok">css/styles.css</td><td class="note">The two ramps, the three utilities, and the layout and motion tokens, all on <code>:root</code>. The source of truth — no page overrides them.</td></tr>
           <tr><td class="tok">css/type-system.css</td><td class="note">The type scale, the role classes, and the ≤760px retune. Loads after styles.css.</td></tr>
           <tr><td class="tok">css/master-header.css</td><td class="note">The master header, scoped under <code>.master-header</code> for pages that cannot take the global reset.</td></tr>
           <tr><td class="tok">css/master-footer.css</td><td class="note">The master footer, scoped under <code>.master-footer</code>, same reason.</td></tr>

@@ -95,7 +95,7 @@ BANNER = """/* =================================================================
 
   /* from styles.css's body rule, which these components inherit from on v3 */
   font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--ink);
+  color: var(--black-1);
   line-height: 1.2;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
@@ -134,7 +134,7 @@ TAIL = """
   display: block;
   height: 100%;
   width: 0;
-  background: var(--ink);
+  background: var(--black-1);
 }
 """
 

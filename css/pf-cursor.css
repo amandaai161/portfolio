@@ -21,8 +21,8 @@
    ========================================================================== */
 .cursor {
   /* Amanda's brand black. Kept in step with styles.css's --black. */
-  --black: #111111;
-  --white: #ffffff;
+  --black-1: #111111;
+  --white-1: #FFFFFF;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --fs-body: 1rem;
@@ -74,14 +74,14 @@
   width: var(--dot);
   height: var(--dot);
   border-radius: 999px;
-  background: var(--black, #000000);
+  background: var(--black-1, #000000);
   /* box-shadow, not border: a border participates in the box model, so with
      the global border-box sizing it would eat 2px off each side of the 14px
      dot and leave a 10px core. A spread-only shadow paints the ring outside
      the box, follows border-radius through the pill transition for free, and
      keeps the dot's own geometry exactly what --dot says it is. */
-  box-shadow: 0 0 0 var(--ring) var(--white, #ffffff);
-  color: var(--white, #ffffff);
+  box-shadow: 0 0 0 var(--ring) var(--white-1, #ffffff);
+  color: var(--white-1, #ffffff);
 
   pointer-events: none;
   opacity: 0;
@@ -111,7 +111,7 @@
   /* Plain white on the black pill. (It used to be black, to knock itself out
      of the difference blend — with the blend gone that would now render
      black-on-black.) */
-  color: var(--white, #ffffff);
+  color: var(--white-1, #ffffff);
 }
 
 .cursor.is-pill .cursor__label {
