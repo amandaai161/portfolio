@@ -790,12 +790,32 @@ html.motion .headhold { height: 40vh; }
 }
 
 .wcard__media {
-  aspect-ratio: 5 / 3;
+  /* Amanda's clips are 800x500 native. The box matches that ratio, and stops
+     growing at their own width -- past 800px every one of them would be an
+     upscale, and the pair columns only reach ~815px at the widest anyway. */
+  aspect-ratio: 8 / 5;
+  max-width: 800px;
   background: #bfbfbf;
   overflow: hidden;
   transform-origin: center center;
 }
-.wcard__media img { width: 100%; height: 100%; object-fit: cover; }
+.wcard__media img,
+.wcard__video,
+.wcard__canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* How fast the hover animation runs, forward and back, as a multiple of the
+   clip's own rate. Read per element by js/thumb-video.js, so a single card can
+   override it. */
+.wcard__video { --thumb-speed: 1; }
+
+/* The canvas is stacked on the video rather than replacing it, so the handover
+   at the end of the capture pass cannot flash a gap. Until .is-canvas it is not
+   painted at all; after it, it is the picture and the video is only a decoder.
+   js/thumb-video.js creates the element -- there is none in the markup, so a
+   page with no JS keeps the poster and nothing here applies. */
+.wcard__media { position: relative; }
+.wcard__canvas { position: absolute; inset: 0; opacity: 0; }
+.wcard__media.is-canvas .wcard__canvas { opacity: 1; }
 
 .wcard__meta { display: flex; flex-direction: column; gap: var(--swork-meta-gap); align-items: flex-start; }
 .wcard__title { font-weight: var(--fw-regular); }
@@ -1434,8 +1454,9 @@ html.motion #outro .cta {
      to the ones in selected work section." The other-work thumbnails are 8:7
      and stood 293px tall against the selected pairs' 201px, so on a phone —
      where every card is full width — they read as a different, heavier kind of
-     card. Same 5:3 as the pairs makes them the same object. */
-  .owork__media { aspect-ratio: 5 / 3; }
+     card. Same ratio as the pairs makes them the same object -- so when the
+     pairs went to the 8:5 of Amanda's clips, this followed them. */
+  .owork__media { aspect-ratio: 8 / 5; }
 
   /* ---- 8. the closing headline ----
      "The bottom CTA section should be significantly bigger. For mobile it
