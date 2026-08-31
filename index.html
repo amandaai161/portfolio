@@ -273,16 +273,23 @@
         <div class="wslide wslide--hazen">
           <div class="srule srule--top" aria-hidden="true"></div>
 
-          <a class="hazen v3-wrap" href="/project_hazen/" data-cursor="See project">
+          <!-- The LINK is the thumbnail, not the row. Amanda: "The clickable
+               element is only the thumbnail, so the hover animation only
+               applies when user's cursor hovering on thumbnail only." The row
+               was one big <a> around all three columns, so the hover fired from
+               anywhere in the headline or the paragraph. The pairs keep their
+               whole-card links; only this row reads as a caption beside a
+               picture rather than as a card. -->
+          <div class="hazen v3-wrap">
             <div class="hazen__lead">
               <h3 class="hazen__title t-h3">Claude design skills: HAZEN</h3>
               <p class="hazen__pill"><span class="pill">Claude Skills</span></p>
             </div>
-            <div class="hazen__media">
+            <a class="hazen__media" href="/project_hazen/" data-cursor="See project" aria-label="Claude design skills: HAZEN">
               <video class="hazen__video" src="/images/thumbnail_hazen.webm" poster="/images/thumbnail_hazen_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video>
-            </div>
+            </a>
             <p class="hazen__desc t-body-sm">A set of Claude skills that carry my art direction into generative work — brief in, directed image and video prompts out, with the craft decisions already made.</p>
-          </a>
+          </div>
 
           <div class="srule srule--bottom" aria-hidden="true"></div>
         </div>

@@ -103,14 +103,24 @@
 
     /* ------------------------------------------------------------- capture */
     function begin() {
-      /* Never capture above the source's own pixels -- there is nothing up
-         there -- and never above what this screen would actually show. */
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      /* CAPTURE AT THE SOURCE'S OWN SIZE, always.
+
+         This used to size itself from the display box -- box width x dpr,
+         capped at the source -- to avoid holding more texture than the screen
+         could show. It measured with getBoundingClientRect(), which reports the
+         TRANSFORMED size, and js/scenes-work.js parks .hazen__media at
+         scale(0.2) before its entry. So a hover during that entry measured
+         129.7px instead of the box's real 648px, and cached an 850px clip at
+         320. Displayed at 1296 device pixels on a 2x screen, that is a 4x
+         upscale: Amanda, "why it looks pixelated?"
+
+         offsetWidth would have dodged the transform, but the source resolution
+         is the ceiling regardless and these clips are small enough that the
+         saving was never worth a size that depends on when you hovered. */
       var srcW = video.videoWidth || 800;
       var srcH = video.videoHeight || 500;
-      var want = Math.round(box.getBoundingClientRect().width * dpr) || srcW;
-      capW = Math.max(320, Math.min(srcW, want));
-      capH = Math.round(capW * srcH / srcW);
+      capW = srcW;
+      capH = srcH;
 
       canvas.width = capW;
       canvas.height = capH;
