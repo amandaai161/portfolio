@@ -65,16 +65,14 @@
    container is what travels -- an image stretched to a whole screen from a
    thumbnail would smear.
 
-   The fade runs the LENGTH OF THE GROWTH, not a fifth of it. Amanda: "the
-   thumbnail webm should not suddenly disappear, instead, it is fading out
-   (opacity from 100% to 0%) as the transition animation plays." Eased out, so
-   most of the fade is spent in the first half while the cover is still small
-   and the clip is still worth looking at. Keep in step with GROW in
-   js/thumb-open.js. */
+   The fade happens BEFORE the growth, not during it, and it is the only thing
+   moving while it runs -- see the two beats in js/thumb-open.js. It reveals
+   this container's own background, which is already the colour the cover will
+   then carry across the screen. Keep in step with FADE there. */
 .thumb.is-opening > video,
 .thumb.is-opening > .thumb-canvas {
   opacity: 0;
-  transition: opacity 620ms cubic-bezier(0.3, 0, 0.4, 1);
+  transition: opacity 180ms ease-out;
 }
 
 /* The travelling copy. Painted, never interactive, and above everything the

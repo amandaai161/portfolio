@@ -21,6 +21,11 @@
    flow would fight both. A fixed-position clone at the same rect has neither
    problem and leaves the page underneath exactly as it was.
 
+   IT RUNS IN TWO BEATS: the clip fades out on its own first, revealing the
+   container's colour underneath, and only then does the container start to
+   grow. Overlapping them looks like nothing at all -- the cover is opaque and
+   sits exactly on the thumbnail, so a clip fading under it is invisible.
+
    NAVIGATION WAITS FOR THE COVER TO CLOSE. Amanda: "Right now seems like you
    directly load the page before the container completely cover the entire
    screen, which causes a rough transition. So, I want you to just let the
@@ -37,11 +42,12 @@
 (function (window, document) {
   "use strict";
 
+  var FADE = 180;      /* ms the clip takes to go, BEFORE anything grows      */
   var GROW = 620;      /* ms for the container to reach full screen           */
   var EASE = "cubic-bezier(0.7, 0, 0.3, 1)";
   /* If transitionend never arrives -- a backgrounded tab, a transition the
      browser declines to run -- the navigation still has to happen. */
-  var FALLBACK = GROW + 220;
+  var FALLBACK = FADE + GROW + 220;
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   var busy = false;
@@ -58,10 +64,41 @@
   }
 
   function open(thumb, href) {
+    if (!thumb.getBoundingClientRect().width) { window.location.href = href; return; }
+
+    var gone = false;
+    function go() {
+      if (gone) return;
+      gone = true;
+      window.location.href = href;
+    }
+    window.setTimeout(go, FALLBACK);
+
+    /* ONE: the clip goes, and nothing else moves yet.
+
+       This used to happen underneath the cover, which was built and appended
+       first -- opaque, at exactly the thumbnail's rect, so it hid the clip on
+       the very first frame and the fade was never visible at all. Amanda: "I
+       still don't see all the 5 webms fading out... I want you to let the
+       thumbnails fading out first, for just few ms, then the container starts
+       enlarging."
+
+       What the clip fades to reveal is the container's own background, which
+       is already the destination's colour -- so by the time the cover arrives
+       there is nothing left for it to hide. */
+    thumb.classList.add("is-opening");
+
+    window.setTimeout(function () { grow(thumb, href, go); }, FADE);
+  }
+
+  /* TWO: a copy of the container, over the real one, growing to fill the
+     screen. Measured now rather than at click time -- the page may have moved
+     under the reader during the fade. */
+  function grow(thumb, href, go) {
     var rect = thumb.getBoundingClientRect();
     var vw = document.documentElement.clientWidth;
     var vh = document.documentElement.clientHeight;
-    if (!rect.width || !rect.height) { window.location.href = href; return; }
+    if (!rect.width || !rect.height) { go(); return; }
 
     var cover = document.createElement("div");
     cover.className = "thumb-open";
@@ -71,11 +108,9 @@
     cover.style.width = rect.width + "px";
     cover.style.height = rect.height + "px";
     /* The container's own resolved colour, so this is the same paint the
-       reader was already looking at rather than a second guess at it. */
+       reader is already looking at rather than a second guess at it. */
     cover.style.background = window.getComputedStyle(thumb).backgroundColor;
     document.body.appendChild(cover);
-
-    thumb.classList.add("is-opening");   /* fades the clip out from under it */
 
     /* Origin at the top-left, so one translate and one scale map the box
        exactly onto the viewport. Scaling a flat colour costs nothing and
@@ -90,16 +125,9 @@
     cover.style.transform =
       "translate(" + (-rect.left) + "px, " + (-rect.top) + "px) scale(" + sx + ", " + sy + ")";
 
-    var gone = false;
-    function go() {
-      if (gone) return;
-      gone = true;
-      window.location.href = href;
-    }
     cover.addEventListener("transitionend", function (e) {
       if (e.propertyName === "transform") go();
     });
-    window.setTimeout(go, FALLBACK);
   }
 
   document.addEventListener("click", function (e) {

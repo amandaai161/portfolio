@@ -959,7 +959,11 @@ figure{margin:0}
 /* ═══════════════════════════════════════════════════════════════════════════
    CLOSING
    ═══════════════════════════════════════════════════════════════════════════ */
-.close{border-top:1px solid var(--line);padding:clamp(70px,9vw,124px) 0 clamp(30px,3.6vw,46px)}
+/* The bottom now matches master-suggestion's top padding exactly, so the last
+   section and the section that follows it breathe the same. Amanda: "the last
+   section, it needs more bottom padding make it having the same padding with
+   master-suggestion's top padding for better UX." */
+.close{border-top:1px solid var(--line);padding:clamp(70px,9vw,124px) 0 clamp(56px,6.5vw,120px)}
 .closelead{font-size:clamp(22px,2.6vw,34px);line-height:1.26;letter-spacing:-.034em;font-weight:500;
   max-width:26ch;margin:20px 0 0}
 .take{display:grid;gap:clamp(20px,2.6vw,44px);grid-template-columns:1fr;
@@ -2142,14 +2146,14 @@ figure{margin:0}
       </a>
     </li>
     <li class="msug__item">
-      <a class="msug__card" href="/project_kayn/" data-cursor="See project">
-        <span class="msug__media thumb thumb--kayn">
-          <video class="msug__video" src="/images/thumbnail_kayn.webm"
-                 poster="/images/thumbnail_kayn_poster.webp"
+      <a class="msug__card" href="/project_nobi/" data-cursor="See project">
+        <span class="msug__media thumb thumb--nobi">
+          <video class="msug__video" src="/images/thumbnail_nobi.webm"
+                 poster="/images/thumbnail_nobi_poster.webp"
                  preload="none" muted playsinline
                  disablepictureinpicture disableremoteplayback aria-hidden="true"></video>
         </span>
-        <span class="msug__title">Kayn Argan Oil</span>
+        <span class="msug__title">NOBI Bakery</span>
         <span class="msug__tags"><span class="msug__tag">Brand Design</span><span class="msug__tag">Web Design</span></span>
       </a>
     </li>

@@ -24,6 +24,26 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Expires", "0")
         super().end_headers()
 
+    def send_error(self, code, message=None, explain=None):
+        """Serve /404.html for a miss, so the real page can be previewed here.
+
+        Static hosts do this by convention; SimpleHTTPRequestHandler returns its
+        own plain-text page, which meant the 404 design could only be checked by
+        visiting /404.html directly -- not by actually getting one.
+        """
+        if code == 404:
+            page = pathlib.Path(self.directory) / "404.html"
+            if page.is_file():
+                body = page.read_bytes()
+                self.send_response(404)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                if self.command != "HEAD":
+                    self.wfile.write(body)
+                return
+        super().send_error(code, message, explain)
+
     def log_message(self, fmt, *args):        # keep the console readable
         if "GET" in (fmt % args) and " 200 " in (fmt % args):
             return

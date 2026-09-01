@@ -1,0 +1,132 @@
+/* ============================================================================
+   404 — page not found
+   ----------------------------------------------------------------------------
+   Built to Amanda's sketch: a giant 404 sitting behind the message, the
+   message centred over it, one solid button out and one quiet link under that.
+   Then "See my work" -- the master-suggestion section, renamed here because on
+   a page nobody chose to land on, three projects are not "other" projects,
+   they are the reason to stay.
+
+   The watermark is a real element rather than a background image so it can
+   scale with the viewport and be read by nothing -- it is aria-hidden, and the
+   heading carries the meaning.
+   ========================================================================== */
+.nf {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding-block: clamp(90px, 13vw, 210px) clamp(56px, 6.5vw, 120px);
+  overflow: hidden;
+}
+
+.nf__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 24px);
+  text-align: center;
+  max-width: 46ch;
+  padding-inline: var(--gutter);
+}
+
+/* The 404 itself. Sized off the viewport so it always reads as a backdrop
+   rather than as content, and clipped by .nf's overflow at narrow widths. */
+.nf__mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  z-index: 0;
+  margin: 0;
+  font-size: clamp(180px, 30vw, 460px);
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--fill);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.nf__title {
+  margin: 0;
+  font-size: clamp(34px, 5.2vw, 76px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.nf__body {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--black-3);
+}
+
+.nf__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 1.2vw, 18px);
+  margin-top: clamp(10px, 1.2vw, 18px);
+}
+
+/* v3's own button: solid at rest, inverting on hover, which is what the
+   1.5px border is there for. */
+.nf__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.85em 1.5em;
+  border: 1.5px solid var(--black-1);
+  background: var(--black-1);
+  color: var(--white-1);
+  font-size: clamp(15px, 1.1vw, 20px);
+  font-weight: var(--fw-medium, 500);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+.nf__cta:hover { background: var(--white-1); color: var(--black-1); }
+.nf__cta:focus-visible { outline: 2px solid var(--black-1); outline-offset: 4px; }
+
+.nf__alt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  color: var(--black-1);
+  text-decoration: none;
+  font-size: var(--fs-body);
+}
+.nf__alt::after {
+  content: "";
+  position: absolute;
+}
+.nf__alt span { position: relative; }
+/* The site's hover is an underline everywhere else, so it is one here too. */
+.nf__alt span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.35s var(--ease-out);
+}
+.nf__alt:hover span::after { transform: scaleX(1); transform-origin: left center; }
+
+.nf__arrow { width: 1.15em; height: auto; flex: none; transition: transform 0.35s var(--ease-out); }
+.nf__cta:hover .nf__arrow,
+.nf__alt:hover .nf__arrow { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nf__cta, .nf__arrow, .nf__alt span::after { transition: none; }
+  .nf__cta:hover .nf__arrow, .nf__alt:hover .nf__arrow { transform: none; }
+}
