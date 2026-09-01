@@ -21,9 +21,16 @@
    flow would fight both. A fixed-position clone at the same rect has neither
    problem and leaves the page underneath exactly as it was.
 
-   Navigation is not held until the animation ends. The browser is told to go as
-   the growth begins, so the fetch overlaps the motion rather than following it
-   -- the cover is still on screen while the next document is on its way.
+   NAVIGATION WAITS FOR THE COVER TO CLOSE. Amanda: "Right now seems like you
+   directly load the page before the container completely cover the entire
+   screen, which causes a rough transition. So, I want you to just let the
+   container enlarges til it coverst the entire screen completely first, then,
+   the respective page loads." So the growth's own transitionend is what fires
+   it, and the reader never sees the swap happen behind a half-grown cover.
+
+   The page it lands on opens under a screen of the same colour, which fades
+   over 0.5s -- see css/master-intro.css. The two halves meet on one flat
+   colour, which is what makes the join invisible.
 
    ES5, matching the rest of js/ on these pages.
    ========================================================================== */
@@ -31,8 +38,10 @@
   "use strict";
 
   var GROW = 620;      /* ms for the container to reach full screen           */
-  var HOLD = 180;      /* ms of growth before the navigation is asked for     */
   var EASE = "cubic-bezier(0.7, 0, 0.3, 1)";
+  /* If transitionend never arrives -- a backgrounded tab, a transition the
+     browser declines to run -- the navigation still has to happen. */
+  var FALLBACK = GROW + 220;
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   var busy = false;
@@ -81,7 +90,16 @@
     cover.style.transform =
       "translate(" + (-rect.left) + "px, " + (-rect.top) + "px) scale(" + sx + ", " + sy + ")";
 
-    window.setTimeout(function () { window.location.href = href; }, HOLD);
+    var gone = false;
+    function go() {
+      if (gone) return;
+      gone = true;
+      window.location.href = href;
+    }
+    cover.addEventListener("transitionend", function (e) {
+      if (e.propertyName === "transform") go();
+    });
+    window.setTimeout(go, FALLBACK);
   }
 
   document.addEventListener("click", function (e) {

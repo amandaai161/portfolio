@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/pf-chrome.css">
   <link rel="stylesheet" href="/css/master-footer.css">
+  <link rel="stylesheet" href="/css/master-intro.css">
   <link rel="stylesheet" href="/css/master-suggestion.css">
   <link rel="stylesheet" href="/css/master-thumb.css">
   <link rel="stylesheet" href="/css/master-bridge.css">
@@ -30,6 +31,16 @@
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+<!-- The page opens under a screen of its own colour, which lifts over 0.5s.
+     Same colour the thumbnail that led here grew to. See css/master-intro.css. -->
+<div class="pf-intro" style="--pf-intro-bg: #F8FAFC" aria-hidden="true"></div>
+<script>/* Safety net. The lift is a CSS animation, and if it never runs -- an engine that
+   declines it, a tab that loaded in the background and was never brought forward --
+   the page would sit under a full screen of flat colour for the rest of the visit.
+   Inline on purpose: a cover that hides the page must not depend on a second request
+   succeeding. Removing an already-lifted cover is a no-op. */
+(function(){var c=document.currentScript.previousElementSibling;
+ setTimeout(function(){if(c&&c.parentNode)c.parentNode.removeChild(c);},1400);})();</script>
 
 <!-- ==================== FLOATING SITE NAV ====================
      Not this project’s nav — Amanda’s. It rides above the page so a visitor who has

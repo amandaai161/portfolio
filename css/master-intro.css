@@ -1,0 +1,60 @@
+/* ============================================================================
+   THE PAGE INTRO — the far side of the card transition
+   ----------------------------------------------------------------------------
+   Amanda: "Identity, Aspire, and Nobi... don't have a page intro transition. So
+   I want you to add a simple fading in animation to their 'first screen'
+   elements... the respective pages start with empty background with their
+   respective colors for the first 0.5[s]. That way, the card transition can run
+   smoothly."
+
+   IT IS A COVER THAT FADES OUT, not a fade-in written onto each page's own
+   first-screen elements. The two look identical -- a screen of flat colour that
+   dissolves to reveal the page -- but this one touches nothing. Those three
+   pages each run their own scroll engine and their own reveal system, and NOBI
+   in particular already animates most of its opening ("as for nobi, only the bg
+   video and the header elements, the others are already animated"); picking
+   elements out of each page to fade would mean editing three hand-built designs
+   and knowing which parts were already spoken for.
+
+   IT ALSO CLOSES THE LOOP WITH js/thumb-open.js. The thumbnail's container
+   grows to fill the screen in the colour of the page it leads to, and that page
+   opens under a full screen of the SAME colour, which then fades. The two
+   halves meet on one flat colour, so the navigation in between has nothing to
+   show. Which is why --pf-intro-bg below matches .thumb--* in
+   css/master-thumb.css exactly.
+
+   ASPIRE AND HAZEN ARE #F8FAFC, NOT WHITE. Their pages are white, but their
+   clips open on #F8FAFC (measured off frame 1: #F6FAFB and #F7FCFC), and Amanda:
+   "currently, the solid white container enlarging animation isn't very visible
+   to human eye." So the cover carries the clip's own near-white and the page
+   arrives at white as it fades -- which is also, exactly, "make the respective
+   site's bg color to be F8FAFC for the first 0.5[s], then it changes to their
+   actual color which is white."
+
+   KAYN IS DELIBERATELY ABSENT: it has a loader of its own and needs no second
+   opening.
+
+   Pure CSS. No script, so it cannot fail to lift.
+   ========================================================================== */
+
+.pf-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000;   /* under a thumbnail cover, over everything else */
+  background: var(--pf-intro-bg, #ffffff);
+  pointer-events: none;
+  animation: pf-intro-lift 0.5s ease forwards;
+}
+
+/* visibility, not just opacity: at 0 opacity the layer is still painted, and
+   leaving a full-screen composited layer over the page for the rest of the
+   visit costs a little on every frame after. */
+@keyframes pf-intro-lift {
+  from { opacity: 1; visibility: visible; }
+  99%  { opacity: 0; visibility: visible; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-intro { animation-duration: 1ms; }
+}

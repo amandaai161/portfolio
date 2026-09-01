@@ -43,6 +43,8 @@
 }
 
 .msug__head {
+  /* Amanda: "The master-suggestion headline can be center aligned (not left)." */
+  text-align: center;
   margin: 0 0 clamp(26px, 3vw, 52px);
   font-size: clamp(26px, 3.2vw, 52px);
   font-weight: 500;
