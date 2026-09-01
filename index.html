@@ -30,6 +30,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="/css/type-system.css" />
+  <link rel="stylesheet" href="/css/master-thumb.css">
   <link rel="stylesheet" href="/css/v3.css" />
   <!-- After v3.css, which is where these rules used to live as its last
        block — same position in the cascade, now on both pages. -->
@@ -285,7 +286,7 @@
               <h3 class="hazen__title t-h3">Claude design skills: HAZEN</h3>
               <p class="hazen__pill"><span class="pill">Claude Skills</span></p>
             </div>
-            <a class="hazen__media" href="/project_hazen/" data-cursor="See project" aria-label="Claude design skills: HAZEN">
+            <a class="hazen__media thumb thumb--hazen" href="/project_hazen/" data-cursor="See project" aria-label="Claude design skills: HAZEN">
               <video class="hazen__video" src="/images/thumbnail_hazen.webm" poster="/images/thumbnail_hazen_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video>
             </a>
             <p class="hazen__desc t-body-sm">A set of Claude skills that carry my art direction into generative work — brief in, directed image and video prompts out, with the craft decisions already made.</p>
@@ -308,11 +309,11 @@
                   <li class="pill">Canva Brand Kit</li>
                 </ul>
               </div>
-              <div class="wcard__media"><video class="wcard__video" src="/images/thumbnail_identity.webm" poster="/images/thumbnail_identity_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+              <div class="wcard__media thumb thumb--identity"><video class="wcard__video" src="/images/thumbnail_identity.webm" poster="/images/thumbnail_identity_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
             </a>
 
             <a class="wcard wcard--r" href="/project_aspire/" data-cursor="See project">
-              <div class="wcard__media"><video class="wcard__video" src="/images/thumbnail_aspire.webm" poster="/images/thumbnail_aspire_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+              <div class="wcard__media thumb thumb--aspire"><video class="wcard__video" src="/images/thumbnail_aspire.webm" poster="/images/thumbnail_aspire_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
               <div class="wcard__meta">
                 <h3 class="wcard__title t-h3">Aspire Web Design System</h3>
                 <ul class="wcard__tags">
@@ -335,11 +336,11 @@
                   <li class="pill">Web Design</li>
                 </ul>
               </div>
-              <div class="wcard__media"><video class="wcard__video" src="/images/thumbnail_kayn.webm" poster="/images/thumbnail_kayn_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+              <div class="wcard__media thumb thumb--kayn"><video class="wcard__video" src="/images/thumbnail_kayn.webm" poster="/images/thumbnail_kayn_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
             </a>
 
             <a class="wcard wcard--r" href="/project_nobi/" data-cursor="See project">
-              <div class="wcard__media"><video class="wcard__video" src="/images/thumbnail_nobi.webm" poster="/images/thumbnail_nobi_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+              <div class="wcard__media thumb thumb--nobi"><video class="wcard__video" src="/images/thumbnail_nobi.webm" poster="/images/thumbnail_nobi_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
               <div class="wcard__meta">
                 <h3 class="wcard__title t-h3">NOBI Bakery</h3>
                 <ul class="wcard__tags">
@@ -571,6 +572,7 @@
   <script src="/js/scenes-intro.js"></script>
   <script src="/js/scenes-work.js"></script>
   <script src="/js/thumb-video.js"></script>
+  <script src="/js/thumb-open.js"></script>
   <script src="/js/scenes-outro.js"></script>
   <!-- LAST of the scene files, and it has to be: js/headline.js measures where
        its own beats fall from what the others have already built — #work's

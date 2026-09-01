@@ -755,11 +755,8 @@ html.motion .headhold { height: 40vh; }
   /* Amanda's clip is 850x532 native, and 850 is the cap she asked for -- so
      the box is exactly the clip, never an upscale and never a crop. Not the
      8:5 the pairs use: this one has a ratio of its own. */
-  display: block;              /* it is the <a> now, not a div */
   aspect-ratio: 850 / 532;
   max-width: 850px;
-  background: #bfbfbf;
-  overflow: hidden;
   transform-origin: center center;
 }
 .hazen__media img { width: 100%; height: 100%; object-fit: cover; }
@@ -800,31 +797,12 @@ html.motion .headhold { height: 40vh; }
      upscale, and the pair columns only reach ~815px at the widest anyway. */
   aspect-ratio: 8 / 5;
   max-width: 800px;
-  background: #bfbfbf;
-  overflow: hidden;
   transform-origin: center center;
 }
-.wcard__media img,
-.wcard__video,
-.hazen__video,
-.thumb-canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-/* How long one hover pass takes, end to end, forward or back. A duration
-   rather than a rate: it holds even if the clips are re-exported at a
-   different length or frame count. Read per element by js/thumb-video.js. */
-.wcard__video,
-.hazen__video { --thumb-duration: 0.4s; }
-
-/* The canvas is stacked on the video rather than replacing it, so the handover
-   at the end of the capture pass cannot flash a gap. Until .is-canvas it is not
-   painted at all; after it, it is the picture and the video is only a decoder.
-   js/thumb-video.js creates the element -- there is none in the markup, so a
-   page with no JS keeps the poster and nothing here applies. One shared class
-   rather than a __canvas per block: the element is the same object on both. */
-.wcard__media,
-.hazen__media { position: relative; }
-.thumb-canvas { position: absolute; inset: 0; opacity: 0; }
-.is-canvas > .thumb-canvas { opacity: 1; }
+/* The video, the canvas, the container colour and the click all live in
+   css/master-thumb.css now -- they are the same on the homepage and in the
+   master-suggestion section, and .thumb is what carries them. What stays here
+   is only this page's own sizing. */
 
 .wcard__meta { display: flex; flex-direction: column; gap: var(--swork-meta-gap); align-items: flex-start; }
 .wcard__title { font-weight: var(--fw-regular); }

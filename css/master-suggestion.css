@@ -1,0 +1,110 @@
+/* ============================================================================
+   MASTER SUGGESTION — "See other projects"
+   ----------------------------------------------------------------------------
+   Three project cards, the last thing before the master footer. It sits on the
+   seven case-study pages and inside the-process section on the four immersive
+   project pages, so like master-footer and master-bridge it assumes nothing
+   about the page around it: its own type, its own colour, everything scoped
+   under .master-suggestion.
+
+   The thumbnails are the same component as the homepage's -- css/master-thumb.css
+   paints and animates them, js/thumb-video.js runs the hover, js/thumb-open.js
+   runs the click. Nothing about that behaviour is repeated here; this file only
+   arranges three of them and sets the ratio Amanda asked for, 8:5.
+
+   GENERATED CONTENT. scripts/gen-master-suggestion.py writes the markup into
+   every page and decides which three each one shows. Change the roster there,
+   not by hand in eleven files.
+   ========================================================================== */
+.master-suggestion {
+  --msug-ink: #111111;
+  --msug-muted: #6B6B6B;
+  --msug-line: rgba(17, 17, 17, 0.18);
+  --msug-paper: #ffffff;
+  --msug-font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  display: block;
+  box-sizing: border-box;
+  padding-block: clamp(56px, 6.5vw, 120px);
+  background: var(--msug-paper);
+  color: var(--msug-ink);
+  font-family: var(--msug-font);
+  border-top: 1px solid var(--msug-line);
+}
+.master-suggestion *,
+.master-suggestion *::before,
+.master-suggestion *::after { box-sizing: border-box; }
+
+.msug__wrap {
+  width: 100%;
+  max-width: calc(1720px + clamp(20px, 5.2vw, 100px) * 2);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5.2vw, 100px);
+}
+
+.msug__head {
+  margin: 0 0 clamp(26px, 3vw, 52px);
+  font-size: clamp(26px, 3.2vw, 52px);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  color: var(--msug-ink);
+}
+
+.msug__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.2vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.msug__item { min-width: 0; }
+
+.msug__card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.1vw, 18px);
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Amanda: "The thumbnail size is 8:5, keep that aspect ration." HAZEN's clip is
+   850x532 rather than a true 8:5, which object-fit: cover trims by a fifth of a
+   pixel at these sizes -- the row reading as one set is worth more than that. */
+.msug__media { aspect-ratio: 8 / 5; }
+
+.msug__title {
+  display: block;
+  font-size: clamp(16px, 1.25vw, 22px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.msug__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.msug__tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--msug-ink);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: clamp(12px, 0.85vw, 14px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .msug__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Three into two columns leaves a widow, and a half-empty last row reads as
+     a mistake. The third card takes the full width instead. */
+  .msug__item:last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+  .msug__grid { grid-template-columns: minmax(0, 1fr); }
+  .msug__item:last-child { grid-column: auto; }
+}

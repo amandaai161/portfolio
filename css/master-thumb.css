@@ -1,0 +1,89 @@
+/* ============================================================================
+   THE PROJECT THUMBNAIL — one component, wherever it appears
+   ----------------------------------------------------------------------------
+   The same object on the homepage and in the master-suggestion section: a
+   coloured container, a clip that rests on frame 1 and animates on hover, and
+   a click that grows the container over the whole screen on the way to the
+   project.
+
+   THE CONTAINER CARRIES THE DESTINATION'S COLOUR. Amanda: "the one that
+   resizes actually the thumbnail container, not the thumbnail image itself. So,
+   make sure that the thumbnail's container background color matches the
+   respective site's background color as well." Each --thumb-bg below is read
+   off the page that thumbnail leads to, so the box that grows to fill the
+   screen is already the colour of what loads next and the hand-off has no seam.
+
+   Everything is keyed on .thumb rather than on .wcard__media / .hazen__media /
+   .msug__media, so the block that arranges the thumbnails and the thumbnail
+   itself stay separate concerns -- and js/thumb-video.js can find every one of
+   them with a single selector.
+
+   Self-contained on purpose: this loads on the four immersive project pages,
+   which take none of the site's global stylesheets.
+   ========================================================================== */
+
+/* ---- where each thumbnail leads, and what colour that page is ----------- */
+.thumb--hazen    { --thumb-bg: #FFFFFF; }   /* project_hazen    --paper      */
+.thumb--identity { --thumb-bg: #0C021A; }   /* project_identity --bg         */
+.thumb--aspire   { --thumb-bg: #FFFFFF; }   /* project_aspire   --white      */
+.thumb--kayn     { --thumb-bg: #2A462D; }   /* project_kayn     --forest     */
+.thumb--nobi     { --thumb-bg: #472128; }   /* project_nobi     --burgundy   */
+
+.thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--thumb-bg, #bfbfbf);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.thumb > img,
+.thumb > video,
+.thumb-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* How long one hover pass takes, end to end, forward or back. A duration
+   rather than a rate: it holds even if the clips are re-exported at a
+   different length or frame count. Read per element by js/thumb-video.js. */
+.thumb > video { --thumb-duration: 0.4s; }
+
+/* The canvas is stacked on the video rather than replacing it, so the handover
+   at the end of the capture pass cannot flash a gap. Until .is-canvas it is not
+   painted at all; after it, it is the picture and the video is only a decoder.
+   js/thumb-video.js creates the element -- there is none in the markup, so a
+   page with no JS keeps the poster and nothing here applies. */
+.thumb-canvas { position: absolute; inset: 0; opacity: 0; }
+.thumb.is-canvas > .thumb-canvas { opacity: 1; }
+
+/* ---- the click ---------------------------------------------------------
+   js/thumb-open.js fades the clip out and grows a copy of the container over
+   the viewport. The clip fades rather than scaling with it because the
+   container is what travels -- an image stretched to a whole screen from a
+   thumbnail would smear. */
+.thumb.is-opening > video,
+.thumb.is-opening > .thumb-canvas {
+  opacity: 0;
+  transition: opacity 0.18s linear;
+}
+
+/* The travelling copy. Painted, never interactive, and above everything the
+   page floats -- the nav dock included. */
+.thumb-open {
+  position: fixed;
+  z-index: 2147483000;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb.is-opening > video,
+  .thumb.is-opening > .thumb-canvas { transition: none; }
+}

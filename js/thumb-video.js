@@ -57,9 +57,11 @@
 (function () {
   "use strict";
 
-  /* Both blocks. The pairs are .wcard, HAZEN is .hazen; each is an <a> with a
-     __media box holding the clip, which is all this file needs of either. */
-  var videos = document.querySelectorAll(".wcard__video, .hazen__video");
+  /* Every thumbnail on the page, wherever it sits. .thumb is the container
+     class css/master-thumb.css keys on -- the homepage pairs, the HAZEN row and
+     the master-suggestion cards all carry it, so none of them has to be named
+     here. The card is the nearest <a>, which is true of all three. */
+  var videos = document.querySelectorAll(".thumb > video");
   if (!videos.length) return;
 
   var reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -444,25 +446,37 @@
      Nothing downloads until the section is within a screen and a half AND the
      device has a real pointer. A reader who never scrolls to the work, and
      every phone, pays only for the posters. */
-  var near = false;
+  var near = [];      /* per thumbnail, whether the scroll has come close */
 
   function maybeWarm() {
-    if (!near || !hoverable.matches) return;
-    for (var i = 0; i < thumbs.length; i++) thumbs[i].warm();
+    if (!hoverable.matches) return;
+    for (var i = 0; i < thumbs.length; i++) if (near[i]) thumbs[i].warm();
   }
 
-  var work = document.getElementById("work");
-  if (work && window.IntersectionObserver) {
+  /* Per thumbnail rather than per section. The homepage could watch #work,
+     but a case study page has no such wrapper, and warming on load there would
+     fetch every suggestion clip before the reader had scrolled anywhere near
+     them. Watching each one covers both without knowing which page it is on. */
+  if (window.IntersectionObserver) {
     var watch = new IntersectionObserver(function (entries) {
-      if (!entries[0].isIntersecting) return;
-      watch.disconnect();
-      near = true;
+      for (var e = 0; e < entries.length; e++) {
+        if (!entries[e].isIntersecting) continue;
+        var i = indexOfCard(entries[e].target);
+        if (i < 0) continue;
+        near[i] = true;
+        watch.unobserve(entries[e].target);
+      }
       maybeWarm();
     }, { rootMargin: "150% 0px" });
-    watch.observe(work);
+    for (var w = 0; w < thumbs.length; w++) watch.observe(thumbs[w].card);
   } else {
-    near = true;
+    for (var n = 0; n < thumbs.length; n++) near[n] = true;
     addEventListener("load", maybeWarm);
+  }
+
+  function indexOfCard(el) {
+    for (var i = 0; i < thumbs.length; i++) if (thumbs[i].card === el) return i;
+    return -1;
   }
 
   /* A mouse plugged into a tablet mid-visit should get the animation. */
@@ -502,7 +516,10 @@
   /* ------------------------------------------------------------- debug hook */
   window.thumbVideo = {
     thumbs: thumbs,
-    warm: function () { near = true; maybeWarm(); },
+    warm: function () {
+      for (var i = 0; i < thumbs.length; i++) near[i] = true;
+      maybeWarm();
+    },
     get state() { return thumbs.map(function (t) { return t.debug; }); }
   };
 })();

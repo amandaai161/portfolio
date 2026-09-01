@@ -19,7 +19,7 @@
   --cs-ink: var(--black-1);      /* body ink, sidebar, headings              */
   --cs-muted: var(--black-3);    /* secondary text                           */
   --cs-dark: var(--black-1);     /* dark panels                              */
-  --cs-pill: var(--fill);        /* sidebar pills                            */
+  --cs-pill: transparent;        /* sidebar pills -- outlined, not filled     */
   --cs-soft: var(--white-2);     /* faint panel ground, image placeholder    */
   --cs-grey: var(--fill);        /* hover tint, icon backing                 */
   --cs-track: var(--fill);       /* the "before" half of a comparison bar    */
@@ -179,13 +179,61 @@
 .cs-sidebar__link:hover { text-decoration: underline; text-underline-offset: 3px; }
 .cs-sidebar__link:hover .ext-arrow { transform: translate(2px, -2px); }
 
+/* Live preview -- full width, directly under the project description. Amanda:
+   "Please add a button, full width, the copy is 'Live preview' with right
+   arrow. Put it just below the project desc." Only the four projects that HAVE
+   a live page carry one; the other three case studies have nothing to point at.
+
+   The same button v3 uses everywhere else: solid black at rest, inverting to
+   white on hover, which is what the 1.5px border is there for. */
+.cs-live {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  width: 100%;
+  padding: 0.85em 1.2em;
+  border: 1.5px solid var(--cs-ink);
+  border-radius: 0;
+  background: var(--cs-ink);
+  color: var(--white-1, #ffffff);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium, 500);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+.cs-live:hover { background: var(--white-1, #ffffff); color: var(--cs-ink); }
+.cs-live:focus-visible { outline: 2px solid var(--cs-ink); outline-offset: 3px; }
+.cs-live__arrow {
+  width: 1.15em;
+  height: auto;
+  flex: none;
+  transition: transform 0.35s var(--ease-out);
+}
+.cs-live:hover .cs-live__arrow { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-live, .cs-live__arrow { transition: none; }
+  .cs-live:hover .cs-live__arrow { transform: none; }
+}
+
 /* contribution pills */
 .cs-contrib { display: flex; flex-direction: column; gap: 8px; }
 .cs-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+/* Amanda: "The side bar capsules, please follow the similar style the homepage
+   has. Black outline instead of grey background, to make everything
+   consistent." Same shape as v3's .pill -- a 1px black hairline, no fill. The
+   padding drops a pixel on each side so the outlined capsule sits at the same
+   overall size the filled one did. */
 .cs-pill {
   border-radius: 999px;
   background: var(--cs-pill);
-  padding: 6px 12px;   /* tuned to the 14px label (was 8px 16px at 16px) */
+  border: 1px solid var(--cs-ink);
+  padding: 5px 11px;   /* tuned to the 14px label, less the new 1px border */
   font-size: var(--fs-body-sm);
   font-weight: 400;
   letter-spacing: -0.02em;
