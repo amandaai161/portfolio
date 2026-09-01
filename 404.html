@@ -125,88 +125,73 @@
   </section>
   <!-- END master-suggestion -->
 
-  <!-- ===================== CONTACT + FOOTER =====================
-       The homepage's footer, verbatim, on Amanda's instruction: "It is the
-       footer we're gonna use in the entire pages of the site." Its styles are
-       in css/chrome.css, which both pages load.
+  <!-- THE SITE FOOTER — v3's own .contact block, not a re-creation.
+       Amanda: "Why not just use the existing one to keep the consistency."
+       The rules arrive via /css/master-footer.css, scoped under .master-footer so
+       they cannot touch this page's own design. Two deliberate departures from
+       the homepage's copy of this markup: Home points at "/" rather than "#top"
+       (on a project page "#top" would scroll this page, not go home), and the
+       toast ships empty — aria-live announces on content CHANGE, so the handler
+       writes the text. The .outro__rise classes are dropped: they are homepage
+       scroll-scene hooks and nothing here drives them.
 
-       Two differences from the homepage copy, both forced by this page rather
-       than chosen: the reveal class is .reveal (js/script.js's observer, what
-       the rest of this page uses) instead of .outro__rise (a GSAP scrub this
-       page has no GSAP for), and Home is a route rather than a scroll target.
+       The scope class sits on a WRAPPER rather than on .contact itself: every
+       rule in master-footer.css is scoped as a DESCENDANT of .master-footer, and a
+       descendant selector does not match the element carrying the class. Putting
+       it on .contact would silently drop .contact's own background and padding. -->
+  <div class="master-footer">
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact__info">
+          <h2 class="contact__title">Let&rsquo;s get in touch!</h2>
 
-       What it replaces: the v1 block with two columns of arrow links. All
-       four of those destinations survive — LinkedIn and Behance as the chips,
-       Resume in the nav list, and "Back to home" as Home. -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="contact__info">
-        <h2 class="contact__title reveal">Let&rsquo;s get in touch!</h2>
+          <div class="contact__details">
+            <div class="contact__reach">
+              <div class="contact__email-wrap">
+                <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" data-cursor="Copy to clipboard" aria-label="Copy amandaalfattah@gmail.com to clipboard">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="contact__email-text">amandaalfattah@gmail.com</span>
+                </button>
+                <span class="copy-toast" role="status" aria-live="polite"></span>
+              </div>
 
-        <div class="contact__details reveal">
-          <div class="contact__reach">
-            <!-- data-cursor is the same attribute the project cards use:
-                 js/cursor.js swells the black dot into a labelled pill over
-                 anything carrying it. Amanda: "they should be coming from
-                 the blackdot, not separated elements. Just like the 'See
-                 project' ones." So there is no tooltip element and no
-                 tooltip CSS — one hover affordance on the page, not two.
-                 The label is presentational; the accessible name stays on
-                 aria-label, and .copy-toast still announces the result. -->
-            <div class="contact__email-wrap">
-              <button type="button" class="contact__email t-h4" data-copy="amandaalfattah@gmail.com" data-cursor="Copy to clipboard" aria-label="Copy email address to clipboard">
-                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="contact__email-text">amandaalfattah@gmail.com</span>
-              </button>
-              <span class="copy-toast" role="status" aria-live="polite">Copied to clipboard</span>
+              <!-- Both marks are Amanda's own files, used as supplied: her 48x48
+                   box, her paths, her #181818. The background rect is painted
+                   currentColor so one declaration owns the chip colour. -->
+              <div class="contact__socials">
+                <a class="social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" data-cursor="Visit my Behance" aria-label="Visit my Behance">
+                  <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor" />
+                    <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818" />
+                  </svg>
+                </a>
+                <a class="social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" data-cursor="Chat on Linkedin" aria-label="Chat on Linkedin">
+                  <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <rect width="48" height="48" fill="currentColor" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818" />
+                  </svg>
+                </a>
+              </div>
             </div>
 
-            <!-- Both marks are Amanda's own files (behance_icon.svg and
-                 LinkedIn_icon.svg), used as supplied: her 48x48 box, her
-                 paths, her #181818. The one edit is the background rect,
-                 which is hers too but painted currentColor instead of white
-                 so css/chrome.css owns the chip colour in one place. Square, no
-                 radius — "with no rounded corners container". -->
-            <div class="contact__socials">
-              <a class="social" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener" data-cursor="Visit my Behance" aria-label="Visit my Behance">
-                <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                  <rect width="48" height="48" fill="currentColor" />
-                  <path d="M38.1667 17.1732H28.25V14.3398H38.1667V17.1732ZM40.6118 31.3398C39.9857 33.1773 37.7374 35.5898 33.3854 35.5898C29.0306 35.5898 25.5031 33.1404 25.5031 27.5503C25.5031 22.0111 28.7968 19.1636 33.2466 19.1636C37.6127 19.1636 40.2789 21.6881 40.8612 25.4338C40.9717 26.1506 41.0156 27.1168 40.9957 28.4654H29.6242C29.8083 33.0143 34.5584 33.1574 36.1238 31.3398H40.6118ZM29.7233 25.6732H36.7571C36.6083 23.4816 35.1477 22.5296 33.248 22.5296C31.1712 22.5296 30.0223 23.6176 29.7233 25.6732ZM16.1602 35.5728H7V14.3696H16.8501C24.6077 14.4843 24.7551 22.0819 20.7034 24.1531C25.6065 25.9381 25.7708 35.5728 16.1602 35.5728ZM11.25 22.8398H16.3273C19.8803 22.8398 20.4442 18.5898 15.8853 18.5898H11.25V22.8398ZM16.0539 27.0898H11.25V31.3625H15.9831C20.311 31.3625 20.0461 27.0898 16.0539 27.0898Z" fill="#181818" />
-                </svg>
-              </a>
-              <a class="social" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener" data-cursor="Chat on Linkedin" aria-label="Chat on Linkedin">
-                <svg class="social__glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                  <rect width="48" height="48" fill="currentColor" />
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5244 18.2126H25.7859V20.8334C26.5438 19.3261 28.4875 17.9718 31.4073 17.9718C37.0045 17.9718 38.3333 20.9723 38.3333 26.4774V36.6732H32.6667V27.7312C32.6667 24.5961 31.9088 22.8281 29.9793 22.8281C27.3032 22.8281 26.1911 24.7335 26.1911 27.7298V36.6732H20.5244V18.2126ZM10.8075 36.4323H16.4742V17.9718H10.8075V36.4323ZM17.2859 11.9523C17.2861 12.4273 17.1919 12.8976 17.0088 13.3358C16.8257 13.7741 16.5573 14.1716 16.2192 14.5052C15.8801 14.8425 15.4778 15.1097 15.0354 15.2915C14.593 15.4734 14.1191 15.5662 13.6408 15.5648C12.6769 15.5627 11.7523 15.1828 11.0653 14.5066C10.7286 14.1718 10.4612 13.7738 10.2784 13.3355C10.0956 12.8972 10.001 12.4272 10 11.9523C10 10.9933 10.3825 10.0753 11.0668 9.3981C11.752 8.71934 12.6777 8.33896 13.6423 8.33985C14.6084 8.33985 15.5349 8.72093 16.2192 9.3981C16.9034 10.0753 17.2859 10.9933 17.2859 11.9523Z" fill="#181818" />
-                </svg>
-              </a>
-            </div>
+            <nav class="contact__nav" aria-label="Footer">
+              <a href="/" class="contact__nav-link">Home</a>
+              <a href="/about" class="contact__nav-link">About</a>
+              <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="contact__nav-link" target="_blank" rel="noopener">Resume</a>
+            </nav>
           </div>
-
-          <nav class="contact__nav" aria-label="Footer">
-            <a href="/" class="contact__nav-link">Home</a>
-            <a href="/about" class="contact__nav-link">About</a>
-            <a href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" class="contact__nav-link" target="_blank" rel="noopener">Resume</a>
-          </nav>
         </div>
+
+        <footer class="footer">
+          <p class="footer__name">Site by Amanda Alfatah Idris. Built with Claude Code</p>
+          <p class="footer__legal">&copy;2026 Amanda Idris. All rights reserved.</p>
+        </footer>
       </div>
-
-      <footer class="footer reveal">
-        <!-- No type-scale class on either. .footer__name is already sized by
-             styles.css, so a .t-* class beside it is a coin toss between two
-             single-class selectors that only load order decides — which is
-             exactly how these two ended up at 18px and 14.4px. css/v3.css
-             sizes both, in one rule. -->
-        <p class="footer__name">Site by Amanda Alfatah Idris. Built with Claude Code</p>
-        <p class="footer__legal">&copy;2026 Amanda Idris. All rights reserved.</p>
-      </footer>
-    </div>
-  </section>
-
-  </section>
+    </section>
+  </div>
 
   <script src="/js/script.js"></script>
   <script src="/js/cursor.js"></script>

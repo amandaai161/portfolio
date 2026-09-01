@@ -49,7 +49,9 @@
   font-weight: 600;
   line-height: 0.8;
   letter-spacing: -0.06em;
-  color: var(--fill);
+  /* Lighter than --fill: at #ECECEC it read as a shape competing with the
+     message rather than as a watermark behind it. */
+  color: rgba(17, 17, 17, 0.045);
   user-select: none;
   pointer-events: none;
   white-space: nowrap;
