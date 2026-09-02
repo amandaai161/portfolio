@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>KAYN — Golden Drop of Nature | 100% Pure Moroccan Argan Oil</title>
+<link rel="icon" href="/favico.svg" type="image/svg+xml">
 <meta name="description" content="KAYN Argan Oil. First-press, slow-pressed and 99.8% Triterpene verified, sourced direct from Agadir, Morocco. For skin, hair and nails.">
 <meta name="theme-color" content="#2A462D">
 <meta name="color-scheme" content="light only">
@@ -15,10 +16,19 @@
 <link rel="preload" href="font/Mukta-Bold.woff2"      as="font" type="font/woff2" crossorigin>
 
 <!-- The hero still and the film are what the loader is actually waiting on.
-     No `crossorigin` here: these are same-origin and a CORS-mode preload would not
-     match the plain fetch/`<img>` request, costing a second download. -->
+
+     THE TWO PRELOADS NEED OPPOSITE THINGS, which is why only one carries
+     `crossorigin`. For `as="image"` the note below holds: it is same-origin, a
+     CORS-mode preload would not match the plain <img> request, and adding
+     crossorigin would cost a second download.
+
+     For `as="fetch"` it is the reverse. That destination is ALWAYS fetched in
+     CORS mode whatever the attribute says, so without `crossorigin` the preload's
+     credentials mode cannot match the fetch() in film.js that consumes it -- the
+     browser warns, throws the preload away, and downloads the 2.3MB film twice.
+     Measured before the fix: two requests, 2,385KB each, on every visit. -->
 <link rel="preload" href="images/2026kayn-hero.webp" as="image" fetchpriority="high">
-<link rel="preload" href="images/2026kayn-bottle-animation.webm" as="fetch" type="video/webm">
+<link rel="preload" href="images/2026kayn-bottle-animation.webm" as="fetch" type="video/webm" crossorigin>
 
 <link rel="stylesheet" href="styles.css">
 
