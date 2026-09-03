@@ -61,7 +61,8 @@
    it the thumbnail has no boundary at all. */
 .pf-process__shot {
   position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   aspect-ratio: 7 / 4;
   border: 1.5px solid var(--pf-ink);
   background: var(--pf-shot);
@@ -137,20 +138,24 @@
   transition: background 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
               color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.pf-process__cta:hover { background: #ffffff; color: #111111; }
-.pf-process__cta:focus-visible { outline: 2px solid #111111; outline-offset: 4px; }
+/* It sits ON the thumbnail, above the absolutely-positioned image, and it is
+   a <span> rather than an <a> -- the thumbnail around it is the link, and a
+   link inside a link is invalid. So every state below keys off the THUMBNAIL
+   being hovered or focused, not the button itself: the button is not a
+   separate target and must never behave like one. */
+.pf-process__shot .pf-process__cta { position: relative; z-index: 1; }
+.pf-process__shot:hover .pf-process__cta,
+.pf-process__shot:focus-visible .pf-process__cta { background: #ffffff; color: #111111; }
 .pf-process__arrow {
   width: 1.6em;
   height: auto;
   flex: none;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.pf-process__cta:hover .pf-process__arrow { transform: translateX(5px); }
+.pf-process__shot:hover .pf-process__arrow,
+.pf-process__shot:focus-visible .pf-process__arrow { transform: translateX(5px); }
 
 .pf-process__meta { display: flex; flex-direction: column; gap: clamp(16px, 1.5vw, 26px); }
-/* The CTA sits at the end of this column now. Without this it would stretch to
-   the column's full width, because a flex column stretches its children. */
-.pf-process__meta .pf-process__cta { align-self: flex-start; }
 
 .pf-process__title {
   margin: 0;
