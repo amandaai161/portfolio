@@ -920,12 +920,18 @@
           </h2>
 
           <div class="pf-process__top">
-            <div class="pf-process__shot">
-              <a class="pf-process__cta" href="/project_aspire/casestudy/" data-cursor="See the process">
-                <span>See the full process breakdown</span>
-                <svg class="pf-process__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-              </a>
-            </div>
+            <!-- The whole thumbnail is the link. The CTA used to sit inside this
+                 box; with the box itself an <a> it had to come out, because a link
+                 inside a link is invalid. It now closes the meta column instead. -->
+            <a class="pf-process__shot" href="/project_aspire/casestudy/" data-cursor="Read the case study"
+               aria-label="Read the Aspire Web Design System case study">
+              <!-- Not lazy. This sheet is parked at translateX(100%) until the
+                   reader asks for it, so a lazy image would still be deciding to
+                   download as the cover slides in, and pop in behind it. One
+                   ~50KB webp is cheaper than that. -->
+              <img class="pf-process__shot-img" src="/images/process_aspire.webp" alt=""
+                   width="700" height="400" />
+            </a>
 
             <div class="pf-process__meta">
               <h3 class="pf-process__title">Aspire Web Design System</h3>
@@ -940,6 +946,10 @@
                 <div class="pf-fact"><dt>Company</dt><dd>Aspire</dd></div>
                 <div class="pf-fact"><dt>Industry</dt><dd>Fintech</dd></div>
               </dl>
+              <a class="pf-process__cta" href="/project_aspire/casestudy/" data-cursor="Read the case study">
+                <span>Read the case study</span>
+                <svg class="pf-process__arrow" viewBox="0 0 40 26" aria-hidden="true"><path d="M2 13h34m0 0l-11-11m11 11l-11 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              </a>
             </div>
           </div>
 

@@ -52,14 +52,18 @@
   align-items: center;
 }
 
-/* A placeholder surface with the CTA sitting in it. Drop a real preview image
-   in as a <img class="pf-process__shot-img"> and it fills the same box. */
+/* The preview, and the whole of it is the link through to the case study.
+   7:4 is the images' own ratio (700x400), so nothing is cropped -- Amanda:
+   "please keep the aspect ratio of the image".
+
+   The outline is load-bearing rather than decorative: most of these previews
+   are white-ish at the edges and the section behind them is white, so without
+   it the thumbnail has no boundary at all. */
 .pf-process__shot {
   position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 21 / 10;
-  padding: clamp(20px, 2vw, 40px);
+  display: block;
+  aspect-ratio: 7 / 4;
+  border: 1.5px solid var(--pf-ink);
   background: var(--pf-shot);
   overflow: hidden;
 }
@@ -70,7 +74,33 @@
   height: 100%;
   object-fit: cover;
   display: block;
+
+  /* At rest it sits back: softened and a little faded. Hovering brings it
+     into focus, up to full opacity, and pushes it in slightly -- the same
+     move the other-work thumbnails make on the homepage.
+
+     The rest state is ALREADY scaled past the frame. A blur samples beyond
+     the element's edges, so an unscaled blurred image feathers out along all
+     four sides and the outline ends up wrapping a soft grey halo. 1.03 on a
+     ~500px box is ~7px of bleed each side, comfortably more than the 4px
+     radius needs, and it is why the zoom runs 1.03 -> 1.075 rather than
+     1 -> 1.045: the eye still reads a 4.5% push. */
+  opacity: 0.75;
+  filter: blur(4px);
+  transform: scale(1.03);
+  transition:
+    opacity 0.5s var(--pf-ease),
+    filter 0.5s var(--pf-ease),
+    transform 0.6s var(--pf-ease);
+  will-change: transform, filter;
 }
+.pf-process__shot:hover .pf-process__shot-img,
+.pf-process__shot:focus-visible .pf-process__shot-img {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1.075);
+}
+.pf-process__shot:focus-visible { outline: 2px solid var(--pf-ink); outline-offset: 4px; }
 
 /* ---- the CTA ----
    v3's own .cta__btn / .cta__btn--solid, declaration for declaration (see
@@ -118,6 +148,9 @@
 .pf-process__cta:hover .pf-process__arrow { transform: translateX(5px); }
 
 .pf-process__meta { display: flex; flex-direction: column; gap: clamp(16px, 1.5vw, 26px); }
+/* The CTA sits at the end of this column now. Without this it would stretch to
+   the column's full width, because a flex column stretches its children. */
+.pf-process__meta .pf-process__cta { align-self: flex-start; }
 
 .pf-process__title {
   margin: 0;
@@ -263,7 +296,6 @@
 @media (max-width: 700px) {
   .pf-process__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-cards { grid-template-columns: minmax(0, 1fr); }
-  .pf-process__shot { aspect-ratio: 4 / 3; }
 }
 
 /* v3's own breakpoint for this button (css/v3.css:1252-1258): it centres its
@@ -274,6 +306,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pf-process__cta, .pf-process__arrow { transition-duration: 0.01ms; }
+  /* The blur and the fade still apply, they just arrive at once. The rest
+     state keeps its 1.03 so the outline never wraps a feathered edge. */
+  .pf-process__shot-img { transition-duration: 0.01ms; }
+  .pf-process__shot:hover .pf-process__shot-img { transform: scale(1.03); }
 }
 
 /* ============================================================================

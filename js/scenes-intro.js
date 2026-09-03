@@ -305,11 +305,14 @@
     }
   });
 
-  /* Beat 1 — the bio frame leaves, headline 1 arrives at the centre, rising
-     into place from just below it as it fades up. Both the opacity and the
-     entry channel run over the same span so the movement and the fade are one
-     gesture rather than two. */
-  tl.to(s1, { opacity: 0, y: DRIFT, ease: "none", duration: BIO_OUT_D }, BIO_OUT)
+  /* Beat 1 — the bio frame leaves UPWARD, headline 1 arrives at the centre,
+     rising into place from just below it as it fades up. Both the opacity and
+     the entry channel run over the same span so the movement and the fade are
+     one gesture rather than two.
+     The bio used to drift DOWN as it faded, against the scroll; every other
+     exit on this timeline (headline 1, headline 2) already leaves upward, so
+     it now carries -DRIFT like the rest. */
+  tl.to(s1, { opacity: 0, y: -DRIFT, ease: "none", duration: BIO_OUT_D }, BIO_OUT)
     .to(s2, { opacity: 1, ease: "none", duration: H1_IN_D }, H1_IN)
     .to(s2y, { entry: 1, ease: "none", duration: H1_IN_D, onUpdate: writeS2Y }, H1_IN)
 
