@@ -226,17 +226,16 @@
 }
 
 /* ---- the three decisions ------------------------------------------------- */
+/* The heading sits ABOVE the cards now, not in a column beside them -- Amanda:
+   "putting the headline to the top of the decisions instead". It used to be a
+   24/76 split, which forced the sentence into a 300px column and cost a wrap
+   argument every time the copy changed. Stacked, the heading has the full
+   width and the cards have it too, which is also what lets the row take four
+   cards without crushing them. */
 .pf-process__bottom {
   display: grid;
-  /* 24/76, not the sketch's original 19/81: at 19fr the heading column reads
-     232px at 1440 wide, and "Three key design decisions that shaped the
-     outcome." wraps to four lines at --pf-fs-h5 regardless of where (or
-     whether) a manual break sits in the copy -- the column is just too
-     narrow for the sentence at that type size. 24/76 is the smallest bump
-     off 19/81 that brings it to three lines at 1440 without a wholesale
-     rebalance of the client's sketch. */
-  grid-template-columns: minmax(0, 24fr) minmax(0, 76fr);
-  gap: clamp(32px, 4.7vw, 90px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(24px, 2.6vw, 44px);
   align-items: center;
 }
 
@@ -249,9 +248,12 @@
   color: inherit;
 }
 
+/* auto-fit, not a fixed three: the number of decisions is per project -- three
+   on most, four on Identity -- and the row should take either without a
+   per-page override. */
 .pf-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
   gap: clamp(16px, 1.5vw, 28px);
   margin: 0;
   padding: 0;
@@ -295,7 +297,6 @@
 /* ---- narrow ------------------------------------------------------------- */
 @media (max-width: 1000px) {
   .pf-process__top,
-  .pf-process__bottom { grid-template-columns: minmax(0, 1fr); }
   .pf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
