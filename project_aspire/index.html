@@ -954,26 +954,28 @@
             </div>
           </div>
 
-          <!-- Stand-in copy. Grounded in the real work so the section can be
-               judged as a design, but Amanda is writing the final three. A
-               replacement is a text edit and nothing else. -->
           <div class="pf-process__bottom">
             <h3 class="pf-process__decisions">Key design decisions</h3>
             <ul class="pf-cards">
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"></span>
-                <h4 class="pf-card__title">One component, every page</h4>
-                <p class="pf-card__body">Every block on the site resolves to a component with named variants, so a change to a card style lands on all 120+ pages at once instead of being repeated by hand on each of them.</p>
+              <li class="pf-card pf-card--lead">
+                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.75 2.9 7.25 12 11.75l9.1-4.5L12 2.75Z" /><path d="m2.9 12 9.1 4.5 9.1-4.5" /><path d="m2.9 16.75 9.1 4.5 9.1-4.5" /></svg></span>
+                <h4 class="pf-card__title">Built one system to carry a 120+ page revamp, instead of rebuilding page by page</h4>
+                <p class="pf-card__body">Every block resolves to a component, so one change lands across the whole site at once.</p>
               </li>
               <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"></span>
-                <h4 class="pf-card__title">Named for whoever ships it</h4>
-                <p class="pf-card__body">Layers, variants and assets use the vocabulary the marketing team already speaks, not designer shorthand. A non-designer can find the right block and reuse it without opening a ticket.</p>
+                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.4 13.6a4.2 4.2 0 0 0 6 0l2.7-2.7a4.2 4.2 0 1 0-6-6l-1.3 1.3" /><path d="M13.6 10.4a4.2 4.2 0 0 0-6 0l-2.7 2.7a4.2 4.2 0 1 0 6 6l1.3-1.3" /></svg></span>
+                <h4 class="pf-card__title">Mirrored the Figma file to Webflow so nothing gets rebuilt in the handoff</h4>
+                <p class="pf-card__body">Designers and developers work from one structure. Delivery time dropped by up to 75%.</p>
               </li>
               <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"></span>
-                <h4 class="pf-card__title">Built to survive the handoff</h4>
-                <p class="pf-card__body">The Figma structure mirrors Webflow&rsquo;s class and symbol model one to one, so what a designer assembles is what a developer builds. No translation step, and no drift between the file and the live site.</p>
+                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="13" height="9" rx="1.8" /><path d="M9 13v3.9M6.4 16.9h5.2" /><rect x="15.6" y="9.4" width="5.9" height="11.1" rx="1.6" /><path d="M17.9 18.2h1.3" /></svg></span>
+                <h4 class="pf-card__title">Made every component responsive, so desktop and mobile are not two separate builds</h4>
+                <p class="pf-card__body">One component covers both breakpoints. Nobody draws the same screen twice.</p>
+              </li>
+              <li class="pf-card">
+                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.6v13.1" /><path d="M12 6.6C10.4 5 8.5 4.4 4.4 4.4v12.9c4.1 0 6 .6 7.6 2.2" /><path d="M12 6.6c1.6-1.6 3.5-2.2 7.6-2.2v12.9c-4.1 0-6 .6-7.6 2.2" /></svg></span>
+                <h4 class="pf-card__title">Documented the system as a guideline a new hire can follow on day one</h4>
+                <p class="pf-card__body">Onboarding was the bottleneck. The rules live in the file now, not in people&rsquo;s heads.</p>
               </li>
             </ul>
           </div>
