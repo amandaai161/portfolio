@@ -270,13 +270,22 @@
   border-radius: 18px;
   background: var(--pf-paper);
 }
+/* Was an empty circle -- a 56px hole doing nothing but spending attention at
+   the top of every card. It holds the card's icon now, and the ring stays as
+   the frame around it. */
 .pf-card__dot {
-  display: block;
+  display: grid;
+  place-items: center;
   width: clamp(44px, 3vw, 56px);
   height: clamp(44px, 3vw, 56px);
   flex: none;
-  border: 1px solid var(--pf-ink);
+  border: 1px solid currentColor;
   border-radius: 50%;
+}
+.pf-card__icon {
+  width: 52%;
+  height: auto;
+  display: block;
 }
 /* The title is where the decision is actually made legible -- Amanda: "make the
    header a bit longer so you can explain clearer, the body text can be shorter
@@ -286,12 +295,21 @@
 .pf-card__title {
   margin: 0;
   text-wrap: balance;
-  font-size: var(--pf-fs-h6);
+  font-size: var(--pf-fs-h5);
   font-weight: var(--pf-fw-semibold);
   line-height: var(--pf-lh-snug);
   letter-spacing: var(--pf-tr-snug);
   color: inherit;
 }
+/* One decision per project can be set dark, so the row has a lead rather than
+   four equal voices. Everything inside it inherits the flipped colour: the
+   icon strokes currentColor and the ring is drawn in it too. */
+.pf-card--lead {
+  background: var(--pf-ink);
+  border-color: var(--pf-ink);
+  color: var(--pf-paper);
+}
+
 .pf-card__body {
   margin: 0;
   font-size: var(--pf-fs-body);
