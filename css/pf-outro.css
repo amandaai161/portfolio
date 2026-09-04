@@ -241,6 +241,7 @@
 
 .pf-process__decisions {
   margin: 0;
+  text-align: center;
   font-size: var(--pf-fs-h5);
   font-weight: var(--pf-fw-medium);
   line-height: var(--pf-lh-snug);
@@ -277,8 +278,14 @@
   border: 1px solid var(--pf-ink);
   border-radius: 50%;
 }
+/* The title is where the decision is actually made legible -- Amanda: "make the
+   header a bit longer so you can explain clearer, the body text can be shorter
+   because the user might not read it anyway... the user only skim quickly".
+   So it runs to a full sentence, and gets balanced wrapping rather than a
+   ragged last word on its own line. */
 .pf-card__title {
   margin: 0;
+  text-wrap: balance;
   font-size: var(--pf-fs-h6);
   font-weight: var(--pf-fw-semibold);
   line-height: var(--pf-lh-snug);
