@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="/css/master-intro.css">
   <link rel="stylesheet" href="/css/master-suggestion.css">
   <link rel="stylesheet" href="/css/master-thumb.css">
-  <link rel="stylesheet" href="/css/master-bridge.css">
   <link rel="stylesheet" href="/css/pf-cursor.css">
   <link rel="stylesheet" href="/css/pf-outro.css">
   <link rel="stylesheet" href="/css/pf-projectnav.css">
@@ -89,6 +88,14 @@
 </div>
 
 <div class="pf-panels" data-pf-panels>
+
+  <!-- ==================== 1 · WEB DESIGN PREVIEW ====================
+       The project as it was built: identity's own site, its own fixed header,
+       its own scroll deck, its own footer. Default sub-page, per the sketch.
+       Ends at identity's footer -- Amanda: "please remove the 'Scroll down to
+       see....' part, as well as the black gradient effect. So the end of
+       respective web design preview is the respective footer." -->
+  <div class="pf-panel" id="pfPanelWeb" data-panel="web" role="tabpanel" aria-labelledby="pfTabWeb">
   <!-- the brand gradient: fixed behind the page, driven by scroll ---------- -->
   <div class="gradient-field" aria-hidden="true">
     <div class="gradient-field__stage">
@@ -531,35 +538,30 @@
       </div>
     </div>
   </footer>
+  </div>
 
-<!-- ==================== THE BRIDGE ====================
-     A master element, the same on all four project pages. On desktop the sheet
-     below is position:fixed and adds no height, so without this the page simply
-     stops and nothing suggests one more gesture does anything. The band darkens
-     into the sheet's own black and says so.
+  <!-- ==================== 2 · BRAND DESIGN ====================
+       Built in Task 3. -->
+  <div class="pf-panel pf-brand" id="pfPanelBrand" data-panel="brand"
+       role="tabpanel" aria-labelledby="pfTabBrand" hidden>
+    <p style="padding:120px;text-align:center;color:#fff">Brand design — placeholder</p>
+  </div>
 
-     The gradient's top stop is the one value that differs per page -- it has to
-     start at the colour of the footer directly above. Here that is identity's --bg, the ground its footer sits on.
-     Everything else lives in /css/master-bridge.css. -->
-<div class="master-bridge" style="--master-bridge-from: var(--bg)">
-  <p class="master-bridge__label">
-    Scroll down to see the full process
-    <svg class="master-bridge__arrow" viewBox="0 0 12 34" fill="none" aria-hidden="true">
-      <path d="M6 1V32M1.4 26.2 6 32l4.6-5.8" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </p>
-</div>
+  <!-- ==================== 3 · CASE STUDY ====================
+       What used to arrive as a sheet sliding in from the right is a tab now.
+       The markup is unchanged and so is /css/pf-outro.css: .pf-outro's DEFAULT
+       state is already flat, in-flow content -- position: fixed only ever came
+       from .pf-outro--live, which js/pf-outro.js added. Dropping the
+       data-pf-outro hook and the script tag leaves exactly the flat rendering
+       that file was already written to fall back to.
 
-<!-- ==================== THE PROCESS ====================
-     This page is the work; the process breakdown is a separate page. So the
-     page ends, and then this arrives over it — a sheet sliding in from the
-     right rather than one more section underneath.
-
-     IT DOES NOT EXTEND THE PAGE. .pf-outro--live is position:fixed, so this
-     block contributes nothing to the document's height. Read pf-outro.css's
-     header before changing anything here. -->
-<div class="pf-outro" data-pf-outro>
+       Keeps "See other projects" and the contact footer. Amanda's call: the
+       brand tab ends on its last image, this one ends somewhere a reader can
+       act. The BEGIN/END master-suggestion markers below must survive --
+       scripts/gen-master-suggestion.py rewrites between them. -->
+  <div class="pf-panel" id="pfPanelCase" data-panel="case"
+       role="tabpanel" aria-labelledby="pfTabCase" hidden>
+<div class="pf-outro">
     <div class="pf-outro__sheet">
 
       <section class="pf-process" aria-labelledby="pfProcessHead">
@@ -752,7 +754,9 @@
 
     </div>
 </div>
-</div>
+  </div>
+
+</div><!-- /.pf-panels -->
 
   <script src="js/smooth-scroll.js"></script>
   <script src="js/deck.js"></script>
@@ -761,7 +765,7 @@
   <script src="js/map.js"></script>
   <script src="js/ui.js"></script>
   <script src="/js/pf-chrome.js"></script>
-  <script src="/js/pf-outro.js"></script>
+  <script src="/js/pf-projectnav.js"></script>
 <!-- The portfolio cursor: v3's black dot with its white ring, on every page.
      Amanda: "keep the black dot following the cursor in all pages." -->
 <div class="cursor" aria-hidden="true"><span class="cursor__label">See project</span></div>

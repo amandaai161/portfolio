@@ -231,3 +231,25 @@
   .pf-projnav .pf-dock { flex: none; }
   .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
+
+/* ---- the panels -----------------------------------------------------------
+   Exactly one is in the flow at a time. Not a horizontal track: identity's
+   deck and gradient both read window.scrollY and documentElement.scrollHeight,
+   and neither works inside an overflow container. So the sub-pages take turns
+   being the document, and the left/right push is supplied by the view
+   transition in js/pf-projectnav.js rather than by moving these boxes.
+
+   NOTHING HERE MAY SET transform, filter, perspective, backdrop-filter OR
+   contain. Each of those makes the panel a containing block for its fixed
+   descendants, and .gradient-field and .nav inside the web panel are both
+   position: fixed. That is also why the push is done with pseudo-elements. */
+.pf-panel {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+/* The attribute alone is not enough: identity's reset does not restate the UA
+   default, and a host page's `display` rule on a descendant selector would
+   win over it. */
+.pf-panel[hidden] { display: none; }
