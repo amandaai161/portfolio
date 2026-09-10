@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="/css/pf-cursor.css">
   <link rel="stylesheet" href="/css/pf-outro.css">
   <link rel="stylesheet" href="/css/pf-projectnav.css">
+  <link rel="stylesheet" href="/css/pf-brand.css">
 
 </head>
 
@@ -541,10 +542,85 @@
   </div>
 
   <!-- ==================== 2 · BRAND DESIGN ====================
-       Built in Task 3. -->
+       The work behind the site, on the brand's own ground. Same twelve images
+       the case study's "Final: Identity 2.0" section carries, laid out for a
+       standalone dark page. The case study keeps its copy: a reader who lands
+       here has not read that page, and a reader on that page is mid-argument.
+
+       ONE VALUE PER PROJECT: --pf-brand-bg. Amanda picked #140335 off her own
+       "New project nav - Brand 2/3.png". Everything else is /css/pf-brand.css. -->
   <div class="pf-panel pf-brand" id="pfPanelBrand" data-panel="brand"
-       role="tabpanel" aria-labelledby="pfTabBrand" hidden>
-    <p style="padding:120px;text-align:center;color:#fff">Brand design — placeholder</p>
+       role="tabpanel" aria-labelledby="pfTabBrand"
+       style="--pf-brand-bg: #140335" hidden>
+    <div class="pf-brand__wrap">
+
+      <header class="pf-brand__head">
+        <h2 class="pf-brand__title">Identity 2.0</h2>
+        <p class="pf-brand__sub">A global network for entrepreneurs, leaders, and creators</p>
+      </header>
+
+      <div class="pf-brand__stack">
+        <img src="/images/project_identity/identity_final/identity_final_showcase_1.webp" width="1400" height="583" loading="lazy" alt="Identity 2.0 — the primary wordmark on the brand's deep purple gradient" />
+        <img src="/images/project_identity/identity_final/identity_final_showcase_2.webp" width="1400" height="674" loading="lazy" alt="id.story — the brand narrative: not a reunion, but a living covenant" />
+        <img src="/images/project_identity/identity_final/identity_final_showcase_3.webp" width="1400" height="674" loading="lazy" alt="Logo variations in Latin and Arabic, plus the refreshed @90thgeneration Instagram profile" />
+        <img src="/images/project_identity/identity_final/identity_final_showcase_4.webp" width="1400" height="781" loading="lazy" alt="Brand applied to stationery — letterhead, envelopes, and business cards" />
+        <img src="/images/project_identity/identity_final/identity_final_showcase_5.webp" width="1400" height="823" loading="lazy" alt="Merchandise and logo construction — pin badge, kerning and spacing specs for both scripts" />
+        <img src="/images/project_identity/identity_final/identity_final_showcase_6.webp" width="1400" height="674" loading="lazy" alt="Member ID lanyard — 'the friends of Identity are still here, after ten years'" />
+      </div>
+
+      <section class="pf-brand__block">
+        <div class="pf-brand__blockhead">
+          <h3 class="pf-brand__blocktitle">The social media post</h3>
+          <p class="pf-brand__blockdesc">The feed is where the community actually lives, so I rebuilt it as a template system: a consistent grid, a fixed type hierarchy, and reusable layouts any admin can fill in minutes. Now every post finally looks like it belongs to the same voice.</p>
+        </div>
+        <div class="pf-brand__stack">
+          <img src="/images/project_identity/identity_final/identity_final_social_1.webp" width="1400" height="1312" loading="lazy" alt="New social templates — a consistent, on-brand set of Instagram posts" />
+          <img src="/images/project_identity/identity_final/identity_final_social_2.webp" width="1400" height="1424" loading="lazy" alt="New social templates — event, quote, and announcement layouts sharing one system" />
+        </div>
+      </section>
+
+      <section class="pf-brand__block">
+        <div class="pf-brand__blockhead">
+          <h3 class="pf-brand__blocktitle">The sub-brands</h3>
+          <p class="pf-brand__blockdesc">The three intents each became a sub-brand with its own accent colour, a simple, ownable cue that tells members at a glance whether something is about connecting, collaborating, or contributing. The same &ldquo;id.&rdquo; naming then stretches to every city chapter and program.</p>
+        </div>
+
+        <div class="pf-brand__subs">
+          <article class="pf-brand__sub" style="--sub-c:#AEFF00">
+            <div class="pf-brand__subhead">
+              <span class="pf-brand__subdot" aria-hidden="true"></span>
+              <h4 class="pf-brand__subname">id.connect</h4>
+            </div>
+            <img src="/images/project_identity/identity_final/identity_final_subbrand_1.webp" width="1400" height="512" loading="lazy" alt="id.connect sub-brand board — logo lockups and social applications in Nexus Green" />
+          </article>
+
+          <article class="pf-brand__sub" style="--sub-c:#FAB429">
+            <div class="pf-brand__subhead">
+              <span class="pf-brand__subdot" aria-hidden="true"></span>
+              <h4 class="pf-brand__subname">id.collaborate</h4>
+            </div>
+            <img src="/images/project_identity/identity_final/identity_final_subbrand_2.webp" width="1400" height="512" loading="lazy" alt="id.collaborate sub-brand board — logo lockups and partnership applications in Synergy Flare" />
+          </article>
+
+          <article class="pf-brand__sub" style="--sub-c:#63ACFF">
+            <div class="pf-brand__subhead">
+              <span class="pf-brand__subdot" aria-hidden="true"></span>
+              <h4 class="pf-brand__subname">id.contribute</h4>
+            </div>
+            <img src="/images/project_identity/identity_final/identity_final_subbrand_3.webp" width="1400" height="512" loading="lazy" alt="id.contribute sub-brand board — logo lockups and social-impact applications in Legacy Azure" />
+          </article>
+
+          <article class="pf-brand__sub" style="--sub-c:#B98CFF">
+            <div class="pf-brand__subhead">
+              <span class="pf-brand__subdot" aria-hidden="true"></span>
+              <h4 class="pf-brand__subname">chapters &amp; programs</h4>
+            </div>
+            <img src="/images/project_identity/identity_final/identity_final_subbrand_4.webp" width="1400" height="899" loading="lazy" alt="Chapters and programs — the id. naming system applied across regional chapters and activity sub-brands" />
+          </article>
+        </div>
+      </section>
+
+    </div>
   </div>
 
   <!-- ==================== 3 · CASE STUDY ====================
