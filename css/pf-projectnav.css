@@ -253,3 +253,70 @@
    default, and a host page's `display` rule on a descendant selector would
    win over it. */
 .pf-panel[hidden] { display: none; }
+
+/* ============================================================================
+   THE PUSH
+   ----------------------------------------------------------------------------
+   Amanda: "There should also be a pushing left and right transition when
+   switching between sub pages." Forward through the tabs, the outgoing
+   sub-page is pushed off to the left and the new one arrives from the right;
+   backward, the reverse.
+
+   Drawn by the View Transitions API over a snapshot the browser takes for us,
+   so no real element moves and nothing here can become a containing block for
+   the fixed .gradient-field and .nav inside the web panel.
+
+   ::view-transition-group(root) is everything WITHOUT a view-transition-name,
+   and the root snapshot is viewport-sized however tall the page is -- so this
+   costs one screen-sized capture per switch.
+
+   THE BAR DOES NOT MOVE. It is named, which lifts it out of the root group,
+   and its group's animation is switched off so the new state (a different pill
+   lit, the bar reset to 0) simply appears. Amanda: the navbar "should be always
+   on top and always visible", and a bar that slid out with the page would not
+   be.
+
+   js/pf-projectnav.js falls back to an instant swap when
+   document.startViewTransition is missing, so nothing here needs a fallback of
+   its own. Reduced motion is handled there too, for the same reason.
+   ========================================================================== */
+
+.pf-projnav { view-transition-name: pf-projnav; }
+
+::view-transition-group(pf-projnav) { animation: none; }
+
+@keyframes pf-slide-out-left  { to   { transform: translateX(-100%); } }
+@keyframes pf-slide-in-right  { from { transform: translateX(100%); } }
+@keyframes pf-slide-out-right { to   { transform: translateX(100%); } }
+@keyframes pf-slide-in-left   { from { transform: translateX(-100%); } }
+
+/* Both snapshots animate at once and neither fades: a cross-fade under a
+   translate reads as a dissolve, not a push. The default root animation IS a
+   cross-fade, which is why every one of these sets its own. */
+html[data-pf-slide]::view-transition-old(root),
+html[data-pf-slide]::view-transition-new(root) {
+  animation-duration: 0.52s;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
+}
+html[data-pf-slide]::view-transition-old(root) { opacity: 1; }
+html[data-pf-slide]::view-transition-new(root) { opacity: 1; }
+
+html[data-pf-slide="forward"]::view-transition-old(root) { animation-name: pf-slide-out-left; }
+html[data-pf-slide="forward"]::view-transition-new(root) { animation-name: pf-slide-in-right; }
+html[data-pf-slide="back"]::view-transition-old(root)    { animation-name: pf-slide-out-right; }
+html[data-pf-slide="back"]::view-transition-new(root)    { animation-name: pf-slide-in-left; }
+
+/* NOTE, on the horizontal overflow a translate normally causes: it does not
+   apply here. The ::view-transition tree is rendered in the top layer, against
+   the snapshot containing block -- it is not a descendant of anything in the
+   document and it contributes no scrollable overflow, so a snapshot sliding a
+   full viewport to the right does not widen the page. There is deliberately no
+   `overflow-x: hidden` guard for it: an untargeted one would clip the page's
+   own content for the rest of the visit, and the obvious targeted form,
+   `html:has(::view-transition)`, is not a valid selector -- :has() matches
+   elements, never pseudo-elements. Task 5's verification measures scrollWidth
+   DURING a switch precisely so this claim is checked rather than trusted. If
+   it ever does overflow, the fix is `:root { overflow-x: clip; }` scoped to
+   these project pages, not a global hidden. */
