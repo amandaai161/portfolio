@@ -144,10 +144,64 @@
   var start = fromHash();
   if (start !== "web") commit(start);
 
+  /* ---- reading progress ---------------------------------------------------
+     Amanda: "please also add the progress bar underneath the nav bar just like
+     the case study pages and the hazen page." Same maths as
+     js/case-study.js's, and the same rAF-coalesced scroll listener: scroll
+     position over scrollable height, written as a scaleX.
+
+     It reads the DOCUMENT, and the document is whichever sub-page is in the
+     flow -- so the bar measures the sub-page the reader is actually in, and
+     resets to 0 on every switch because commit() scrolls to the top. */
+  var progress = document.getElementById("pfProgress");
+  var pTicking = false;
+
+  /* Declared at the top level of the IIFE, not inside the `if (progress)`
+     below. This file is in strict mode, where a function declaration inside a
+     block is scoped to that block -- so defining it in there would leave
+     onChange, further down, calling an undefined name. */
+  function updateProgress() {
+    pTicking = false;
+    if (!progress) return;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? window.scrollY / max : 0;
+    if (p < 0) p = 0;
+    if (p > 1) p = 1;
+    progress.style.transform = "scaleX(" + p.toFixed(4) + ")";
+  }
+
+  function onProg() {
+    if (!pTicking) {
+      pTicking = true;
+      window.requestAnimationFrame(updateProgress);
+    }
+  }
+
+  if (progress) {
+    window.addEventListener("scroll", onProg, { passive: true });
+    window.addEventListener("resize", onProg);
+    /* identity and aspire hijack the wheel and ease scrollY themselves, so a
+       plain scroll event can lag a frame behind what is on screen; kayn and
+       nobi run Lenis. Subscribing to whichever engine is present keeps the bar
+       exactly in step. Both are optional and absent on a page without one. */
+    if (window.ID && window.ID.onTick) window.ID.onTick(onProg);
+    if (window.lenis && window.lenis.on) window.lenis.on("scroll", onProg);
+
+    updateProgress();
+  }
+
   window.PFProjectNav = {
     show: show,
     onChange: null,
     get current() { return current; },
     get panels() { return panels; }
+  };
+
+  /* The new sub-page is a different height, and scrollY is back at 0. Both
+     reach the bar through the resize commit() already dispatches, but that is
+     an implementation detail of another function -- ask for it explicitly. */
+  window.PFProjectNav.onChange = function () {
+    if (progress) updateProgress();
   };
 })(window, document);
