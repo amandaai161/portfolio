@@ -735,6 +735,14 @@ Finally, delete this line from the bottom of the file:
     root.setAttribute("data-pf-slide", forward ? "forward" : "back");
 
     var vt = document.startViewTransition(function () { commit(name); });
+    /* .ready rejects (InvalidStateError) whenever the browser skips the
+       animation outright -- document hidden or not fully active at the
+       moment the transition would start, which a stray tab switch or a
+       backgrounded window makes ordinary. commit() already ran via the
+       callback above either way; this just keeps that rejection from
+       surfacing as an uncaught promise. Both promises need a handler: an
+       unhandled rejection on either one is a console error. */
+    vt.ready["catch"](function () { });
     vt.finished["catch"](function () { }).then(function () {
       root.removeAttribute("data-pf-slide");
     });
