@@ -56,8 +56,23 @@
 
   function measure() {
     if (!deck) return;
-    vh = window.innerHeight;
-    deckTop = deck.getBoundingClientRect().top + window.scrollY;
+    /* The visible height BELOW the project navbar, which is what one slide
+       occupies. sections.css sizes .deck and .deck__stage from the same figure;
+       if these two ever disagree the slides stop drifting out of step with the
+       scroll. Reads the live custom property so the 80px -> 56px breakpoint
+       needs no second definition here. */
+    var navH = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--pf-nav-h")
+    ) || 0;
+    vh = window.innerHeight - navH;
+    /* navH comes off BOTH figures, and for two different reasons. vh is how
+       much height one slide occupies. deckTop is the scroll position at which
+       slide 0 should read as progress 0 -- and .deck__stage now pins at
+       top: navH, so it pins navH px of scrolling EARLIER than the deck's own
+       document offset. Subtracting it here is what keeps "the stage just
+       pinned" and "slide 0 is exactly on its stop" the same moment. Take it
+       off vh alone and every slide stop sits navH px late. */
+    deckTop = deck.getBoundingClientRect().top + window.scrollY - navH;
     lastP = -1;
   }
 

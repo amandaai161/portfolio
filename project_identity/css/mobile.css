@@ -173,8 +173,8 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    height: 100dvh;
+    height: calc(100vh - var(--pf-nav-h, 0px));
+    height: calc(100dvh - var(--pf-nav-h, 0px));
     z-index: -1;                       /* behind the bar, above the page */
     display: flex;
     flex-direction: column;

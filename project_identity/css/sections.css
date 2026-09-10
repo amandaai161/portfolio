@@ -6,7 +6,7 @@
 
 .nav {
   position: fixed;
-  top: 0;
+  top: var(--pf-nav-h, 0px);
   left: 0;
   right: 0;
   z-index: 60;
@@ -67,18 +67,20 @@
 .slide {
   display: grid;
   align-content: center;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--pf-nav-h, 0px));
   padding-block: 108px;
 }
 
 /* one viewport per slide, plus whatever extra hold the slides asked for
-   (data-dwell), plus one for the sticky stage itself */
-.js-deck .deck { height: calc((var(--deck-span, 5) + 1) * 100vh); }
+   (data-dwell), plus one for the sticky stage itself. "One viewport" is the
+   height BELOW the project navbar -- deck.js measures the same figure, and the
+   two have to agree or the slide stops drift from the scroll position. */
+.js-deck .deck { height: calc((var(--deck-span, 5) + 1) * (100vh - var(--pf-nav-h, 0px))); }
 
 .js-deck .deck__stage {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--pf-nav-h, 0px);
+  height: calc(100vh - var(--pf-nav-h, 0px));
   overflow: hidden;
 }
 

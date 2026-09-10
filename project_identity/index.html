@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="/css/master-bridge.css">
   <link rel="stylesheet" href="/css/pf-cursor.css">
   <link rel="stylesheet" href="/css/pf-outro.css">
+  <link rel="stylesheet" href="/css/pf-projectnav.css">
 
 </head>
 
@@ -42,34 +43,52 @@
 (function(){var c=document.currentScript.previousElementSibling;
  setTimeout(function(){if(c&&c.parentNode)c.parentNode.removeChild(c);},1400);})();</script>
 
-<!-- ==================== FLOATING SITE NAV ====================
-     Not this project’s nav — Amanda’s. It rides above the page so a visitor who has
-     scrolled into the middle of a long immersive page can still reach the rest
-     of the site without scrolling back. Absolute URLs: this page is deployed
-     away from the site root, where "/about" would 404. -->
-<div class="pf-dock" data-pf-dock>
-  <button class="pf-dock__btn" type="button" aria-expanded="false" aria-controls="pfDockMenu" aria-label="Open site menu">
-    <span class="pf-dock__bars" aria-hidden="true"><i></i><i></i><i></i></span>
-  </button>
+<!-- ==================== THE PROJECT NAVBAR ====================
+     Three views of this project, always reachable. Amanda's sketches are in
+     resources/new project nav/. The floating hamburger used to sit in the
+     top-right corner of the viewport; it is the third cell of this bar now.
+     Rules in /css/pf-projectnav.css, behaviour in /js/pf-projectnav.js. -->
+<div class="pf-projnav" data-pf-projnav>
+  <div class="pf-projnav__inner">
+    <a class="pf-projnav__name" href="/">Amanda Idris</a>
 
-<div class="pf-dock__menu" id="pfDockMenu" hidden>
-    <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
-    <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
-    <a class="pf-dock__link" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Resume</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
-    <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Linkedin</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
-    <a class="pf-dock__link" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Behance</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
+    <div class="pf-projnav__tabs" role="tablist" aria-label="Project views">
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabWeb"
+              data-tab="web" aria-selected="true" aria-controls="pfPanelWeb">Web design preview</button>
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabBrand"
+              data-tab="brand" aria-selected="false" aria-controls="pfPanelBrand">Brand design</button>
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabCase"
+              data-tab="case" aria-selected="false" aria-controls="pfPanelCase">Case study</button>
+    </div>
+
+    <div class="pf-dock" data-pf-dock>
+      <button class="pf-dock__btn" type="button" aria-expanded="false" aria-controls="pfDockMenu" aria-label="Open site menu">
+        <span class="pf-dock__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+
+      <div class="pf-dock__menu" id="pfDockMenu" hidden>
+        <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
+        <a class="pf-dock__link" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Resume</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+        <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Linkedin</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+        <a class="pf-dock__link" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Behance</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+      </div>
+    </div>
   </div>
+
+  <div class="pf-projnav__progress" aria-hidden="true"><span class="pf-projnav__bar" id="pfProgress"></span></div>
 </div>
 
+<div class="pf-panels" data-pf-panels>
   <!-- the brand gradient: fixed behind the page, driven by scroll ---------- -->
   <div class="gradient-field" aria-hidden="true">
     <div class="gradient-field__stage">
@@ -732,6 +751,7 @@
       </div>
 
     </div>
+</div>
 </div>
 
   <script src="js/smooth-scroll.js"></script>
