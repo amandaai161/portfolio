@@ -286,10 +286,38 @@ Create the file with this content. The header comment matters — it is how the 
 @media (max-width: 760px) {
   .pf-projnav .pf-dock { display: block; }
   .pf-projnav__name { display: none; }
-  .pf-projnav__inner { grid-template-columns: 1fr auto; gap: 8px; padding-inline: 12px; }
-  .pf-projnav__tabs { justify-self: center; gap: 2px; }
-  .pf-projnav__tab { height: 40px; padding-inline: 12px; font-size: 14px; }
-  .pf-projnav .pf-dock__menu { right: 12px; top: calc(var(--pf-nav-h) + 6px); }
+  .pf-projnav__inner { grid-template-columns: minmax(0, 1fr) auto; gap: 6px; padding-inline: 10px; }
+
+  /* THE minmax(0, 1fr) ABOVE IS LOAD-BEARING, and the plain `1fr` it replaces
+     was a real bug. A grid item's min-width defaults to auto, which refuses to
+     shrink below its content -- so at 375px the three tabs did not compress,
+     they shoved the 44px hamburger 34px past the right edge, clipped and
+     unreachable. Nothing reported it: the bar is position: fixed, so it never
+     widened the document and scrollWidth stayed equal to clientWidth. Measure
+     the button's own getBoundingClientRect().right against innerWidth; an
+     overflow check on the document cannot see this.
+
+     overflow-x is the safety valve for viewports too narrow to hold three
+     legible tabs at all (320px cannot). At 375px the sizes below leave ~12px
+     spare, so it never engages there. Amanda picked "drop the name, keep 3
+     tabs + hamburger" over a scrolling tab row, and this keeps that true
+     everywhere it is physically possible. */
+  .pf-projnav__tabs {
+    justify-self: stretch;
+    justify-content: center;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 2px;
+  }
+  .pf-projnav__tabs::-webkit-scrollbar { display: none; }
+
+  /* flex: none on both -- the tabs must not have their labels squeezed, and
+     the dock must never be the thing that gives way. */
+  .pf-projnav__tab { height: 40px; padding-inline: 8px; font-size: 12.5px; flex: none; }
+  .pf-projnav .pf-dock { flex: none; }
+  .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
 ```
 
@@ -474,7 +502,12 @@ Serve the site and open `http://localhost:8000/project_identity/`, then check:
 3. `computer {action: "screenshot"}` — compare against `resources/new project nav/New project nav - Website.png`. The hero headline must be vertically centred in the space **below** the bar, and the "identity" wordmark and its Network/Directory/Partner/About links must be fully visible, not clipped.
 4. Scroll to the second and third deck slides (`javascript_tool: window.scrollTo(0, window.innerHeight * 1.5)`), screenshot, and confirm each slide is still centred in the visible area. This is what proves Step 3's CSS/JS pair agree.
 5. Click the hamburger. The menu opens below the bar's right edge, not over the tabs. Click it again; it closes.
-6. `resize_window {preset: "mobile"}`, reload, screenshot: the name is gone, three tabs fit, the hamburger is visible.
+6. `resize_window {preset: "mobile"}`, reload, screenshot: the name is gone, three tabs fit, the hamburger is visible. Then measure it, because a fixed bar overflows **silently** — it never widens the document, so `scrollWidth === clientWidth` stays true while the burger sits off-screen:
+   ```js
+   var b = document.querySelector('.pf-projnav .pf-dock__btn').getBoundingClientRect();
+   ({right: b.right, viewport: window.innerWidth, clipped: b.right > window.innerWidth})
+   ```
+   Expected: `clipped: false`, with `right` at least 8px inside `viewport`.
 7. `read_console_messages {onlyErrors: true}` — empty.
 
 - [ ] **Step 6: Commit**
