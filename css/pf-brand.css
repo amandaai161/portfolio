@@ -129,6 +129,14 @@
   margin-inline: auto;
 }
 
+/* Amanda: "remove the gaps between the main showcase images. As for social and
+   the sub-brands keep as they are." The six primary boards are one continuous
+   reveal and read as a seam when separated; the social and sub-brand groups are
+   discrete artefacts and keep their gutters. A modifier rather than a change to
+   the base rule, because .pf-brand__stack is shared by both the primary
+   showcase and the social block on every project that uses this file. */
+.pf-brand__stack--flush { gap: 0; }
+
 /* A named sub-brand board: a coloured dot, its name, then the board. --sub-c
    is set per article, as on the case study page.
 
