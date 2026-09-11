@@ -50,11 +50,22 @@
 
   /* The state change itself. Deliberately synchronous and animation-free: the
      view transition in show() wraps this, and everything that cannot run one
-     calls it directly. */
+     calls it directly.
+
+     Gated on valid() for the same reason the tab-click loop below is: a page
+     need not carry all three sub-pages. Aspire has no "brand" tab or panel,
+     so panels["brand"] is undefined there -- writing .hidden on it threw
+     mid-loop, which on a forward switch (web -> case) meant the loop died at
+     "brand" and never reached "case" at all. The tab still looked selected
+     the OLD way and the new panel never un-hid, current never advanced past
+     the crash, and everything commit() does after the loop -- scrollTo,
+     the resize dispatch, onChange -- silently never ran either. Same failure
+     shape as the click-wiring bug, one function over. */
   function commit(name) {
     var k, n;
     for (k = 0; k < ORDER.length; k++) {
       n = ORDER[k];
+      if (!valid(n)) continue;
       panels[n].hidden = n !== name;
       tabs[n].setAttribute("aria-selected", n === name ? "true" : "false");
     }
@@ -129,8 +140,16 @@
     });
   }
 
-  /* ---- the tabs ---------------------------------------------------------- */
+  /* ---- the tabs ----------------------------------------------------------
+     Gated on valid(), because a page need not carry all three sub-pages:
+     Aspire has no brand tab. Without this the loop called
+     tabs["brand"].addEventListener on a page where that element does not
+     exist, threw mid-IIFE, and took everything below it with it -- the hash
+     listener, the initial state, window.PFProjectNav and the progress bar.
+     Loud in the console, silent in the UI: a page whose tabs never got
+     listeners just looks inert. */
   for (i = 0; i < ORDER.length; i++) {
+    if (!valid(ORDER[i])) continue;
     (function (name) {
       tabs[name].addEventListener("click", function () {
         if (name === current) return;
