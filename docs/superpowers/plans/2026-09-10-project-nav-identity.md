@@ -19,7 +19,12 @@
 - **Brand ground for Identity: `#140335`** — sampled from Amanda's `New project nav - Brand 2/3.png`. (Brand 1.png exported at `#100518`; she chose `#140335`.)
 - **Showcase images cap at `max-width: 1400px`** — which is also their exact native width, so they never upscale.
 - **Navbar height: `--pf-nav-h: 80px` desktop, `56px` at `max-width: 760px`.** 80px is measured off the sketches.
-- **Every tab opens at its own top.** Switching scrolls to 0; no per-tab scroll memory.
+- **Clicking a tab opens that sub-page at its top.** `commit()` scrolls to 0 on every
+  switch. This is scoped to the tab gesture, which is what Amanda chose. It deliberately
+  does NOT override `history.scrollRestoration`: Back and Forward restore the scroll
+  position the browser recorded, because that is what those buttons are for, and
+  fighting it would be a worse page. Do not write code or comments claiming the page
+  has no scroll memory at all -- it has exactly the memory the browser gives it.
 - **Sub-page endings:** Web design preview ends at Identity's own site footer. Brand design ends at its last image. Case study keeps "See other projects" + Amanda's contact footer.
 - **Sketches are the spec** and live in `portfolio_folder/resources/new project nav/`. Where a sketch and this plan's pixel values disagree, re-measure the sketch.
 
@@ -304,7 +309,12 @@ Create the file with this content. The header comment matters — it is how the 
      everywhere it is physically possible. */
   .pf-projnav__tabs {
     justify-self: stretch;
-    justify-content: center;
+    /* `safe` is load-bearing. A plain `center` that overflows puts half the
+       overflow on the LEADING side, and scrollLeft clamps at 0 -- so the
+       first tab's left edge goes unreachable (21px lost at 320px) with
+       scrollbar-width:none removing any hint that it happened. `safe` falls
+       back to flex-start the moment the track overflows. */
+    justify-content: safe center;
     min-width: 0;
     overflow-x: auto;
     scrollbar-width: none;
@@ -313,10 +323,12 @@ Create the file with this content. The header comment matters — it is how the 
   }
   .pf-projnav__tabs::-webkit-scrollbar { display: none; }
 
-  /* flex: none on both -- the tabs must not have their labels squeezed, and
-     the dock must never be the thing that gives way. */
+  /* flex: none keeps a tab's label from being squeezed. The dock needs no
+     equivalent and must not be given one: .pf-projnav__inner is display:grid
+     at every breakpoint, so .pf-dock is a GRID item and flex:none on it is
+     inert. What actually protects the dock is its `auto` track above, which
+     is sized to content before the minmax(0, 1fr) track gets anything. */
   .pf-projnav__tab { height: 40px; padding-inline: 8px; font-size: 12.5px; flex: none; }
-  .pf-projnav .pf-dock { flex: none; }
   .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
 ```
