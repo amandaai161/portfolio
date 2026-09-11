@@ -20,9 +20,15 @@
   <link rel="stylesheet" href="/css/master-intro.css">
   <link rel="stylesheet" href="/css/master-suggestion.css">
   <link rel="stylesheet" href="/css/master-thumb.css">
-  <link rel="stylesheet" href="/css/master-bridge.css">
   <link rel="stylesheet" href="/css/pf-cursor.css?v=2">
 <link rel="stylesheet" href="/css/pf-outro.css">
+<link rel="stylesheet" href="/css/pf-projectnav.css">
+<link rel="stylesheet" href="/css/pf-brand.css">
+
+  <!-- Without JS the panels would be unreachable: they ship with `hidden` in
+       the markup. Before this navbar, the process section simply rendered flat
+       at the end of the page. This restores that. -->
+  <noscript><style>.pf-panel[hidden]{display:block!important}</style></noscript>
 
 </head>
 
@@ -40,34 +46,65 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ==================== FLOATING SITE NAV ====================
-     Not this project’s nav — Amanda’s. It rides above the page so a visitor who has
-     scrolled into the middle of a long immersive page can still reach the rest
-     of the site without scrolling back. Absolute URLs: this page is deployed
-     away from the site root, where "/about" would 404. -->
-<div class="pf-dock" data-pf-dock>
-  <button class="pf-dock__btn" type="button" aria-expanded="false" aria-controls="pfDockMenu" aria-label="Open site menu">
-    <span class="pf-dock__bars" aria-hidden="true"><i></i><i></i><i></i></span>
-  </button>
+<!-- ==================== THE PROJECT NAVBAR ====================
+     Three views of this project, always reachable. Amanda's sketches are in
+     resources/new project nav/. The floating hamburger used to sit in the
+     top-right corner of the viewport ("FLOATING SITE NAV" below, now folded
+     into this comment); it is the third cell of this bar now, markup
+     unchanged, just relocated. Same shared bar as every other project: rules
+     in /css/pf-projectnav.css, behaviour in /js/pf-projectnav.js -- and that
+     behaviour needed no NOBI-specific change, because it never assumes a
+     fixed tab count; see js/pf-projectnav.js's own header. -->
+<div class="pf-projnav" data-pf-projnav>
+  <div class="pf-projnav__inner">
+    <a class="pf-projnav__name" href="/">Amanda Idris</a>
 
-<div class="pf-dock__menu" id="pfDockMenu" hidden>
-    <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
-    <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
-    <a class="pf-dock__link" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Resume</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
-    <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Linkedin</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
-    <a class="pf-dock__link" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener">
-      <span class="pf-dock__label">Behance</span>
-      <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-    </a>
+    <div class="pf-projnav__tabs" role="tablist" aria-label="Project views">
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabWeb"
+              data-tab="web" aria-selected="true" aria-controls="pfPanelWeb">Web design preview</button>
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabBrand"
+              data-tab="brand" aria-selected="false" aria-controls="pfPanelBrand">Brand design</button>
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabCase"
+              data-tab="case" aria-selected="false" aria-controls="pfPanelCase">Case study</button>
+    </div>
+
+    <div class="pf-dock" data-pf-dock>
+      <button class="pf-dock__btn" type="button" aria-expanded="false" aria-controls="pfDockMenu" aria-label="Open site menu">
+        <span class="pf-dock__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+
+      <div class="pf-dock__menu" id="pfDockMenu" hidden>
+        <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
+        <a class="pf-dock__link" href="https://drive.google.com/file/d/17xpRZMmFu-NjKafbXy8DL-JBh-s6-kH6/view?usp=drive_link" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Resume</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+        <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfattah/" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Linkedin</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+        <a class="pf-dock__link" href="https://www.behance.net/amandaalfattah" target="_blank" rel="noopener">
+          <span class="pf-dock__label">Behance</span>
+          <svg class="pf-dock__ext" viewBox="0 0 14 15" aria-hidden="true"><path d="M3 12L11 4M11 4H4M11 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+      </div>
+    </div>
   </div>
+
+  <div class="pf-projnav__progress" aria-hidden="true"><span class="pf-projnav__bar" id="pfProgress"></span></div>
 </div>
 
+<div class="pf-panels" data-pf-panels>
+
+  <!-- ==================== 1 · WEB DESIGN PREVIEW ====================
+       The project as it was built: NOBI's own site, its own fixed header, its
+       own scroll-driven hero and sections, its own footer. Default sub-page,
+       per the sketch. Ends at NOBI's own footer -- same rule as every other
+       project page: the bridge band and the "Scroll down to see the full
+       process" prompt are gone because the process tab is one click away now,
+       not one more scroll. -->
+  <div class="pf-panel" id="pfPanelWeb" data-panel="web" role="tabpanel" aria-labelledby="pfTabWeb">
 <!-- ══════════════════════════════════════ NAV ══════════════════════════════════════ -->
 <header class="nav" id="nav">
   <div class="nav__inner">
@@ -379,35 +416,51 @@
   <span class="rule rule--flow line line--h" data-line="h"></span>
   <p class="footer__legal">Copyright 2026 NOBI Bakery. Terms &amp; Privacy</p>
 </footer>
+  </div>
 
-<!-- ==================== THE BRIDGE ====================
-     A master element, the same on all four project pages. On desktop the sheet
-     below is position:fixed and adds no height, so without this the page simply
-     stops and nothing suggests one more gesture does anything. The band darkens
-     into the sheet's own black and says so.
+  <!-- ==================== 2 · BRAND DESIGN ====================
+       Simpler than Identity's by Amanda's instruction: a masthead and one
+       flush stack, no section blocks. The ground is the one per-project value;
+       #291217 is sampled from her own "New project nav - Brand NOBI.png".
+       The images are 2800px wide -- 2x assets rendering at the 1400px cap. -->
+  <div class="pf-panel pf-brand" id="pfPanelBrand" data-panel="brand"
+       role="tabpanel" aria-labelledby="pfTabBrand"
+       style="--pf-brand-bg: #291217" hidden>
+    <div class="pf-brand__wrap">
 
-     The gradient's top stop is the one value that differs per page -- it has to
-     start at the colour of the footer directly above. Here that is nobi's --burgundy, the ground its footer sits on.
-     Everything else lives in /css/master-bridge.css. -->
-<div class="master-bridge" style="--master-bridge-from: var(--burgundy)">
-  <p class="master-bridge__label">
-    Scroll down to see the full process
-    <svg class="master-bridge__arrow" viewBox="0 0 12 34" fill="none" aria-hidden="true">
-      <path d="M6 1V32M1.4 26.2 6 32l4.6-5.8" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </p>
-</div>
+      <header class="pf-brand__head">
+        <h2 class="pf-brand__title">Nobi Bakery</h2>
+        <p class="pf-brand__tagline">A modern Japanese fusion bakery</p>
+      </header>
 
-<!-- ==================== THE PROCESS ====================
-     This page is the work; the process breakdown is a separate page. So the
-     page ends, and then this arrives over it — a sheet sliding in from the
-     right rather than one more section underneath.
+      <div class="pf-brand__stack pf-brand__stack--flush">
+        <img src="/images/project_nobi/nobi_showcase_1.webp" width="2800" height="1729" loading="lazy" alt="NOBI Bakery landing page — hero and brand introduction" />
+        <img src="/images/project_nobi/nobi_showcase_2.webp" width="2798" height="3769" loading="lazy" alt="NOBI Bakery landing page — fusion menu and product showcase" />
+        <img src="/images/project_nobi/nobi_showcase_3.webp" width="2800" height="827" loading="lazy" alt="NOBI Bakery landing page — brand story and craftsmanship" />
+        <img src="/images/project_nobi/nobi_showcase_4.webp" width="2800" height="8434" loading="lazy" alt="NOBI Bakery landing page — interaction preview" />
+        <img src="/images/project_nobi/nobi_showcase_5.webp" width="2800" height="1969" loading="lazy" alt="NOBI Bakery landing page — full page layout" />
+      </div>
 
-     IT DOES NOT EXTEND THE PAGE. .pf-outro--live is position:fixed, so this
-     block contributes nothing to the document's height. Read pf-outro.css's
-     header before changing anything here. -->
-<div class="pf-outro" data-pf-outro>
+    </div>
+  </div>
+
+  <!-- ==================== 3 · CASE STUDY ====================
+       What used to arrive as a sheet sliding in from the right is a tab now.
+       The markup is unchanged and so is /css/pf-outro.css: .pf-outro's DEFAULT
+       state is already flat, in-flow content -- position: fixed only ever came
+       from .pf-outro--live, which js/pf-outro.js added. Dropping the
+       data-pf-outro hook and the script tag leaves exactly the flat rendering
+       that file was already written to fall back to.
+
+       The bridge band that used to sit here is gone outright, not hidden: it
+       existed only to point at a sheet the reader had to scroll to reach, and
+       there is no more scrolling to reach it -- the tab above does that job
+       now. Keeps "See other projects" and the contact footer. The BEGIN/END
+       master-suggestion markers below must survive --
+       scripts/gen-master-suggestion.py rewrites between them. -->
+  <div class="pf-panel" id="pfPanelCase" data-panel="case"
+       role="tabpanel" aria-labelledby="pfTabCase" hidden>
+<div class="pf-outro">
     <div class="pf-outro__sheet">
 
       <section class="pf-process" aria-labelledby="pfProcessHead">
@@ -591,13 +644,16 @@
 
     </div>
 </div>
+  </div>
+
+</div><!-- /.pf-panels -->
 
 <script src="js/vendor/gsap.min.js"></script>
 <script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/vendor/lenis.min.js"></script>
 <script src="js/main.js"></script>
 <script src="/js/pf-chrome.js"></script>
-<script src="/js/pf-outro.js"></script>
+<script src="/js/pf-projectnav.js"></script>
 <!-- The portfolio cursor: v3's black dot with its white ring, on every page.
      Amanda: "keep the black dot following the cursor in all pages." -->
 <div class="cursor" aria-hidden="true"><span class="cursor__label">See project</span></div>

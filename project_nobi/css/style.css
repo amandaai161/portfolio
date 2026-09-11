@@ -191,7 +191,7 @@ main{position:relative}
 
 /* ═══════════════════════════════ NAV ═══════════════════════════════ */
 .nav{
-  position:fixed;inset:0 0 auto 0;z-index:100;
+  position:fixed;inset:0 0 auto 0;top:var(--pf-nav-h, 0px);z-index:100;
   height:var(--nav-h);color:var(--white);
   transition:height .55s var(--ease),background-color .5s var(--ease),backdrop-filter .5s var(--ease);
 }
@@ -252,7 +252,7 @@ main{position:relative}
 
 /* ═══════════════════════════════ HERO ═══════════════════════════════ */
 .hero{
-  position:relative;min-height:100svh;
+  position:relative;min-height:calc(100svh - var(--pf-nav-h, 0px));
   display:flex;flex-direction:column;
   overflow:hidden;isolation:isolate;
 }
@@ -284,7 +284,8 @@ main{position:relative}
 /* vertical JP tagline — sits outside .hero so its hairline can descend past it */
 .hero__vert{
   position:absolute;z-index:5;
-  top:calc(100svh - clamp(180px,20.31vw,390px));
+  /* keyed to the hero's own foot, which is now a navbar shorter */
+  top:calc(100svh - var(--pf-nav-h, 0px) - clamp(180px,20.31vw,390px));
   left:83.7%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;
   pointer-events:none;
