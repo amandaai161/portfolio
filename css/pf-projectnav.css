@@ -27,10 +27,10 @@
    ========================================================================== */
 
 :root {
-  --pf-nav-h: 80px;
+  --pf-nav-h: 64px;
 }
 @media (max-width: 760px) {
-  :root { --pf-nav-h: 56px; }
+  :root { --pf-nav-h: 52px; }
 }
 
 .pf-projnav,
@@ -82,7 +82,7 @@
 
 .pf-projnav__name {
   justify-self: start;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.03em;
   white-space: nowrap;
@@ -93,14 +93,20 @@
 .pf-projnav__name:focus-visible { outline: 2px solid #111111; outline-offset: 3px; }
 
 /* ---- the tabs -------------------------------------------------------------
-   Sketch-calibrated: the active pill measures 242 x 57 and the gap between two
-   inactive labels measures ~72px. 18px text + 32px of padding either side +
-   an 8px gap reproduces both. */
+   Sketch-calibrated at first: the active pill measures 242 x 57 in the sketch
+   and the gap between two inactive labels measures ~72px there, which is what
+   the original 18px text + 32px padding either side + 8px gap reproduced.
+   Amanda then reviewed the built bar on localhost and asked for it stepped
+   down -- "the new top navbar height should be reduced, right now it feels
+   too large" -- so the numbers below (16px text, 26px padding, 6px gap) are
+   deliberately smaller than the sketch measurement, not a drift from it. Do
+   not "restore" the sketch values from this comment; they describe the
+   sketch, not the target. */
 .pf-projnav__tabs {
   justify-self: center;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .pf-projnav__tab {
@@ -108,15 +114,15 @@
   -webkit-appearance: none;
   display: inline-flex;
   align-items: center;
-  height: 56px;
+  height: 44px;
   margin: 0;
-  padding-inline: 32px;
+  padding-inline: 26px;
   border: 0;
   border-radius: 999px;
   background: transparent;
   color: #111111;
   font: inherit;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -235,7 +241,7 @@
      at every breakpoint, so .pf-dock is a GRID item and flex:none on it is
      inert. What actually protects the dock is its `auto` track above, which
      is sized to content before the minmax(0, 1fr) track gets anything. */
-  .pf-projnav__tab { height: 40px; padding-inline: 8px; font-size: 12.5px; flex: none; }
+  .pf-projnav__tab { height: 38px; padding-inline: 8px; font-size: 12.5px; flex: none; }
   .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
 

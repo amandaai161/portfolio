@@ -59,7 +59,7 @@
     /* The visible height BELOW the project navbar, which is what one slide
        occupies. sections.css sizes .deck and .deck__stage from the same figure;
        if these two ever disagree the slides stop drifting out of step with the
-       scroll. Reads the live custom property so the 80px -> 56px breakpoint
+       scroll. Reads the live custom property so the 64px -> 52px breakpoint
        needs no second definition here. */
     var navH = parseFloat(
       getComputedStyle(document.documentElement).getPropertyValue("--pf-nav-h")
