@@ -66,7 +66,15 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  /* Amanda: "the black dot cursor assistant is not visible on the top navbar,
+     please it should be visible everywhere." css/pf-projectnav.css puts the
+     project navbar at z-index 9500 (itself above pf-chrome's dock at 9000),
+     which painted over this dot at the old 1000. 10000 is chosen only to clear
+     that 9500 -- there is nothing else on these pages stacked higher.
+     pointer-events: none below is unchanged by this: the dot has never been
+     hit-testable, so raising it changes nothing about what the pointer can
+     click through to. */
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
