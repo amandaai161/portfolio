@@ -245,6 +245,22 @@
   .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
 
+/* The loaders must not punch a hole in the bar.
+   css/pf-chrome.css hides the dock while a page is still loading --
+   html[data-motion="pending"] on kayn, body.is-loading on nobi. That is right
+   for a dock floating loose over a page mid-intro, and wrong for one that is
+   the third cell of a bar: the bar itself stays painted, so hiding only the
+   hamburger leaves a gap where a control should be.
+
+   Both of those selectors compute 0-2-1, which beats a plain
+   `.pf-projnav .pf-dock` at 0-2-0 -- so this has to restate the ancestor
+   condition rather than just naming the dock again. */
+html[data-motion="pending"] .pf-projnav .pf-dock,
+body.is-loading .pf-projnav .pf-dock {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* ---- the panels -----------------------------------------------------------
    Exactly one is in the flow at a time. Not a horizontal track: identity's
    deck and gradient both read window.scrollY and documentElement.scrollHeight,
