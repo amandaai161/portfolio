@@ -654,10 +654,15 @@
                  being hovered on its own. -->
             <a class="pf-process__shot" href="/project_identity/casestudy/" data-cursor="See the process"
                aria-label="Read the Identity 2.0 case study">
-              <!-- Not lazy. This sheet is parked at translateX(100%) until the
-                   reader asks for it, so a lazy image would still be deciding to
-                   download as the cover slides in, and pop in behind it. One
-                   ~50KB webp is cheaper than that. -->
+              <!-- Not lazy. This used to be true because the sheet was parked at
+                   translateX(100%) until the reader asked for it; that sliding
+                   sheet is gone -- js/pf-outro.js no longer runs on this page and
+                   .pf-outro sits flat, in-flow. The same conclusion still holds
+                   for the reason that replaced it: this whole panel is
+                   display:none until its tab is picked, so a lazy image would
+                   only start deciding to download once the panel opens, and pop
+                   in behind the cover exactly as before. One ~50KB webp is
+                   cheaper than that either way. -->
               <img class="pf-process__shot-img" src="/images/process_identity.webp" alt=""
                    width="700" height="400" />
               <span class="pf-process__cta">

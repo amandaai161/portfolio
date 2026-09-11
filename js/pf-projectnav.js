@@ -60,8 +60,13 @@
     }
     current = name;
 
-    /* Amanda: every tab opens at its own top. Also the one state in which the
-       deck is guaranteed correct before it re-measures below. */
+    /* Amanda: every tab opens at its own top. This reset is scoped to the tab
+       GESTURE ONLY -- it does not touch history.scrollRestoration, which stays
+       at the browser's default "auto". So Back and Forward still land where
+       the browser recorded, because restoring scroll on Back is what those
+       buttons are for; fighting that would be a worse page. Also the one
+       state in which the deck is guaranteed correct before it re-measures
+       below. */
     window.scrollTo(0, 0);
 
     /* deck.js and gradient.js both re-measure on resize (debounced 120ms) and
@@ -199,10 +204,20 @@
   if (progress) {
     window.addEventListener("scroll", onProg, { passive: true });
     window.addEventListener("resize", onProg);
-    /* identity and aspire hijack the wheel and ease scrollY themselves, so a
-       plain scroll event can lag a frame behind what is on screen; kayn and
-       nobi run Lenis. Subscribing to whichever engine is present keeps the bar
-       exactly in step. Both are optional and absent on a page without one. */
+    /* Of these two hooks, only one is live today: Identity exposes
+       window.ID.onTick and this file is loaded on Identity alone, so this
+       branch is the only one that actually fires right now. The other three
+       pages this file will load on in phase two do not give the progress bar
+       anything to subscribe to yet -- Aspire's engine (project_aspire/scroll.js)
+       exposes window.smoothScroll with only `state` and a `to()` method, no
+       tick hook at all, and Kayn's and NOBI's Lenis instances
+       (project_kayn/app.js, project_nobi/js/main.js) are both IIFE-local
+       variables that never reach window.lenis. The line below is kept anyway:
+       it costs nothing, matches js/case-study.js's own check, and is correct
+       the day any page actually assigns window.lenis. Until then, phase two
+       will need to either expose Kayn's and NOBI's Lenis instances the same
+       way, or accept that the bar on those two pages runs off the plain
+       `scroll` listener above instead of an engine tick. */
     if (window.ID && window.ID.onTick) window.ID.onTick(onProg);
     if (window.lenis && window.lenis.on) window.lenis.on("scroll", onProg);
 

@@ -10,8 +10,13 @@
    exact native width of every identity_final_*.webp. Above the cap the images
    would only upscale.
 
-   Type steps are the --pf-fs-* scale from css/pf-chrome.css, which is v3's own
-   scale -- load this file after that one.
+   The type steps below MATCH css/pf-chrome.css's --pf-fs-* scale -- same
+   values, hand-copied -- but this file has no load-order dependency on that
+   one and references none of its custom properties. It could not: pf-chrome.css
+   declares --pf-fs-* on `.pf-dock, .pf-outro`, never :root, so they are not
+   even in scope on `.pf-brand`. The literals are deliberate, not a shortcut a
+   later pass should "deduplicate" into var(--pf-fs-*) -- doing that would
+   compute to an unset custom property on this class.
    ========================================================================== */
 
 .pf-brand,
