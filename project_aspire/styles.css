@@ -482,6 +482,12 @@ button,input{ font:inherit; color:inherit; }
 .nav{
   position:fixed;
   inset:0 0 auto;
+  /* `inset` is a shorthand for top/right/bottom/left together, so it already
+     set top:0 above -- this has to come AFTER it or the cascade just
+     overwrites the override with the shorthand's own value. The project
+     navbar sits above this in the same fixed layer, so Aspire's own header
+     is pushed down to clear it. */
+  top:var(--pf-nav-h, 0px);
   z-index:100;
   height:var(--nav-h);
   background:var(--white);   /* opaque — the composition scrolls under it */
@@ -592,13 +598,23 @@ button,input{ font:inherit; color:inherit; }
 
 .scene__pin{
   position:sticky;
-  top:0;
+  /* Sticky to the project navbar's bottom edge, not the viewport's: the bar
+     sits above this in the same fixed layer, so top:0 would park the pin a
+     navbar's-height too high and the two would overlap for the life of the
+     pin. Same reasoning drops --pf-nav-h from each 100vh/100svh below --
+     otherwise the pin would run navbar-height PAST the bottom of the
+     viewport, permanently unreachable. */
+  top:var(--pf-nav-h, 0px);
   z-index:2;
-  height:100vh;
-  height:100svh;
+  height:calc(100vh - var(--pf-nav-h, 0px));
+  height:calc(100svh - var(--pf-nav-h, 0px));
   overflow:hidden;
   /* Both paddings are real layout, so hero.js can read them back resolved —
-     getComputedStyle can't evaluate a clamp() held in a custom property. */
+     getComputedStyle can't evaluate a clamp() held in a custom property.
+     padding-top is Aspire's OWN --nav-h (its in-page header), not the project
+     bar's --pf-nav-h above -- two different fixed bars stacked in the same
+     layer, each with its own height reserved by a different property. Left
+     unchanged: hero.js reads this back resolved and must keep seeing it. */
   padding-top:var(--nav-h);
   padding-bottom:var(--sp-anim-bottom);
   display:flex;
