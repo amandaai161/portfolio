@@ -28,8 +28,9 @@
 
 ## What phase one already proved, so nobody re-derives it
 
-- **The shared JS needs ONE guard for a page with fewer than three tabs, and phase one did not have it.** This plan originally claimed the file worked untouched. That was wrong, and Aspire proved it: `valid()` checks that both a tab *and* a panel exist, but the tab-wiring loop did not — it walked `ORDER` and called `tabs[name].addEventListener` unguarded, so on a page with no brand tab it threw a TypeError mid-IIFE and took everything below it down with it: hash routing, the initial state, `window.PFProjectNav`, and the progress bar. Loud in the console, silent in the UI — a page whose tabs never got listeners just looks inert.
-  The fix gates the loop on the predicate that already exists, so "does this sub-page exist on this page" has exactly one definition:
+- **The shared JS needed TWO guards for a page with fewer than three tabs, and phase one had neither.** This plan originally claimed the file worked untouched. That was wrong, and Aspire proved it: `valid()` checks that both a tab *and* a panel exist, but the tab-wiring loop did not — it walked `ORDER` and called `tabs[name].addEventListener` unguarded, so on a page with no brand tab it threw a TypeError mid-IIFE and took everything below it down with it: hash routing, the initial state, `window.PFProjectNav`, and the progress bar. Loud in the console, silent in the UI — a page whose tabs never got listeners just looks inert.
+  **There were two such loops, not one.** The tab-wiring loop was found first; `commit()` has a structurally identical one that indexes `panels[n]`/`tabs[n]` across the whole of `ORDER`, and with only the first fixed, clicking "Case study" on Aspire threw on `panels["brand"]` before ever reaching `"case"`. Both are now gated. A later reviewer read the whole file and confirmed there is no third site: `show()` only ever calls `ORDER.indexOf()`, which returns `-1` rather than throwing.
+  The fix gates each loop on the predicate that already exists, so "does this sub-page exist on this page" has exactly one definition:
   ```js
   for (i = 0; i < ORDER.length; i++) {
     if (!valid(ORDER[i])) continue;   /* a page need not carry all three */
