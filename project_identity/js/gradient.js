@@ -73,13 +73,27 @@
   function measureAnchors() {
     var ids = ["hero", "intro", "numbers", "map"];
     var out = [];
+    var raw, allZero = true;
     for (var i = 0; i < ids.length; i++) {
       var el = document.getElementById(ids[i]);
       if (!el) return (anchors = null);
-      var top = el.getBoundingClientRect().top + window.scrollY;
-      out.push(i === 0 ? 0 : Math.max(0, top - window.innerHeight * 0.34));
+      raw = el.getBoundingClientRect().top + window.scrollY;
+      if (raw !== 0) allZero = false;
+      out.push(i === 0 ? 0 : Math.max(0, raw - window.innerHeight * 0.34));
     }
-    anchors = out;
+    /* The project navbar can hide this whole page in a display:none panel
+       (switching to Brand or Case study) without tearing this script down, and
+       a debounced resize fires while it is hidden. Every element in a
+       display:none subtree reports a (0,0,0,0) rect, so every "raw" above
+       comes back 0 and the loop would otherwise commit anchors = [0,0,0,0] --
+       a truthy array that stackedProgress() then trusts forever, since its own
+       lazy re-measure only fires when anchors is falsy. That stale zeroed
+       array reads as "past the last frame" (opacity 0), so coming back to this
+       panel showed a flash of flat colour until the NEXT debounced resize
+       happened to reset it. Bailing to null here instead means the lazy
+       re-measure keeps retrying on every tick, so it self-heals on the very
+       first frame after the panel is unhidden and layout is real again. */
+    anchors = allZero ? null : out;
   }
 
   function stackedProgress(y) {

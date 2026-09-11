@@ -253,7 +253,12 @@
   }
 
   .slide--hero {
-    min-height: 100svh;
+    /* svh, not vh, so the earlier --pf-nav-h sweep across this file's other
+       viewport-height rules skipped this one -- a grep for "100vh" does not
+       match "100svh". Left alone, the hero ran the full small-viewport height
+       UNDER the fixed project navbar too, so 56px of it sat below the fold and
+       the centred hero copy read 56px low on every phone. */
+    min-height: calc(100svh - var(--pf-nav-h, 0px));
     padding-top: calc(var(--nav-h) + 72px);
     padding-bottom: 88px;
   }
