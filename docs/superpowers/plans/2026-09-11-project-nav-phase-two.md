@@ -28,7 +28,15 @@
 
 ## What phase one already proved, so nobody re-derives it
 
-- **The shared JS needs no change for a two-tab page.** `ORDER` is `["web","brand","case"]`; `valid()` requires both a tab *and* a panel to exist, so on Aspire `"brand"` is simply never valid — `fromHash()` falls back to `"web"`, and `forward` still computes correctly from `indexOf` (web 0 → case 2 is forward). **If you find yourself editing `js/pf-projectnav.js` for Aspire, stop: the design intends this to work untouched.**
+- **The shared JS needs ONE guard for a page with fewer than three tabs, and phase one did not have it.** This plan originally claimed the file worked untouched. That was wrong, and Aspire proved it: `valid()` checks that both a tab *and* a panel exist, but the tab-wiring loop did not — it walked `ORDER` and called `tabs[name].addEventListener` unguarded, so on a page with no brand tab it threw a TypeError mid-IIFE and took everything below it down with it: hash routing, the initial state, `window.PFProjectNav`, and the progress bar. Loud in the console, silent in the UI — a page whose tabs never got listeners just looks inert.
+  The fix gates the loop on the predicate that already exists, so "does this sub-page exist on this page" has exactly one definition:
+  ```js
+  for (i = 0; i < ORDER.length; i++) {
+    if (!valid(ORDER[i])) continue;   /* a page need not carry all three */
+    (function (name) { ... })(ORDER[i]);
+  }
+  ```
+  Everything else about the two-tab case held as described: `fromHash()` falls back to `"web"` for a `#brand` link, and `forward` still computes correctly from `indexOf` (web 0 → case 2 is forward).
 - **The panel mechanism.** Exactly one panel is in the flow; the rest carry `hidden`. `.pf-panel` must never set `transform`, `filter`, `perspective`, `backdrop-filter` or `contain` — each would trap that page's `position: fixed` descendants.
 - **`commit()` scrolls to 0 and dispatches a synthetic `resize`** on every switch, which is what lets a page's scroll engine re-measure after being laid out at zero size inside `display: none`.
 - **The push transition cannot be observed in this environment.** `document.visibilityState` is stuck `"hidden"` with a frozen `requestAnimationFrame`, and browsers skip view transitions on a hidden document. Its keyframes were proxy-verified in phase one. Do not report it broken and do not spend budget on it.
