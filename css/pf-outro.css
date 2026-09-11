@@ -320,11 +320,19 @@
 }
 
 /* ---- narrow ------------------------------------------------------------- */
+/* .pf-process__top used to be in this rule too, going 45/55 to an even 50/50.
+   Amanda: "the thumbnail should be placed above the project desc, not side by
+   side" -- two equal columns was still side-by-side and worse than 45/55 for
+   getting there, so it now skips straight to one column at 700px below
+   instead of pit-stopping here. */
 @media (max-width: 1000px) {
-  .pf-process__top,
   .pf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
+  /* One column. The thumbnail (.pf-process__shot) is already first in DOM
+     order, ahead of .pf-process__meta, so this alone stacks it above the
+     copy with no markup change. */
+  .pf-process__top { grid-template-columns: minmax(0, 1fr); }
   .pf-process__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-cards { grid-template-columns: minmax(0, 1fr); }
 }
