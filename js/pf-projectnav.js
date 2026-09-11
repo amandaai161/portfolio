@@ -77,6 +77,10 @@
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  /* Bumped once per transition actually started below. Not just a boolean --
+     see the comment at its use site in show(). */
+  var slideToken = 0;
+
   function show(name) {
     if (!valid(name) || name === current) return;
 
@@ -93,6 +97,20 @@
        transition never runs against the previous one's direction. */
     root.setAttribute("data-pf-slide", forward ? "forward" : "back");
 
+    /* A second tab click inside the ~520ms animation starts a new transition
+       (call it VT2) while the first (VT1) is still live. Per spec, starting
+       VT2 skips VT1 outright, which settles VT1's `finished` immediately --
+       BEFORE VT2 has run its own updateCallback or set its own direction. If
+       VT1's cleanup below just unconditionally cleared the attribute, it
+       would do so at that moment, so by the time VT2's snapshots are actually
+       sampled `data-pf-slide` is gone and matches neither `="forward"` nor
+       `="back"` in css/pf-projectnav.css -- VT2 silently falls back to the
+       browser's default cross-fade instead of the push. Tagging each
+       transition with a token and only clearing the attribute when that
+       token is still the most recent one lets VT1's premature settle no-op
+       instead of stepping on VT2's direction. */
+    var token = ++slideToken;
+
     var vt = document.startViewTransition(function () { commit(name); });
     /* .ready rejects (InvalidStateError) whenever the browser skips the
        animation outright -- document hidden or not fully active at the
@@ -102,7 +120,7 @@
        surfacing as an uncaught promise. */
     vt.ready["catch"](function () { });
     vt.finished["catch"](function () { }).then(function () {
-      root.removeAttribute("data-pf-slide");
+      if (token === slideToken) root.removeAttribute("data-pf-slide");
     });
   }
 

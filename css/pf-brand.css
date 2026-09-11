@@ -22,7 +22,15 @@
 }
 
 .pf-brand {
-  --pf-brand-bg: #140335;
+  /* #111111 here is a deliberately neutral, "obviously unset" ground -- this
+     codebase's own ink colour, not any project's brand colour. Identity's
+     purple used to be hard-coded as this default, which meant a page that
+     shipped without its own inline --pf-brand-bg would silently render on
+     Identity's ground instead of failing visibly. Aspire and Kayn have not
+     had their brand grounds chosen yet, so this file must not guess for them.
+     EVERY PAGE MUST SET ITS OWN --pf-brand-bg INLINE on the .pf-brand panel,
+     the way project_identity/index.html already does for #140335. */
+  --pf-brand-bg: #111111;
   --pf-brand-ink: #FFFFFF;
   --pf-brand-ink-soft: rgba(255, 255, 255, 0.72);
   --pf-brand-max: 1400px;
@@ -60,7 +68,7 @@
   letter-spacing: -0.03em;
   color: var(--pf-brand-ink);
 }
-.pf-brand__sub {
+.pf-brand__tagline {
   margin: clamp(10px, 1vw, 16px) 0 0;
   font-size: clamp(1.0625rem, 0.95rem + 0.35vw, 1.5rem);  /* 17 -> 24 */
   font-weight: 400;
@@ -117,7 +125,15 @@
 }
 
 /* A named sub-brand board: a coloured dot, its name, then the board. --sub-c
-   is set per article, as on the case study page. */
+   is set per article, as on the case study page.
+
+   .pf-brand__sub is this board's own class -- it used to also be the masthead
+   subtitle's class above, which is why it is renamed to .pf-brand__tagline
+   there. The two were unrelated components sharing one name: every board
+   inherited the tagline's `margin` and computed an unwanted flex column, and
+   the tagline in turn computed this rule's `display: flex; gap` it never
+   asked for. The descendant classes below (__subhead, __subdot, __subname)
+   have always belonged to the board and are unaffected. */
 .pf-brand__subs {
   display: flex;
   flex-direction: column;

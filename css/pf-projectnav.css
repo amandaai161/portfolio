@@ -216,7 +216,12 @@
      everywhere it is physically possible. */
   .pf-projnav__tabs {
     justify-self: stretch;
-    justify-content: center;
+    /* `safe` is load-bearing. A plain `center` that overflows puts half the
+       overflow on the LEADING side, and scrollLeft clamps at 0 -- so the
+       first tab's left edge goes unreachable (21px lost at 320px) with
+       scrollbar-width:none removing any hint that it happened. `safe` falls
+       back to flex-start the moment the track overflows. */
+    justify-content: safe center;
     min-width: 0;
     overflow-x: auto;
     scrollbar-width: none;
@@ -225,10 +230,12 @@
   }
   .pf-projnav__tabs::-webkit-scrollbar { display: none; }
 
-  /* flex: none on both -- the tabs must not have their labels squeezed, and
-     the dock must never be the thing that gives way. */
+  /* flex: none keeps a tab's label from being squeezed. The dock needs no
+     equivalent and must not be given one: .pf-projnav__inner is display:grid
+     at every breakpoint, so .pf-dock is a GRID item and flex:none on it is
+     inert. What actually protects the dock is its `auto` track above, which
+     is sized to content before the minmax(0, 1fr) track gets anything. */
   .pf-projnav__tab { height: 40px; padding-inline: 8px; font-size: 12.5px; flex: none; }
-  .pf-projnav .pf-dock { flex: none; }
   .pf-projnav .pf-dock__menu { right: 10px; top: calc(var(--pf-nav-h) + 6px); }
 }
 
