@@ -164,10 +164,18 @@
   .nav.is-open .nav__toggle-bars i:first-child { transform: translateY(5.25px) rotate(45deg); }
   .nav.is-open .nav__toggle-bars i:last-child { transform: translateY(-5.25px) rotate(-45deg); }
 
-  /* The sheet fills the viewport, but `inset: 0` cannot say so: .nav carries a
-     transform for its hide-on-scroll, which makes it the containing block for
-     any fixed descendant. .nav sits at the viewport's top-left, so anchoring
-     there and sizing in viewport units gets the same box. */
+  /* The sheet has to fill everything below the shared project navbar, but
+     `inset: 0` cannot say so: .nav carries a transform for its hide-on-scroll,
+     which makes it the containing block for any fixed descendant. .nav no
+     longer sits at the viewport's top-left -- it sits at top: var(--pf-nav-h)
+     (sections.css) -- so `top: 0; left: 0` below anchors to .nav's own box,
+     which is already offset by the navbar's height, and lands exactly where
+     the sheet is supposed to start: right under the bar. That leaves the
+     BOTTOM edge to correct for, which plain 100vh/100dvh would overshoot by
+     var(--pf-nav-h) past the true viewport bottom -- which is why the height
+     is that minus var(--pf-nav-h) rather than a bare viewport unit. Two
+     separate corrections for two separate edges, not one box standing in for
+     another. */
   .has-js .nav__menu {
     position: fixed;
     top: 0;

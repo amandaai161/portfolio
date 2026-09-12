@@ -223,20 +223,23 @@
   if (progress) {
     window.addEventListener("scroll", onProg, { passive: true });
     window.addEventListener("resize", onProg);
-    /* Of these two hooks, only one is live today: Identity exposes
-       window.ID.onTick and this file is loaded on Identity alone, so this
-       branch is the only one that actually fires right now. The other three
-       pages this file will load on in phase two do not give the progress bar
-       anything to subscribe to yet -- Aspire's engine (project_aspire/scroll.js)
-       exposes window.smoothScroll with only `state` and a `to()` method, no
-       tick hook at all, and Kayn's and NOBI's Lenis instances
-       (project_kayn/app.js, project_nobi/js/main.js) are both IIFE-local
-       variables that never reach window.lenis. The line below is kept anyway:
-       it costs nothing, matches js/case-study.js's own check, and is correct
-       the day any page actually assigns window.lenis. Until then, phase two
-       will need to either expose Kayn's and NOBI's Lenis instances the same
-       way, or accept that the bar on those two pages runs off the plain
-       `scroll` listener above instead of an engine tick. */
+    /* This file now loads on all four pages, and of these two hooks exactly
+       one is live: Identity exposes window.ID.onTick, so that branch fires
+       there. The second is permanently dead on all four -- Aspire's engine
+       (project_aspire/scroll.js) exposes window.smoothScroll with only
+       `state` and a `to()` method, no tick hook at all, and Kayn's and
+       NOBI's Lenis instances (project_kayn/app.js, project_nobi/js/main.js)
+       are both IIFE-local variables that never get assigned to window.lenis.
+       That decision was taken silently, not fixed: the line stays anyway,
+       because it costs nothing, matches js/case-study.js's own check, and is
+       correct the day any page actually assigns window.lenis.
+
+       Kayn and NOBI are not broken by its absence. Both drive Lenis by
+       animating the real `scrollTop` (see the header comment on CONFIG.lenis
+       in project_kayn/app.js), so the native `scroll` event this file already
+       listens for above still fires on every Lenis-driven frame -- the bar
+       just rides the plain listener instead of an engine tick on those two
+       pages. */
     if (window.ID && window.ID.onTick) window.ID.onTick(onProg);
     if (window.lenis && window.lenis.on) window.lenis.on("scroll", onProg);
 

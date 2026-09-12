@@ -10,13 +10,18 @@
    exact native width of every identity_final_*.webp. Above the cap the images
    would only upscale.
 
-   The type steps below MATCH css/pf-chrome.css's --pf-fs-* scale -- same
-   values, hand-copied -- but this file has no load-order dependency on that
-   one and references none of its custom properties. It could not: pf-chrome.css
-   declares --pf-fs-* on `.pf-dock, .pf-outro`, never :root, so they are not
-   even in scope on `.pf-brand`. The literals are deliberate, not a shortcut a
-   later pass should "deduplicate" into var(--pf-fs-*) -- doing that would
-   compute to an unset custom property on this class.
+   THREE of the type steps below MATCH css/pf-chrome.css's --pf-fs-* scale --
+   same values, hand-copied: .pf-brand__blocktitle is --pf-fs-h5,
+   .pf-brand__subname is --pf-fs-h6, .pf-brand__blockdesc is --pf-fs-body. The
+   other two, .pf-brand__title (32->48) and .pf-brand__tagline (17->24), are
+   sketch-derived and match no step in that scale -- they are not a fourth and
+   fifth "hidden" match, just this page's own sizes. Either way this file has
+   no load-order dependency on pf-chrome.css and references none of its custom
+   properties. It could not: pf-chrome.css declares --pf-fs-* on
+   `.pf-dock, .pf-outro`, never :root, so they are not even in scope on
+   `.pf-brand`. The three literals that do match are deliberate, not a
+   shortcut a later pass should "deduplicate" into var(--pf-fs-*) -- doing
+   that would compute to an unset custom property on this class.
    ========================================================================== */
 
 .pf-brand,
@@ -133,8 +138,11 @@
    the sub-brands keep as they are." The six primary boards are one continuous
    reveal and read as a seam when separated; the social and sub-brand groups are
    discrete artefacts and keep their gutters. A modifier rather than a change to
-   the base rule, because .pf-brand__stack is shared by both the primary
-   showcase and the social block on every project that uses this file. */
+   the base rule, because .pf-brand__stack is shared by the primary showcase on
+   every project that uses this file -- only Identity also has a social block
+   built from this same class (project_identity/index.html), and it is the
+   reason the un-flushed default has to stay the base behaviour rather than
+   being folded into --flush. */
 .pf-brand__stack--flush { gap: 0; }
 
 /* A named sub-brand board: a coloured dot, its name, then the board. --sub-c
