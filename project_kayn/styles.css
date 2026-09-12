@@ -1135,3 +1135,17 @@ html[data-motion="off"] .film__pins circle { opacity: 1; }
     transition-duration: .001ms !important;
   }
 }
+
+/* The project navbar (/css/pf-projectnav.css) parks its own hamburger in the
+   bar at every width, so at <=760px this page was showing two: the navbar's,
+   which now carries Amanda's site nav, and #burger, this recreated site's own
+   toggle for .drawer. Amanda: hide the recreated site's own burger at <=760px
+   rather than the navbar's, because nothing of hers is lost -- the navbar's
+   dock already reaches the same drawer. Scoped to #pfPanelWeb, the web
+   sub-page's panel, so this rule cannot reach the brand or case panels, which
+   have no burger of their own to hide. 760px matches the navbar's own mobile
+   breakpoint, not this file's 900px one -- the two hamburgers only collide
+   once the navbar has already dropped to its compact bar. */
+@media (max-width: 760px) {
+  #pfPanelWeb .burger { display: none; }
+}

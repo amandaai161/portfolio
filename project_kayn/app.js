@@ -79,6 +79,18 @@
     if (rule) rule.style.transform = "none";
     if (reason) console.info("[KAYN] Motion disabled — " + reason);
 
+    /* Undo boot()'s `if (lenis) lenis.stop();` (held until the loader lifts).
+       The only other place that releases it is the intro timeline's
+       onComplete, so a throw anywhere in the boot chain between those two
+       points -- asset loading, film attach, fitHero, matchMedia -- left the
+       page permanently unscrollable with nothing in the console a visitor
+       could act on. Defensive: no throw has actually been produced here, but
+       the deep-link bail below now reaches this function too, and `lenis` is
+       null on every bail that runs before initLenis() (this one included),
+       so the call is a harmless no-op there and only matters for the
+       boot-error catch further down, where initLenis() already ran. */
+    if (lenis) lenis.start();
+
     /* The arcs are drawn by the timelines, so with motion off they have no
        geometry at all until we close them here. */
     $$(".loader__arc, .hero__arc, .origin__arc, .film__arc").forEach(ringSolid);
@@ -925,6 +937,26 @@
      BOOT
      ───────────────────────────────────────────────────────────────────────── */
   function boot() {
+    /* Amanda: a deep link that opens straight on #brand or #case has never
+       seen the web tab, so playing its loader -- Storyboard 1, the
+       forest-green ring, scroll locked from the first byte by
+       html[data-motion="pending"] body { overflow: clip } in styles.css --
+       over the brand or case-study panel serves no one; it only delays a
+       recruiter who followed a link to the brand work. Reading the hash here
+       and taking the same path the page already trusts for "no
+       choreography" -- standDown(), the REDUCED/no-GSAP bail above -- is the
+       smallest version of "skip the intro" available: this returns before
+       initLenis() ever calls lenis.stop(), so nothing below builds at all
+       for this load (Lenis, ScrollTrigger, the hero exit, the film), nothing
+       has to be torn back down afterwards, and the scroll lock this deep
+       link would otherwise trigger is simply never applied. A bare
+       /project_kayn/ (no hash, or #web) skips this branch and boot() runs
+       exactly as it did before this existed. */
+    if (/^#(brand|case)$/.test(window.location.hash)) {
+      standDown("opened on a sub-page, not the web tab");
+      return;
+    }
+
     var intro = null;
     lenis = initLenis();
     if (lenis) lenis.stop();                       /* held until the loader lifts */
