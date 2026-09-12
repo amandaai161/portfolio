@@ -104,6 +104,13 @@
   --gap-col:     clamp(22px, 4.9vw - 8px, 75px);
   --band:        clamp(76px, 1.6px + 17.3vw, 300px);       /* section rhythm */
 
+  /* One name for "a viewport below the project navbar". The film sequence
+     stacks three of these and pulls one up over another by exactly minus one
+     of them; if the height and the negative margin ever stop agreeing, the USP
+     overlay slides out of register with the film behind it and nothing errors.
+     So they read the same token. */
+  --stage-h: calc(100svh - var(--pf-nav-h, 0px));
+
   /* Hero plate */
   --scrim-blur:  clamp(11px, 1.68vw, 34px);   /* 20% softer than the first pass */
   --scrim-tint:  rgba(4, 17, 6, 0.44);
@@ -355,7 +362,7 @@ html[data-motion="off"] [data-reveal-wipe] { clip-path: none; }
    Mode 2 (data-solid, from the moment the hero has dissolved): a short bar of
    frosted paper with the wordmark and links in moss green, and no rule. */
 .masthead {
-  position: fixed; inset: 0 0 auto; z-index: 60;
+  position: fixed; inset: 0 0 auto; top: var(--pf-nav-h, 0px); z-index: 60;
   padding-block: clamp(14px, 0.9vw, 22px) 0;
   color: var(--cream);
   transition: transform .6s var(--ease-out), background-color .45s linear,
@@ -472,8 +479,8 @@ html[data-motion="off"] .masthead__rule { transform: none; }
   height: 190svh;
 }
 .hero__stage {
-  position: sticky; top: 0;
-  height: 100svh; min-height: 560px;
+  position: sticky; top: var(--pf-nav-h, 0px);
+  height: var(--stage-h); min-height: 560px;
   overflow: clip;
   /* The comp's own under-colour, sampled from the portrait hero's top strip.
      Matching it exactly means the band above the still — the comp leaves ~94px
@@ -593,8 +600,8 @@ html[data-motion="off"] .masthead__rule { transform: none; }
 }
 
 .film__stage {
-  position: sticky; top: 0; z-index: 2;
-  height: 100svh; min-height: 560px;
+  position: sticky; top: var(--pf-nav-h, 0px); z-index: 2;
+  height: var(--stage-h); min-height: 560px;
   display: grid; grid-template-rows: auto 1fr;
   padding: clamp(48px, 7.8vh, 150px) var(--shell-wide) 0;
 }
@@ -662,8 +669,8 @@ html[data-motion="off"] .masthead__rule { transform: none; }
 /* USP ring copy. Sibling of the stage and pulled back over it so both pin at
    top:0; z-index 1 keeps every word behind the bottle (Storyboard 2.2). */
 .usp {
-  position: sticky; top: 0; z-index: 1;
-  margin-top: -100svh; height: 100svh;
+  position: sticky; top: var(--pf-nav-h, 0px); z-index: 1;
+  margin-top: calc(-1 * var(--stage-h)); height: var(--stage-h);
   pointer-events: none;
 }
 /* Adjacent anchors are only 0.7071 x R apart vertically — 117px on a 720-tall
@@ -1095,7 +1102,7 @@ html[data-motion="off"] .masthead__rule { transform: none; }
    where GSAP never arrived, so both fall back to the same static layout. */
 
 html[data-motion="off"] .loader { display: none; }
-html[data-motion="off"] .hero { height: 100svh; }
+html[data-motion="off"] .hero { height: var(--stage-h); }
 html[data-motion="off"] .hero__stage { position: static; }
 html[data-motion="off"] .film { height: auto; margin-top: 0; padding-bottom: var(--band); }
 html[data-motion="off"] .film__stage {
