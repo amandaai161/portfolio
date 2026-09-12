@@ -194,18 +194,30 @@
     if (titleInline) gsap.set(heroTitle, { opacity: 0, y: 34 });
     else gsap.set(heroLines, { yPercent: 108 });
 
+    /* Named rather than inlined so boot() can call it directly on the
+       deep-link path below (see tl.land), instead of trusting GSAP's
+       progress()/totalProgress() to fire it as a side effect of seeking --
+       those suppress their own callbacks by default, and getting that flag
+       wrong silently reproduces the exact "loader stuck over the page" bug
+       this exists to prevent. Idempotent by construction (hiding an
+       already-hidden loader, setting an attribute to its own value,
+       starting an already-started Lenis, refreshing ScrollTrigger twice),
+       so it is safe to call from both places without checking which one
+       already ran. */
+    function land() {
+      loader.hidden = true;
+      html.setAttribute("data-motion", "ready");
+      if (lenis) lenis.start();
+      ScrollTrigger.refresh();
+    }
+
     /* Scenes 1.1 and 1.2 — the fill and the count — are not on this timeline;
        they run for as long as the assets take (see runLoadRing). This one is
        everything after 100%, and is played once the ring is full. */
     var tl = gsap.timeline({
       paused: true,
       defaults: { ease: "power2.inOut" },
-      onComplete: function () {
-        loader.hidden = true;
-        html.setAttribute("data-motion", "ready");
-        if (lenis) lenis.start();
-        ScrollTrigger.refresh();
-      }
+      onComplete: land
     });
 
     /* The readout goes first, then a beat on the closed circle. */
@@ -270,6 +282,7 @@
         opacity: 1, x: 0, duration: 1.05, stagger: 0.1, ease: "expo.out"
       }, "flight+=1.20");
 
+    tl.land = land;                 /* exposed for boot()'s deep-link skip */
     return tl;
   }
 
@@ -941,21 +954,19 @@
        seen the web tab, so playing its loader -- Storyboard 1, the
        forest-green ring, scroll locked from the first byte by
        html[data-motion="pending"] body { overflow: clip } in styles.css --
-       over the brand or case-study panel serves no one; it only delays a
-       recruiter who followed a link to the brand work. Reading the hash here
-       and taking the same path the page already trusts for "no
-       choreography" -- standDown(), the REDUCED/no-GSAP bail above -- is the
-       smallest version of "skip the intro" available: this returns before
-       initLenis() ever calls lenis.stop(), so nothing below builds at all
-       for this load (Lenis, ScrollTrigger, the hero exit, the film), nothing
-       has to be torn back down afterwards, and the scroll lock this deep
-       link would otherwise trigger is simply never applied. A bare
-       /project_kayn/ (no hash, or #web) skips this branch and boot() runs
-       exactly as it did before this existed. */
-    if (/^#(brand|case)$/.test(window.location.hash)) {
-      standDown("opened on a sub-page, not the web tab");
-      return;
-    }
+       over the brand or case-study panel serves no one. She asked to skip
+       the INTRO and release the scroll lock, not to disable motion for the
+       page's whole session -- so this must not bail out of boot() the way
+       standDown() does (that path never builds Lenis, ScrollTrigger, the
+       hero exit or the film at all). A visitor who deep-links into the
+       brand work and then clicks over to "Web design preview" -- the
+       obvious next thing to do -- has to find that tab fully alive, not
+       frozen in standDown()'s no-choreography state. So boot() below runs
+       exactly as it always has, building everything unconditionally; the
+       only change is at the one place it would PLAY the intro (see
+       skipIntro further down), where it lands the intro's end state
+       immediately instead. */
+    var skipIntro = /^#(brand|case)$/.test(window.location.hash);
 
     var intro = null;
     lenis = initLenis();
@@ -1007,7 +1018,26 @@
         intro = buildIntro(filmURL);
 
         /* Everything is built; hand over the moment the ring reads 100%. */
-        return ringFull.then(function () { intro.play(); });
+        return ringFull.then(function () {
+          if (skipIntro) {
+            /* Land, don't play. intro.progress(1) alone would render every
+               tween at its end value but -- like intro.totalProgress(1) --
+               suppresses the timeline's own onComplete by default, which is
+               what hides the loader, flips data-motion to "ready" and
+               restarts Lenis; getting that suppression flag wrong would
+               silently reproduce the exact "loader stuck over the page" bug
+               this exists to fix. So the completion work (tl.land, the same
+               function onComplete already calls) is invoked directly rather
+               than trusted to fire as a side effect of the seek -- it is
+               idempotent (see its own comment in buildIntro), so calling it
+               here even if GSAP *also* fires onComplete on its own costs
+               nothing. */
+            intro.progress(1);
+            intro.land();
+          } else {
+            intro.play();
+          }
+        });
       });
     }).catch(function (err) {
       console.error("[KAYN] Boot failed.", err);
