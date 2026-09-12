@@ -955,22 +955,48 @@
        forest-green ring, scroll locked from the first byte by
        html[data-motion="pending"] body { overflow: clip } in styles.css --
        over the brand or case-study panel serves no one. She asked to skip
-       the INTRO and release the scroll lock, not to disable motion for the
-       page's whole session -- so this must not bail out of boot() the way
-       standDown() does (that path never builds Lenis, ScrollTrigger, the
-       hero exit or the film at all). A visitor who deep-links into the
-       brand work and then clicks over to "Web design preview" -- the
-       obvious next thing to do -- has to find that tab fully alive, not
-       frozen in standDown()'s no-choreography state. So boot() below runs
-       exactly as it always has, building everything unconditionally; the
-       only change is at the one place it would PLAY the intro (see
-       skipIntro further down), where it lands the intro's end state
-       immediately instead. */
+       the INTRO and release the scroll lock IMMEDIATELY, not to disable
+       motion for the page's whole session -- so this must not bail out of
+       boot() the way standDown() does (that path never builds Lenis,
+       ScrollTrigger, the hero exit or the film at all). A visitor who
+       deep-links into the brand work and then clicks over to "Web design
+       preview" -- the obvious next thing to do -- has to find that tab
+       fully alive, not frozen in standDown()'s no-choreography state.
+
+       "Immediately" ruled out gating the release on anything that waits for
+       real network assets: the web tab's own film video, hero image and web
+       fonts. An earlier pass landed the release right after those loaded
+       (skipping only the loader's own ring-fill and the intro's choreography
+       after it) and that was still visibly wrong -- a deep link sat through
+       the real asset load first, watching the ring count up, before the
+       brand or case panel ever appeared. So this releases in two stages:
+       synchronously, below, before ANY loading starts; and again, once the
+       full pipeline (Lenis, ScrollTrigger, hero exit, film, the intro
+       timeline) has actually built, purely to render the intro's tweens at
+       their end values and refresh ScrollTrigger -- see the second
+       `skipIntro` branch further down for why re-doing the release itself
+       there is harmless. */
     var skipIntro = /^#(brand|case)$/.test(window.location.hash);
 
     var intro = null;
     lenis = initLenis();
-    if (lenis) lenis.stop();                       /* held until the loader lifts */
+
+    if (skipIntro) {
+      /* Release right now, synchronously, before loadAssets() below has even
+         started -- nothing after this point may gate on it. lenis never gets
+         .stop() on this path: there is nothing to "hold until the loader
+         lifts" when the loader is hidden before this function does anything
+         else, and Lenis applies its OWN scroll lock while stopped
+         (.lenis-stopped { overflow: clip } in styles.css) independently of
+         data-motion, so skipping the stop matters as much as clearing the
+         attribute does. */
+      var loaderNow = $("#loader");
+      if (loaderNow) loaderNow.hidden = true;
+      html.setAttribute("data-motion", "ready");
+    } else {
+      if (lenis) lenis.stop();                     /* held until the loader lifts */
+    }
+
     initDrawer();
     initMasthead();
 
@@ -1017,27 +1043,28 @@
         initParallax();
         intro = buildIntro(filmURL);
 
+        if (skipIntro) {
+          /* The lock already lifted at the top of boot(), before any of this
+             had even started loading -- this is not what makes the page
+             usable, it finishes the job now that the pieces it needs exist.
+             intro.progress(1) is purely visual here: it renders every tween
+             this timeline drives (hero opacity, the nav mark, the rings) at
+             its end value, so a later switch to "Web design preview" finds a
+             fully revealed hero rather than one still sitting at its
+             pre-intro, invisible state -- .progress() alone would do that
+             much regardless of its suppressEvents default. intro.land() is
+             called anyway, and is safe to call a second time (see its own
+             comment on idempotence): hiding an already-hidden loader and
+             starting an already-unstopped Lenis cost nothing, and its
+             ScrollTrigger.refresh() call is genuinely needed now, since the
+             triggers it refreshes did not exist yet at the top of boot(). */
+          intro.progress(1);
+          intro.land();
+          return;
+        }
+
         /* Everything is built; hand over the moment the ring reads 100%. */
-        return ringFull.then(function () {
-          if (skipIntro) {
-            /* Land, don't play. intro.progress(1) alone would render every
-               tween at its end value but -- like intro.totalProgress(1) --
-               suppresses the timeline's own onComplete by default, which is
-               what hides the loader, flips data-motion to "ready" and
-               restarts Lenis; getting that suppression flag wrong would
-               silently reproduce the exact "loader stuck over the page" bug
-               this exists to fix. So the completion work (tl.land, the same
-               function onComplete already calls) is invoked directly rather
-               than trusted to fire as a side effect of the seek -- it is
-               idempotent (see its own comment in buildIntro), so calling it
-               here even if GSAP *also* fires onComplete on its own costs
-               nothing. */
-            intro.progress(1);
-            intro.land();
-          } else {
-            intro.play();
-          }
-        });
+        return ringFull.then(function () { intro.play(); });
       });
     }).catch(function (err) {
       console.error("[KAYN] Boot failed.", err);
