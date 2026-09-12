@@ -159,6 +159,59 @@
     })(ORDER[i]);
   }
 
+  /* ---- tab keyboard handling ----------------------------------------------
+     role="tablist" / role="tab" tell a screen reader "tab, 2 of 3" and imply
+     the ARIA Authoring Practices keyboard model that goes with it -- Left and
+     Right move between tabs, Home and End jump to the first and last -- which
+     plain <button> elements know nothing about on their own. Without this a
+     screen-reader user hears the count, then finds the arrow keys do nothing.
+
+     This is deliberately NOT roving tabindex (setting tabindex="-1" on every
+     tab but the selected one, which is the other half of the usual pattern):
+     these are plain, always-focusable <button>s and Tab already moves through
+     all of them in source order for free. Touching tabindex would take that
+     away for no gain, so the browser's own Tab traversal is left alone and
+     only the arrow keys are intercepted.
+
+     valid() is reused to build the navigable list, so a page missing a tab
+     (Aspire has no "brand") is skipped exactly the way the click-wiring loop
+     above skips it -- Left/Right/Home/End on a two-tab page cycle those two
+     and never land on a tab that was never wired up.
+
+     These tabs activate on click, not on a separate Enter/Space after
+     focusing -- see the click handler above. Arrow/Home/End keep that: the
+     tab moved to is shown immediately, the same call the click handler makes,
+     so keyboard and mouse behave identically. */
+  var tabList = bar.querySelector('[role="tablist"]');
+  if (tabList) {
+    tabList.addEventListener("keydown", function (e) {
+      var key = e.key;
+      if (key !== "ArrowLeft" && key !== "ArrowRight" && key !== "Home" && key !== "End") return;
+
+      var nav = [];
+      var j;
+      for (j = 0; j < ORDER.length; j++) {
+        if (valid(ORDER[j])) nav.push(ORDER[j]);
+      }
+
+      var here = e.target && e.target.getAttribute ? e.target.getAttribute("data-tab") : null;
+      var pos = nav.indexOf(here);
+      if (pos === -1) return; /* focus is on the tablist but not on one of its tabs */
+
+      var next;
+      if (key === "Home") next = nav[0];
+      else if (key === "End") next = nav[nav.length - 1];
+      else next = nav[(pos + (key === "ArrowRight" ? 1 : -1) + nav.length) % nav.length];
+
+      e.preventDefault();
+      tabs[next].focus();
+      if (next !== current) {
+        setHash(next);
+        show(next);
+      }
+    });
+  }
+
   /* ---- the hash ----------------------------------------------------------
      A sub-page is worth a URL: it is how Amanda sends a recruiter straight to
      the brand work, and it is what makes the back button undo a tab switch.
