@@ -592,10 +592,17 @@ html[data-motion="off"] .masthead__rule { transform: none; }
 .film {
   position: relative; z-index: 1;
   margin-top: -190svh;                  /* == .hero height, so .film starts at 0 */
-  /* 550 = 100 stage + 90 lead-in + 360 of beats. The lead-in is the stretch that
-     scrubs behind the hero (.hero 190 less one 100 stage); it is added to the
-     height rather than taken out of the beats, so every beat keeps the pixel
-     pacing it had before app.js started offsetting them. */
+  /* 550 = 100 stage + 90 lead-in + 360 of beats, all in svh. The lead-in is
+     the stretch that scrubs behind the hero's exit run -- .hero is 190svh and
+     its sticky stage is --stage-h, 100svh minus the navbar's var(--pf-nav-h),
+     not a flat 100svh, so the true exit run is 90svh plus the navbar's height
+     rather than a clean 90. That extra --pf-nav-h is left out here: this
+     number only paces the scrub beats in svh units, and a few dozen pixels of
+     navbar against several viewport-heights of scroll is not worth carrying
+     a calc() into a unit this height is already approximate in. Where the
+     pull-up has to be pixel-exact rather than merely well-paced -- the
+     portrait .film below, so the section lands flush with no gap -- it is:
+     see that rule's own comment. */
   height: 550svh;
 }
 
@@ -667,10 +674,19 @@ html[data-motion="off"] .masthead__rule { transform: none; }
 }
 
 /* USP ring copy. Sibling of the stage and pulled back over it so both pin at
-   top:0; z-index 1 keeps every word behind the bottle (Storyboard 2.2). */
+   var(--pf-nav-h) -- the navbar's height, not the viewport's top:0 -- which
+   is what keeps them stacked exactly on top of one another; z-index 1 keeps
+   every word behind the bottle (Storyboard 2.2).
+
+   min-height: 560px below has to match .film__stage's own (further up this
+   file). --ring-cy is a percentage, so it resolves against each box's own
+   height independently -- if the two boxes disagreed below the clamp, the
+   ring and its USP labels would misregister against each other the moment
+   either one hit its floor. */
 .usp {
   position: sticky; top: var(--pf-nav-h, 0px); z-index: 1;
   margin-top: calc(-1 * var(--stage-h)); height: var(--stage-h);
+  min-height: 560px;
   pointer-events: none;
 }
 /* Adjacent anchors are only 0.7071 x R apart vertically — 117px on a 720-tall
@@ -971,14 +987,19 @@ html[data-motion="off"] .masthead__rule { transform: none; }
 @media (max-aspect-ratio: 1 / 1) {
   .film {
     position: relative; z-index: auto;
-    /* Pulled up by exactly the hero's exit run (190svh section less its 100svh
-       sticky stage). Past that point the hero's stage has faded to nothing and
-       is only scrolling itself off screen, which read as most of a blank
-       viewport between the two sections. Overlapping them removes it; the hero
-       is z-index 2 and paints on top, so nothing shows through until it has
-       gone. app.js hangs this section's reveals off the hero's exit rather than
-       off their own positions for exactly that reason. */
-    margin-top: -90svh; height: auto;
+    /* Pulled up by exactly the hero's exit run. The hero section is 190svh
+       and its sticky stage is --stage-h (100svh minus the navbar's
+       var(--pf-nav-h)), not a flat 100svh -- so the exit run is 90svh PLUS
+       the navbar's height, and the pull-up has to add that back in or it is
+       --pf-nav-h short, leaving this section start --pf-nav-h too LOW (a gap
+       under the hero, not an overlap). Past the exit run the hero's stage
+       has faded to nothing and is only scrolling itself off screen, which
+       read as most of a blank viewport between the two sections. Overlapping
+       them removes it; the hero is z-index 2 and paints on top, so nothing
+       shows through until it has gone. app.js hangs this section's reveals
+       off the hero's exit rather than off their own positions for exactly
+       that reason. */
+    margin-top: calc(-90svh - var(--pf-nav-h, 0px)); height: auto;
     padding-bottom: var(--band);
   }
   .film__stage {
