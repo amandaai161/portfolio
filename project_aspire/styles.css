@@ -1621,7 +1621,7 @@ button,input{ font:inherit; color:inherit; }
    proportions come out optically the same size with no per-logo number.
 
    Not `max-width` + `max-height` on an auto-sized image: when both are violated
-   the CSS sizing algorithm picks one axis, and Glints (294×72) came out 43px tall
+   the CSS sizing algorithm picks one axis, and Crewloom (294×72) came out 43px tall
    against a 40px cap. A definite box cannot get that wrong.
 
    `align-self: end` in both states, so growing changes three lengths and no
