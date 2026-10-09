@@ -1269,17 +1269,10 @@ html.motion #outro .cta {
 
 .cta__btn--solid { background: var(--black-1); color: var(--white-1); }
 .cta__btn--solid:hover { background: var(--white-1); color: var(--black-1); }
-/* The outlined button tints rather than inverting: 15% black on hover, 30%
-   while held. Keeping the label and outline black throughout means the button
-   never restates itself as a second solid button beside the primary one —
-   the two stay visibly primary and secondary at every state. */
-.cta__btn--ghost { background: var(--white-1); color: var(--black-1); }
-.cta__btn--ghost:hover { background: rgba(0, 0, 0, 0.15); color: var(--black-1); }
-.cta__btn--ghost:active { background: rgba(0, 0, 0, 0.30); color: var(--black-1); }
 
 @media (max-width: 480px) {
-  /* Two full-width buttons stacked read better than two cramped ones that
-     wrap unevenly — nowrap on the labels means they cannot shrink. */
+  /* A full-width button reads better than a cramped one — nowrap on the
+     label means it cannot shrink. */
   .cta__actions { flex-direction: column; align-self: stretch; }
   .cta__btn { justify-content: center; }
 }
