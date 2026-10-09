@@ -1,2 +1,6 @@
 .DS_Store
 **/.DS_Store
+
+# Working notes stay out of the published site
+.superpowers/
+docs/superpowers/
