@@ -197,8 +197,8 @@
 
   /* ---------- client logo marquee ---------- */
   --logo-gap:       70px;   /* measured edge-to-edge between logos */
-  --logo-row-h:     78px;   /* tallest logo (nextbillion.ai, 86×78) */
-  --marquee-secs:   45s;    /* one full cycle = 2105px, so ≈47px/s */
+  --logo-row-h:     78px;   /* tallest logo (lumora.ai, 93×78) */
+  --marquee-secs:   48s;    /* one full cycle = 2243px, so ≈47px/s */
 
   /* ---------- vertical rhythm (reference y-positions) ----------
      "Homepage Section 1 (Revised).png", artboard 1348 tall:
@@ -2255,10 +2255,12 @@ html:not(.js) .reveal{ opacity:1; transform:none; }
     --sp-anim-bottom:clamp(16px, 2.2vh, 28px);
     /* Half the size it was — 28 from 56, gaps 22 from 44. The duration halves with
        it: one cycle is one set's width, so leaving it at 32s on a track that is now
-       half as wide would run the marquee at half the speed. 16s holds the pace. */
+       half as wide would run the marquee at half the speed. 16s held the pace for
+       the original logos; the v5.0 set is wider at this size (1638px a cycle), so
+       20s keeps the same ≈81px/s. */
     --logo-gap:22px;
     --logo-row-h:28px;
-    --marquee-secs:16s;
+    --marquee-secs:20s;
   }
   .nav__inner{ gap:12px; }
   .nav__logo img{ height:28px; }
