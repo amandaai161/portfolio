@@ -32,6 +32,9 @@
   <link rel="stylesheet" href="/css/type-system.css" />
   <link rel="stylesheet" href="/css/master-thumb.css">
   <link rel="stylesheet" href="/css/v3.css" />
+  <!-- The v5 homepage's own sections: hero, "What I bring to the team", Works.
+       After v3.css, whose square button (.cta__btn) it builds on. -->
+  <link rel="stylesheet" href="/css/home.css" />
   <!-- After v3.css, which is where these rules used to live as its last
        block — same position in the cascade, now on both pages. -->
   <link rel="stylesheet" href="/css/chrome.css" />
@@ -56,9 +59,9 @@
         <!-- HOME first, as drawn in Amanda's header sketch. Same target as
              .header__name above it (#top, not "/") so it scrolls this page
              back up instead of reloading it — on the one page it appears on,
-             a reload would drop the reader out of a scroll-driven sequence
-             and back at a cold start. -->
+             a reload would throw away where the reader had got to. -->
         <a href="#top" class="nav__link is-active" aria-current="page">Home</a>
+        <a href="#work" class="nav__link">Works</a>
         <a href="/about" class="nav__link">About</a>
         <a href="https://www.linkedin.com/in/amandaalfatah/" class="nav__link nav__link--ext" target="_blank" rel="noopener">
           Linkedin
@@ -77,6 +80,7 @@
 
     <div class="mobile-menu" id="mobileMenu" hidden>
       <a href="#top" class="mobile-menu__link">Home</a>
+      <a href="#work" class="mobile-menu__link">Works</a>
       <a href="/about" class="mobile-menu__link">About</a>
       <a href="https://www.linkedin.com/in/amandaalfatah/" class="mobile-menu__link" target="_blank" rel="noopener">Linkedin</a>
       <a href="https://www.behance.net/amandaalfattah" class="mobile-menu__link" target="_blank" rel="noopener">Behance</a>
@@ -90,323 +94,313 @@
   </header>
 
   <main>
-    <!-- The giant display type. ONE fixed element, alive from the tail of
-         the intro all the way to the CTA, and owned end to end by
-         js/headline.js — nothing else on the page writes to it.
+    <!-- ===================== THE LEAD — the hero, "What I bring to the team", the works =====================
+         Amanda's full-page design of 11 Nov 2026. These three sections share
+         one wrapper because, where the screen is big enough, they share one
+         SCREEN: #lead is a scroll runway, .lead__stage sticks under the header
+         for its length, and each section fades out upward as the next fades in
+         in its place. Amanda: "Please make the transition from hero -> USP ->
+         work section similar to the current live version: Fading in and out
+         with slight movement." And, of a first cut that let the USP scroll away
+         instead: "The transition from USPs section to works section is wrong,
+         please make it like what you did on Hero -> USPs."
 
-         TWO WORDS, TWO BLOCKS. css/v3.css gives .mhead__word display:block,
-         so "SELECTED WORK." is on two lines because the markup says so, not
-         because a width cap happens to fit it. That matters while the first
-         word is scrambling through random characters on its way to "OTHER":
-         the old single-string version relied on a 6em cap to force the break,
-         so a wide scramble frame broke differently and the headline collapsed
-         onto one line mid-change (measured: 786px wide -> 918 -> 1002 -> 786,
-         one line at the widest point). No string can do that to two blocks.
+         The works are taller than a screen, so they are the one section left
+         in the stage's flow: the stage is as tall as they are, and once they
+         have arrived the stage lets go and they scroll on like any other
+         content. js/scenes-home.js drives it; css/home.css holds the layout
+         and says where it applies.
 
-         data-morph-to is what the first word becomes. Only that word changes —
-         "WORK." is the same in both — so it is the only one that scrambles.
+         Without the motion scripts, with reduced motion, or on a screen too
+         small to hold a section whole, the wrapper does nothing: the three
+         sections are ordinary content, one under the other. -->
+    <div class="lead" id="lead">
+      <div class="lead__stage">
 
-         The resting markup already reads the final string, which is what a
-         no-motion visitor sees: html.motion never gets added, so neither the
-         `html.motion #morphHead{opacity:0}` rule in css/v3.css nor any of
-         js/headline.js applies, and the plain two-word markup below IS the
-         page. js/headline.js bails before splitting anything in that case, so
-         it stays plain prose.
+        <!-- ===================== HERO =====================
+             Portrait, greeting, one statement with three links, one button.
 
-         #mheadSlot is an invisible twin that defines the LANDED position and
-         size. It is never painted and never split — it exists purely to be
-         measured, so both of the headline's two states come from CSS rather
-         than from numbers written into JS. -->
-    <div class="mhead" id="morphHead" aria-hidden="true"><span class="mhead__word" data-morph-to="OTHER">SELECTED</span> <span class="mhead__word">WORK.</span></div>
-    <div class="mhead mhead--slot" id="mheadSlot" aria-hidden="true"><span class="mhead__word">SELECTED</span> <span class="mhead__word">WORK.</span></div>
+             THE PORTRAIT AND THE GREETING ARE THE LINK TO THE ABOUT PAGE, as on
+             the live site: "Keep the interaction of 'Hi I'm Amanda' and my
+             avatar to direct to about page." That is why there is no second
+             button. data-cursor swells the dot into its "More about me" pill.
 
-    <!-- ===================== INTRO — three centred states over a scroll-driven field ===================== -->
-    <section class="intro" id="intro">
-      <div class="intro__stage">
+             THE STATEMENT, Amanda's own words of 17 Nov 2026, all in black. Its
+             three underlined phrases are links that back the claim with the
+             work itself: "6 years" goes to "What I bring to the team",
+             "SaaS and fintech" to Aspire, "AI agents" to HAZEN. On a mouse,
+             the cursor's dot grows into a card with that work's picture and
+             a line of context (js/cursor.js reads the data-card-* attributes;
+             the dot is the same one that grows into the "More about me" pill).
+             Size "A" of the mockup in resources/docs/plans/v5/
+             project-section-layouts/hero-links/: one size, smaller than the
+             old three-line headline, so all of it still fits the first screen.
 
-        <!-- The DEMO animation (js/demo-anim.js). Named "demo", not "intro",
-             so it is never confused with the intro SECTION's own state-to-state
-             transitions. It sits dead-centre of the stage; headline 1 is
-             positioned above it and headline 2 below it (see css/v3.css). -->
-        <div class="intro__demo" id="demoAnim" aria-hidden="true"></div>
-
-        <div class="intro__states">
-
-          <div class="intro__state intro__state--1">
-            <a href="/about" class="intro__me" data-cursor="More about me" aria-label="More about me">
-              <span class="intro__avatar"><img src="/images/about/profile.webp" alt="Portrait of Amanda Idris" width="72" height="72" /></span>
-              <span class="intro__greeting">Hi, I&rsquo;m <b class="intro__name">Amanda.</b></span>
+             .is-live is in the markup, not added by script: it is what lets
+             this section take the pointer while it is on the stage, and it
+             must already be true before any script has run. -->
+        <section class="hero is-live" id="hero" aria-labelledby="heroHeading">
+          <div class="container hero__inner">
+            <a class="hero__me" href="/about" data-cursor="More about me" aria-label="More about me">
+              <span class="hero__avatar"><img src="/images/about/profile.webp" alt="Portrait of Amanda Idris" width="72" height="72" /></span>
+              <span class="hero__greeting">Hi, I&rsquo;m Amanda.</span>
             </a>
-            <p class="intro__titles">
-              <span>Creative Lead</span>
-              <span class="intro__sep" aria-hidden="true"></span>
-              <span>Brand &amp; Web Systems Designer</span>
-              <span class="intro__sep" aria-hidden="true"></span>
-              <span>B2B Fintech &amp; SaaS</span>
-            </p>
 
-            <!-- Scroll cue: v1's mouse glyph, icon ONLY — the "See my works"
-                 label that used to sit beside it in v1 is deliberately gone
-                 (Amanda, twice: first "remove the see my works text", then
-                 "please only show the icon without text"). It reuses
-                 .scroll-cue/.mouse-scroll straight from css/styles.css, so it
-                 carries v1's design system with no new look of its own; the
-                 only addition is .scroll-cue--inline, which un-fixes it.
+            <h1 class="hero__title" id="heroHeading">A designer with <a class="hero__link" href="#offer" data-text="6&nbsp;years" aria-label="6 years: what I bring to the team" data-card-img="/images/thumbnail_usp_poster.webp" data-card-kicker="Jump to section" data-card-title="Six years, in three strengths" data-card-desc="Design, systems and AI, each shown in a short loop.">6&nbsp;years</a> of experience. I build the visual infrastructure behind <a class="hero__link" href="/project_aspire/" data-text="SaaS&nbsp;and&nbsp;fintech" aria-label="SaaS and fintech: the Aspire project" data-card-img="/images/thumbnail_aspire_poster.webp" data-card-kicker="Relevant project" data-card-title="Aspire" data-card-desc="A fintech design system that cut page builds from ten days to under four.">SaaS&nbsp;and&nbsp;fintech</a> brands: systems that hold every page, asset and campaign to the same high standard. And I develop <a class="hero__link" href="/project_hazen/" data-text="AI&nbsp;agents" aria-label="AI agents: the HAZEN project" data-card-img="/images/thumbnail_hazen_poster.webp" data-card-kicker="Relevant project" data-card-title="HAZEN" data-card-desc="Claude skills that carry my art direction into image and video work.">AI&nbsp;agents</a> to handle the groundwork, so the craft gets full attention.</h1>
 
-                 It sits HERE, as the last line of the bio frame, rather than
-                 fixed to the bottom of the viewport — Amanda: "The hero
-                 section, the scroll indicator should be put below my titles'
-                 line, not in the bottom of the page. Then adjust the whole
-                 elements of the page accordingly so all is centered
-                 properly." Being a real child of the frame is what does the
-                 centring: .intro__state--1 fills the stage and centres its
-                 own contents, so the group re-centres around the cue's added
-                 height by itself, at every viewport, with no offset to tune.
-                 It also means the cue now leaves WITH the bio rather than on
-                 a fade of its own (js/ui.js used to drive one) — the bio
-                 frame is the one thing it was ever an invitation to scroll
-                 past.
-
-                 Not a link: v1's was an <a href="#works">, but v3's intro is a
-                 long scrubbed sequence and jumping past it would skip the
-                 whole thing. aria-hidden + no tab stop because it is pure
-                 decoration with no label to announce. -->
-            <div class="scroll-cue scroll-cue--inline" id="scrollCue" aria-hidden="true"><span class="mouse-scroll"></span></div>
-          </div>
-
-          <!-- The two <br class="intro__brk"> are PHONE-ONLY line breaks:
-               css/v3.css hides them at 761px and up, so the desktop line
-               remains one string wrapping on its own, exactly as it does now.
-               The spaces around them are kept, so with the breaks hidden the
-               sentence still reads "I build visual infrastructure behind the
-               brand." with normal word spacing.
-
-               Amanda asked for this headline to hold at three lines on a
-               phone. A max-width in ch happens to give three today and gives
-               two or four the moment the size, the measure or the webfont
-               moves; a break in the markup is the count itself. -->
-          <h1 class="intro__state intro__state--2 intro__h">I build visual <br class="intro__brk" />infrastructure <br class="intro__brk" />behind the brand.</h1>
-
-          <!-- The <br> before "without" pins Frame 3/4/5's two-line split
-               ("I use AI to scale it" / "without losing the polish") as a fixed
-               break, not natural wrapping. Natural wrapping is viewport-
-               dependent AND width-dependent: measured at 1280px, the paragraph
-               naturally wraps as "...it without" / "losing the polish" (matching
-               neither this text's original plain form nor the AI-image swap) up
-               until AI's wipe-driven width crosses ~82px, at which point
-               "without" jumps from line 1 to line 2 mid-wipe (an actual rewrap,
-               not the intended smooth outward slide) — see task-4-report.md's
-               fix-round-1 section. At 1440px "without" never separates from
-               line 1 at all, before or after the wipe. The <br> makes that break
-               point a fixed fact of the markup instead of a fragile function of
-               font metrics, and re-verified clean (constant 0.50 displacement
-               ratio, stable line count through the whole wipe) at 1280/1440/375
-               — see task-4-report.md's fix-round-1 section for that table too.
-               It does NOT stop the rest of the sentence from wrapping further at
-               narrow widths, and that's fine at the required 375px check: "I use
-               AI to scale it" still fits on its one pinned line there, "without
-               losing the polish" just reflows onto 2 lines below it (3 lines
-               total, stable through the whole wipe) — ordinary responsive
-               behaviour, not a defect. At 320px (checked as an extra margin,
-               not a required width) the pinned line itself starts to wrap too,
-               which can strand "it" alone on its own line — a real but minor
-               cosmetic edge case at very old/narrow phone widths, disclosed
-               rather than fixed this round; natural (br-less) wrapping doesn't
-               have this specific problem at 320px but reintroduces the original
-               mid-wipe rewrap risk this <br> exists to prevent. -->
-          <p class="intro__state intro__state--3 intro__h" id="introHeadline3">I use <span class="intro__word intro__word--ai"><img class="intro__word-img intro__word-img--before" src="/images/text_AI_before.svg" alt="" aria-hidden="true" /><img class="intro__word-img intro__word-img--after" src="/images/text_AI_after.svg" alt="AI" /></span><br class="intro__brk" /> to scale it<br>without losing <br class="intro__brk" /><span class="intro__word intro__word--polish"><img class="intro__word-img intro__word-img--before" src="/images/text_polish_before.svg" alt="" aria-hidden="true" /><img class="intro__word-img intro__word-img--after" src="/images/text_polish_after.svg" alt="the polish" /></span></p>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- The scroll runway the landed "SELECTED WORK." headline holds over.
-         Deliberately EMPTY: Amanda asked for the headline to sit readable at
-         middle-left "for the first few scroll" before it shrinks to the
-         top-left watermark, and it can only do that if nothing else is
-         arriving on screen at the same time. Before this element existed the
-         hold ran on top of the work section scrolling in, so the headline was
-         never alone and the hold never read as one.
-
-         js/headline.js measures this box to place both beats: it holds over
-         the first two thirds and shrinks across the last one, and the shrink
-         ends exactly where #work's stage pins — so the hold finishes and the
-         first slide begins on the same pixel, with no blank screen between.
-
-         Collapsed to zero height without html.motion (css/v3.css): with no
-         arrival and no shrink there is nothing to hold, and an empty box would
-         just be dead scrolling. -->
-    <div class="headhold" id="headHold" aria-hidden="true"></div>
-
-    <!-- ===================== WORK — a four-slide sequence =====================
-         claude-handover/new-interaction-work/. #selected used to be a
-         normally-scrolling section; it is now ONE pinned stage that four
-         slides pass through, each fading in with its own entry, holding for a
-         few scroll points, then leaving upward:
-
-           1  Claude design skills: HAZEN
-           2  pair 1 — Identity 2.0 + Aspire Web Design System
-           3  pair 2 — Kayn Argan Oil + NOBI Bakery
-           4  the OTHER WORK. headline (the fixed #morphHead carries it, so
-              this slide is a timing placeholder with nothing of its own)
-
-         The three other projects used to be a fifth slide here. They are a
-         slide again, but their own — #other, further down, with its own stage
-         and its own scene (js/scenes-outro.js) — so this pin can release
-         cleanly at the end of slide 4 and the headline can be back to its
-         watermark before they arrive under it.
-
-         Without html.motion the stage is a plain flex column and all four
-         slides simply stack and read in order, which is why the markup is
-         ordinary sectioned content rather than four absolutely-positioned
-         layers in the HTML itself. -->
-    <section class="work" id="work" aria-labelledby="workHeading">
-      <h2 class="visually-hidden" id="workHeading">Selected and other work</h2>
-
-      <div class="work__stage">
-
-        <!-- SLIDE 1 -->
-        <div class="wslide wslide--hazen">
-          <div class="srule srule--top" aria-hidden="true"></div>
-
-          <!-- The LINK is the thumbnail, not the row. Amanda: "The clickable
-               element is only the thumbnail, so the hover animation only
-               applies when user's cursor hovering on thumbnail only." The row
-               was one big <a> around all three columns, so the hover fired from
-               anywhere in the headline or the paragraph. The pairs keep their
-               whole-card links; only this row reads as a caption beside a
-               picture rather than as a card. -->
-          <div class="hazen v3-wrap">
-            <div class="hazen__lead">
-              <h3 class="hazen__title t-h3">Claude design skills: HAZEN</h3>
-              <p class="hazen__pill"><span class="pill">Claude Skills</span></p>
+            <!-- A link to #work, so it still lands there with no script at
+                 all; js/home.js only makes the trip smooth and stops it under
+                 the header rather than behind it. -->
+            <div class="hero__actions">
+              <a class="cta__btn cta__btn--solid hero__btn" href="#work">
+                See my work
+                <svg class="tail-arrow" viewBox="0 0 30 20" aria-hidden="true"><path d="M1 10h27.5M19.5 1l9 9-9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              </a>
             </div>
-            <a class="hazen__media thumb thumb--hazen" href="/project_hazen/" data-cursor="See project" aria-label="Claude design skills: HAZEN">
-              <video class="hazen__video" src="/images/thumbnail_hazen.webm" poster="/images/thumbnail_hazen_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video>
-            </a>
-            <p class="hazen__desc t-body-sm">A set of Claude skills that carry my art direction into generative work — brief in, directed image and video prompts out, with the craft decisions already made.</p>
           </div>
+        </section>
 
-          <div class="srule srule--bottom" aria-hidden="true"></div>
-        </div>
+        <!-- ===================== USP — "What I bring to the team" =====================
+             Three columns: the title, three items, and the visual for the
+             selected one. "When one is clicked, its respective visual appear."
 
-        <!-- SLIDE 2 — pair 1. The left card carries its text ABOVE its image and
-             the right card below it, and the right card rides one --swork-split
-             lower; that is the "not aligned" arrangement the frames draw. -->
-        <div class="wslide wslide--pair">
-          <div class="wpair v3-wrap">
-            <a class="wcard wcard--l" href="/project_identity/" data-cursor="See project">
-              <div class="wcard__meta">
-                <h3 class="wcard__title t-h3">Identity 2.0</h3>
-                <ul class="wcard__tags">
-                  <li class="pill">Brand Design</li>
-                  <li class="pill">Web Design</li>
-                  <li class="pill">Canva Brand Kit</li>
-                </ul>
+             All three descriptions are always on the page and only change
+             colour, so picking a different item never moves anything.
+
+             It is a tab list: one tab selected, its panel showing, arrow keys
+             to move between them (js/home.js). Each panel holds one of
+             Amanda's three loops (js/usp-anim.js), which starts from the
+             beginning when its item is picked.
+
+             The <br> in the title is the design's own break, kept at every
+             width: on one line a narrow screen strands "team" by itself. -->
+        <section class="usp" id="offer" aria-labelledby="uspHeading" tabindex="-1">
+          <div class="container usp__inner">
+            <h2 class="usp__title" id="uspHeading">What I bring <br />to the team</h2>
+
+            <div class="usp__list" role="tablist" aria-labelledby="uspHeading" aria-orientation="vertical">
+              <button class="usp__item is-active" type="button" role="tab" id="uspTab1" aria-selected="true" aria-controls="uspPanel1">
+                <span class="usp__num" aria-hidden="true">01</span>
+                <span class="usp__name">Design that means business</span>
+                <span class="usp__desc">I turn your positioning, message and business goals into a visual identity people recognize and trust. Every design choice has a reason behind it.</span>
+              </button>
+              <button class="usp__item" type="button" role="tab" id="uspTab2" aria-selected="false" aria-controls="uspPanel2" tabindex="-1">
+                <span class="usp__num" aria-hidden="true">02</span>
+                <span class="usp__name">Systems the team can build on</span>
+                <span class="usp__desc">One system spreading out into a web page, a slide deck, a brochure, a social post and the other marketing collaterals.</span>
+              </button>
+              <button class="usp__item" type="button" role="tab" id="uspTab3" aria-selected="false" aria-controls="uspPanel3" tabindex="-1">
+                <span class="usp__num" aria-hidden="true">03</span>
+                <span class="usp__name">AI-powered workflow, human taste</span>
+                <span class="usp__desc">I&rsquo;ve designed with AI since 2021 and built AI-powered workflows that speed up production. The creative calls and final polish stay with me.</span>
+              </button>
+            </div>
+
+            <div class="usp__visual">
+              <div class="usp__panel is-active" role="tabpanel" id="uspPanel1" aria-labelledby="uspTab1">
+                <div class="usp__anim" data-usp="1" aria-hidden="true"></div>
               </div>
-              <div class="wcard__media thumb thumb--identity"><video class="wcard__video" src="/images/thumbnail_identity.webm" poster="/images/thumbnail_identity_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
-            </a>
-
-            <a class="wcard wcard--r" href="/project_aspire/" data-cursor="See project">
-              <div class="wcard__media thumb thumb--aspire"><video class="wcard__video" src="/images/thumbnail_aspire.webm" poster="/images/thumbnail_aspire_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
-              <div class="wcard__meta">
-                <h3 class="wcard__title t-h3">Aspire Web Design System</h3>
-                <ul class="wcard__tags">
-                  <li class="pill">Web Design</li>
-                  <li class="pill">Web Design System</li>
-                </ul>
+              <div class="usp__panel" role="tabpanel" id="uspPanel2" aria-labelledby="uspTab2">
+                <div class="usp__anim" data-usp="2" aria-hidden="true"></div>
               </div>
-            </a>
+              <div class="usp__panel" role="tabpanel" id="uspPanel3" aria-labelledby="uspTab3">
+                <div class="usp__anim" data-usp="3" aria-hidden="true"></div>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <!-- SLIDE 3 — pair 2 -->
-        <div class="wslide wslide--pair">
-          <div class="wpair v3-wrap">
-            <a class="wcard wcard--l" href="/project_kayn/" data-cursor="See project">
-              <div class="wcard__meta">
-                <h3 class="wcard__title t-h3">Kayn Argan Oil</h3>
-                <ul class="wcard__tags">
-                  <li class="pill">Brand Design</li>
-                  <li class="pill">Web Design</li>
-                </ul>
-              </div>
-              <div class="wcard__media thumb thumb--kayn"><video class="wcard__video" src="/images/thumbnail_kayn.webm" poster="/images/thumbnail_kayn_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
-            </a>
+        <!-- ===================== WORKS =====================
+             Every project is in this one section; there is no separate project
+             page. Two tabs:
 
-            <a class="wcard wcard--r" href="/project_nobi/" data-cursor="See project">
-              <div class="wcard__media thumb thumb--nobi"><video class="wcard__video" src="/images/thumbnail_nobi.webm" poster="/images/thumbnail_nobi_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
-              <div class="wcard__meta">
-                <h3 class="wcard__title t-h3">NOBI Bakery</h3>
-                <ul class="wcard__tags">
-                  <li class="pill">Brand Design</li>
-                  <li class="pill">Web Design</li>
-                </ul>
+               Design works   Identity 2.0, Aspire, NOBI Bakery, Kayn up front;
+                              Bacarita, Atlasique and The Visual Lab behind
+                              "See more"
+               AI works       HAZEN, and a place kept for SINAN
+
+             Amanda: "Move the HAZEN project to 'AI work tab', and create a
+             placeholder beside HAZEN in AI work tab, called SINAN, and just make it
+             not clickable and add 'Coming soon' on it." So SINAN is a <div>, not a
+             link: no href, no hover, no cursor pill.
+
+             The thumbnail is the same component it always was: .thumb carries the
+             destination's colour, js/thumb-video.js plays the clip on hover and
+             winds it back, js/thumb-open.js grows the container over the screen on
+             the way to the project, and data-cursor turns the dot into the "See
+             project" pill.
+
+             THE DESCRIPTIONS ARE DRAFTS. The design carries lorem ipsum there; what
+             is here is each project's own case-study summary, so the cards can be
+             judged with real words in them. Amanda has not signed these off.
+
+             tabindex="-1" lets js/home.js hand focus to the section when a link to
+             #work brings the reader down to it. -->
+        <section class="pj" id="work" aria-labelledby="workHeading" tabindex="-1">
+          <div class="container">
+            <div class="pj__head">
+              <h2 class="pj__title" id="workHeading">Works</h2>
+
+              <!-- data-active says which half the black lozenge is under
+                   (css/home.css); js/home.js keeps it in step with the tabs. -->
+              <div class="pj__tabs" role="tablist" aria-labelledby="workHeading" data-active="design">
+                <button class="pj__tab is-active" type="button" role="tab" id="pjTabDesign" data-key="design" aria-selected="true" aria-controls="pjPanelDesign">Design works</button>
+                <button class="pj__tab" type="button" role="tab" id="pjTabAi" data-key="ai" aria-selected="false" aria-controls="pjPanelAi" tabindex="-1">AI works</button>
               </div>
-            </a>
+            </div>
+
+            <!-- ---------- Design works ---------- -->
+            <div class="pj__panel is-active" role="tabpanel" id="pjPanelDesign" aria-labelledby="pjTabDesign">
+              <ul class="pj__grid">
+                <li>
+                  <a class="pj-card" href="/project_identity/" data-cursor="See project">
+                    <div class="pj-card__media thumb thumb--identity"><video src="/images/thumbnail_identity.webm" poster="/images/thumbnail_identity_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+                    <h3 class="pj-card__title">Identity 2.0</h3>
+                    <ul class="pj-card__tags">
+                      <li>Brand Design</li>
+                      <li>Web Design</li>
+                      <li>Canva Brand Kit</li>
+                    </ul>
+                    <p class="pj-card__desc">A full rebrand for Identity, a global community of around 1,500 members. Reviving a fading community with one scalable identity system a small team can actually run.</p>
+                  </a>
+                </li>
+                <li>
+                  <a class="pj-card" href="/project_aspire/" data-cursor="See project">
+                    <div class="pj-card__media thumb thumb--aspire"><video src="/images/thumbnail_aspire.webm" poster="/images/thumbnail_aspire_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+                    <h3 class="pj-card__title">Aspire</h3>
+                    <ul class="pj-card__tags">
+                      <li>Web Design</li>
+                      <li>Web Design System</li>
+                    </ul>
+                    <p class="pj-card__desc">A Figma-to-Webflow design system built at Aspire that cut landing-page production from ten working days to under four.</p>
+                  </a>
+                </li>
+                <li>
+                  <a class="pj-card" href="/project_nobi/" data-cursor="See project">
+                    <div class="pj-card__media thumb thumb--nobi"><video src="/images/thumbnail_nobi.webm" poster="/images/thumbnail_nobi_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+                    <h3 class="pj-card__title">NOBI Bakery</h3>
+                    <ul class="pj-card__tags">
+                      <li>Brand Design</li>
+                      <li>Web Design</li>
+                    </ul>
+                    <p class="pj-card__desc">A digital storefront and landing page for NOBI Bakery: traditional Japanese baking with modern twists, built for a seamless ordering experience.</p>
+                  </a>
+                </li>
+                <li>
+                  <a class="pj-card" href="/project_kayn/" data-cursor="See project">
+                    <div class="pj-card__media thumb thumb--kayn"><video src="/images/thumbnail_kayn.webm" poster="/images/thumbnail_kayn_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+                    <h3 class="pj-card__title">Kayn</h3>
+                    <ul class="pj-card__tags">
+                      <li>Brand Design</li>
+                      <li>Web Design</li>
+                    </ul>
+                    <p class="pj-card__desc">A premium brand elevation and landing page for Kayn Argan Oil, translating authentic Moroccan sourcing into a sophisticated digital experience.</p>
+                  </a>
+                </li>
+              </ul>
+
+              <!-- The rest. In the page from the start, so it is there for a
+                   visitor with no script and for a search engine; js/home.js is
+                   what closes it and what "See more" opens. -->
+              <div class="pj__more" id="workMore">
+                <div class="pj__more-clip">
+                  <ul class="pj__grid">
+                    <li>
+                      <a class="pj-card" href="/project_bacarita/" data-cursor="See project">
+                        <div class="pj-card__media pj-card__media--still"><img src="/images/bacarita_thumbnail.webp" alt="Bacarita Creative Hub preview" loading="lazy" /></div>
+                        <h3 class="pj-card__title">Bacarita Creative Hub</h3>
+                        <ul class="pj-card__tags">
+                          <li>Brand Design</li>
+                          <li>Web Design</li>
+                        </ul>
+                        <p class="pj-card__desc">A bold creative-hub identity and site for Bacarita Talks, centralizing cultural narratives, podcasts and community stories into one vibrant digital hub.</p>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="pj-card" href="/project_atlasique/" data-cursor="See project">
+                        <div class="pj-card__media pj-card__media--still"><img src="/images/atlasique_thumbnail.webp" alt="Atlasique Travel preview" loading="lazy" /></div>
+                        <h3 class="pj-card__title">Atlasique Travel</h3>
+                        <ul class="pj-card__tags">
+                          <li>Brand Design</li>
+                          <li>Web Design</li>
+                        </ul>
+                        <p class="pj-card__desc">An immersive, editorial landing page for Atlasique, a premier luxury travel agency in Morocco crafting bespoke high-end journeys.</p>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="pj-card" href="/project_visuallab/" data-cursor="See project">
+                        <div class="pj-card__media pj-card__media--still"><img src="/images/visuallabs_thumbnail.webp" alt="The Visual Lab preview" loading="lazy" /></div>
+                        <h3 class="pj-card__title">The Visual Lab</h3>
+                        <ul class="pj-card__tags">
+                          <li>UI Design</li>
+                        </ul>
+                        <p class="pj-card__desc">A personal visual lab of high-fidelity mobile UI concepts, pushing immersive art and depth against clean, functional interfaces.</p>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="pj__actions">
+                <div class="pj__actions-clip">
+                  <button class="cta__btn cta__btn--solid hero__btn pj__morebtn" type="button" aria-expanded="false" aria-controls="workMore">
+                    See more
+                    <svg class="tail-arrow" viewBox="0 0 30 20" aria-hidden="true"><path d="M1 10h27.5M19.5 1l9 9-9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------- AI works ---------- -->
+            <div class="pj__panel" role="tabpanel" id="pjPanelAi" aria-labelledby="pjTabAi" hidden>
+              <ul class="pj__grid">
+                <li>
+                  <a class="pj-card" href="/project_hazen/" data-cursor="See project">
+                    <div class="pj-card__media thumb thumb--hazen"><video src="/images/thumbnail_hazen.webm" poster="/images/thumbnail_hazen_poster.webp" preload="none" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+                    <h3 class="pj-card__title">HAZEN</h3>
+                    <ul class="pj-card__tags">
+                      <li>Claude Skills</li>
+                    </ul>
+                    <p class="pj-card__desc">A set of Claude skills that carry my art direction into generative work: brief in, directed image and video prompts out, with the craft decisions already made.</p>
+                  </a>
+                </li>
+                <li>
+                  <div class="pj-card pj-card--soon" data-cursor="Work in progress…">
+                    <!-- Option 3, "Sunrise", of the five Amanda was shown on 16 Nov
+                         (resources/docs/plans/v5/sinan-thumbnail/). Always moving:
+                         the spark turns once every 160s and its glow breathes. -->
+                    <div class="pj-card__media sinan-tn" role="img" aria-label="SINAN, coming soon">
+                      <svg class="sinan-tn__defs" width="0" height="0" aria-hidden="true" focusable="false">
+                        <defs>
+                          <g id="sinanSpark"><path d="M3.77,-0.16L0.61,-35.32A2.04,2.04 0 0 0 -3.47,-35.15L-3.60,0.15ZM3.00,1.60L17.61,-28.99A2.02,2.02 0 0 0 14.04,-30.90L-3.28,-1.75ZM1.52,2.09L28.73,-18.92A2.50,2.50 0 0 0 25.79,-22.96L-2.58,-3.55ZM0.25,3.70L42.46,-0.77A2.35,2.35 0 0 0 42.14,-5.45L-0.28,-4.19ZM-1.80,2.42L26.24,21.18A2.17,2.17 0 0 0 28.84,17.70L2.82,-3.79ZM-3.29,2.33L19.89,32.02A2.11,2.11 0 0 0 23.33,29.58L2.97,-2.11ZM-2.53,-0.09L-2.29,38.53A2.04,2.04 0 0 0 1.78,38.67L4.65,0.16ZM-3.32,-1.61L-21.01,37.83A2.19,2.19 0 0 0 -17.08,39.74L2.95,1.43ZM-1.63,-2.75L-33.18,17.57A2.42,2.42 0 0 0 -30.71,21.73L2.26,3.81ZM0.06,-3.38L-40.84,-2.67A2.44,2.44 0 0 0 -40.92,2.20L-0.08,4.40ZM1.58,-2.12L-26.90,-22.09A2.45,2.45 0 0 0 -29.84,-18.15L-2.58,3.46ZM3.35,-1.95L-14.59,-30.37A2.46,2.46 0 0 0 -18.85,-27.90L-3.05,1.77Z"/><circle r="6"/></g>
+                          <linearGradient id="sinanSun" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#EDA685"/>
+                            <stop offset="0.5" stop-color="#D97757"/>
+                            <stop offset="1" stop-color="#C96442"/>
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      <div class="sinan-tn__sky"></div>
+                      <div class="sinan-tn__halo"></div>
+                      <svg class="sinan-tn__glow" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#sinanSpark"/></svg>
+                      <svg class="sinan-tn__sun" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#sinanSpark"/></svg>
+                      <div class="sinan-tn__type" aria-hidden="true"><span class="sinan-tn__name">SINAN</span><span class="sinan-tn__soon">Coming soon</span></div>
+                      <div class="sinan-tn__grain"></div>
+                    </div>
+                    <h3 class="pj-card__title">SINAN</h3>
+                    <ul class="pj-card__tags">
+                      <li>Claude Skills</li>
+                    </ul>
+                    <p class="pj-card__desc">Where generic AI design tools jump straight to output, SINAN starts with the questions a senior designer would ask. With a curated style library and a more technical build process, it delivers systems teams can trust.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-
-        <!-- SLIDE 4 — the OTHER WORK. headline, and the last pinned slide.
-             #morphHead (fixed, above) is what is actually on screen here; this
-             slide exists so the sequence has a beat to hold it on. Empty on
-             purpose, and zero-height without motion so it adds nothing to the
-             stacked reading order. The pin releases at the end of this slide;
-             everything below scrolls normally. -->
-        <div class="wslide wslide--head" aria-hidden="true"></div>
+        </section>
 
       </div>
-    </section>
-
-    <!-- ===================== OTHER WORK =====================
-         A SLIDE again, not ordinary content. Amanda: "The other work
-         section: Please make it separated from the bottom CTA and footer
-         section. The 3 items appear like a slide show instead. Just like the
-         selected section. The intro and outro animation can just be a simple
-         fading in + out with movement from bottom to top."
-
-         So this section is now a scroll runway with a sticky stage inside it
-         (css/v3.css), and js/scenes-outro.js runs one slide through it: the
-         three cards rise in together, hold, and leave upward. Separating it
-         from the closing block is what the hold does — nothing else is on
-         screen while these three are.
-
-         Only where all three fit one screen side by side. Below 901px the
-         grid drops to two columns and then one, which is taller than a stage,
-         so there the section falls back to ordinary flow with a plain reveal.
-         Both paths live in js/scenes-outro.js. -->
-    <section class="other" id="other" aria-labelledby="otherHeading">
-      <h2 class="visually-hidden" id="otherHeading">Other work</h2>
-      <div class="other__stage">
-        <div class="owork v3-wrap">
-          <a class="owork__card" href="/project_bacarita/" data-cursor="See project">
-            <div class="owork__media"><img src="/images/bacarita_thumbnail.webp" alt="Bacarita Creative Hub preview" loading="lazy" /></div>
-            <h3 class="owork__title t-h4">Bacarita Creative Hub</h3>
-            <ul class="owork__tags">
-              <li class="pill">Brand Design</li>
-              <li class="pill">Web Design</li>
-            </ul>
-          </a>
-
-          <a class="owork__card" href="/project_atlasique/" data-cursor="See project">
-            <div class="owork__media"><img src="/images/atlasique_thumbnail.webp" alt="Atlasique Travel preview" loading="lazy" /></div>
-            <h3 class="owork__title t-h4">Atlasique Travel</h3>
-            <ul class="owork__tags">
-              <li class="pill">Brand Design</li>
-              <li class="pill">Web Design</li>
-            </ul>
-          </a>
-
-          <a class="owork__card" href="/project_visuallab/" data-cursor="See project">
-            <div class="owork__media"><img src="/images/visuallabs_thumbnail.webp" alt="The Visual Lab preview" loading="lazy" /></div>
-            <h3 class="owork__title t-h4">The Visual Lab</h3>
-            <ul class="owork__tags">
-              <li class="pill">UI Design</li>
-            </ul>
-          </a>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <!-- ===================== THE CLOSING BLOCK =====================
          The CTA and the contact/footer are ONE thing now. Amanda: "The bottom
@@ -528,6 +522,7 @@
 
             <nav class="contact__nav" aria-label="Footer">
               <a href="#top" class="contact__nav-link">Home</a>
+              <a href="#work" class="contact__nav-link">Works</a>
               <a href="/about" class="contact__nav-link">About</a>
             </nav>
           </div>
@@ -553,20 +548,28 @@
   <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <!-- What is left of the motion scripts. The scroll-driven intro, the pinned
+       work slides and the travelling "SELECTED WORK." headline went with the
+       sections they drove (js/demo-anim.js, js/scenes-intro.js,
+       js/scenes-work.js and js/headline.js are no longer loaded here). What
+       remains is Lenis, the fades between the top three sections, and the
+       closing block's own entrance: motion-core.js starts the first,
+       scenes-home.js runs the second, scenes-outro.js and arrival.js the third. -->
   <script src="/js/arrival.js"></script>
   <script src="/js/motion-core.js"></script>
   <script src="/js/cursor.js"></script>
-  <script src="/js/demo-anim.js"></script>
-  <script src="/js/scenes-intro.js"></script>
-  <script src="/js/scenes-work.js"></script>
   <script src="/js/thumb-video.js"></script>
   <script src="/js/thumb-open.js"></script>
+  <!-- The fades between the hero, "What I bring to the team" and the works.
+       Before scenes-outro.js so the page's triggers are created top to bottom. -->
+  <script src="/js/scenes-home.js"></script>
   <script src="/js/scenes-outro.js"></script>
-  <!-- LAST of the scene files, and it has to be: js/headline.js measures where
-       its own beats fall from what the others have already built — #work's
-       timeline mapping (V3.work.at) and #outro's pinned position — so both
-       must exist before it runs. -->
-  <script src="/js/headline.js"></script>
+  <script src="/js/home.js"></script>
   <script src="/js/ui.js"></script>
+  <!-- The three USP loops (Amanda's, made in Claude Design): React to draw
+       them, then the loops themselves, built by resources/scripts/usp-anim. -->
+  <script src="/js/vendor/react.production.min.js"></script>
+  <script src="/js/vendor/react-dom.production.min.js"></script>
+  <script src="/js/usp-anim.js"></script>
 </body>
 </html>

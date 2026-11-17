@@ -1,0 +1,828 @@
+/* ============================================================
+   HOME — the v5 homepage's own sections
+   ------------------------------------------------------------
+   Built to Amanda's full-page design of 11 Nov 2026, top to bottom:
+
+     .lead   all three sections, which take turns on one screen
+       .hero   portrait, greeting, one statement, one button
+       .usp    "What I bring to the team": title, three items, a visual
+       .pj     "Works": two tabs, a grid of projects, "See more"
+
+   Loaded after v3.css and before chrome.css. v3.css still carries
+   the scroll-driven homepage these replaced; nothing here reuses
+   its classes.
+
+   EVERY RESTING STATE IN THIS FILE IS THE FINISHED PAGE. The rules
+   under html.motion, at the end, only apply once js/motion-core.js
+   has confirmed the motion scripts are running; without them, or
+   with reduced motion, the three sections simply sit one under the
+   other and read in order.
+
+   Sizes are the design's own at 1920px wide and scale down with the
+   viewport from there, the way the type scale does.
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - var(--header-h, 88px));
+  min-height: calc(100svh - var(--header-h, 88px));
+  /* The block sits above the middle of the screen: 14vh is held back at
+     the bottom and what is left is split evenly. */
+  padding-block: 24px calc(24px + 14vh);
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* THE PORTRAIT AND THE GREETING ARE ONE LINK, to the about page, as they
+   are on the live site. The whole block lifts, the portrait lifts a little
+   further and grows, and a rule sweeps in under the greeting: three things
+   saying the same thing, plus the cursor's own "More about me" pill. */
+.hero__me {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 0.859vw, 16.5px);
+  color: inherit;
+  transition: transform 0.4s var(--ease-out);
+}
+.hero__avatar {
+  width: clamp(60px, 3.75vw, 72px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+  transition: transform 0.4s var(--ease-out);
+}
+.hero__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.hero__greeting {
+  position: relative;
+  font-size: clamp(22px, 1.46vw, 28px);
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.hero__greeting::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.hero__me:hover,
+.hero__me:focus-visible { transform: translateY(-3px); }
+.hero__me:hover .hero__avatar,
+.hero__me:focus-visible .hero__avatar { transform: translateY(-3px) scale(1.04); }
+.hero__me:hover .hero__greeting::after,
+.hero__me:focus-visible .hero__greeting::after { transform: scaleX(1); }
+.hero__me:focus-visible { outline: 2px solid var(--black-1); outline-offset: 10px; }
+
+/* The statement: all black, Amanda's 17 Nov design. One size, smaller than
+   the old three-line 70px headline so the whole of it (about 45 words)
+   still fits the first screen with the button under it: 50px at 1920,
+   2.6vw below that, never under 24px. Balanced, so no line ends on a
+   lone word. Line height 1.26, up from 1.14 on Amanda's 17 Nov note
+   that the longer statement read too packed; it also leaves the links'
+   hover box clear of the lines above and below. */
+.hero__title {
+  margin-top: clamp(36px, 4.48vw, 86px);
+  max-width: 29em;
+  font-size: clamp(1.5rem, 2.6vw, 3.125rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.26;
+  letter-spacing: -0.01em;
+  color: var(--black-1);
+  text-wrap: balance;
+}
+
+/* Its three links: underlined in the text's own black. Under the pointer a
+   solid black box runs across the words from left to right, and they turn
+   white inside it (Amanda, 17 Nov 2026, replacing the grey hover).
+   js/cursor.js opens their preview card at the same time.
+
+   The box is ::after, carrying the same words again (data-text) in white
+   on black, revealed by clip-path. Its content box is made to coincide
+   with the link's own text, so the white words land exactly on the black
+   ones and the wipe looks like one set of words changing colour. The "/ ''"
+   keeps that copy out of screen readers; the link's aria-label names it.
+   The link's side padding is cancelled by a matching negative margin, so
+   the box reaches a little past the words without moving them. */
+.hero__link {
+  --bx: 0.16em;            /* box past the words, left and right */
+  --bt: -0.02em;           /* box top, from the top of the text's line */
+  --bb: 0.17em;            /* box bottom, past the bottom of the text's line */
+  position: relative;
+  padding: 0 var(--bx);
+  margin: 0 calc(-1 * var(--bx));
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: max(2px, 0.055em);
+  text-underline-offset: 0.14em;
+}
+.hero__link::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  inset: var(--bt) 0 calc(-1 * var(--bb));
+  padding: calc(-1 * var(--bt)) var(--bx) var(--bb);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  background: var(--black-1);
+  color: var(--white-1);
+  text-decoration: underline;
+  text-decoration-thickness: max(2px, 0.055em);
+  text-underline-offset: 0.14em;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.5s var(--ease-out);
+}
+@media (hover: hover) {
+  .hero__link:hover::after { clip-path: inset(0 0 0 0); }
+}
+.hero__link:focus-visible::after { clip-path: inset(0 0 0 0); }
+.hero__link:focus-visible { outline: 2px solid var(--black-1); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .hero__link::after { transition: none; }
+}
+
+.hero__actions {
+  margin-top: clamp(36px, 4.48vw, 86px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(12px, 1.35vw, 26px);
+}
+
+/* The closing block's square button (.cta__btn, css/v3.css), at this
+   design's own proportions: a 62px box around a 21px label. "See my work"
+   and "See more" are the same button. */
+.hero__btn {
+  gap: 0.33em;
+  padding: 0.9em 1.1em;
+  font-family: inherit;
+  font-size: clamp(16px, 1.094vw, 21px);
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.hero__btn:focus-visible {
+  outline: 2px solid var(--black-1);
+  outline-offset: 3px;
+}
+
+/* The arrow's tail fades into whatever the button is painted in. A mask
+   rather than a gradient stroke, so the one drawing works on the black
+   button and on its white hover state without a colour of its own. */
+.cta__btn .tail-arrow {
+  width: 1.38em;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+}
+
+/* One arrival, on load. `backwards`, not `both`: once it has played it
+   lets go of transform, so the link's own hover lift is not held down. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__me,
+  .hero__title,
+  .hero__actions { animation: hero-in 0.9s var(--ease-out) backwards; }
+  .hero__title { animation-delay: 0.08s; }
+  .hero__actions { animation-delay: 0.16s; }
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@media (max-width: 480px) {
+  .hero__actions { align-self: stretch; }
+  .hero__actions .hero__btn { flex: 1; justify-content: center; }
+}
+
+/* ============================================================
+   USP — "What I bring to the team"
+   Three columns at full width: the title, the three items, and the
+   visual for whichever item is selected. js/home.js moves
+   .is-active; everything that changes is a colour or an opacity, so
+   the section never changes height when a different item is picked.
+   ============================================================ */
+.usp {
+  /* An item that is not selected. The design's #BABABA at first; Amanda,
+     12 Nov: "The inactive text in USPs section and works section should be
+     less visible." */
+  --usp-rest: #D4D4D4;
+  --usp-name: var(--fs-h5);                /* an item's title; its number reads this too */
+  /* Little above it: in ordinary flow the hero has already left most of a
+     screen of air under its button. */
+  padding-block: clamp(32px, 2.6vw, 50px) clamp(64px, 7.8vw, 150px);
+}
+
+.usp__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 453fr) minmax(0, 707fr) minmax(0, 560fr);
+  align-items: start;
+}
+
+.usp__title,
+.pj__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-medium);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+/* Pulled up by the space above its capitals, so the top of the letters,
+   not the top of the line box, is what meets the top of the visual. */
+.usp__title { margin-top: -0.17em; }
+
+/* IN THREE COLUMNS THE TYPE SCALES WITH THE COLUMNS. The site's type scale
+   stops shrinking long before a 1200px screen does, and a title that stays
+   62px in a column that has dropped to 300px runs into the items beside it.
+   So here both titles are a fraction of the viewport, the same fraction they
+   are of it at 1920: the composition is the design's at every width. */
+@media (min-width: 1200px) {
+  .usp { --usp-name: clamp(22px, 1.667vw, 32px); }
+  .usp__title { font-size: clamp(40px, 3.333vw, 64px); }
+}
+
+.usp__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 2.865vw, 55px);
+  margin-top: 14px;
+  /* Just enough held back from the visual for the longest description to
+     keep the two lines it has in the design. */
+  padding-right: clamp(20px, 2.8vw, 54px);
+}
+
+.usp__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 41px minmax(0, 1fr);
+  width: 100%;
+  margin: 0;
+  padding: 0 0 0 30px;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  color: var(--usp-rest);
+  cursor: pointer;
+  transition: color 0.35s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.usp__item:not(.is-active):hover { color: var(--black-4); }
+.usp__item.is-active { color: var(--black-1); cursor: default; }
+.usp__item:focus-visible { outline: 2px solid var(--black-1); outline-offset: 8px; }
+
+/* The marker beside the selected item. */
+.usp__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2.5px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--black-1);
+  opacity: 0;
+  transform: scaleY(0.35);
+  transform-origin: top;
+  transition: opacity 0.25s var(--ease), transform 0.5s var(--ease-out);
+}
+.usp__item.is-active::before { opacity: 1; transform: none; }
+
+.usp__num,
+.usp__name,
+.usp__desc { display: block; }
+
+/* Same line box as the title beside it, so the two sit on one centre line
+   whatever size the title is at. */
+.usp__num {
+  font-size: 18px;
+  font-weight: var(--fw-semibold);
+  line-height: calc(var(--usp-name) * 1.15);
+  letter-spacing: 0;
+}
+.usp__name {
+  font-size: var(--usp-name);
+  font-weight: var(--fw-medium);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.usp__desc {
+  grid-column: 2;
+  margin-top: 7.5px;
+  font-size: clamp(16px, 0.94vw, 18px);
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+/* White, the loops' own background (SITE_BG in
+   resources/scripts/usp-anim/src/runtime.jsx), so their square boards
+   sit centred in this 4:3 box with no seam either side. The black outline
+   marks out the box on the white page (Amanda, 17 Nov, after #F8F8F8
+   "doesn't really work"); it is the 1.5px line the Works switcher uses. */
+.usp__visual {
+  position: relative;
+  box-sizing: border-box;
+  aspect-ratio: 4 / 3;
+  border: 1.5px solid var(--black-1);
+  background: #FFFFFF;
+  overflow: hidden;
+}
+.usp__panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--ease), visibility 0s linear 0.45s;
+}
+.usp__panel.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s var(--ease);
+}
+
+/* A loop: an 800 x 800 board, scaled by js/usp-anim.js to fit the box. */
+.usp__anim { position: absolute; inset: 0; }
+.usp__board {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 800px;
+  height: 800px;
+  transform-origin: 50% 50%;
+}
+
+/* The loops' own type, as Amanda set it in Claude Design. Inter is cut
+   down to Latin; Satoshi is as it came. Only downloaded once a loop draws
+   text in it. */
+@font-face { font-family: "Satoshi"; src: url("/fonts/Satoshi-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("/fonts/Satoshi-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("/fonts/Inter-usp.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+/* Two columns: the title moves above the items, the visual keeps the
+   right-hand side. The title keeps its two lines; on one it would leave
+   "team" on a line by itself. */
+@media (max-width: 1199px) {
+  .usp__inner {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    column-gap: clamp(28px, 4vw, 48px);
+    row-gap: clamp(28px, 4vw, 48px);
+  }
+  .usp__title { margin-top: 0; }
+  .usp__list { margin-top: 0; padding-right: 0; }
+  .usp__visual { grid-column: 2; grid-row: 1 / span 2; }
+}
+/* ONE COLUMN: the title, then the three items, with the visual directly
+   under whichever item is selected. Amanda, 12 Nov: "Put the animation
+   container below the respective text instead of always on top of all 3
+   USPs. Right now the animation container is cropped when we select the
+   USP number 2 or 3." Above them all, picking the third item changed
+   something a screen away from the finger.
+
+   The list steps aside (display: contents) so its three items and the
+   visual are siblings in one grid, and `order` slots the visual in after
+   the selected one. Nothing moves in the markup, so the reading order and
+   the tab order stay title, items, visual. js/home.js keeps the item that
+   was tapped where it was on screen while the visual changes places.
+
+   No numbers here either: "please remove the numbers to give some space
+   for the texts." */
+@media (max-width: 760px) {
+  .usp__inner { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  .usp__list { display: contents; }
+  .usp__item { grid-template-columns: minmax(0, 1fr); padding-left: 20px; margin-top: 32px; }
+  .usp__item:nth-child(1) { order: 1; }
+  .usp__item:nth-child(2) { order: 3; }
+  .usp__item:nth-child(3) { order: 5; }
+  .usp__num { display: none; }
+  .usp__desc { grid-column: 1; font-size: var(--fs-body-sm); }
+  .usp__visual { grid-column: auto; grid-row: auto; order: 2; margin-top: 20px; }
+  .usp__inner:has(#uspTab2.is-active) .usp__visual { order: 4; }
+  .usp__inner:has(#uspTab3.is-active) .usp__visual { order: 6; }
+}
+
+/* ============================================================
+   WORKS
+   Every project is in this one section; there is no separate
+   project page. Two tabs: "Design works" opens on four projects
+   with the rest behind "See more"; "AI works" holds HAZEN and a
+   place kept for SINAN.
+
+   The thumbnail, its hover clip and the click that opens a project
+   are css/master-thumb.css, js/thumb-video.js and js/thumb-open.js,
+   unchanged. This file only arranges them.
+   ============================================================ */
+.pj {
+  /* A card that is not being pointed at: #9E9E9E in the design, lighter since
+     Amanda's "should be less visible" (12 Nov, as --usp-rest above). */
+  --pj-rest: #C4C4C4;
+  /* NO AIR UNDER THE LAST ROW. The closing block below brings its own: with
+     motion its first screen is all white, the headline in the middle of it,
+     and without motion it has a deep top padding (css/v3.css). Air here as
+     well was a second helping, and the headline only starts arriving once
+     that block reaches the top of the screen, so every pixel of it was scroll
+     with nothing happening. Amanda: "The gap between works section and the
+     bottom CTA section is too wide that's why the animation started too late."
+     The 8px is the focus ring's: a card's outline sits 8px outside it, and the
+     closing block is painted over anything that reaches into it. */
+  padding-block: clamp(72px, 7.3vw, 140px) 8px;
+  scroll-margin-top: var(--header-h, 88px);
+}
+.pj:focus,
+.usp:focus { outline: none; }   /* both take focus only to mark a scroll js/home.js made */
+
+.pj__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(40px, 4.17vw, 80px);
+}
+
+/* ---- the two tabs ----
+   A pill with two equal halves. The black lozenge is one element that
+   slides between them, so switching reads as one thing moving rather than
+   one thing switching off and another on. data-active on the list says
+   which half it is under; js/home.js writes it. */
+/* About 80% of the first size (Amanda, 17 Nov: "make that switcher a bit
+   smaller"): height, width, inset and type all scaled together. */
+.pj__tabs {
+  --pj-tabs-inset: clamp(5px, 0.42vw, 8px);
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: clamp(18px, 1.56vw, 30px);
+  padding: var(--pj-tabs-inset);
+  border: 1.5px solid var(--black-1);
+  border-radius: 999px;
+}
+.pj__tabs::before {
+  content: "";
+  position: absolute;
+  top: var(--pj-tabs-inset);
+  bottom: var(--pj-tabs-inset);
+  left: var(--pj-tabs-inset);
+  width: calc(50% - var(--pj-tabs-inset));
+  border-radius: 999px;
+  background: var(--black-1);
+  transition: transform 0.5s var(--ease-out);
+}
+.pj__tabs[data-active="ai"]::before { transform: translateX(100%); }
+
+.pj__tab {
+  position: relative;
+  z-index: 1;
+  min-width: clamp(112px, 10.8vw, 207px);
+  height: clamp(38px, 2.67vw, 51px);
+  padding: 0 1.1em;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: clamp(15px, 1.04vw, 20px);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0;
+  color: var(--black-1);
+  cursor: pointer;
+  transition: color 0.3s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.pj__tab.is-active { color: var(--white-1); cursor: default; }
+.pj__tab:focus-visible { outline: 2px solid var(--black-1); outline-offset: 4px; }
+
+/* ---- the panels ---- */
+.pj__panel[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  /* Replays whenever a panel goes from hidden to shown, i.e. on a tab
+     switch. .is-switched is only there after the first switch, so the
+     panel the page opens on does not play it on load. */
+  .pj__panel.is-switched { animation: pj-panel-in 0.6s var(--ease-out) backwards; }
+}
+@keyframes pj-panel-in {
+  from { opacity: 0; transform: translateY(20px); }
+}
+
+.pj__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(16px, 1.25vw, 24px);
+  row-gap: clamp(48px, 4.4vw, 84px);
+}
+
+/* ---- a project ----
+   Grey until it is pointed at, then black: the card under the pointer is
+   the one being read. A screen with no pointer has nothing to point with,
+   so there every card is simply black. */
+.pj-card {
+  display: block;
+  color: var(--pj-rest);
+  transition: color 0.3s var(--ease);
+}
+a.pj-card:hover,
+a.pj-card:focus-visible,
+.pj-card--soon:hover { color: var(--black-1); }
+a.pj-card:focus-visible { outline: 2px solid var(--black-1); outline-offset: 6px; }
+@media (hover: none) {
+  a.pj-card,
+  .pj-card--soon { color: var(--black-1); }
+}
+
+.pj-card__media { aspect-ratio: 8 / 5; }
+
+/* The three stills have no clip to play, so a small zoom is the whole
+   hover. It is on the image inside the box: the frame stays where it is. */
+.pj-card__media--still { overflow: hidden; background: #bfbfbf; }
+.pj-card__media--still img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.55s var(--ease-out);
+}
+.pj-card:hover .pj-card__media--still img,
+.pj-card:focus-visible .pj-card__media--still img { transform: scale(1.045); }
+
+.pj-card__title {
+  margin-top: clamp(18px, 1.61vw, 31px);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Plain words with a hairline between them, not pills. */
+.pj-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  margin-top: clamp(14px, 1.46vw, 28px);
+  font-size: var(--fs-body-lg);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.pj-card__tags li + li {
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+.pj-card__desc {
+  max-width: 580px;
+  margin-top: clamp(12px, 1.35vw, 26px);
+  font-size: var(--fs-body);
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+/* ---- the place kept for SINAN ----
+   Not a link, so no click; its cursor pill says "Work in progress…"
+   (data-cursor, js/cursor.js). It does take the cards' hover
+   on its words, grey to black (Amanda, 17 Nov: "I still need it to be
+   hoverable, the hover interaction only occurs on its texts"); the
+   thumbnail keeps turning on its own either way. */
+.pj-card--soon { cursor: default; }
+/* Its thumbnail: Option 3, "Sunrise" (Amanda, 17 Nov: "make it animated by
+   default, not only on hover"). A Claude-style spark rising like the sun,
+   turning slowly, its glow breathing; the name where HAZEN's sits on its
+   card. Drawn in the page rather than as a clip, so it is sharp at every
+   size and moves without anyone pointing at it. Everything inside is in cqw,
+   so it scales with the card exactly. */
+.sinan-tn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  background: #FFFFFF;
+}
+.sinan-tn > * { position: absolute; }
+.sinan-tn__defs { overflow: hidden; }
+.sinan-tn__sky {
+  inset: 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 30%, #FDF4EE 56%, #F8DCCB 80%, #F3C6AC 100%);
+}
+.sinan-tn__halo {
+  left: 50%; top: 73cqw;
+  width: 120cqw; height: 120cqw; margin: -60cqw 0 0 -60cqw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(217, 119, 87, 0.50), rgba(217, 119, 87, 0.14) 52%, rgba(217, 119, 87, 0) 74%);
+  animation: sinan-breathe 8s ease-in-out infinite;
+}
+.sinan-tn__sun,
+.sinan-tn__glow {
+  left: 50%; top: 73cqw;
+  width: 76cqw; height: 76cqw; margin: -38cqw 0 0 -38cqw;
+  overflow: visible;
+  will-change: transform;
+  animation: sinan-turn 160s linear infinite;
+}
+.sinan-tn__glow { fill: #E58D69; opacity: 0.55; filter: blur(2.2cqw); }
+.sinan-tn__sun { fill: url(#sinanSun); }
+.sinan-tn__type { left: 0; right: 0; top: 6.6cqw; text-align: center; color: var(--black-1); }
+.sinan-tn__name {
+  display: block;
+  font-size: 8.4cqw;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  letter-spacing: 0.15em;
+  padding-left: 0.15em;            /* the tracking after the last letter, given back */
+}
+.sinan-tn__soon {
+  display: block;
+  margin-top: 2.1cqw;
+  font-size: 2.15cqw;
+  line-height: 1.2;
+  color: var(--black-3);
+}
+.sinan-tn__grain {
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.33  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 14cqw;
+}
+@keyframes sinan-turn { to { transform: rotate(360deg); } }
+@keyframes sinan-breathe { 50% { opacity: 0.72; transform: scale(1.035); } }
+@media (prefers-reduced-motion: reduce) {
+  .sinan-tn__halo, .sinan-tn__sun, .sinan-tn__glow { animation: none; }
+}
+
+/* ---- "See more" ----
+   The rest of the design work sits in a row that is zero tall until asked
+   for: a grid row animating from 0fr to 1fr, so the height it opens to is
+   the content's own and never a number written here.
+
+   Only once js/home.js has added .is-collapsible: with no script there is
+   no button to press, so nothing is hidden and every project is simply
+   there. */
+.pj__more-clip { min-height: 0; }
+.pj__more .pj__grid { padding-top: clamp(48px, 4.4vw, 84px); }
+.pj__actions { display: none; }
+
+.pj.is-collapsible .pj__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.9s var(--ease-out);
+}
+.pj.is-collapsible .pj__more-clip { overflow: hidden; }
+.pj.is-collapsible .pj__more.is-open { grid-template-rows: 1fr; }
+/* Open and finished: the clip has done its job, and left on it would cut
+   the focus ring off any card that sits against its edge. */
+.pj.is-collapsible .pj__more.is-settled .pj__more-clip { overflow: visible; }
+
+.pj.is-collapsible .pj__more li {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.9s var(--ease-out);
+}
+.pj.is-collapsible .pj__more.is-open li { opacity: 1; transform: none; }
+.pj.is-collapsible .pj__more.is-open li:nth-child(2) { transition-delay: 0.08s; }
+.pj.is-collapsible .pj__more.is-open li:nth-child(3) { transition-delay: 0.16s; }
+
+/* The button gives its own height back as the row above it opens, on the
+   same curve, so the page below moves once instead of twice. */
+.pj.is-collapsible .pj__actions {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.9s var(--ease-out), opacity 0.3s var(--ease);
+}
+.pj.is-collapsible .pj__actions.is-leaving {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+.pj.is-collapsible .pj__actions[hidden] { display: none; }
+.pj__actions-clip {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+/* The space above the button is its own margin, not the row's padding:
+   padding would hold the row open after it has closed. */
+.pj__morebtn { margin: clamp(48px, 4.4vw, 84px) 8px 8px; }
+
+@media (max-width: 760px) {
+  .pj__grid { grid-template-columns: minmax(0, 1fr); row-gap: 48px; }
+  .pj__more .pj__grid { padding-top: 48px; }
+  .pj-card__title { font-size: 26px; }
+  /* Amanda, 12 Nov: "Replace fs-body in USPs & Works section with
+     fs-body-sm. Right now they all feels too big." 16px to 14px, the tags
+     with the descriptions so the two keep their relation. */
+  .pj-card__tags { font-size: var(--fs-body-sm); }
+  .pj-card__desc { font-size: var(--fs-body-sm); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj-card:hover .pj-card__media--still img { transform: none; }
+}
+
+/* ============================================================
+   MOTION — the sections fade in and out with a slight move, as on
+   the live site. js/scenes-home.js drives every rule below; none
+   applies until js/motion-core.js has added html.motion.
+
+   WHERE THERE IS ROOM, THE THREE SECTIONS TAKE TURNS ON ONE SCREEN.
+   .lead__stage sticks under the header, and .lead::after is the
+   runway it sticks for. On it the hero leaves upward and "What I
+   bring to the team" arrives in its place and holds; then that
+   leaves upward the same way and the works arrive in its place.
+   Then the stage lets go and the works scroll on as ordinary
+   content.
+
+   The works are the stage's only child in flow, so the stage is
+   exactly as tall as they are and the closing block follows their
+   last row with nothing in between. The hero and the USP are laid
+   over the stage's first screen instead, one screen tall each.
+
+   That needs each section to fit one screen, which is why the query
+   has a width, a height and a shape on it: the hero's type is sized
+   from the screen's WIDTH, so a window that is wide but shallow
+   (anything past 9:4) is too short for it however many pixels tall
+   it is. Everywhere else the sections stay in ordinary flow and each
+   piece fades up as it scrolls into view; those start states are the
+   second block, under the exact negation of the first query.
+
+   The same two queries are in js/scenes-home.js, and so is the
+   runway's length in screens (RUN). Keep them in step.
+   ============================================================ */
+@media (min-width: 1200px) and (min-height: 680px) and (max-aspect-ratio: 9/4) {
+  /* The runway: one and a half screens of scroll, a screen being the
+     viewport plus the header (the unit js/scenes-home.js times its beats in). */
+  html.motion .lead::after {
+    content: "";
+    display: block;
+    height: calc(1.5 * (100vh + var(--header-h, 88px)));
+    /* NOT A SCROLL ANCHOR. The browser keeps whatever it picks as an anchor
+       still on screen when the page above it changes height, and it never
+       picks inside a sticky element, so the runway was what it held on to:
+       switching to "AI works" shortened the stage by ~1,000px and the page
+       was pulled up by exactly that, back to "What I bring to the team".
+       With the runway out, the anchor is #lead itself, whose top does not
+       move when the works change height. */
+    overflow-anchor: none;
+  }
+  html.motion .lead__stage {
+    position: sticky;
+    top: var(--header-h, 88px);
+  }
+  html.motion .lead__stage > .hero,
+  html.motion .lead__stage > .usp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(100vh - var(--header-h, 88px));
+    height: calc(100svh - var(--header-h, 88px));
+    min-height: 0;
+  }
+  html.motion .lead__stage > .usp {
+    display: grid;
+    align-content: center;
+    padding-block: 0 6vh;
+    opacity: 0;
+  }
+  /* The works arrive at the top of the screen, so the air above them is the
+     stage's own and not a second helping of padding. */
+  html.motion .lead__stage > .pj {
+    padding-top: clamp(24px, 2.1vw, 40px);
+    opacity: 0;
+  }
+  /* The sections that are not on screen are still stacked there, invisible,
+     and opacity does not take an element out of hit-testing. Only the one
+     js/scenes-home.js marks .is-live takes the pointer. */
+  html.motion .lead__stage > section { pointer-events: none; }
+  html.motion .lead__stage > .is-live { pointer-events: auto; }
+}
+
+@media not all and (min-width: 1200px) and (min-height: 680px) and (max-aspect-ratio: 9/4) {
+  html.motion .usp__title,
+  html.motion .usp__visual,
+  html.motion .usp__item,
+  html.motion .pj__head,
+  html.motion #pjPanelDesign > .pj__grid > li { opacity: 0; transform: translateY(28px); }
+}
+
+/* On a phone the visual changes places whenever a different item is picked,
+   so it cannot arrive on a scroll trigger keyed to where it was: it would
+   land half faded under the item just tapped. It is simply there; the items
+   around it still fade up. */
+@media (max-width: 760px) {
+  html.motion .usp__visual { opacity: 1; transform: none; }
+}
