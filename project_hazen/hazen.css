@@ -1,0 +1,1460 @@
+/* ============================================================
+   HAZEN · case study
+   The current HAZEN page's own pieces (its cover, the map, the
+   walk-through, the worked examples) set in the case-study language.
+
+   Rules of the page:
+   - White. No dark panels; black is for "The outcome" cards, as on
+     the other project pages, the icon circles, the two project
+     wordmarks and the clip.
+   - Colour means a skill, and only as an accent: a thick lid on the
+     left of a white container, a dot, a check, a thin bar. Never a
+     fill. Think, Direct and Make carry no colour: Think and Direct are
+     white, Make is the page's second white.
+   - Prompts: what I typed and the trial runs on a quiet grey; the final
+     prompts on white in a 1.5px black outline.
+   - Square corners. Pills and circles are the only round things.
+   - Figtree for everything a person says. Mono only for what was typed
+     into a machine (prompts), a size smaller than the text around it.
+   - No kickers, side notes or meta labels. A heading, a sentence, or
+     the visual itself says it.
+   ============================================================ */
+
+@font-face { font-family: "Granger"; src: url("fonts/Granger.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Ibrand"; src: url("fonts/Ibrand.woff2") format("woff2"); font-display: swap; }
+
+.hz {
+  /* the five skills, in pipeline order; the current page's values.
+     --aN the skill's colour, --aN-ink its legible tone for small marks. */
+  --a1: #9EDDE4; --a2: #A5C3F5; --a3: #C7B8F5; --a4: #F7AE9B; --a5: #EFA3A8;
+  --a1-ink: #0E7A8C; --a2-ink: #2C55B5; --a3-ink: #5F42BC; --a4-ink: #B0472A; --a5-ink: #AE3644;
+  /* the Make stage, and anything that stands for it: the page's second
+     white. Grey read as switched off (Amanda, round three). */
+  --hz-make: var(--white-2);
+  /* what I typed, and the trial runs: a quiet grey, a step behind the page */
+  --hz-draft: #F3F3F3;
+  /* bars that stand for the old way of working */
+  --hz-gray: #D7DADE;
+  /* the accent lid on a skill's container */
+  --lid: 6px;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --hz-head: 88px;
+}
+
+/* ---------- small shared pieces ---------- */
+.hz-pfx { color: var(--black-4); font-weight: 400; }
+.hz-m { font-family: var(--mono); font-size: 0.86em; letter-spacing: 0; }
+.hz-rec {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--black-4);
+  white-space: nowrap;
+}
+.hz-body {
+  margin: 18px 0 0;
+  max-width: 70ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--black-3);
+}
+.hz-body b, .hz-say b { color: var(--black-1); font-weight: 600; }
+.hz-h3 {
+  margin: 0;
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+}
+.hz-h4 {
+  margin: 0;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.hz-subhead { margin-top: clamp(64px, 7vw, 112px); }
+.hz-subhead--in { margin-top: clamp(32px, 3.6vw, 52px); }
+.hz-sublede {
+  margin: 12px 0 0;
+  max-width: 58ch;
+  font-size: var(--fs-body-lg);
+  line-height: 1.5;
+  color: var(--black-3);
+}
+.hz-closer {
+  margin: clamp(28px, 3vw, 48px) 0 0;
+  max-width: 32ch;
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+}
+
+/* statements break into even lines, never a lone last word */
+.hz-brief, .hz-closer, .hz-rig__h, .hz-loop__h, .hz-take__t, .hz-ct__t, .hz-how__t, .hz-lim__t,
+.hz-close__h, .hz-close__punch, .hz-after__turn, .hz-tpos__t, .hz-kv__h, .hz-st__t, .hz-hero__lede,
+.hz-step__head > .hz-say { text-wrap: balance; }
+/* and running text never ends on one word alone */
+.hz-lede, .hz-sublede, .hz-say, .hz-body, .hz-dos__role, .hz-dos__p, .hz-re p, .hz-after__text p, .hz-loop__say p,
+.hz-how__p, .hz-lim__p, .hz-ct__p, .hz-take__p, .hz-close__text p, .hz-vs__note p, .hz-tnote p, .hz-tpos p,
+.hz-named__ab, .hz-cand__w, .hz-rig__grid p, .hz-helps li, .hz-fig figcaption { text-wrap: pretty; }
+
+/* images: the case studies' frame, a hairline and square corners */
+.hz-fig { margin: 0; min-width: 0; }
+.hz-fig img,
+.hz-show__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  background: var(--white-2);
+}
+.hz-fig figcaption,
+.hz-kv figcaption {
+  margin-top: 10px;
+  font-size: var(--fs-body-sm);
+  line-height: 1.5;
+  color: var(--black-3);
+}
+.hz-fig figcaption b,
+.hz-kv figcaption b { color: var(--black-1); font-weight: 600; }
+
+/* ---------- the page frame ---------- */
+/* the hero starts right under the header and is a screen of its own */
+.hz .cs-shell { padding-top: 0; }
+/* the slim sidebar: contents only */
+@media (min-width: 1081px) {
+  .hz .cs-layout { grid-template-columns: 184px minmax(0, 1fr); gap: clamp(40px, 4.4vw, 80px); }
+}
+.hz .cs-toc__list { gap: 8px; }
+
+/* ============================================================
+   HERO · centred, one screen, the five skills under the headline
+   ============================================================ */
+.hz-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--hz-head));
+  min-height: calc(100svh - var(--hz-head));
+  padding: clamp(24px, 4vh, 48px) 0 clamp(88px, 13vh, 120px);
+  text-align: center;
+}
+.hz-hero__in { width: 100%; }
+/* the codename: a black pill, a size up from the body's small text */
+.hz-code {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 clamp(18px, 2.6vh, 30px);
+  padding: 10px 22px 11px;
+  border-radius: 999px;
+  background: var(--black-1);
+  color: var(--white-1);
+  font-size: var(--fs-body);
+  line-height: 1;
+}
+.hz-code span { color: rgba(255, 255, 255, 0.68); }
+.hz-code b { font-weight: var(--fw-semibold); letter-spacing: 0.14em; }
+.hz-hero__title {
+  margin: 0 auto;
+  max-width: 18ch;
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+@media (min-width: 1081px) {
+  .hz-hero__title { max-width: none; }
+  .hz-hero__l2 { display: block; }
+}
+.hz-hero__lede {
+  margin: clamp(16px, 2.4vh, 24px) auto 0;
+  max-width: 38em;
+  font-size: var(--fs-body-lg);
+  line-height: 1.5;
+  color: var(--black-3);
+}
+
+/* the five skills: white cards, each with its colour as a thick lid */
+.hz-cast {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(10px, 1vw, 16px);
+  margin: clamp(28px, 5vh, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.hz-cast > li { display: flex; min-width: 0; }
+.hz-cc {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr auto auto;
+  width: 100%;
+  min-height: clamp(150px, 20vh, 184px);
+  padding: 15px 16px 17px 26px;
+  border: 1px solid var(--line);
+  background: var(--white-1);
+  color: var(--black-1);
+  transition: border-color 0.35s var(--ease), transform 0.5s var(--ease-out);
+}
+.hz-cc::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  width: 8px;
+  background: var(--c);
+}
+.hz-cc__tier { grid-column: 1; grid-row: 1; font-size: 13px; line-height: 1.3; color: var(--black-3); }
+.hz-cc__ico { grid-column: 2; grid-row: 1; width: 24px; height: 24px; }
+.hz-cc__ico svg { display: block; width: 24px; height: 24px; }
+.hz-cc__nm {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  font-size: clamp(1rem, 0.86rem + 0.3vw, 1.125rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+/* the namespace on its own line, so the five names share one baseline */
+.hz-cc .hz-pfx { display: block; margin-bottom: 1px; font-size: 13px; letter-spacing: 0; }
+.hz-cc__rl {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  min-height: 2.8em;
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--black-3);
+}
+.hz-cc:hover { border-color: var(--black-1); transform: translateY(-4px); }
+.hz-cc:focus-visible { outline: 2px solid var(--black-1); outline-offset: 3px; }
+
+/* the live site's mouse cue, at the bottom middle of the hero. The base
+   look is .scroll-cue in /css/styles.css; /js/script.js fades it out over
+   the first quarter screen of scroll. Phones hide it (styles.css). */
+.hz-hero .hz-cue {
+  position: absolute;
+  top: auto;
+  bottom: clamp(18px, 4vh, 40px);
+  left: 50%;
+  z-index: 1;
+  animation: hz-cue-in 0.8s var(--ease) 0.7s backwards;
+}
+@keyframes hz-cue-in { from { opacity: 0; } }
+
+/* on load, the hero arrives the way the homepage's does */
+@keyframes hz-in { from { opacity: 0; transform: translateY(14px); } }
+.hz-hero__in > * { animation: hz-in 0.9s var(--ease-out) 0.2s backwards; }
+.hz-hero__in > :nth-child(2) { animation-delay: 0.28s; }
+.hz-hero__in > :nth-child(3) { animation-delay: 0.36s; }
+.hz-hero__in > :nth-child(4) { animation-delay: 0.44s; }
+
+/* ============================================================
+   THE OUTCOME · Amanda's sketch (14 Nov 2026)
+   Three columns, each the old way in a line of text, an arrow, then a
+   black card with what Hazen does instead: the figure at the top, a
+   gray line at the foot. Three cards don't need the full width, so the
+   columns stop at 360px and the row sits in the middle.
+   ============================================================ */
+.hz-oc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(28px, 3.6vw, 64px);
+  padding: clamp(24px, 4vw, 64px) 0 clamp(72px, 9vw, 140px);
+}
+.hz-oc__head {
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-medium);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.hz-oc__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 360px));
+  justify-content: center;
+  gap: clamp(16px, 2vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hz-oc__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+}
+.hz-oc__was {
+  max-width: 32ch;
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-body-lg);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  /* two lines in every column, so the arrows and cards line up */
+  min-height: calc(2 * 1.45em);
+}
+.hz-oc__arrow {
+  flex: none;
+  width: 16px;
+  height: 40px;
+  margin: clamp(14px, 1.6vw, 24px) 0;
+  fill: none;
+  stroke: var(--black-1);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hz-oc__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  align-self: stretch;
+  aspect-ratio: 3 / 2;
+  padding: clamp(22px, 2.4vw, 38px);
+  background: var(--black-1);
+  color: var(--white-1);
+}
+.hz-oc__n {
+  display: block;
+  font-size: clamp(3rem, 0.7rem + 3.06vw, 4.375rem);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  white-space: nowrap;
+}
+.hz-oc__l {
+  display: block;
+  font-size: var(--fs-body);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+  text-wrap: pretty;
+}
+.hz-oc__was b { font-weight: var(--fw-semibold); }
+/* one column on narrow screens, kept card-sized */
+@media (max-width: 860px) {
+  .hz-oc__list { grid-template-columns: minmax(0, 400px); gap: clamp(40px, 8vw, 56px); }
+}
+
+/* ============================================================
+   THE HAND-OVER · the homepage's hero, USP and works, applied here
+   Where the hero fits one screen, the hero, the outcome and the page
+   share a stage that sticks under the header for RUN screens of scroll
+   (a screen being the viewport plus the header). Each fades out upward
+   and the next fades in from below in the same place, then the stage
+   lets go. hazen.js (Lead) drives it and adds html.hz-staged; keep
+   the query and the 1.5 in step with it, and with js/scenes-home.js.
+   ============================================================ */
+@media (min-width: 1200px) and (min-height: 680px) and (max-aspect-ratio: 9/4) {
+  html.hz-staged .hz-lead::after {
+    content: "";
+    display: block;
+    height: calc(1.5 * (100vh + var(--hz-head)));
+    /* not a scroll anchor: the browser never anchors inside a sticky
+       element, so it would hold on to the runway instead (see the same
+       note in /css/home.css) */
+    overflow-anchor: none;
+  }
+  html.hz-staged .hz-lead__stage {
+    position: sticky;
+    top: var(--hz-head);
+  }
+  /* the hero and the outcome are laid over the stage's first screen,
+     one screen tall each; the page is the stage's only child in flow */
+  html.hz-staged .hz-hero,
+  html.hz-staged .hz-oc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    height: calc(100vh - var(--hz-head));
+    height: calc(100svh - var(--hz-head));
+    min-height: 0;
+  }
+  html.hz-staged .hz-oc { padding: clamp(24px, 4vh, 48px) 0; }
+  /* the layers sit in one place; only the one on screen takes the pointer */
+  html.hz-staged .hz-lead__stage > :not(.is-live) { pointer-events: none; }
+}
+
+/* ============================================================
+   SECTION HEADS · the statement, then the lede
+   ============================================================ */
+.hz-head { max-width: 900px; }
+.hz-h2 {
+  margin: 0;
+  max-width: 22ch;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+.hz-lede {
+  margin: clamp(14px, 1.4vw, 22px) 0 0;
+  max-width: 62ch;
+  font-size: var(--fs-body-lg);
+  line-height: 1.5;
+}
+.hz-lede b { font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   ABOUT · the gap, the loop, the turn
+   ============================================================ */
+.hz-gap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(8px, 0.9vw, 14px);
+  margin-top: clamp(32px, 3.6vw, 56px);
+}
+.hz-st {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(18px, 1.6vw, 26px);
+  border: 1.5px solid var(--black-1);
+  background: var(--white-1);
+}
+.hz-st__t {
+  margin: 0 0 18px;
+  font-size: clamp(1.25rem, 1.05rem + 0.55vw, 1.625rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.hz-st__f {
+  margin: auto 0 0;
+  padding-top: 16px;
+  font-size: var(--fs-body-sm);
+  line-height: 1.45;
+  color: var(--black-3);
+}
+.hz-gap__arrow { display: flex; align-items: center; justify-content: center; color: var(--black-1); }
+.hz-gap__arrow svg { width: 26px; height: 14px; }
+
+.hz-frags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.hz-frags li {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  background: var(--white-2);
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+.hz-frags li.is-out { border-style: dashed; background: transparent; color: var(--black-4); }
+
+.hz-slots { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 3px; margin-top: 18px; }
+.hz-slots i { height: 9px; border: 1px dashed var(--black-4); }
+.hz-slots i.on { border: 1px solid var(--black-1); background: var(--black-1); }
+.hz-slotlb {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 9px 0 0;
+  font-size: var(--fs-body-sm);
+  color: var(--black-3);
+}
+.hz-slotlb b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* prompts: mono, a size down, on their own ground */
+.hz-ptxt {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: 0;
+  color: var(--black-2);
+  overflow-wrap: anywhere;
+}
+.hz-st__prompt { padding: 12px 13px; background: var(--hz-draft); border: 1px solid var(--line); }
+.hz-garland {
+  padding: 1px 2px;
+  background: var(--fill);
+  color: var(--black-4);
+  text-decoration: line-through;
+  text-decoration-color: rgba(17, 17, 17, 0.45);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* the loop: white, the words beside the count, under a hairline */
+.hz-loop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: end;
+  gap: clamp(28px, 4.4vw, 72px);
+  margin-top: clamp(48px, 5vw, 80px);
+  padding-top: clamp(28px, 3vw, 44px);
+  border-top: 1px solid var(--line);
+}
+.hz-loop__h {
+  margin: 0;
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-heading);
+}
+.hz-loop__say p { margin: 14px 0 0; max-width: 46ch; font-size: var(--fs-body); line-height: 1.6; color: var(--black-3); }
+.hz-rolls { display: flex; align-items: flex-end; gap: 6px; height: clamp(72px, 7vw, 104px); }
+.hz-rolls i { flex: 1; height: 26%; background: var(--hz-gray); transition: height 0.8s var(--ease-out); }
+.hz-loop.is-on .hz-rolls i:nth-child(1) { height: 34%; }
+.hz-loop.is-on .hz-rolls i:nth-child(2) { height: 42%; transition-delay: 0.04s; }
+.hz-loop.is-on .hz-rolls i:nth-child(3) { height: 38%; transition-delay: 0.08s; }
+.hz-loop.is-on .hz-rolls i:nth-child(4) { height: 54%; transition-delay: 0.12s; }
+.hz-loop.is-on .hz-rolls i:nth-child(5) { height: 48%; transition-delay: 0.16s; }
+.hz-loop.is-on .hz-rolls i:nth-child(6) { height: 64%; transition-delay: 0.2s; }
+.hz-loop.is-on .hz-rolls i:nth-child(7) { height: 58%; transition-delay: 0.24s; }
+.hz-loop.is-on .hz-rolls i:nth-child(8) { height: 76%; transition-delay: 0.28s; }
+.hz-loop.is-on .hz-rolls i:nth-child(9) { height: 70%; transition-delay: 0.32s; }
+.hz-loop.is-on .hz-rolls i:nth-child(10) { height: 92%; transition-delay: 0.36s; }
+.hz-loop.is-on .hz-rolls i:nth-child(11) { height: 86%; transition-delay: 0.4s; }
+.hz-loop.is-on .hz-rolls i:nth-child(12) { height: 100%; transition-delay: 0.44s; }
+.hz-rollsum {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.hz-rollsum > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; min-width: 0; }
+.hz-rollsum dd {
+  margin: 0;
+  font-size: clamp(2rem, 1.3rem + 2.2vw, 3.5rem);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.hz-rollsum dt { margin-top: 8px; font-size: var(--fs-body-sm); color: var(--black-3); }
+
+.hz-after {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  align-items: start;
+  gap: clamp(28px, 4vw, 72px);
+  margin-top: clamp(48px, 5vw, 80px);
+}
+.hz-after__text p {
+  margin: 0 0 14px;
+  max-width: 64ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--black-3);
+}
+.hz-after__text p:last-child { margin-bottom: 0; }
+.hz-after__text b { color: var(--black-1); font-weight: var(--fw-semibold); }
+.hz-after__text .hz-after__turn {
+  margin: 0 0 16px;
+  max-width: 24ch;
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--black-1);
+}
+.hz-named { padding: clamp(20px, 2vw, 28px); background: var(--white-2); border: 1px solid var(--line); }
+.hz-named__pic {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  object-fit: cover;
+  object-position: center 24%;
+}
+.hz-named__ab { margin: 16px 0 0; font-size: var(--fs-body-sm); line-height: 1.55; color: var(--black-3); }
+.hz-named__ab b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   ARCHITECTURE · the map
+   ============================================================ */
+.hz-chart {
+  margin: clamp(32px, 3.6vw, 56px) 0 0;
+  padding: clamp(18px, 2vw, 32px);
+  background: var(--white-1);
+  border: 1px solid var(--line);
+}
+.hz-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  margin-bottom: clamp(16px, 2vw, 26px);
+  font-size: 13px;
+  color: var(--black-3);
+}
+.hz-legend span { display: inline-flex; align-items: center; gap: 10px; }
+.hz-legend i { display: inline-block; width: 26px; height: 0; border-top: 1.5px solid rgba(17, 17, 17, 0.55); }
+.hz-legend .hz-legend__back { border-top: 1.5px dashed var(--black-4); }
+#flowchart { display: block; width: 100%; height: auto; }
+.hz-chart__hint { display: none; }
+
+/* the map draws itself once, when it arrives */
+.js .hz-chart .fc-node {
+  opacity: 0;
+  transform: translateY(8px);
+  transform-box: fill-box;
+  transition: opacity 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.js .hz-chart .fc-edge {
+  stroke-dasharray: var(--len, 600);
+  stroke-dashoffset: var(--len, 600);
+  transition: stroke-dashoffset 1.05s var(--ease-out);
+}
+.js .hz-chart .fc-edge--loop {
+  stroke-dasharray: 5 5;
+  stroke-dashoffset: 0;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out) 0.85s;
+}
+.js .hz-chart .fc-elbl,
+.js .hz-chart .fc-band,
+.js .hz-chart .fc-band-lbl { opacity: 0; transition: opacity 0.7s var(--ease-out); }
+.js .hz-chart.is-on .fc-band,
+.js .hz-chart.is-on .fc-band-lbl { opacity: 1; }
+.js .hz-chart.is-on .fc-edge { stroke-dashoffset: 0; }
+.js .hz-chart.is-on .fc-edge--loop { opacity: 1; }
+.js .hz-chart.is-on .fc-elbl { opacity: 1; transition-delay: 0.75s; }
+.js .hz-chart.is-on .fc-node { opacity: 1; transform: none; }
+.js .hz-chart.is-on .fc-node[data-i="2"] { transition-delay: 0.1s; }
+.js .hz-chart.is-on .fc-node[data-i="3"] { transition-delay: 0.2s; }
+.js .hz-chart.is-on .fc-node[data-i="4"] { transition-delay: 0.3s; }
+.js .hz-chart.is-on .fc-node[data-i="5"] { transition-delay: 0.38s; }
+
+/* ---------- the three handoffs: white, white, the second white ---------- */
+.hz-how {
+  --how-gap: clamp(20px, 2.4vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--how-gap);
+  margin: clamp(24px, 2.6vw, 40px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hz-how__step { position: relative; min-width: 0; }
+.hz-how__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 27px;
+  left: 66px;
+  right: calc(-1 * var(--how-gap) + 10px);
+  height: 1.5px;
+  background: var(--line);
+}
+.hz-how__num {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 1.5px solid var(--black-1);
+  border-radius: 50%;
+  background: var(--white-1);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+}
+.hz-how__step.is-make .hz-how__num { background: var(--hz-make); }
+.hz-how__k { margin: 18px 0 0; font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--black-3); }
+.hz-how__t {
+  margin: 6px 0 0;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.hz-how__p { margin: 10px 0 0; font-size: 15px; line-height: 1.58; color: var(--black-3); }
+.hz-how__p b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   ARCHITECTURE · the walk-through
+   Stacked by default (narrow screens, no JS, static captures);
+   pinned one skill at a time once html carries .hz-pin.
+   ============================================================ */
+.hz-desc { margin-top: clamp(20px, 2.4vw, 36px); }
+.hz-desc__stick { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 3vw, 48px); }
+.hz-desc__nav { display: none; }
+.hz-desc__stage { display: grid; gap: clamp(48px, 5vw, 72px); }
+.hz-dos { min-width: 0; scroll-margin-top: calc(var(--hz-head) + 24px); }
+/* a skill takes focus when a cover card sends you to it; it is a place to
+   read from, not a control, so it shows no ring */
+.hz-dos:focus { outline: none; }
+
+/* keep in step with pinned() in hazen.js */
+@media (min-width: 1200px) and (min-height: 620px) {
+  .hz-pin .hz-desc__track { position: relative; height: 480vh; }
+  .hz-pin .hz-desc__stick {
+    position: sticky;
+    top: var(--hz-head);
+    height: calc(100vh - var(--hz-head));
+    grid-template-columns: minmax(0, 256px) minmax(0, 1fr);
+    align-items: stretch;
+    padding: 20px 0;
+  }
+  .hz-pin .hz-desc__nav { position: relative; display: flex; flex-direction: column; gap: 12px; height: 100%; }
+  .hz-pin .hz-desc__stage { position: relative; display: block; overflow: hidden; }
+  /* hidden, not auto: the page's scroll moves a tall skill (hazen.js),
+     so a wheel over it never gets stuck inside */
+  .hz-pin .hz-dos {
+    --fade-t: 0px;
+    --fade-b: 0px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--fade-t), #000 calc(100% - var(--fade-b)), transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 var(--fade-t), #000 calc(100% - var(--fade-b)), transparent 100%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.45s var(--ease-out), transform 0.55s var(--ease-out);
+  }
+  .hz-pin .hz-dos.is-on { opacity: 1; pointer-events: auto; transform: none; }
+  /* auto margins rather than centring, so a tall skill starts at its top */
+  .hz-pin .hz-dos > :first-child { margin-top: auto; }
+  .hz-pin .hz-dos > :last-child { margin-bottom: auto; }
+  /* a little tighter on the stage than in the flat layout */
+  .hz-pin .hz-dos__nm { font-size: var(--fs-h5); line-height: var(--lh-snug); }
+  .hz-pin .hz-dos__role { max-width: 64ch; font-size: var(--fs-body); line-height: 1.5; }
+  .hz-pin .hz-dos__p { margin-top: 16px; }
+  .hz-pin .hz-helps { gap: 6px; margin-top: 14px; padding-top: 14px; }
+}
+
+/* the nav: the map turned on its side. Think and Direct on white, Make
+   on the page's second white, as in the map. */
+.hz-band {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(10px, 2.2vh, 24px);
+  padding: 30px 14px 16px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: var(--bg);
+}
+.hz-band[data-band="think"],
+.hz-band[data-band="direct"] { --bg: var(--white-1); }
+.hz-band[data-band="direct"] { flex: 0.62 1 auto; }
+.hz-band[data-band="make"] { --bg: var(--hz-make); }
+.hz-band__lb {
+  position: absolute;
+  top: 9px;
+  right: 12px;
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--black-3);
+}
+.hz-sk {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  padding: 12px 14px 12px 20px;
+  border: 1px solid var(--line);
+  background: var(--white-1);
+  color: var(--black-1);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.hz-sk::before { content: ""; position: absolute; left: -1px; top: -1px; bottom: -1px; width: var(--lid); background: var(--c); }
+.hz-sk__dot {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(17, 17, 17, 0.2);
+  border-radius: 50%;
+  background: var(--white-1);
+  transform: translateX(-50%);
+  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease), top 0.3s var(--ease);
+}
+.hz-sk__nm { display: block; font-size: 15px; font-weight: var(--fw-semibold); line-height: 1.2; letter-spacing: -0.02em; }
+.hz-sk__rl { display: block; margin-top: 3px; font-size: 13px; line-height: 1.3; color: var(--black-3); }
+.hz-sk:hover { opacity: 0.9; }
+.hz-sk.is-done { opacity: 0.85; }
+.hz-sk.is-done .hz-sk__dot { border-color: var(--c); background: var(--c); }
+.hz-sk.is-on { opacity: 1; border-color: var(--black-1); box-shadow: inset 0 0 0 0.5px var(--black-1); }
+.hz-sk.is-on .hz-sk__dot { top: -10px; width: 18px; height: 18px; border-color: var(--c); background: var(--c); }
+.hz-sk:focus-visible { outline: 2px solid var(--black-1); outline-offset: 2px; }
+.hz-lnk { position: relative; z-index: 2; display: flex; justify-content: center; margin: 0; }
+.hz-lnk span { padding: 0 8px; background: var(--bg); font-size: 12.5px; color: var(--black-3); }
+.hz-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  width: 3px;
+  background: rgba(17, 17, 17, 0.08);
+  transform: translateX(-50%);
+}
+.hz-spine i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  /* the skills' own pastels; the ink tones were too loud (round three) */
+  background-image: linear-gradient(180deg, var(--a1), var(--a2) 26%, var(--a3) 52%, var(--a4) 76%, var(--a5));
+  background-repeat: no-repeat;
+  transition: height 0.16s linear;
+}
+
+/* one skill: white, with its colour as a lid beside the name */
+.hz-dos__top { position: relative; padding-left: 22px; }
+.hz-dos__top::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: var(--lid);
+  background: var(--c);
+}
+.hz-dos__nm {
+  margin: 0;
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-heading);
+  overflow-wrap: anywhere;
+}
+.hz-dos__role { margin: 8px 0 0; max-width: 56ch; font-size: var(--fs-body-lg); line-height: 1.45; color: var(--black-3); }
+.hz-dos__p { margin: clamp(18px, 2vw, 24px) 0 0; max-width: 66ch; font-size: 15px; line-height: 1.6; color: var(--black-3); }
+.hz-dos__p b { color: var(--black-1); font-weight: var(--fw-semibold); }
+/* the prompt that made the clip: a final prompt, so white in black */
+.hz-dos__prompt { margin-top: 14px; padding: 12px 14px; border: 1.5px solid var(--black-1); background: var(--white-1); }
+
+.hz-helps {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.hz-helps li { position: relative; padding-left: 26px; font-size: 14px; line-height: 1.5; color: var(--black-3); }
+.hz-helps li::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  width: 11px;
+  height: 6px;
+  border-left: 1.8px solid var(--c-ink);
+  border-bottom: 1.8px solid var(--c-ink);
+  transform: rotate(-45deg);
+}
+
+/* ---------- the five graphics, each played once on arrival ---------- */
+.hz-g { margin-top: clamp(16px, 1.8vw, 22px); padding: 16px 18px; border: 1px solid var(--line); background: var(--white-1); }
+
+.hz-g1__q { margin: 0 0 12px; font-size: 15px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.hz-g1__a,
+.hz-g1__b { position: relative; margin: 0 0 9px; padding-left: 24px; font-size: 14px; line-height: 1.5; }
+.hz-g1__a {
+  color: var(--black-4);
+  text-decoration: line-through;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.7s var(--ease) 0.3s;
+}
+.hz-g1__a::before { content: "\00d7"; position: absolute; left: 3px; top: -1px; font-size: 15px; color: var(--black-4); }
+.hz-g1__b { margin-bottom: 0; color: var(--black-1); }
+.hz-g1__b::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 3px;
+  width: 10px;
+  height: 5px;
+  border-left: 1.6px solid var(--c-ink);
+  border-bottom: 1.6px solid var(--c-ink);
+  transform: rotate(-45deg);
+}
+.js .hz-g1:not(.is-on) .hz-g1__b { opacity: 0; transform: translateY(5px); }
+.hz-g1__b { transition: opacity 0.6s var(--ease) 0.75s, transform 0.6s var(--ease) 0.75s; }
+.hz-g1.is-on .hz-g1__a { text-decoration-color: var(--black-4); }
+
+.hz-g2__row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.hz-g2__t {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 11px 11px 12px 14px;
+  border: 1px solid var(--line);
+  background: var(--white-1);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), filter 0.7s var(--ease), border-color 0.7s var(--ease), box-shadow 0.7s var(--ease);
+}
+.hz-g2__n { font-size: 14px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.hz-g2__w { font-size: 12.5px; line-height: 1.38; color: var(--black-3); }
+.hz-g2.is-on .hz-g2__t:not(.is-win) { opacity: 0.4; }
+.hz-g2.is-on .hz-g2__t.is-win { border-color: var(--black-1); box-shadow: inset var(--lid) 0 0 var(--c), inset 0 0 0 0.5px var(--black-1); transform: translateY(-4px); }
+
+.hz-g3__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.hz-g3__s {
+  position: relative;
+  overflow: hidden;
+  padding: 7px 9px 8px;
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--black-4);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: color 0.45s var(--ease), border-color 0.45s var(--ease);
+}
+.hz-g3__s::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 3px; background: var(--c); transition: width 0.5s var(--ease); }
+.hz-g3__s.is-e { border-style: dashed; }
+.hz-g3.is-on .hz-g3__s.is-f { color: var(--black-1); border-color: rgba(17, 17, 17, 0.32); }
+.hz-g3.is-on .hz-g3__s.is-f::after { width: 100%; }
+.hz-g3.is-on .hz-g3__s.is-e { border-color: rgba(17, 17, 17, 0.4); color: var(--black-3); }
+
+.hz-g4__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.hz-g4__c {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--black-3);
+  transition: opacity 0.6s var(--ease), color 0.6s var(--ease), border-color 0.6s var(--ease);
+}
+.hz-g4__c.is-in::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); opacity: 0; transition: opacity 0.6s var(--ease); }
+.hz-g4.is-on .hz-g4__c.is-out { opacity: 0.4; text-decoration: line-through; }
+.hz-g4.is-on .hz-g4__c.is-in { border-color: var(--black-1); color: var(--black-1); }
+.hz-g4.is-on .hz-g4__c.is-in::before { opacity: 1; }
+.hz-g4__sp { margin-top: 14px; padding-top: 2px; border-top: 1px solid var(--line); }
+.hz-g4__bar { position: relative; height: 5px; margin: 14px 0 8px; background: linear-gradient(90deg, var(--fill), var(--c)); }
+.hz-g4__bar i { position: absolute; top: -6px; width: 2px; height: 17px; background: var(--black-1); opacity: 0; transition: opacity 0.5s var(--ease) 0.5s; }
+.hz-g4.is-on .hz-g4__bar i { opacity: 1; }
+.hz-g4__ends { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--black-3); }
+
+.hz-g5__t { position: relative; height: 34px; overflow: hidden; border: 1px solid var(--line); background: var(--white-2); }
+.hz-g5__b {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 16%;
+  display: flex;
+  align-items: center;
+  width: 0;
+  padding-left: 11px;
+  overflow: hidden;
+  background: var(--c);
+  transition: width 1.1s var(--ease-out) 0.2s;
+}
+.hz-g5.is-on .hz-g5__b { width: 52%; }
+/* on a phone the bar is narrower than its label: end it on an ellipsis
+   rather than a cut letter */
+.hz-g5__b span { min-width: 0; padding-right: 8px; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px; white-space: nowrap; color: var(--black-1); opacity: 0; transition: opacity 0.5s var(--ease) 0.95s; }
+.hz-g5.is-on .hz-g5__b span { opacity: 1; }
+.hz-g5__sc { display: flex; justify-content: space-between; margin-top: 7px; font-size: 12px; color: var(--black-4); }
+.hz-g5__h { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
+.hz-g5__h span { padding: 4px 10px; border: 1px dashed rgba(17, 17, 17, 0.3); border-radius: 999px; font-size: 12.5px; color: var(--black-3); }
+
+/* ---------- the limits: three plain statements under a black rule ---------- */
+.hz-lims {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 40px);
+  margin: clamp(24px, 2.6vw, 40px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hz-lim { min-width: 0; padding-top: 18px; border-top: 1.5px solid var(--black-1); }
+.hz-lim__t {
+  margin: 0;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.hz-lim__p { margin: 10px 0 0; font-size: 15px; line-height: 1.58; color: var(--black-3); }
+
+/* ============================================================
+   THE WORKED EXAMPLES
+   ============================================================ */
+/* the project's own wordmark heads the section */
+.hz-mark {
+  display: inline-block;
+  margin: 0 0 clamp(18px, 2vw, 26px);
+  padding: 14px 20px 13px;
+  background: var(--black-1);
+  color: var(--white-1);
+  line-height: 1;
+}
+.hz-mark--granger { font-family: "Granger", serif; font-size: clamp(26px, 2.6vw, 32px); letter-spacing: 0.02em; }
+.hz-mark--ibrand { font-family: "Ibrand", "Helvetica Neue", sans-serif; font-size: clamp(24px, 2.4vw, 30px); letter-spacing: -0.01em; text-transform: lowercase; }
+
+/* the spine down the left, as the case studies link their steps */
+.hz-steps {
+  --g: 64px;
+  --fill: 0;
+  position: relative;
+  margin: clamp(40px, 4.4vw, 72px) 0 0;
+  padding: 0 0 0 var(--g);
+  list-style: none;
+}
+.hz-steps::before,
+.hz-steps::after { content: ""; position: absolute; top: 10px; left: 13px; width: 1.5px; }
+.hz-steps::before { bottom: 10px; background: var(--line); }
+.hz-steps::after { height: calc((100% - 20px) * var(--fill)); background: var(--black-1); }
+.hz-step { position: relative; padding-top: clamp(56px, 6vw, 88px); }
+.hz-step:first-child { padding-top: 0; }
+.hz-node {
+  position: absolute;
+  top: 0;
+  left: calc(-1 * var(--g) + 4px);
+  z-index: 2;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--black-1);
+  border-radius: 50%;
+  background: var(--white-1);
+  transition: background-color 0.4s var(--ease);
+}
+/* the brief's dot sits level with its first line */
+.hz-step > .hz-node { top: 8px; }
+.hz-step.is-seen .hz-node { background: var(--c); }
+.hz-brief {
+  margin: 0;
+  max-width: 28ch;
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  line-height: 1.24;
+  letter-spacing: var(--tracking-snug);
+}
+.hz-say { margin: 0; font-size: var(--fs-body); line-height: 1.55; color: var(--black-3); }
+.hz-step > .hz-say { margin-top: 16px; max-width: 62ch; }
+
+.hz-step__head { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 14px clamp(16px, 2vw, 28px); }
+.hz-step__head > .hz-node { top: 50%; transform: translateY(-50%); }
+.hz-step__head > .hz-say { flex: 1 1 280px; min-width: 0; max-width: 50ch; }
+/* the skill at work: white, with its lid */
+.hz-tag {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 11px 18px 12px 22px;
+  border: 1px solid var(--line);
+  background: var(--white-1);
+}
+.hz-tag::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: -1px; width: var(--lid); background: var(--c); }
+.hz-tag__nm { font-size: 16px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.hz-tag__rl { font-size: 13px; color: var(--black-3); }
+
+/* the exchange: what I typed (mono, on the quiet grey), what came back
+   (white, with the skill's lid) */
+.hz-chat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  align-items: start;
+  gap: clamp(10px, 1.2vw, 16px);
+  margin-top: clamp(18px, 2vw, 28px);
+}
+.hz-me { padding: 16px 18px 18px; border: 1px solid var(--line); background: var(--hz-draft); }
+.hz-me__k { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 10px; font-size: 13px; font-weight: var(--fw-semibold); color: var(--black-3); }
+.hz-me__p { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.65; letter-spacing: 0; color: var(--black-1); overflow-wrap: anywhere; }
+.hz-re { position: relative; padding: 18px 20px 20px 26px; border: 1px solid var(--line); background: var(--white-1); color: #333333; }
+.hz-re::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: -1px; width: var(--lid); background: var(--c); }
+.hz-re__k { margin: 0 0 10px; font-size: 13px; font-weight: var(--fw-semibold); color: var(--black-1); }
+.hz-re p:not(.hz-re__k) { margin: 0 0 12px; font-size: 15px; line-height: 1.6; }
+.hz-re p:last-child { margin-bottom: 0; }
+.hz-re b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* the tension meter */
+.hz-tension {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  margin-top: clamp(14px, 1.6vw, 20px);
+}
+.hz-tbox { padding: 20px 22px; border: 1.5px solid var(--black-1); background: var(--white-1); }
+.hz-oppose { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(10px, 1.6vw, 22px); }
+.hz-opp { min-width: 0; }
+.hz-opp__n { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 2px solid var(--black-1); font-size: 18px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.hz-opp--r { text-align: right; }
+.hz-opp--r .hz-opp__n { border-bottom-style: dashed; }
+.hz-opp ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: var(--fs-body-sm); color: var(--black-3); }
+.hz-opp__x { position: relative; align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.hz-opp__x::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1px dashed rgba(17, 17, 17, 0.3); }
+.hz-opp__x span { position: relative; padding: 6px 0; background: var(--white-1); font-size: 13px; color: var(--black-4); }
+.hz-tstate { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--black-3); }
+.hz-tstate.is-done { color: var(--black-1); font-weight: var(--fw-semibold); }
+.hz-tnote { padding: 20px 22px; background: var(--white-2); }
+.hz-tnote p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.55; color: var(--black-3); }
+.hz-tnote p:last-child { margin-bottom: 0; }
+.hz-tnote b, .hz-tpos b { color: var(--black-1); font-weight: var(--fw-semibold); }
+.hz-tends { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; font-weight: var(--fw-semibold); }
+.hz-trail { position: relative; height: 3px; background: linear-gradient(90deg, var(--black-1), var(--hz-gray)); }
+.hz-tknob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--black-1);
+  border-radius: 50%;
+  background: var(--white-1);
+  transform: translate(-50%, -50%);
+  transition: left 1.2s var(--ease-out);
+}
+.hz-tbox.is-on .hz-tknob { left: 62%; }
+.hz-tcols { display: flex; justify-content: space-between; margin-top: 14px; font-size: 13px; color: var(--black-3); }
+.hz-tcols ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.hz-tcols ul + ul { text-align: right; }
+/* the position the deep skill backed: white, with its lid */
+.hz-tpos { position: relative; padding: 20px 22px 22px 28px; border: 1px solid var(--line); background: var(--white-1); }
+.hz-tpos::before { content: ""; position: absolute; top: -1px; bottom: -1px; left: -1px; width: var(--lid); background: var(--c); }
+.hz-tpos__t { margin: 0; font-size: clamp(1.25rem, 1.05rem + 0.55vw, 1.5rem); font-weight: var(--fw-semibold); line-height: 1.2; letter-spacing: -0.02em; }
+.hz-tpos p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--black-3); }
+
+/* territories and attempts */
+.hz-terr { margin-top: clamp(28px, 3vw, 44px); }
+.hz-terr__head { margin-bottom: 16px; }
+.hz-cands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1vw, 14px); }
+.hz-cand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--white-1);
+  transition: opacity 0.7s var(--ease), filter 0.7s var(--ease), border-color 0.7s var(--ease);
+}
+.hz-cand img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+#simpul .hz-cand img { aspect-ratio: 16 / 9; }
+.hz-cand figcaption { display: flex; flex: 1; flex-direction: column; gap: 4px; padding: 12px 13px 14px; }
+.hz-cand__n { font-size: 14.5px; font-weight: var(--fw-semibold); line-height: 1.25; letter-spacing: -0.02em; }
+.hz-cand__w { margin-bottom: 8px; font-size: 13px; line-height: 1.45; color: var(--black-3); }
+.hz-cand__v { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--black-4); }
+.hz-cands.is-on .hz-cand:not(.is-taken) { opacity: 0.5; filter: saturate(0); }
+.hz-cands.is-on .hz-cand:not(.is-taken):hover { opacity: 1; filter: none; }
+.hz-cands.is-on .hz-cand.is-taken { border-color: var(--black-1); box-shadow: inset 0 0 0 0.5px var(--black-1); }
+.hz-cands.is-on .hz-cand.is-taken .hz-cand__v { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* prompt blocks: what I typed and the trial runs on the quiet grey; the
+   final prompts, the ones behind what shipped, on white in the case
+   studies' 1.5px black outline */
+.hz-prompt { min-width: 0; padding: 14px 16px 16px; border: 1px solid var(--line); background: var(--hz-draft); }
+.hz-prompt.is-final { border: 1.5px solid var(--black-1); background: var(--white-1); }
+.hz-prompt.is-lit { margin-top: clamp(14px, 1.6vw, 20px); }
+.hz-prompt__h {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+}
+.hz-pclamp { position: relative; max-height: 8.5em; overflow: hidden; }
+.hz-pclamp::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.2em; background: linear-gradient(rgba(243, 243, 243, 0), var(--hz-draft)); }
+.is-final .hz-pclamp::after { background: linear-gradient(rgba(255, 255, 255, 0), var(--white-1)); }
+.hz-pclamp.is-open { max-height: none; }
+.hz-pclamp.is-open::after { display: none; }
+.hz-pmore {
+  margin-top: 10px;
+  padding: 5px 13px 6px;
+  border: 1px solid var(--black-1);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--black-1);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.hz-pmore:hover { background: var(--black-1); color: var(--white-1); }
+
+.hz-duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: clamp(14px, 1.6vw, 22px); margin-top: clamp(18px, 2vw, 28px); }
+.hz-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: clamp(12px, 1.4vw, 20px); margin-top: clamp(18px, 2vw, 28px); }
+
+/* the routing call: white, in the case studies' 1.5px outline */
+.hz-rig {
+  margin-top: clamp(22px, 2.6vw, 36px);
+  padding: clamp(24px, 2.8vw, 40px);
+  border: 1.5px solid var(--black-1);
+  background: var(--white-1);
+  color: var(--black-3);
+}
+.hz-rig__h {
+  margin: 0;
+  max-width: 30ch;
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--black-1);
+}
+.hz-rig__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 36px); margin: clamp(20px, 2.4vw, 32px) 0 0; }
+.hz-rig__grid > div { min-width: 0; }
+.hz-rig__grid dt { font-size: 13px; color: var(--black-3); }
+.hz-rig__grid dd { margin: 4px 0 0; font-size: 20px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; color: var(--black-1); }
+.hz-rig__grid p { margin: 8px 0 0; font-size: 14px; line-height: 1.55; }
+.hz-rig__math { margin: clamp(20px, 2.4vw, 30px) 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.hz-rig__math b { color: var(--black-1); font-weight: var(--fw-semibold); }
+.hz-rig__math s { color: var(--black-4); }
+
+/* the set: each frame beside the prompt that made it */
+.hz-show { display: grid; gap: clamp(20px, 2.4vw, 32px); margin-top: clamp(16px, 2vw, 24px); }
+.hz-show__wide { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); align-items: start; gap: 10px clamp(14px, 1.6vw, 22px); }
+.hz-show__pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(14px, 1.6vw, 22px); }
+.hz-show__tall { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.hz-step .hz-closer { max-width: 40ch; padding-top: 22px; border-top: 1px solid var(--line); }
+
+.hz-fig--lead { margin-top: clamp(22px, 2.6vw, 36px); }
+.hz-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.2vw, 16px); margin-top: clamp(12px, 1.4vw, 18px); }
+
+/* the clip, shown as the site header it was made for */
+.hz-kv { margin: clamp(22px, 2.6vw, 36px) 0 0; }
+.hz-kv__frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--line); background: var(--black-1); }
+.hz-kv__vid { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.hz-kv__ui { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(13px, 1.9vw, 26px); pointer-events: none; }
+.hz-kv__nav { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.hz-kv__logo { font-family: "Ibrand", "Helvetica Neue", sans-serif; font-size: clamp(14px, 1.7vw, 21px); line-height: 1; letter-spacing: -0.01em; text-transform: lowercase; color: var(--white-1); }
+.hz-kv__links { display: none; gap: clamp(14px, 1.7vw, 26px); }
+.hz-kv__links i { font-size: 11.5px; font-style: normal; color: rgba(255, 255, 255, 0.66); }
+.hz-kv__cta { padding: 5px 13px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 999px; font-size: 10.5px; color: var(--white-1); white-space: nowrap; }
+.hz-kv__copy { max-width: min(48%, 440px); }
+.hz-kv__h { margin: 0; font-size: clamp(17px, 2.6vw, 34px); font-weight: var(--fw-medium); line-height: 1.1; letter-spacing: -0.035em; color: var(--white-1); }
+.hz-kv__p { margin: 9px 0 0; max-width: 36ch; font-size: clamp(11px, 1.05vw, 13.5px); line-height: 1.5; color: rgba(255, 255, 255, 0.68); }
+@media (min-width: 700px) { .hz-kv__links { display: flex; } }
+
+/* ============================================================
+   THE CONTROLS · the case studies' icon list, two by two
+   ============================================================ */
+.hz-ctrls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(32px, 3.4vw, 52px) clamp(24px, 3.4vw, 64px);
+  margin: clamp(32px, 3.6vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hz-ct { min-width: 0; }
+/* an icon in a black circle, drawn in white; the three closing points
+   below use the same one */
+.hz-ct__ic,
+.hz-take__ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--black-1);
+  color: var(--white-1);
+}
+.hz-ct__ic svg,
+.hz-take__ic svg { width: 22px; height: 22px; }
+.hz-ct__t {
+  margin: 16px 0 0;
+  font-size: clamp(1.25rem, 1.05rem + 0.55vw, 1.5rem);
+  font-weight: var(--fw-semibold);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+.hz-ct__p { margin: 10px 0 0; max-width: 56ch; font-size: 15px; line-height: 1.6; color: var(--black-3); }
+.hz-ct__p b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   IMPACT · the same job, both ways
+   ============================================================ */
+.hz-vs { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; gap: clamp(24px, 3.4vw, 56px); margin-top: clamp(32px, 3.6vw, 56px); }
+.hz-vs__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; margin-bottom: 22px; }
+.hz-vs__legend { display: flex; gap: 18px; margin: 0; font-size: 13px; color: var(--black-3); }
+.hz-vs__legend span { display: inline-flex; align-items: center; gap: 8px; }
+.hz-vs__legend i { display: inline-block; width: 14px; height: 14px; }
+.hz-vs__legend .is-a { background: var(--hz-gray); }
+.hz-vs__legend .is-b { background: var(--black-1); }
+.hz-vs__row { margin: 0 0 20px; }
+.hz-vs__row:last-child { margin-bottom: 0; }
+.hz-vs__l { margin: 0 0 8px; font-size: 15px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.hz-vs__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: var(--w);
+  /* every label sits inside its bar, so a bar is never narrower than
+     its words (the rows that measure something already fit at --w) */
+  min-width: max-content;
+  height: 32px;
+  margin-top: 4px;
+  padding: 0 12px;
+  transform-origin: left;
+  transition: transform 1s var(--ease-out);
+}
+.hz-vs__bar span { font-size: 13px; white-space: nowrap; transition: opacity 0.45s var(--ease) 0.7s; }
+.hz-vs__bar.is-a { background: var(--hz-gray); color: var(--black-1); }
+.hz-vs__bar.is-b { background: var(--black-1); color: var(--white-1); transition-delay: 0.15s; }
+.hz-vs__bar.is-b span { transition-delay: 0.85s; }
+.js .hz-vs__chart:not(.is-on) .hz-vs__bar { transform: scaleX(0); }
+/* the words wait for their bar, so they never show squeezed */
+.js .hz-vs__chart:not(.is-on) .hz-vs__bar span { opacity: 0; transition: none; }
+.hz-vs__note p { margin: 0 0 14px; font-size: 15px; line-height: 1.6; color: var(--black-3); }
+.hz-vs__note p:last-child { margin-bottom: 0; }
+.hz-vs__note b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   CLOSING
+   ============================================================ */
+.hz-take { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 2.6vw, 44px); margin: clamp(32px, 3.6vw, 56px) 0 0; padding: 0; list-style: none; }
+.hz-take > li { min-width: 0; }
+.hz-take__t { margin: 16px 0 0; font-size: clamp(1.25rem, 1.05rem + 0.55vw, 1.5rem); font-weight: var(--fw-semibold); line-height: 1.22; letter-spacing: -0.02em; }
+.hz-take__p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--black-3); }
+.hz-close {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 3.4vw, 56px);
+  margin-top: clamp(44px, 4.8vw, 80px);
+  padding-top: clamp(32px, 3.6vw, 52px);
+  border-top: 1px solid var(--line);
+}
+.hz-close__text p { margin: 0 0 14px; max-width: 62ch; font-size: var(--fs-body); line-height: 1.6; color: var(--black-3); }
+.hz-close__text b { color: var(--black-1); font-weight: var(--fw-semibold); }
+.hz-close__text .hz-close__punch { margin: 24px 0 0; font-size: var(--fs-h6); font-weight: var(--fw-semibold); line-height: 1.3; letter-spacing: -0.02em; color: var(--black-1); }
+.hz-close__side { padding: clamp(22px, 2.4vw, 32px); border: 1.5px solid var(--black-1); }
+.hz-close__h { margin: 0; font-size: var(--fs-h5); font-weight: var(--fw-medium); line-height: var(--lh-snug); letter-spacing: var(--tracking-snug); }
+.hz-close__x { margin: 16px 0 0; font-size: var(--fs-body-sm); line-height: 1.55; color: var(--black-3); }
+.hz-close__x b { color: var(--black-1); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1199px) {
+  .hz-vs { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 1080px) {
+  /* five cards: three, then two */
+  .hz-cast { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .hz-cast > li { grid-column: span 2; }
+  .hz-cast > li:nth-child(n+4) { grid-column: span 3; }
+  .hz-cc { min-height: 168px; }
+}
+
+@media (max-width: 900px) {
+  .hz-gap { grid-template-columns: minmax(0, 1fr); }
+  .hz-gap__arrow { padding: 2px 0; transform: rotate(90deg); }
+  .hz-loop { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .hz-after { grid-template-columns: minmax(0, 1fr); }
+  .hz-named { max-width: 520px; }
+  .hz-chart { padding: 16px; }
+  .hz-chart__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #flowchart, .hz-legend { min-width: 720px; }
+  .hz-chart__hint { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13px; color: var(--black-4); }
+  .hz-chart__hint::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .hz-lims { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .hz-tension { grid-template-columns: minmax(0, 1fr); }
+  .hz-cands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hz-close { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 760px) {
+  /* the hero is as tall as it needs to be here, and phones hide the cue */
+  .hz-hero { min-height: 0; padding: 40px 0 56px; }
+
+  /* the five as rows, as the current page does on a phone */
+  .hz-cast { grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 32px; }
+  .hz-cast > li,
+  .hz-cast > li:nth-child(n+4) { grid-column: auto; }
+  .hz-cc {
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 2px;
+    min-height: 0;
+    padding: 13px 16px 13px 22px;
+  }
+  .hz-cc::before { width: var(--lid); }
+  .hz-cc__ico { grid-column: 1; grid-row: 1 / 3; }
+  .hz-cc__nm { grid-column: 2; grid-row: 1; font-size: 15px; }
+  .hz-cc .hz-pfx { display: inline; margin: 0; font-size: inherit; }
+  .hz-cc__tier { grid-column: 3; grid-row: 1; justify-self: end; font-size: 12px; white-space: nowrap; }
+  .hz-cc__rl { grid-column: 2 / 4; grid-row: 2; min-height: 0; margin-top: 0; font-size: 13px; }
+  .hz-cc:hover { transform: none; }
+
+  .hz-how { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .hz-how__step { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 16px; }
+  .hz-how__num { grid-row: 1 / 5; width: 48px; height: 48px; }
+  .hz-how__k { margin-top: 2px; }
+  .hz-how__step:not(:last-child)::after { top: 56px; bottom: -24px; left: 23.25px; right: auto; width: 1.5px; height: auto; }
+
+  .hz-g2__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hz-g3__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .hz-steps { --g: 36px; }
+  .hz-steps::before, .hz-steps::after { left: 7px; }
+  .hz-node { left: calc(-1 * var(--g) + 1px); width: 14px; height: 14px; }
+  .hz-step > .hz-node { top: 7px; }
+  /* the head wraps here, so the dot stays level with the skill's tag */
+  .hz-step__head > .hz-node { top: 24px; transform: none; }
+  .hz-chat { grid-template-columns: minmax(0, 1fr); }
+  .hz-duo, .hz-pair { grid-template-columns: minmax(0, 1fr); }
+  .hz-rig__grid { grid-template-columns: minmax(0, 1fr); }
+  .hz-show__wide { grid-template-columns: minmax(0, 1fr); }
+  .hz-ctrls { grid-template-columns: minmax(0, 1fr); }
+  .hz-take { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 700px) {
+  /* the header mock keeps only its headline at this size */
+  .hz-kv__p { display: none; }
+  .hz-kv__copy { max-width: 72%; }
+}
+
+@media (max-width: 560px) {
+  .hz-g3__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* the four attempts as a two-by-two, so the set reads as one set */
+  .hz-cands { gap: 8px; }
+  .hz-cand figcaption { padding: 10px 10px 12px; }
+  .hz-cand__n { font-size: 13.5px; }
+  .hz-cand__w { font-size: 12.5px; }
+  .hz-cand__v { font-size: 12px; }
+  .hz-show__pair, .hz-trio { grid-template-columns: minmax(0, 1fr); }
+  .hz-rollsum dd { font-size: 2rem; }
+  .hz-oppose { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .hz-opp--r { text-align: left; }
+  .hz-opp__x { justify-content: flex-start; }
+  .hz-opp__x::before { top: 50%; bottom: auto; left: 0; right: 0; border-left: 0; border-top: 1px dashed rgba(17, 17, 17, 0.3); }
+  .hz-opp__x span { padding: 0 10px 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hz *, .hz *::before, .hz *::after { transition-duration: 0.001ms !important; transition-delay: 0s !important; }
+  .hz-hero__in > *, .hz-hero .hz-cue { animation: none; }
+}
