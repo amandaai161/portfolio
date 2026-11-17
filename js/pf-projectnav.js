@@ -24,7 +24,15 @@
   var wrap = document.querySelector("[data-pf-panels]");
   if (!bar || !wrap) return;
 
-  var ORDER = ["web", "brand", "case"];
+  /* The tabs' left-to-right order, read from the markup, so the push
+     direction and the arrow keys follow it. Identity puts "brand" first
+     (Amanda, 17 Nov 2026); the other pages keep web, brand, case. */
+  var ORDER = [];
+
+  /* The sub-page a bare URL opens on: whichever tab the markup ships
+     selected. "web" on every page except Identity, which opens on "brand"
+     (Amanda, 17 Nov 2026). */
+  var HOME = "web";
 
   var tabs = {};
   var panels = {};
@@ -34,6 +42,8 @@
   for (i = 0; i < list.length; i++) {
     el = list[i];
     tabs[el.getAttribute("data-tab")] = el;
+    ORDER.push(el.getAttribute("data-tab"));
+    if (el.getAttribute("aria-selected") === "true") HOME = el.getAttribute("data-tab");
   }
 
   list = wrap.querySelectorAll(".pf-panel");
@@ -42,7 +52,7 @@
     panels[el.getAttribute("data-panel")] = el;
   }
 
-  var current = "web";
+  var current = HOME;
 
   function valid(name) {
     return ORDER.indexOf(name) !== -1 && tabs[name] && panels[name];
@@ -215,16 +225,16 @@
   /* ---- the hash ----------------------------------------------------------
      A sub-page is worth a URL: it is how Amanda sends a recruiter straight to
      the brand work, and it is what makes the back button undo a tab switch.
-     "web" writes no hash, because it is what a bare /project_identity/ means. */
+     HOME writes no hash, because it is what a bare URL means. */
   function setHash(name) {
     var url = window.location.pathname + window.location.search +
-              (name === "web" ? "" : "#" + name);
+              (name === HOME ? "" : "#" + name);
     window.history.pushState({ pfTab: name }, "", url);
   }
 
   function fromHash() {
     var h = window.location.hash.replace(/^#/, "");
-    return valid(h) ? h : "web";
+    return valid(h) ? h : HOME;
   }
 
   window.addEventListener("popstate", function () {
@@ -233,11 +243,11 @@
   });
 
   /* ---- initial state ------------------------------------------------------
-     The markup ships with "web" selected, so a deep link has to be applied
+     The markup ships with HOME selected, so a deep link has to be applied
      before anything is painted from it. commit(), not show(): there is no
      previous sub-page to push away from. */
   var start = fromHash();
-  if (start !== "web") commit(start);
+  if (start !== HOME) commit(start);
 
   /* ---- reading progress ---------------------------------------------------
      Amanda: "please also add the progress bar underneath the nav bar just like

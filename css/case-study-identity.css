@@ -312,6 +312,45 @@
 .cs-page--identity .cs-note p { max-width: none; }
 
 /* ============================================================
+   BEFORE & AFTER · the last section (Amanda's pick, 17 Nov 2026)
+   Option 2 of the mockups: figures, not sentences, with a column for
+   how far each one moved. Two groups, so the one result that is the
+   system's own (designers needed) stands apart from the ones the whole
+   team earned. The note above them is the page's soft note box with an
+   info mark in place of the lock.
+   ============================================================ */
+.id-impact__note { margin-top: 0; }
+.id-impact { margin-top: clamp(36px, 4vw, 64px); }
+.id-impact__row {
+  display: grid;
+  grid-template-columns: 1.15fr 0.7fr 0.7fr 1.35fr;
+  gap: clamp(14px, 1.4vw, 26px);
+  align-items: center;
+  padding: clamp(18px, 1.8vw, 24px) 0;
+  border-bottom: 1px solid var(--cs-line);
+}
+.id-impact__row--head { padding-top: 0; }
+.id-impact__row--head span { color: var(--cs-muted); }
+.id-impact__row--head span:nth-child(3) { color: var(--cs-ink); }   /* AFTER, as on Aspire */
+.id-impact__group {
+  margin: 0;
+  padding: clamp(28px, 3vw, 48px) 0 12px;
+  border-bottom: 1.5px solid var(--cs-ink);
+}
+.id-impact__row--head + .id-impact__group { padding-top: 8px; }
+.id-impact__key { display: flex; align-items: center; gap: 10px; }
+.id-impact__key .ico { flex: none; width: 24px; height: 24px; color: var(--black-4); }
+.id-impact__num {
+  font-size: var(--fs-h6);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  font-variant-numeric: tabular-nums;
+}
+.id-impact__num--before { color: var(--cs-muted); }
+.id-impact__change { color: var(--cs-ink); }
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 900px) {
@@ -339,4 +378,21 @@
 
   /* the stacked reveal + wide research boards bleed to the screen edges */
   .cs-showcase { margin-inline: calc(var(--gutter) * -1); }
+
+  /* before & after → name on top, the two figures side by side, the change under */
+  .id-impact__row { grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .id-impact__row--head { display: none; }
+  .id-impact__key, .id-impact__change { grid-column: 1 / -1; }
+  .id-impact__key { margin-bottom: 4px; }
+  .id-impact__change { color: var(--cs-muted); }
+  .id-impact__num::before {
+    display: block;
+    font-size: var(--fs-eyebrow-2);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--cs-muted);
+  }
+  .id-impact__num--before::before { content: "Before"; }
+  .id-impact__num--after::before { content: "After"; color: var(--cs-ink); }
 }

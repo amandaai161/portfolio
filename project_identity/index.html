@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Identity &mdash; Built on Trust. Driven by Growth.</title>
   <link rel="icon" href="/favico.svg" type="image/svg+xml">
-  <meta name="description" content="Identity is a vetted ecosystem of 1,000+ leaders across 40+ cities. Connect with verified founders, unlock B2B deal flow, and build high-value partnerships within a community you already know and trust.">
+  <meta name="description" content="Identity is a vetted ecosystem of 1,500+ leaders across 40+ cities. Connect with verified founders, unlock B2B deal flow, and build high-value partnerships within a community you already know and trust.">
   <meta name="theme-color" content="#0C021A">
 
   <link rel="preload" href="font/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,10 +65,12 @@
     <a class="pf-projnav__name" href="/">Amanda Idris</a>
 
     <div class="pf-projnav__tabs" role="tablist" aria-label="Project views">
-      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabWeb"
-              data-tab="web" aria-selected="true" aria-controls="pfPanelWeb">Web design preview</button>
+      <!-- Brand design first, and the page opens on it; then the web preview
+           (Amanda, 17 Nov 2026). The web preview's link is #web. -->
       <button class="pf-projnav__tab" type="button" role="tab" id="pfTabBrand"
-              data-tab="brand" aria-selected="false" aria-controls="pfPanelBrand">Brand design</button>
+              data-tab="brand" aria-selected="true" aria-controls="pfPanelBrand">Brand design</button>
+      <button class="pf-projnav__tab" type="button" role="tab" id="pfTabWeb"
+              data-tab="web" aria-selected="false" aria-controls="pfPanelWeb">Web design preview</button>
       <button class="pf-projnav__tab" type="button" role="tab" id="pfTabCase"
               data-tab="case" aria-selected="false" aria-controls="pfPanelCase">Case study</button>
     </div>
@@ -80,6 +82,7 @@
 
       <div class="pf-dock__menu" id="pfDockMenu" hidden>
         <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/#work"><span class="pf-dock__label">Works</span></a>
         <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
         <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfatah/" target="_blank" rel="noopener">
           <span class="pf-dock__label">Linkedin</span>
@@ -100,11 +103,11 @@
 
   <!-- ==================== 1 · WEB DESIGN PREVIEW ====================
        The project as it was built: identity's own site, its own fixed header,
-       its own scroll deck, its own footer. Default sub-page, per the sketch.
+       its own scroll deck, its own footer. No longer the default: Identity opens on Brand design (17 Nov 2026).
        Ends at identity's footer -- Amanda: "please remove the 'Scroll down to
        see....' part, as well as the black gradient effect. So the end of
        respective web design preview is the respective footer." -->
-  <div class="pf-panel" id="pfPanelWeb" data-panel="web" role="tabpanel" aria-labelledby="pfTabWeb">
+  <div class="pf-panel" id="pfPanelWeb" data-panel="web" role="tabpanel" aria-labelledby="pfTabWeb" hidden>
   <!-- the brand gradient: fixed behind the page, driven by scroll ---------- -->
   <div class="gradient-field" aria-hidden="true">
     <div class="gradient-field__stage">
@@ -168,7 +171,7 @@
           <div class="container">
             <p class="hero__eyebrow" data-reveal>A global network for entrepreneurs, leaders, and creators</p>
             <h1 class="hero__title t-h1" data-reveal>Built on Trust.<br>Driven by Growth.</h1>
-            <p class="hero__lede t-body-lg" data-reveal>Identity is vetted ecosystem of 1,000+ leaders across 40+ cities. Connect with verified founders, unlock B2B deal flow, and build high-value partnerships within a community you already know and trust.</p>
+            <p class="hero__lede t-body-lg" data-reveal>Identity is vetted ecosystem of 1,500+ leaders across 40+ cities. Connect with verified founders, unlock B2B deal flow, and build high-value partnerships within a community you already know and trust.</p>
             <div class="btn-row hero__actions" data-reveal>
               <a class="btn btn--solid" href="#">Become a Partner</a>
               <a class="btn btn--outline" href="#">Browse directory</a>
@@ -292,7 +295,7 @@
         <path fill="#AEFF00" d="M448.672 55.44C448.672 66.6 455.272 73.2 465.232 73.2C472.552 73.2 477.952 69.72 480.472 63.6H495.472C492.232 77.52 481.072 86.4 465.352 86.4C446.752 86.4 434.272 73.92 434.272 55.32C434.272 36.84 446.752 24.48 465.352 24.48C480.952 24.48 492.232 33.24 495.352 46.92H480.352C477.832 41.04 472.432 37.68 465.232 37.68C455.272 37.68 448.672 44.28 448.672 55.44Z"/>
         <path fill="#AEFF00" d="M530.765 72.96V86.16C511.085 86.16 500.645 76.2 500.645 57.72V1.32H515.045V25.32H528.725V38.52H515.045V57.6C515.045 68.52 519.485 72.96 530.765 72.96Z"/>
         </svg>
-            <span class="pillar__body">Skip the cold outreach and awkward introductions. Connect gives you direct access to a verified network of 1,000+ leaders across 40+ global chapters&mdash;rebuilding active familiarity and opening doors to high-value relationships grounded in shared trust.</span>
+            <span class="pillar__body">Skip the cold outreach and awkward introductions. Connect gives you direct access to a verified network of 1,500+ leaders across 40+ global chapters&mdash;rebuilding active familiarity and opening doors to high-value relationships grounded in shared trust.</span>
             <span class="pillar__more">Learn more <svg class="arrow" viewBox="0 0 26 8" fill="none" aria-hidden="true" focusable="false"><path d="M0 4h23.5M20.5 1 24 4l-3.5 3" stroke="currentColor" stroke-width="1" stroke-linecap="square"/></svg></span>
           </a>
           <a class="pillar pillar--collaborate" href="#">
@@ -559,7 +562,7 @@
        "New project nav - Brand 2/3.png". Everything else is /css/pf-brand.css. -->
   <div class="pf-panel pf-brand" id="pfPanelBrand" data-panel="brand"
        role="tabpanel" aria-labelledby="pfTabBrand"
-       style="--pf-brand-bg: #140335" hidden>
+       style="--pf-brand-bg: #140335">
     <div class="pf-brand__wrap">
 
       <header class="pf-brand__head">
@@ -648,12 +651,49 @@
 <div class="pf-outro">
     <div class="pf-outro__sheet">
 
-      <section class="pf-process" aria-labelledby="pfProcessHead">
+      <!-- Amanda's sketch of 12 Nov 2026: the outcome first, as four dark
+           cards whose huge text is the stat itself, readable in seconds;
+           then a rule; then the way into the case study; then the key design
+           decisions as a list in one outlined box. Outcomes and decisions
+           are kept apart on purpose: no number in a decision. Draft copy,
+           Amanda is curating the final. -->
+      <div class="pf-process">
         <div class="pf-process__wrap">
-          <h2 class="pf-process__head" id="pfProcessHead">
-            <span class="pf-process__line">That&rsquo;s the outcome.</span>
-            <span class="pf-process__line">Here&rsquo;s how it was built.</span>
-          </h2>
+          <!-- Amanda, 17 Nov 2026: the outcome uses the same before, arrow,
+               black card pattern as HAZEN's "What Hazen changed". Four
+               highlights she picked from the case study's last section, with
+               no note here: the full table and the "whole team" note live at
+               the end of the case study. -->
+          <section class="pf-impact" aria-labelledby="pfImpactHead">
+            <h2 class="pf-process__head" id="pfImpactHead">The outcome</h2>
+            <ul class="pf-ba">
+              <li class="pf-ba__item">
+                <p class="pf-ba__was">Producing the community&rsquo;s assets took <b>12 designers</b></p>
+                <svg class="pf-ba__arrow" viewBox="0 0 16 40" aria-hidden="true"><path d="M8 1v37M2 32l6 6 6-6"/></svg>
+                <div class="pf-ba__card"><span class="pf-ba__n">Only 4</span><span class="pf-ba__l">Main designers now, for the same output at the same quality</span></div>
+              </li>
+              <li class="pf-ba__item">
+                <p class="pf-ba__was">Instagram had <b>4,661 followers</b> before the rebrand</p>
+                <svg class="pf-ba__arrow" viewBox="0 0 16 40" aria-hidden="true"><path d="M8 1v37M2 32l6 6 6-6"/></svg>
+                <div class="pf-ba__card"><span class="pf-ba__n">+412</span><span class="pf-ba__l">New followers, up 9% to 5,073</span></div>
+              </li>
+              <li class="pf-ba__item">
+                <p class="pf-ba__was">Instagram impressions<br>sat around <b>5k&ndash;18k</b></p>
+                <svg class="pf-ba__arrow" viewBox="0 0 16 40" aria-hidden="true"><path d="M8 1v37M2 32l6 6 6-6"/></svg>
+                <div class="pf-ba__card"><span class="pf-ba__n">~80k</span><span class="pf-ba__l">Impressions across the two months after launch</span></div>
+              </li>
+              <li class="pf-ba__item">
+                <p class="pf-ba__was">The grand reunion aimed for about <b>500 members</b></p>
+                <svg class="pf-ba__arrow" viewBox="0 0 16 40" aria-hidden="true"><path d="M8 1v37M2 32l6 6 6-6"/></svg>
+                <div class="pf-ba__card"><span class="pf-ba__n">+30%</span><span class="pf-ba__l">Over the target, with about 650 members there</span></div>
+              </li>
+            </ul>
+          </section>
+
+          <hr class="pf-process__rule" />
+
+          <section class="pf-process__case" aria-labelledby="pfProcessHead">
+            <h2 class="pf-process__head" id="pfProcessHead">The thinking behind it</h2>
 
           <div class="pf-process__top">
             <!-- The whole thumbnail is the link, button included. The button is a
@@ -686,7 +726,7 @@
                 <li class="pf-pill">Web Design</li>
                 <li class="pf-pill">Canva Brand Kit</li>
               </ul>
-              <p class="pf-process__desc">A full rebrand for Identity, a global community serving more than 1,000 active members. It was never just an aesthetic refresh. The harder part was building a visual system that could scale with the community and still be run by a small team with very limited resources.</p>
+              <p class="pf-process__desc">A full rebrand for Identity, a global community of around 1,500 members. It was never just an aesthetic refresh. The harder part was building a visual system that could scale with the community and still be run by a small team with very limited resources.</p>
               <dl class="pf-process__facts">
                 <div class="pf-fact"><dt>Year</dt><dd>2026</dd></div>
                 <div class="pf-fact"><dt>Duration</dt><dd>7 weeks</dd></div>
@@ -699,33 +739,29 @@
           <!-- Stand-in copy. Grounded in the real work so the section can be
                judged as a design, but Amanda is writing the final three. A
                replacement is a text edit and nothing else. -->
-          <div class="pf-process__bottom">
-            <h3 class="pf-process__decisions">Key design decisions</h3>
-            <ul class="pf-cards">
-              <li class="pf-card pf-card--lead">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.25" /><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none" /></svg></span>
-                <h4 class="pf-card__title">Built for a core of 30 members, not the whole 1,000+ community at once</h4>
-                <p class="pf-card__body">Pushing one message to everyone had stopped working. A small active core could spread it outward.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5s7-6.06 7-11a7 7 0 1 0-14 0c0 4.94 7 11 7 11Z" /><circle cx="12" cy="10.5" r="2.6" /></svg></span>
-                <h4 class="pf-card__title">Turned 40+ scattered chapters into one interactive map of the network</h4>
-                <p class="pf-card__body">Members find their own city, then open it to see who is there, what they run, and who leads it.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.25" y="3.75" width="17.5" height="16.5" rx="2.5" /><path d="M3.25 8.75h17.5M10.5 8.75v11.5" /></svg></span>
-                <h4 class="pf-card__title">Shipped the system in Canva, because the people posting are not designers</h4>
-                <p class="pf-card__body">Figma or Illustrator would need a designer every time. Canva holds the quality and any chapter lead can use it.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.6" /><path d="M12 9.4V4.6M9.75 13.35 5.6 15.75M14.25 13.35l4.15 2.4" /><circle cx="12" cy="3" r="1.6" /><circle cx="4.2" cy="16.55" r="1.6" /><circle cx="19.8" cy="16.55" r="1.6" /></svg></span>
-                <h4 class="pf-card__title">Designed the logo, naming and colours as one family any new chapter can join</h4>
-                <p class="pf-card__body">Diversity is what this community runs on, so the system stretches to fit new cities and fields instead of being redrawn.</p>
-              </li>
-            </ul>
-          </div>
+            <div class="pf-process__bottom">
+              <h3 class="pf-process__decisions">Key design decisions</h3>
+              <ul class="pf-decisions">
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.25"/><circle cx="12" cy="12" r="5.25"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+                  <h4 class="pf-decision__title">Built for a small core first, not all 1,500 at once</h4>
+                  <p class="pf-decision__body">Pushing one story to everyone had stopped working. A core of 30 to 50 active members could carry the warmth outward on its own.</p>
+                </li>
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="3.75"/><rect x="13.25" y="3.25" width="7.5" height="7.5" rx="1"/><path d="m7 13.4 4.1 7.1H2.9Z"/><path d="m17 13 4 4-4 4-4-4Z"/></svg>
+                  <h4 class="pf-decision__title">Turned the community&rsquo;s diversity into its selling point</h4>
+                  <p class="pf-decision__body">Members spread across cities, countries and professions looked like the reason nothing held together. Reframed, it&rsquo;s a network no other community can claim.</p>
+                </li>
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>
+                  <h4 class="pf-decision__title">Shipped the system in Canva, not Figma</h4>
+                  <p class="pf-decision__body">The people posting aren&rsquo;t designers, and Figma or Illustrator would need one every time. Canva keeps the quality while any chapter lead can use it.</p>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       <!-- BEGIN master-suggestion (generated by scripts/gen-master-suggestion.py) -->
       <section class="master-suggestion" aria-labelledby="msugHead">
@@ -827,6 +863,7 @@
 
                 <nav class="contact__nav" aria-label="Footer">
                   <a href="/" class="contact__nav-link">Home</a>
+                  <a href="/#work" class="contact__nav-link">Works</a>
                   <a href="/about" class="contact__nav-link">About</a>
                 </nav>
               </div>
