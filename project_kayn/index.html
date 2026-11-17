@@ -83,6 +83,7 @@
 
       <div class="pf-dock__menu" id="pfDockMenu" hidden>
         <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/#work"><span class="pf-dock__label">Works</span></a>
         <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
         <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfatah/" target="_blank" rel="noopener">
           <span class="pf-dock__label">Linkedin</span>
@@ -552,12 +553,34 @@
 <div class="pf-outro">
     <div class="pf-outro__sheet">
 
-      <section class="pf-process" aria-labelledby="pfProcessHead">
+      <!-- Amanda's sketch of 12 Nov 2026: the outcome first, as four dark
+           cards whose huge text is the stat itself, readable in seconds;
+           then a rule; then the way into the case study; then the key design
+           decisions as a list in one outlined box. Outcomes and decisions
+           are kept apart on purpose: no number in a decision. Draft copy,
+           Amanda is curating the final. -->
+      <div class="pf-process">
         <div class="pf-process__wrap">
-          <h2 class="pf-process__head" id="pfProcessHead">
-            <span class="pf-process__line">That&rsquo;s the outcome.</span>
-            <span class="pf-process__line">Here&rsquo;s how it was built.</span>
-          </h2>
+          <section class="pf-impact" aria-labelledby="pfImpactHead">
+            <h2 class="pf-process__head" id="pfImpactHead">The outcome</h2>
+            <!-- A Level-Up Lab rework of a 2021 freelance brief, so these are
+                 what the work delivered, not business results. -->
+            <ul class="pf-stats">
+              <li class="pf-stat"><span class="pf-stat__num">5</span>
+                <span class="pf-stat__label">Problems found on the old page, each with its own fix</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">1</span>
+                <span class="pf-stat__label">Product, shown from every angle, sourcing to proof</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">6</span>
+                <span class="pf-stat__label">Steps in the design process, from brief to presentation</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">2 weeks</span>
+                <span class="pf-stat__label">From the first brief to the finished landing page</span></li>
+            </ul>
+          </section>
+
+          <hr class="pf-process__rule" />
+
+          <section class="pf-process__case" aria-labelledby="pfProcessHead">
+            <h2 class="pf-process__head" id="pfProcessHead">The thinking behind it</h2>
 
           <div class="pf-process__top">
             <!-- The whole thumbnail is the link, button included. The button is a
@@ -594,28 +617,29 @@
             </div>
           </div>
 
-          <div class="pf-process__bottom">
-            <h3 class="pf-process__decisions">Key design decisions</h3>
-            <ul class="pf-cards">
-              <li class="pf-card pf-card--lead">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.7 19a2 2 0 0 0 1.4-.6l6.2-6.2a6 6 0 0 0-8.5-8.5L5.6 9.9a2 2 0 0 0-.6 1.4V18a1 1 0 0 0 1 1Z" /><path d="M16 8 2.8 21.2" /><path d="M17.4 15H9" /></svg></span>
-                <h4 class="pf-card__title">Set the premium mood in the first screen without heavy decoration to carry it</h4>
-                <p class="pf-card__body">Elegance came from space, type and restraint, so the page still opens fast.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7 20.8 7.4v9.2L12 21.3 3.2 16.6V7.4L12 2.7Z" /><path d="m3.5 7.5 8.5 4.6 8.5-4.6M12 12.1v9.2" /></svg></span>
-                <h4 class="pf-card__title">Used one simple 3D animation to hold people inside the features section</h4>
-                <p class="pf-card__body">That section does the convincing. The motion slows the scroll there and nowhere else.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" /><path d="m16.1 16.1 4.7 4.7" /></svg></span>
-                <h4 class="pf-card__title">Went deep on one product from every angle instead of spreading across a catalogue</h4>
-                <p class="pf-card__body">Sourcing, benefits, usage, proof. A specific product earns a specific page.</p>
-              </li>
-            </ul>
-          </div>
+            <div class="pf-process__bottom">
+              <h3 class="pf-process__decisions">Key design decisions</h3>
+              <ul class="pf-decisions">
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Set the premium mood in the first screen without heavy decoration to carry it</h4>
+                  <p class="pf-decision__body">Elegance came from space, type and restraint, so the page still opens fast.</p>
+                </li>
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Used one simple 3D animation to hold people inside the features section</h4>
+                  <p class="pf-decision__body">That section does the convincing. The motion slows the scroll there and nowhere else.</p>
+                </li>
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Went deep on one product from every angle instead of spreading across a catalogue</h4>
+                  <p class="pf-decision__body">Sourcing, benefits, usage, proof. A specific product earns a specific page.</p>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       <!-- BEGIN master-suggestion (generated by scripts/gen-master-suggestion.py) -->
       <section class="master-suggestion" aria-labelledby="msugHead">
@@ -717,6 +741,7 @@
 
                 <nav class="contact__nav" aria-label="Footer">
                   <a href="/" class="contact__nav-link">Home</a>
+                  <a href="/#work" class="contact__nav-link">Works</a>
                   <a href="/about" class="contact__nav-link">About</a>
                 </nav>
               </div>

@@ -1,17 +1,29 @@
 /* ============================================================================
-   THE-PROCESS SECTION
+   THE CASE-STUDY PANEL ("Case study" tab, /#case on a project page)
    ----------------------------------------------------------------------------
-   The overview + CTA that lands after a project page finishes: what the project
-   was, and a way through to the full process breakdown on amanda-design.com.
+   Built to Amanda's sketch of 12 Nov 2026, top to bottom:
 
-   Built to Amanda's sketch. Column ratios are the sketch's own, read off its
-   1920 canvas — 45/55 for the shot and the meta block, 19/81 for the decisions
-   heading and its three cards.
+     1  THE OUTCOME. Four dark cards, each one stat: the huge text IS the
+        number, the small grey line under it says what it counts. "This new
+        design is more effective to transfer the outcomes to whoever land on
+        this page within the matter of seconds."
+     2  A rule.
+     3  HOW IT WAS BUILT. The way into the full case study: the shot (the
+        link) beside the title, pills, summary and facts.
+     4  KEY DESIGN DECISIONS. A list in one outlined box, centred under it.
+        "Please separate between the outcomes and the key design
+        decisions": numbers live in (1), never in a decision.
+
+   Column ratio 45/55 for the shot and the meta block is the earlier
+   sketch's, read off its 1920 canvas; the new sketch keeps it.
 
    Requires pf-chrome.css to be loaded first: every size below resolves against
    the --pf-* tokens declared there.
    ========================================================================== */
 .pf-process {
+  /* The stat's own size, not borrowed from the heading scale. Amanda: "70px
+     max then clamp -> 48 minimum." It reaches 48 at 1200 and 70 at 1920. */
+  --pf-fs-stat: clamp(3rem, 0.7rem + 3.06vw, 4.375rem);   /* 48 -> 70 */
   display: block;
   margin: 0;
   padding-block: clamp(64px, 7vw, 132px) clamp(64px, 7vw, 130px);
@@ -21,6 +33,8 @@
   letter-spacing: var(--pf-tr-body);
 }
 
+/* The gap is the sketch's air above and below the rule (~115px at 1920);
+   inside each half the pieces sit closer, ~64px. */
 .pf-process__wrap {
   width: 100%;
   max-width: calc(1720px + clamp(20px, 5.2vw, 100px) * 2);
@@ -30,9 +44,14 @@
   flex-direction: column;
   gap: clamp(48px, 6vw, 118px);
 }
+.pf-impact,
+.pf-process__case {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3.4vw, 64px);
+  margin: 0;
+}
 
-/* Two lines because the markup says two lines, not because a width cap happens
-   to break it there. */
 .pf-process__head {
   margin: 0;
   text-align: center;
@@ -42,9 +61,144 @@
   letter-spacing: var(--pf-tr-display);
   color: inherit;
 }
-.pf-process__line { display: block; }
 
-/* ---- the shot + the meta block ------------------------------------------- */
+.pf-process__rule {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--pf-muted);
+}
+
+/* Read aloud instead of a stat that does not read well as text: "<1s",
+   "2 -> 1". */
+.pf-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 1. the outcome ------------------------------------------------------ */
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* The number, then its line directly under it: one unit, not two ends of
+   a 3:2 card. Amanda: "The gap between the main text impact and its subtext
+   is too big, feels off in wider screen browser." So no aspect ratio and no
+   space-between; the card is as tall as what it holds, and the cards in a
+   row match the tallest. */
+.pf-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: clamp(10px, 0.9vw, 16px);
+  margin: 0;
+  padding: clamp(20px, 2.4vw, 46px);
+  background: var(--pf-ink);
+  color: var(--pf-paper);
+}
+.pf-stat__num {
+  display: block;
+  font-size: var(--pf-fs-stat);
+  font-weight: var(--pf-fw-medium);
+  line-height: 1;
+  letter-spacing: var(--pf-tr-display);
+  white-space: nowrap;
+}
+/* Body large, full white, and room for two lines: "the subtext can also be
+   2 lines long". */
+.pf-stat__label {
+  display: block;
+  max-width: 34ch;
+  font-size: var(--pf-fs-body-lg);
+  font-weight: var(--pf-fw-regular);
+  line-height: var(--pf-lh-normal);
+  letter-spacing: var(--pf-tr-body);
+  color: var(--pf-paper);
+}
+
+/* ---- 1b. the outcome as before -> after (Identity, 17 Nov 2026) ----------
+   Amanda asked for the same pattern as HAZEN's "What Hazen changed"
+   (project_hazen/hazen.css, .hz-oc): the old way in a line of text, an
+   arrow, then a black card with the figure on top and its line at the
+   foot. Four across the full width, like the .pf-stats row it replaced;
+   two at tablet, one on phones. Pages still on .pf-stats are unchanged. */
+.pf-ba {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(48px, 5vw, 80px) clamp(10px, 1.6vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-ba__item { display: flex; flex-direction: column; align-items: center; min-width: 0; margin: 0; }
+.pf-ba__was {
+  max-width: 32ch;
+  margin: 0;
+  text-align: center;
+  font-size: var(--pf-fs-body-lg);
+  line-height: 1.45;
+  letter-spacing: var(--pf-tr-body);
+  text-wrap: balance;
+  min-height: calc(2 * 1.45em);   /* two lines in every column, so arrows and cards line up */
+}
+.pf-ba__was b { font-weight: var(--pf-fw-semibold); }
+.pf-ba__arrow {
+  flex: none;
+  width: 16px;
+  height: 40px;
+  margin: clamp(14px, 1.6vw, 24px) 0;
+  fill: none;
+  stroke: var(--pf-ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pf-ba__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  align-self: stretch;
+  aspect-ratio: 3 / 2;
+  padding: clamp(22px, 2.4vw, 38px);
+  background: var(--pf-ink);
+  color: var(--pf-paper);
+}
+.pf-ba__n {
+  display: block;
+  font-size: var(--pf-fs-stat);
+  font-weight: var(--pf-fw-medium);
+  line-height: 1;
+  letter-spacing: var(--pf-tr-display);
+  white-space: nowrap;
+}
+.pf-ba__l {
+  display: block;
+  font-size: var(--pf-fs-body);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+  text-wrap: pretty;
+}
+@media (max-width: 1199px) {
+  .pf-ba { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .pf-ba { grid-template-columns: minmax(0, 400px); }
+}
+
+/* ---- 3. the shot + the meta block --------------------------------------- */
 .pf-process__top {
   display: grid;
   grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
@@ -225,116 +379,103 @@
   color: inherit;
 }
 
-/* ---- the three decisions ------------------------------------------------- */
-/* The heading sits ABOVE the cards now, not in a column beside them -- Amanda:
-   "putting the headline to the top of the decisions instead". It used to be a
-   24/76 split, which forced the sentence into a 300px column and cost a wrap
-   argument every time the copy changed. Stacked, the heading has the full
-   width and the cards have it too, which is also what lets the row take four
-   cards without crushing them. */
+/* ---- 4. key design decisions ------------------------------------------- */
+/* One outlined box, centred, ~800px at 1920 as drawn (750 on the sketch's
+   1804 canvas). Each decision is an icon (Aspire, Identity; a black dot on
+   Kayn and NOBI for now), a one-line title that carries the decision, and a
+   longer grey description of why. Amanda, 12 Nov: "Add more gap between how
+   it was built section and the key decisions section", so the box sits
+   further below the shot and facts than the section's own gap (44px on a
+   phone, 120px at 1920). */
 .pf-process__bottom {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(24px, 2.6vw, 44px);
-  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: clamp(16px, 2.6vw, 56px) auto 0;
+  padding: clamp(20px, 2.6vw, 48px);
+  border: 1px solid var(--pf-ink);
 }
 
 .pf-process__decisions {
-  margin: 0;
+  margin: 0 0 clamp(20px, 2.4vw, 44px);
   text-align: center;
-  font-size: var(--pf-fs-h5);
+  font-size: var(--pf-fs-h4);
+  font-weight: var(--pf-fw-medium);
+  line-height: var(--pf-lh-snug);
+  letter-spacing: var(--pf-tr-heading);
+  color: inherit;
+}
+
+.pf-decisions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-decision {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(12px, 1vw, 18px);
+  row-gap: 6px;
+  align-items: center;
+  margin: 0;
+  padding-block: clamp(16px, 1.3vw, 24px);
+  border-top: 1px solid var(--pf-line);
+}
+.pf-decision:last-child { padding-bottom: 0; }
+.pf-decision__dot {
+  width: clamp(22px, 1.9vw, 36px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--pf-ink);
+}
+/* Amanda: "change the black circles with icons that represent each point".
+   Line icons in ink, drawn on a 24 grid at the dot's size, no circle. */
+.pf-decision__icon {
+  display: block;
+  width: clamp(26px, 2vw, 38px);
+  height: auto;
+  color: var(--pf-ink);
+}
+.pf-decision__title {
+  margin: 0;
+  text-wrap: balance;
+  font-size: var(--pf-fs-h6);
   font-weight: var(--pf-fw-medium);
   line-height: var(--pf-lh-snug);
   letter-spacing: var(--pf-tr-snug);
   color: inherit;
 }
-
-/* auto-fit, not a fixed three: the number of decisions is per project -- three
-   on most, four on Identity -- and the row should take either without a
-   per-page override. */
-.pf-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
-  gap: clamp(16px, 1.5vw, 28px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.pf-card {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 1.2vw, 22px);
-  margin: 0;
-  padding: clamp(24px, 2vw, 38px);
-  border: 1px solid var(--pf-ink);
-  border-radius: 18px;
-  background: var(--pf-paper);
-}
-/* Was an empty circle -- a 56px hole doing nothing but spending attention at
-   the top of every card. It holds the card's icon now, and the ring stays as
-   the frame around it. */
-.pf-card__dot {
-  display: grid;
-  place-items: center;
-  width: clamp(44px, 3vw, 56px);
-  height: clamp(44px, 3vw, 56px);
-  flex: none;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-}
-.pf-card__icon {
-  width: 52%;
-  height: auto;
-  display: block;
-}
-/* The title is where the decision is actually made legible -- Amanda: "make the
-   header a bit longer so you can explain clearer, the body text can be shorter
-   because the user might not read it anyway... the user only skim quickly".
-   So it runs to a full sentence, and gets balanced wrapping rather than a
-   ragged last word on its own line. */
-.pf-card__title {
-  margin: 0;
-  text-wrap: balance;
-  font-size: var(--pf-fs-h5);
-  font-weight: var(--pf-fw-semibold);
-  line-height: var(--pf-lh-snug);
-  letter-spacing: var(--pf-tr-snug);
-  color: inherit;
-}
-/* One decision per project can be set dark, so the row has a lead rather than
-   four equal voices. Everything inside it inherits the flipped colour: the
-   icon strokes currentColor and the ring is drawn in it too. */
-.pf-card--lead {
-  background: var(--pf-ink);
-  border-color: var(--pf-ink);
-  color: var(--pf-paper);
-}
-
-.pf-card__body {
+/* Under the title, not under the dot. */
+.pf-decision__body {
+  grid-column: 2;
   margin: 0;
   font-size: var(--pf-fs-body);
   font-weight: var(--pf-fw-regular);
   line-height: var(--pf-lh-normal);
   letter-spacing: var(--pf-tr-body);
-  color: inherit;
+  color: var(--pf-muted);
 }
 
 /* ---- narrow ------------------------------------------------------------- */
-/* .pf-process__top used to be in this rule too, going 45/55 to an even 50/50.
-   Amanda: "the thumbnail should be placed above the project desc, not side by
-   side" -- two equal columns was still side-by-side and worse than 45/55 for
-   getting there, so it now skips straight to one column at 700px below
-   instead of pit-stopping here. */
-@media (max-width: 1000px) {
-  .pf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Four across only from 1440: narrower than that, a quarter of the row is
+   too tight for a two-line label at body large. Two by two down to 520, then one per row, since 48px
+   is the floor and a phone's half-width card is narrower than that number.
+   The shot stacks
+   above the copy at 700 (Amanda: "the thumbnail should be placed above the
+   project desc, not side by side"); it is already first in DOM order. */
+@media (max-width: 1439px) {
+  .pf-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .pf-stats { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 700px) {
-  /* One column. The thumbnail (.pf-process__shot) is already first in DOM
-     order, ahead of .pf-process__meta, so this alone stacks it above the
-     copy with no markup change. */
   .pf-process__top { grid-template-columns: minmax(0, 1fr); }
   .pf-process__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .pf-cards { grid-template-columns: minmax(0, 1fr); }
+  .pf-decision { align-items: start; }
+  /* Centred on the title's first line rather than on a two-line block. */
+  .pf-decision__dot,
+  .pf-decision__icon { margin-top: 0.1em; }
+  .pf-decision__body { font-size: var(--pf-fs-body-sm); }
 }
 
 /* v3's own breakpoint for this button (css/v3.css:1252-1258): it centres its

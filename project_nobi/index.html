@@ -75,6 +75,7 @@
 
       <div class="pf-dock__menu" id="pfDockMenu" hidden>
         <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/#work"><span class="pf-dock__label">Works</span></a>
         <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
         <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfatah/" target="_blank" rel="noopener">
           <span class="pf-dock__label">Linkedin</span>
@@ -459,12 +460,34 @@
 <div class="pf-outro">
     <div class="pf-outro__sheet">
 
-      <section class="pf-process" aria-labelledby="pfProcessHead">
+      <!-- Amanda's sketch of 12 Nov 2026: the outcome first, as four dark
+           cards whose huge text is the stat itself, readable in seconds;
+           then a rule; then the way into the case study; then the key design
+           decisions as a list in one outlined box. Outcomes and decisions
+           are kept apart on purpose: no number in a decision. Draft copy,
+           Amanda is curating the final. -->
+      <div class="pf-process">
         <div class="pf-process__wrap">
-          <h2 class="pf-process__head" id="pfProcessHead">
-            <span class="pf-process__line">That&rsquo;s the outcome.</span>
-            <span class="pf-process__line">Here&rsquo;s how it was built.</span>
-          </h2>
+          <section class="pf-impact" aria-labelledby="pfImpactHead">
+            <h2 class="pf-process__head" id="pfImpactHead">The outcome</h2>
+            <!-- A Level-Up Lab rework of a 2021 freelance brief, so these are
+                 what the work delivered, not business results. -->
+            <ul class="pf-stats">
+              <li class="pf-stat"><span class="pf-stat__num">6</span>
+                <span class="pf-stat__label">Problems found in the brief, each with its own fix</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">2</span>
+                <span class="pf-stat__label">Personas the page was built around</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">1</span>
+                <span class="pf-stat__label">Order flow that handles both pickup and delivery</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">2 weeks</span>
+                <span class="pf-stat__label">From the first brief to the finished landing page</span></li>
+            </ul>
+          </section>
+
+          <hr class="pf-process__rule" />
+
+          <section class="pf-process__case" aria-labelledby="pfProcessHead">
+            <h2 class="pf-process__head" id="pfProcessHead">The thinking behind it</h2>
 
           <div class="pf-process__top">
             <!-- The whole thumbnail is the link, button included. The button is a
@@ -501,28 +524,29 @@
             </div>
           </div>
 
-          <div class="pf-process__bottom">
-            <h3 class="pf-process__decisions">Key design decisions</h3>
-            <ul class="pf-cards">
-              <li class="pf-card pf-card--lead">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.6a2 2 0 0 1 2-2h2.3l1.3-2h6.8l1.3 2H19a2 2 0 0 1 2 2v8.8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.6Z" /><circle cx="12" cy="12.9" r="3.5" /></svg></span>
-                <h4 class="pf-card__title">Designed the page around how the product looks, because this audience shares what it buys</h4>
-                <p class="pf-card__body">Sarah and Alex post what they eat. Making the pastry look good is the marketing.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2" /><path d="M10.3 8.4v7.2l6-3.6-6-3.6Z" /></svg></span>
-                <h4 class="pf-card__title">Opened the hero with the baking itself, so the premium label has proof behind it</h4>
-                <p class="pf-card__body">People trust what they can watch being made. A styled photo only makes the claim.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M4.5 12h15M4.5 17h8.5" /></svg></span>
-                <h4 class="pf-card__title">Kept the page minimal on purpose, so the information reads and the photos lead</h4>
-                <p class="pf-card__body">The imagery is built to pull attention. Everything around it stays out of its way.</p>
-              </li>
-            </ul>
-          </div>
+            <div class="pf-process__bottom">
+              <h3 class="pf-process__decisions">Key design decisions</h3>
+              <ul class="pf-decisions">
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Designed the page around how the product looks, because this audience shares what it buys</h4>
+                  <p class="pf-decision__body">Sarah and Alex post what they eat. Making the pastry look good is the marketing.</p>
+                </li>
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Opened the hero with the baking itself, so the premium label has proof behind it</h4>
+                  <p class="pf-decision__body">People trust what they can watch being made. A styled photo only makes the claim.</p>
+                </li>
+                <li class="pf-decision">
+                  <span class="pf-decision__dot" aria-hidden="true"></span>
+                  <h4 class="pf-decision__title">Kept the page minimal on purpose, so the information reads and the photos lead</h4>
+                  <p class="pf-decision__body">The imagery is built to pull attention. Everything around it stays out of its way.</p>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       <!-- BEGIN master-suggestion (generated by scripts/gen-master-suggestion.py) -->
       <section class="master-suggestion" aria-labelledby="msugHead">
@@ -624,6 +648,7 @@
 
                 <nav class="contact__nav" aria-label="Footer">
                   <a href="/" class="contact__nav-link">Home</a>
+                  <a href="/#work" class="contact__nav-link">Works</a>
                   <a href="/about" class="contact__nav-link">About</a>
                 </nav>
               </div>

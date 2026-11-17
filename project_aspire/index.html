@@ -76,6 +76,7 @@
 
       <div class="pf-dock__menu" id="pfDockMenu" hidden>
         <a class="pf-dock__link" href="/"><span class="pf-dock__label">Home</span></a>
+        <a class="pf-dock__link" href="/#work"><span class="pf-dock__label">Works</span></a>
         <a class="pf-dock__link" href="/about"><span class="pf-dock__label">About</span></a>
         <a class="pf-dock__link" href="https://www.linkedin.com/in/amandaalfatah/" target="_blank" rel="noopener">
           <span class="pf-dock__label">Linkedin</span>
@@ -933,12 +934,32 @@
 <div class="pf-outro">
     <div class="pf-outro__sheet">
 
-      <section class="pf-process" aria-labelledby="pfProcessHead">
+      <!-- Amanda's sketch of 12 Nov 2026: the outcome first, as four dark
+           cards whose huge text is the stat itself, readable in seconds;
+           then a rule; then the way into the case study; then the key design
+           decisions as a list in one outlined box. Outcomes and decisions
+           are kept apart on purpose: no number in a decision. Draft copy,
+           Amanda is curating the final. -->
+      <div class="pf-process">
         <div class="pf-process__wrap">
-          <h2 class="pf-process__head" id="pfProcessHead">
-            <span class="pf-process__line">That&rsquo;s the outcome.</span>
-            <span class="pf-process__line">Here&rsquo;s how it was built.</span>
-          </h2>
+          <section class="pf-impact" aria-labelledby="pfImpactHead">
+            <h2 class="pf-process__head" id="pfImpactHead">The outcome</h2>
+            <ul class="pf-stats">
+              <li class="pf-stat"><span class="pf-stat__num">60&ndash;75%</span>
+                <span class="pf-stat__label">Faster page production, design and build combined</span></li>
+              <li class="pf-stat"><span class="pf-stat__num" aria-hidden="true">&lt;4 days</span><span class="pf-sr">Under 4 days</span>
+                <span class="pf-stat__label">Production time per page, down from 10 working days</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">+67%</span>
+                <span class="pf-stat__label">Higher click-through rate on core product pages</span></li>
+              <li class="pf-stat"><span class="pf-stat__num">120+</span>
+                <span class="pf-stat__label">Pages revamped on one shared system</span></li>
+            </ul>
+          </section>
+
+          <hr class="pf-process__rule" />
+
+          <section class="pf-process__case" aria-labelledby="pfProcessHead">
+            <h2 class="pf-process__head" id="pfProcessHead">The thinking behind it</h2>
 
           <div class="pf-process__top">
             <!-- The whole thumbnail is the link, button included. The button is a
@@ -975,33 +996,29 @@
             </div>
           </div>
 
-          <div class="pf-process__bottom">
-            <h3 class="pf-process__decisions">Key design decisions</h3>
-            <ul class="pf-cards">
-              <li class="pf-card pf-card--lead">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.75 2.9 7.25 12 11.75l9.1-4.5L12 2.75Z" /><path d="m2.9 12 9.1 4.5 9.1-4.5" /><path d="m2.9 16.75 9.1 4.5 9.1-4.5" /></svg></span>
-                <h4 class="pf-card__title">Built one system to carry a 120+ page revamp, instead of rebuilding page by page</h4>
-                <p class="pf-card__body">Every block resolves to a component, so one change lands across the whole site at once.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.4 13.6a4.2 4.2 0 0 0 6 0l2.7-2.7a4.2 4.2 0 1 0-6-6l-1.3 1.3" /><path d="M13.6 10.4a4.2 4.2 0 0 0-6 0l-2.7 2.7a4.2 4.2 0 1 0 6 6l1.3-1.3" /></svg></span>
-                <h4 class="pf-card__title">Mirrored the Figma file to Webflow which cut delivery time by up to 75%</h4>
-                <p class="pf-card__body">Design and development work from one structure, so nothing gets rebuilt in the handoff.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="13" height="9" rx="1.8" /><path d="M9 13v3.9M6.4 16.9h5.2" /><rect x="15.6" y="9.4" width="5.9" height="11.1" rx="1.6" /><path d="M17.9 18.2h1.3" /></svg></span>
-                <h4 class="pf-card__title">Made every component responsive, so desktop and mobile are not two separate builds</h4>
-                <p class="pf-card__body">One component covers both breakpoints. Nobody draws the same screen twice.</p>
-              </li>
-              <li class="pf-card">
-                <span class="pf-card__dot" aria-hidden="true"><svg class="pf-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.6v13.1" /><path d="M12 6.6C10.4 5 8.5 4.4 4.4 4.4v12.9c4.1 0 6 .6 7.6 2.2" /><path d="M12 6.6c1.6-1.6 3.5-2.2 7.6-2.2v12.9c-4.1 0-6 .6-7.6 2.2" /></svg></span>
-                <h4 class="pf-card__title">Documented the system as a guideline a new hire can follow on day one</h4>
-                <p class="pf-card__body">Onboarding was the bottleneck. The rules live in the file now, not in people&rsquo;s heads.</p>
-              </li>
-            </ul>
-          </div>
+            <div class="pf-process__bottom">
+              <h3 class="pf-process__decisions">Key design decisions</h3>
+              <ul class="pf-decisions">
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h11M4 10h7M4 14.5h4"/><circle cx="15.5" cy="15.5" r="4"/><path d="m18.4 18.4 2.6 2.6"/></svg>
+                  <h4 class="pf-decision__title">Started with an audit, not a style guide</h4>
+                  <p class="pf-decision__body">I went through every existing Figma file to find which patterns kept coming back and which were one-offs. The system standardized what the team actually used, not what a template assumed.</p>
+                </li>
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16m0 0-3.5-3.5M20 8l-3.5 3.5"/><path d="M20 16H4m0 0 3.5-3.5M4 16l3.5 3.5"/></svg>
+                  <h4 class="pf-decision__title">Matched Figma variables to Webflow classes 1:1</h4>
+                  <p class="pf-decision__body">Every token a designer used had a twin a developer could find by name. Handoff stopped being a translation job, and the repeated errors from unintended changes stopped with it.</p>
+                </li>
+                <li class="pf-decision">
+                  <svg class="pf-decision__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.6 10.2A8 8 0 0 0 5.7 7.1L4 8.8"/><path d="M4 4.3v4.5h4.5"/><path d="M4.4 13.8a8 8 0 0 0 13.9 3.1l1.7-1.7"/><path d="M20 19.7v-4.5h-4.5"/></svg>
+                  <h4 class="pf-decision__title">Made components that sync across sites</h4>
+                  <p class="pf-decision__body">One edit to a component reached every site that used it. That&rsquo;s what made revamping the whole site realistic rather than a page-by-page slog.</p>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       <!-- BEGIN master-suggestion (generated by scripts/gen-master-suggestion.py) -->
       <section class="master-suggestion" aria-labelledby="msugHead">
@@ -1103,6 +1120,7 @@
 
                 <nav class="contact__nav" aria-label="Footer">
                   <a href="/" class="contact__nav-link">Home</a>
+                  <a href="/#work" class="contact__nav-link">Works</a>
                   <a href="/about" class="contact__nav-link">About</a>
                 </nav>
               </div>
